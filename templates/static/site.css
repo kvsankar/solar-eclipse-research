@@ -882,6 +882,18 @@ body.lb-open { overflow: hidden; }
 }
 
 @media (max-width: 720px) {
-  .search { flex: 1 1 auto; margin-left: 0; }
-  .search-panel { width: min(560px, 92vw); }
+  /* Give the search a row of its own. Sharing the first row it was squeezed
+     to 85px at phone widths, too narrow to read as a search field at all, and
+     its results panel — absolutely positioned against a box that small,
+     sitting in the middle of the header — ran past the right edge and gave
+     the whole page a horizontal scrollbar. Anchored to a full-width row the
+     panel is exactly as wide as the viewport allows. */
+  .topbar { flex-wrap: wrap; row-gap: 8px; }
+  /* Flex wraps a line before it shrinks anything on it, so a brand wide
+     enough to crowd the two buttons sends the theme toggle to a row of its
+     own and makes a three-row sticky header. Reserving their width caps the
+     brand instead, and it wraps inside the first row. */
+  .brand { max-width: calc(100% - 118px); }
+  .search { order: 3; flex: 1 0 100%; margin-left: 0; }
+  .search-panel { left: 0; width: 100%; }
 }
