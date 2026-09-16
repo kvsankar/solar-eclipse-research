@@ -33,6 +33,21 @@ python tools/jargon_check.py       # terms used before they are explained
 
 Requires **pandoc** on PATH (3.x) and Python 3.10+. No pip or npm dependencies.
 
+## Deployment
+
+The public source repository is
+[`kvsankar/solar-eclipse-research`](https://github.com/kvsankar/solar-eclipse-research).
+The manual **Deploy to Sankara.net** workflow builds the site and publishes the
+owned subtree to:
+
+```text
+https://sankara.net/astro/solar-eclipses/computing.html
+```
+
+The workflow copies the built home page to `computing.html` and deploys the
+complete generated site so its relative links and assets remain available.
+Deployment credentials live in the `sankara-net-production` GitHub environment.
+
 ## Layout
 
 ```

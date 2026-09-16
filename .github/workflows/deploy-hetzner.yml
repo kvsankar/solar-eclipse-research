@@ -1,0 +1,70 @@
+name: Deploy to Sankara.net
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sankara-net-solar-eclipses
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    name: Build and deploy
+    runs-on: ubuntu-latest
+    environment: sankara-net-production
+    env:
+      REMOTE_PATH: /var/www/sankara.net/astro/solar-eclipses/
+      PUBLIC_URL: https://sankara.net/astro/solar-eclipses/computing.html
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes pandoc rsync
+          pandoc --version
+          python --version
+
+      - name: Build site
+        run: |
+          python tools/merge_refs.py
+          python tools/build.py --clean
+          cp site/index.html site/computing.html
+
+      - name: Verify deployment payload
+        run: |
+          test "$REMOTE_PATH" = "/var/www/sankara.net/astro/solar-eclipses/"
+          test -f site/computing.html
+          test -f site/assets/site.css
+          test -f site/assets/site.js
+          test -f site/assets/site3d.js
+          grep -q "<title>" site/computing.html
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.HETZNER_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+
+      - name: Deploy owned subtree
+        run: |
+          rsync -avz --delete \
+            -e "ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=no -o ServerAliveInterval=30 -o ServerAliveCountMax=10" \
+            ./site/ \
+            "${{ secrets.HETZNER_USERNAME }}@${{ secrets.HETZNER_HOST }}:${REMOTE_PATH}"
+        timeout-minutes: 10
+
+      - name: Verify live page
+        run: |
+          curl --fail --silent --show-error --retry 5 --retry-delay 3 \
+            "$PUBLIC_URL" |
+            grep -q "Computing Solar Eclipses"
+
+      - name: Cleanup SSH key
+        if: always()
+        run: rm -f ~/.ssh/deploy_key
