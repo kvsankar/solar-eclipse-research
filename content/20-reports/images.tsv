@@ -1,0 +1,3 @@
+# path	kind	licence	source	note
+20-reports/img/pipeline-stages.svg	own	own work	tools/figures/pipeline_stages.py	Schematic flow of the nine stages, the elements and direct topocentric paths, their cross-check, and the two modes.
+20-reports/img/error-budget.svg	own	own work	tools/figures/error_budget.py	Data figure: the ranked budget as edge position error in metres on a log axis, every bar a row of the table in error-budget.md.

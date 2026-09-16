@@ -1,0 +1,4 @@
+# path	kind	licence	source	note
+10-raw/02-catalogs/img/eclipse-types.svg	own	own work	tools/figures/eclipse_types.py	Schematic cross-sections of the four types, keyed to where the umbral vertex falls.
+10-raw/02-catalogs/img/gamma-u-classification.svg	own	own work	tools/figures/gamma_u_classification.py	Data figure: classification regions computed from the Meeus inequalities quoted in the notes.
+10-raw/02-catalogs/img/catalogue-composition.svg	own	own work	tools/figures/catalogue_composition.py	Data figure: the type counts of the Five Millennium Catalogue, NASA/TP-2009-214174.

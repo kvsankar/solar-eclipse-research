@@ -1,0 +1,31 @@
+# Generated output
+site/
+outputs/
+
+# Downloaded source documents (third-party, copyrighted).
+# Every one is identified by URL in references.tsv; re-fetch rather than commit.
+*.pdf
+*.txt
+!requirements.txt
+*.html
+!templates/*.html
+!templates/**/*.html
+
+# Third-party source imagery held only as working reference, never published.
+# Our own figures live in content/**/img/ and ARE committed.
+var/source-images/
+
+# Python
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Everything under var/ is scratch: downloaded sources, cloned third-party
+# repositories, working notes. The README and AGENTS.md both describe it as
+# gitignored. The rule used to cover only var/_*, which left 900 MB of other
+# people's material, two whole cloned repositories among it, staged for commit.
+var/
+.playwright-mcp/

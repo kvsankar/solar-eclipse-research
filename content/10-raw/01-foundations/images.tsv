@@ -1,0 +1,3 @@
+# path	kind	licence	source	note
+10-raw/01-foundations/img/fundamental-plane.svg	own	own work	tools/figures/fundamental_plane.py	Schematic cross-section naming the axis, both cones, the plane and l1, l2.
+10-raw/01-foundations/img/besselian-xy.svg	own	own work	tools/figures/besselian_xy.py	Schematic view down the shadow axis showing x, y, l1, l2 and gamma on the fundamental plane.

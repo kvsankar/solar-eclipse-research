@@ -1,0 +1,5 @@
+obscuration	obscuration	The fraction of the Sun's apparent disc area covered by the Moon, computed from the overlap of two discs and always 1 during totality.
+contact-times	contact times (C1 to C4)	First contact when the Moon's disc first touches the Sun's, second contact when totality or annularity begins, third contact when it ends, and fourth contact when the discs separate.
+vsop87	VSOP87	An analytic planetary theory from the Bureau des Longitudes giving Sun and planet positions as trigonometric series, used by NASA's eclipse Canon for the Sun.
+elp2000	ELP-2000/82	An analytic lunar theory giving the Moon's position as trigonometric series, used by NASA's eclipse Canon and by Meeus-based libraries for the Moon.
+shadow-cone	shadow cone	The umbral or penumbral cone tangent to both Sun and Moon, characterised by its half-angle $f$ whose tangent appears in the Besselian elements as $\tan f_1$ and $\tan f_2$.

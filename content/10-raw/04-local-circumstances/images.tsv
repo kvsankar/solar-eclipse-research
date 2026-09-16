@@ -1,0 +1,4 @@
+# path	kind	licence	source	note
+10-raw/04-local-circumstances/img/observer-reduction.svg	own	own work	tools/figures/observer_reduction.py	Schematic of the reduction of one observer onto the fundamental plane: phi, zeta, xi, eta, u, v, m and the shrunken radii.
+10-raw/04-local-circumstances/img/contact-configurations.svg	own	own work	tools/figures/contact_configurations.py	Schematic of C1 to C4 as disc tangencies, with the position angle P marked on C4.
+10-raw/04-local-circumstances/img/magnitude-obscuration.svg	own	own work	tools/figures/magnitude_obscuration.py	Data figure. Obscuration against magnitude computed in the script from the lens-area formula quoted from the 1961 Explanatory Supplement section 9D.
