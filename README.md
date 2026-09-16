@@ -48,6 +48,21 @@ The workflow copies the built home page to `computing.html` and deploys the
 complete generated site so its relative links and assets remain available.
 Deployment credentials live in the `sankara-net-production` GitHub environment.
 
+`tools/deploy.py` performs the same deploy from an authorized workstation. It
+mirrors the workflow step for step — same build, same payload checks, same
+guarded remote path, same rsync flags, same post-deploy check — so a local run
+and an Actions run put the same bytes in the same place.
+
+```bash
+python tools/deploy.py --dry-run     # build, verify, show what would transfer
+python tools/deploy.py --yes         # deploy, then check the live page
+```
+
+It holds no credentials. Host, user and key come from
+`~/.config/sankara-net/env/main.env`, then the surface env, then `--ssh-alias`
+(read with `ssh -G`, which resolves SSH config without connecting), then
+explicit `--host/--user/--key`. Missing settings are reported by name.
+
 ## Layout
 
 ```
