@@ -36,7 +36,7 @@ python tools/fix_math.py           # rewrite TeX that pandoc's math parser rejec
 python tools/normalise_prose.py    # house-style spelling and notation, outside quotations and code
 python tools/prose_check.py        # prose tics and long sentences
 python tools/jargon_check.py       # terms used before they are explained
-python tools/make_og_image.py      # recompose content/img/social-card.jpg (needs Pillow)
+python tools/make_og_image.py      # recompose content/img/social-card-v2.jpg (needs Pillow)
 ```
 
 Requires **pandoc** on PATH (3.x) and Python 3.10+. No pip or npm dependencies
@@ -49,7 +49,7 @@ Every page carries Open Graph and Twitter card tags, so a shared link previews
 as a card. They are the one part of the output that cannot be relative:
 `BASE_URL` in `tools/build.py` says where the tree is published, and only the
 previews depend on it. One image serves the whole site —
-`content/img/social-card.jpg`, composed by `tools/make_og_image.py` from the
+`content/img/social-card-v2.jpg`, composed by `tools/make_og_image.py` from the
 totality photograph. The credit is drawn into the image because a card is
 shown without the page around it, and the licence asks for the credit beside
 the image.

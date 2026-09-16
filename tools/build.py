@@ -47,7 +47,11 @@ SITE_TITLE = "Computing Solar Eclipses — Research"
 # never forms. This is where the built tree is published; a build served from
 # anywhere else still works, and only its social previews point here.
 BASE_URL = "https://sankara.net/astro/solar-eclipses/"
-SOCIAL_IMAGE = "img/social-card.jpg"
+# Versioned filename. Cloudflare serves images with max-age=604800, so a card
+# changed in place keeps its stale bytes in front of the scrapers for a week.
+# Renaming is the one invalidation that needs no API credentials; bump the
+# suffix whenever the card is recomposed.
+SOCIAL_IMAGE = "img/social-card-v2.jpg"
 SOCIAL_IMAGE_ALT = (
     "Totality: the solar corona around the black disc of the Moon, with pink "
     "prominences at the limb."
