@@ -840,19 +840,33 @@ def render_social(node: Node) -> str:
     url = BASE_URL + ("" if node.parent is None else node.url_from_root)
     title = SITE_TITLE if node.parent is None else f"{node.title} · {SITE_TITLE}"
     description = node.description or SITE_TITLE
+    image = BASE_URL + SOCIAL_IMAGE
     tags = [
         ("og:type", "article" if node.parent is not None else "website"),
         ("og:site_name", SITE_TITLE),
         ("og:title", title),
         ("og:description", description),
         ("og:url", url),
-        ("og:image", BASE_URL + SOCIAL_IMAGE),
+        ("og:image", image),
+        # WhatsApp and Facebook read secure_url and type; without them some
+        # scrapers fetch the image and then decline to show it.
+        ("og:image:secure_url", image),
+        ("og:image:type", "image/jpeg"),
         ("og:image:width", "1200"),
         ("og:image:height", "630"),
         ("og:image:alt", SOCIAL_IMAGE_ALT),
     ]
     out = [f'<meta property="{k}" content="{html.escape(v)}">' for k, v in tags]
-    out.append('<meta name="twitter:card" content="summary_large_image">')
+    # X falls back to the og: tags in principle, but is markedly more reliable
+    # when the twitter: ones are stated outright.
+    twitter = [
+        ("twitter:card", "summary_large_image"),
+        ("twitter:title", title),
+        ("twitter:description", description),
+        ("twitter:image", image),
+        ("twitter:image:alt", SOCIAL_IMAGE_ALT),
+    ]
+    out += [f'<meta name="{k}" content="{html.escape(v)}">' for k, v in twitter]
     out.append(f'<link rel="canonical" href="{html.escape(url)}">')
     return "\n".join(out)
 

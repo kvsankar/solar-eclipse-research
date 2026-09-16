@@ -91,7 +91,10 @@ def main() -> int:
     draw.text((WIDTH - MARGIN - 14, HEIGHT - 34), CREDIT, font=credit_font,
               fill=(154, 148, 138), anchor="ra")
 
-    card.save(TARGET, "JPEG", quality=86, optimize=True, progressive=True)
+    # Baseline, not progressive. WhatsApp's link-preview thumbnailer does not
+    # decode progressive JPEGs and simply shows no image, and the saving on a
+    # 38 KB file is not worth a card that silently fails.
+    card.save(TARGET, "JPEG", quality=86, optimize=True, progressive=False)
     print(f"{TARGET.relative_to(ROOT)}: {TARGET.stat().st_size // 1024} KB, "
           f"{WIDTH}x{HEIGHT}")
     return 0
