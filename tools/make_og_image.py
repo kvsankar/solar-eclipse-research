@@ -22,7 +22,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / "content" / "img" / "totality-1999-viatour.jpg"
-TARGET = ROOT / "content" / "img" / "social-card.jpg"
+TARGET = ROOT / "content" / "img" / "social-card-v2.jpg"
 
 WIDTH, HEIGHT = 1200, 630
 MARGIN = 28           # black kept above and below the corona
