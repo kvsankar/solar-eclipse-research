@@ -5,6 +5,14 @@ status: working
 updated: 2026-09-16
 ---
 
+![Everything this site computes is the geometry behind this photograph, and
+the hardest parts of it are at the edges. The pink prominences ring a limb
+that is not a circle: lunar topography moves a path limit by 1 to 3 km, and
+the solar radius that sets where the corona begins is still disputed at a
+third of an arcsecond. Totality of 1999 August 11, photographed from France
+by Luc Viatour / [lucnix.be](https://lucnix.be), CC BY-SA 3.0
+[@glob-nasa-google-2024] [@val-besselian-maps-accuracy].](img/totality-1999-viatour.jpg){.hero}
+
 Solar eclipse predictions are published by a handful of people and programs,
 and they agree to a few hundred metres at the edge of the path. The places
 where they disagree are where the modelling decisions live. This site sets out

@@ -1,5 +1,12 @@
 # eclipse-research: computing solar eclipse products
 
+![Totality: the solar corona around the black disc of the Moon, with pink prominences at the limb.](content/img/totality-1999-viatour.jpg)
+
+<sub>Totality of 1999 August 11, from France. Luc Viatour /
+[lucnix.be](https://lucnix.be), [CC BY-SA
+3.0](https://creativecommons.org/licenses/by-sa/3.0/), via
+[Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Solar_eclipse_1999_4.jpg).</sub>
+
 Deep research into how solar eclipse computational products are computed,
 from enumerating the eclipses in a period to the contact times and Baily's
 beads at a single observer. Markdown in `content/`, deterministically
@@ -29,9 +36,23 @@ python tools/fix_math.py           # rewrite TeX that pandoc's math parser rejec
 python tools/normalise_prose.py    # house-style spelling and notation, outside quotations and code
 python tools/prose_check.py        # prose tics and long sentences
 python tools/jargon_check.py       # terms used before they are explained
+python tools/make_og_image.py      # recompose content/img/social-card.jpg (needs Pillow)
 ```
 
-Requires **pandoc** on PATH (3.x) and Python 3.10+. No pip or npm dependencies.
+Requires **pandoc** on PATH (3.x) and Python 3.10+. No pip or npm dependencies
+for the build itself; `make_og_image.py` needs Pillow and is run by hand when
+the card changes, not on every build.
+
+## Social previews
+
+Every page carries Open Graph and Twitter card tags, so a shared link previews
+as a card. They are the one part of the output that cannot be relative:
+`BASE_URL` in `tools/build.py` says where the tree is published, and only the
+previews depend on it. One image serves the whole site —
+`content/img/social-card.jpg`, composed by `tools/make_og_image.py` from the
+totality photograph. The credit is drawn into the image because a card is
+shown without the page around it, and the licence asks for the credit beside
+the image.
 
 ## Deployment
 

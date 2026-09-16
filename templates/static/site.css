@@ -548,6 +548,12 @@ html[data-theme="dark"] {
 .doc figure { margin: 28px 0; max-width: var(--max); }
 .doc figure svg.figsvg { display: block; width: 100%; height: auto; }
 .doc figure img { display: block; max-width: 100%; height: auto; border-radius: 6px; }
+/* A hero photograph is nearly square, so at full column width it fills the
+   window and pushes the opening paragraph under the fold. Cap its height so
+   the picture and the start of the prose are visible together. */
+.doc figure img.hero {
+  max-height: min(56vh, 540px); width: auto; margin-inline: auto;
+}
 .doc figcaption {
   font-size: 13px; line-height: 1.55; color: var(--text-faint);
   margin-top: 9px; padding-top: 7px; border-top: 1px solid var(--line);
