@@ -215,27 +215,76 @@ def verify_payload() -> None:
 
 # -------------------------------------------------------------------- deploy
 
-def rsync(settings: dict[str, str], dry_run: bool) -> None:
+# The chocolatey rsync on Windows is a cygwin build, and Git for Windows ships
+# an MSYS2 ssh. rsync forks its transport, and two different POSIX emulation
+# runtimes cannot share fork state, so the pair fails with "dup() in/out/err
+# failed" before it ever reaches the network. Use the ssh that sits beside the
+# rsync binary, which is the runtime's own matched build.
+CHOCO_RSYNC = Path(r"C:\ProgramData\chocolatey\lib\rsync\tools\bin\rsync.exe")
+
+
+def cygwin_path(path: str) -> str:
+    """Rewrite C:\\x or /c/x as /cygdrive/c/x for a cygwin binary."""
+    text = str(path).replace("\\", "/")
+    drive = re.fullmatch(r"([A-Za-z]):/(.*)", text)
+    if drive:
+        return f"/cygdrive/{drive.group(1).lower()}/{drive.group(2)}"
+    msys = re.fullmatch(r"/([A-Za-z])/(.*)", text)
+    if msys:
+        return f"/cygdrive/{msys.group(1).lower()}/{msys.group(2)}"
+    return text
+
+
+def resolve_transport() -> tuple[str, str, bool]:
+    """Pick an rsync and an ssh that share a POSIX runtime."""
+    # The rsync.exe chocolatey puts on PATH is a .NET shim that mangles
+    # arguments; the real binary lives in the package directory.
+    if CHOCO_RSYNC.is_file():
+        sibling = CHOCO_RSYNC.parent / "ssh.exe"
+        if sibling.is_file():
+            return str(CHOCO_RSYNC), str(sibling), True
     rsync_bin = shutil.which("rsync")
     if not rsync_bin:
         raise DeployError("rsync was not found on PATH.")
+    ssh_bin = shutil.which("ssh")
+    if not ssh_bin:
+        raise DeployError("ssh was not found on PATH.")
+    return rsync_bin, ssh_bin, False
+
+
+def rsync(settings: dict[str, str], dry_run: bool) -> None:
+    rsync_bin, ssh_bin, cygwin = resolve_transport()
+    key = cygwin_path(settings["key"]) if cygwin else settings["key"]
+    ssh_ref = cygwin_path(ssh_bin) if cygwin else "ssh"
     ssh_command = (
-        f"ssh -i {settings['key']} -o IdentitiesOnly=yes"
+        f"{ssh_ref} -i {key} -o IdentitiesOnly=yes"
         " -o StrictHostKeyChecking=accept-new"
         " -o ServerAliveInterval=30 -o ServerAliveCountMax=10"
     )
     # --delete is safe only because REMOTE_PATH is a checked literal naming a
     # subtree this repo owns outright. /var/www/sankara.net/ is shared.
-    command = [rsync_bin, "-avz", "--delete"]
+    #
+    # --chmod is not cosmetic. A Windows working copy has no POSIX mode bits,
+    # so -a invents them and lands 0770 files that nginx, running as www-data,
+    # cannot read: the tree transfers perfectly and every URL still 404s. An
+    # Actions runner checks out 0644/0755 and never shows this. State the
+    # modes so both paths publish the same thing.
+    command = [rsync_bin, "-avz", "--delete", "--chmod=D755,F644"]
     if dry_run:
         command.append("--dry-run")
+    # The source stays relative and rsync runs from the repo root. An absolute
+    # Windows path would arrive as "C:/...", and rsync reads the drive letter
+    # as a hostname and refuses: "source and destination cannot both be remote".
     command += [
         "-e", ssh_command,
-        f"{SITE.as_posix()}/",
+        f"{SITE.name}/",
         f"{settings['user']}@{settings['host']}:{REMOTE_PATH}",
     ]
     log(f"rsync{' --dry-run' if dry_run else ''} -> {REMOTE_PATH}")
-    proc = subprocess.run(command, check=False)
+    # Belt and braces: if this is ever run from a Git Bash shell rather than
+    # native Python, stop MSYS from rewriting the POSIX paths inside -e.
+    environment = dict(os.environ, MSYS2_ARG_CONV_EXCL="*", MSYS_NO_PATHCONV="1")
+    proc = subprocess.run(command, cwd=ROOT, env=environment, check=False)
     if proc.returncode != 0:
         raise DeployError(f"rsync exited {proc.returncode}.")
 
@@ -245,10 +294,19 @@ def verify_live() -> None:
     request = urllib.request.Request(
         PUBLIC_URL, headers={"User-Agent": "eclipse-research-deploy"}
     )
-    with urllib.request.urlopen(request, timeout=30) as response:
-        if response.status != 200:
-            raise DeployError(f"{PUBLIC_URL} returned {response.status}.")
-        body = response.read().decode("utf-8", errors="replace")
+    try:
+        with urllib.request.urlopen(request, timeout=30) as response:
+            body = response.read().decode("utf-8", errors="replace")
+    except urllib.error.HTTPError as error:
+        # A 403 or 404 here, with the transfer reported clean, usually means
+        # the bytes arrived but the web server cannot read them.
+        raise DeployError(
+            f"{PUBLIC_URL} returned {error.code}. The files may have "
+            "transferred with modes the web server cannot read; check that "
+            "directories are 755 and files 644."
+        ) from error
+    except urllib.error.URLError as error:
+        raise DeployError(f"{PUBLIC_URL} could not be reached: {error.reason}") from error
     if SMOKE_STRING not in body:
         raise DeployError(f"{PUBLIC_URL} does not contain {SMOKE_STRING!r}.")
     log("live page looks right")
