@@ -390,18 +390,19 @@
     };
   };
 
-  /* The four types of solar eclipse, as one geometry with one number changed.
+  /* The four types of solar eclipse, as one shared drawing geometry.
 
-     The umbral radius on the fundamental plane, u, is that number. The umbral
-     cone closes to a point, its vertex, at a height u / tan f2 above that
-     plane, and since that height barely changes during an eclipse the vertex
-     sweeps out a plane of its own. The ground at the sub-shadow point stands
-     sqrt(1 - gamma^2) above the same plane. Where the ground reaches past the
-     vertex the converging umbra lands and the eclipse is total; where it does
-     not, the vertex is short of the ground, the antumbra lands, and the
-     eclipse is annular. A hybrid is the case where the ground crosses the
-     vertex plane partway along the path, so one eclipse is both. A partial is
-     the case where the axis misses the Earth and only the penumbra lands.
+     The three central cases keep one gamma and change only the umbral radius
+     on the fundamental plane, u. The umbral cone closes to a point, its
+     vertex, at a height u / tan f2 above that plane, and since that height
+     barely changes during an eclipse the vertex sweeps out a plane of its
+     own. The ground at the sub-shadow point stands sqrt(1 - gamma^2) above
+     the same plane. Where the ground reaches past the vertex the converging
+     umbra lands and the eclipse is total; where it does not, the vertex is
+     short of the ground, the antumbra lands, and the eclipse is annular. A
+     hybrid is the case where the ground crosses the vertex plane partway
+     along the path, so one eclipse is both. The partial case changes gamma
+     because its defining condition is that the axis misses the Earth.
 
      The flat figure has to bend the vertex locus into an arc, because it draws
      the Moon close enough to see. At true scale it is a plane, and the
@@ -432,6 +433,11 @@
     var LIFT = 1.0005;
     var DEC = 15.0;             // declination of the shadow axis
     var SWEEP = 0.90;           // drawn stretch of the path, each way
+    /* Clip every case at the same two planes. Deriving these ends from each
+       case's vertex made the cones visibly grow and shrink when the type
+       changed, even though their half-angles and drawing scale were fixed. */
+    var CONE_TOP = 2.10;
+    var CONE_BOTTOM = -1.75;
 
     /* gamma is the least distance of the axis from the geocentre, u the
        umbral radius on the fundamental plane, both in Earth radii and both in
@@ -441,7 +447,7 @@
       { id: "partial", label: "Partial", gamma: 1.045, u: 0.0042 },
       { id: "annular", label: "Annular", gamma: 0.350, u: 0.0075 },
       { id: "total", label: "Total", gamma: 0.350, u: -0.0060 },
-      { id: "hybrid", label: "Hybrid", gamma: 0.400, u: 0.0025 }
+      { id: "hybrid", label: "Hybrid", gamma: 0.350, u: 0.0025 }
     ];
     var cur = TYPES[3], ZV = 0, YT = 0, groundKind = "";
 
@@ -508,6 +514,16 @@
       }
       return FILL[key];
     }
+    function surfaceMat(colour, opacity) {
+      var key = colour + "|" + opacity + "|surface";
+      if (!FILL[key]) {
+        FILL[key] = new THREE.MeshBasicMaterial({
+          color: colour, transparent: true, opacity: opacity,
+          side: THREE.FrontSide, depthTest: false, depthWrite: false
+        });
+      }
+      return FILL[key];
+    }
     function line(points, colour, dashed, through) {
       var l = new THREE.Line(new THREE.BufferGeometry().setFromPoints(points),
         mat(colour, dashed, through));
@@ -542,14 +558,14 @@
        it. Points with sizeAttenuation off are measured in pixels, so the size
        holds without any per-frame work. */
     var GLYPH = {};
-    function glyph(colour, centred) {
-      var key = colour + (centred ? "-c" : "");
+    function glyph(centred) {
+      var key = centred ? "centred" : "ring";
       if (GLYPH[key]) return GLYPH[key];
       var cv = document.createElement("canvas");
       cv.width = cv.height = 64;
       var g2 = cv.getContext("2d");
-      g2.strokeStyle = colour;
-      g2.fillStyle = colour;
+      g2.strokeStyle = "#fff";
+      g2.fillStyle = "#fff";
       g2.lineWidth = 6;
       g2.beginPath();
       g2.arc(32, 32, 21, 0, Math.PI * 2);
@@ -571,7 +587,8 @@
       var pk = colour + "|" + px + "|" + through + "|" + centred;
       if (!PMAT[pk]) {
         PMAT[pk] = new THREE.PointsMaterial({
-          size: px, sizeAttenuation: false, map: glyph(colour, centred),
+          color: colour, size: px, sizeAttenuation: false,
+          map: glyph(centred),
           transparent: true, opacity: through ? 0.85 : 1,
           depthWrite: false, depthTest: !through
         });
@@ -649,7 +666,7 @@
       return cur.id === "hybrid" ? "annular" : "";
     }, "track", 6);
     var aCap = tag(new THREE.Vector3(), function () {
-      return (ZV >= 1 || cur.gamma >= 1) ? "" : "ground past the vertex";
+      return onGlobe ? "ground past the vertex" : "";
     }, "cap", 7);
     var onGlobe = false;
     var aV = tag(new THREE.Vector3(), function () {
@@ -876,14 +893,15 @@
       // the cap of ground that reaches past the vertex. For a partial the
       // region exists geometrically but no cone ever reaches it, and drawing
       // it would promise a totality that never happens.
-      if (ZV < 1 && cur.gamma < 1) {
+      if (onGlobe && cur.gamma < 1) {
         /* Just under the ground marks (LIFT), not above them: a cap drawn
            further out is drawn over the very shadow it is there to explain. */
         var cap = new THREE.Mesh(
           new THREE.SphereGeometry(1.0003, 64, 28, 0, Math.PI * 2, 0,
             Math.acos(Math.max(-1, ZV))),
-          fillMat(pal.accent2, 0.19));
+          surfaceMat(pal.accent2, 0.19));
         cap.quaternion.copy(Q_Y);
+        cap.renderOrder = 3;
         gCap.add(cap);
       }
       aCap.copy(M.clone().multiplyScalar(1.09));
@@ -922,8 +940,8 @@
 
       // the axis, its two cones, and the vertex between them
       var x0 = -SWEEP;
-      var top = Math.max(2.05, ZV + 0.45);
-      var bot = Math.min(-1.45, ZV - 0.45);
+      var top = CONE_TOP;
+      var bot = CONE_BOTTOM;
       function cone(rTop, rBottom, hh, hc, colour, opacity) {
         var mesh = new THREE.Mesh(
           new THREE.CylinderGeometry(rTop, rBottom, hh, 32, 1, true),
@@ -937,9 +955,9 @@
       // Above the vertex the cone converges as the umbra; below it the same
       // two surfaces open out again as the antumbra.
       gAxis.add(cone(Math.abs(cur.u - top * TAN_F2), 0,
-        top - ZV, (top + ZV) / 2, pal.ink, 0.55));
+        top - ZV, (top + ZV) / 2, pal.ink, 0.4));
       gAxis.add(cone(0, Math.abs(cur.u - bot * TAN_F2),
-        ZV - bot, (ZV + bot) / 2, pal.ink, 0.22));
+        ZV - bot, (ZV + bot) / 2, pal.ink, 0.4));
       // Drawn through the globe: for a total eclipse the vertex lies beyond
       // the far surface, and a mark that vanishes exactly when it matters is
       // no mark at all.
@@ -1057,6 +1075,18 @@
       if (window.console && console.error) {
         console.error("3D scene '" + name + "' failed to build:", e);
       }
+      if (scene) {
+        try {
+          scene.traverse(function (o) {
+            if (o.geometry) o.geometry.dispose();
+            dropMaterial(o.material);
+          });
+        } catch (cleanupError) { /* release the WebGL context below */ }
+      }
+      if (renderer) {
+        try { renderer.forceContextLoss(); } catch (contextError) { /* unsupported */ }
+        try { renderer.dispose(); } catch (disposeError) { /* partly initialised */ }
+      }
       return false;
     }
 
@@ -1066,6 +1096,29 @@
     // Fixed for the life of the viewer; it used to be rebuilt every frame.
     var byId = {};
     built.layers.forEach(function (l) { byId[l.id] = l; });
+
+    /* Material colours are values copied from CSS when the scene is built.
+       Re-read and replace them when the page or system theme changes, rather
+       than leaving an open viewer in the old theme. */
+    function refreshPalette() {
+      var next = palette();
+      var replacements = {};
+      Object.keys(pal).forEach(function (key) {
+        try {
+          replacements[new THREE.Color(pal[key]).getHexString()] = next[key];
+        } catch (e) { /* a non-colour custom property is not a material */ }
+      });
+      scene.traverse(function (o) {
+        var materials = o.material && o.material.length ? o.material : [o.material];
+        materials.forEach(function (m) {
+          if (!m || !m.color) return;
+          var replacement = replacements[m.color.getHexString()];
+          if (replacement) m.color.set(replacement);
+        });
+      });
+      pal = next;
+      invalidate();
+    }
 
     // ---- controls -------------------------------------------------------
     var panel = document.createElement("div");
@@ -1156,7 +1209,7 @@
               x.setAttribute("aria-pressed", "false");
             });
           vb.setAttribute("aria-pressed", "true");
-          spinning = null;
+          stopAnim();
           explode = 0;
           slider.value = 0;
           built.variants.select(o.id);
@@ -1235,7 +1288,7 @@
       if (isFull()) {
         // Give the canvas whatever the controls do not need.
         h = Math.max(200, viewer.clientHeight - panel.offsetHeight -
-          hint.offsetHeight - 40);
+          hint.offsetHeight - (readout ? readout.offsetHeight : 0) - 40);
       } else {
         h = Math.round(w * 9 / 16);
       }
@@ -1266,6 +1319,23 @@
 
     controls = Orbit(camera, stage, 5.2, THREE, built.home, invalidate);
     size();
+
+    var themeObserver = null;
+    if (window.MutationObserver) {
+      themeObserver = new MutationObserver(refreshPalette);
+      themeObserver.observe(document.documentElement, {
+        attributes: true, attributeFilter: ["data-theme"]
+      });
+    }
+    var schemeQuery = window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)");
+    if (schemeQuery) {
+      if (schemeQuery.addEventListener) {
+        schemeQuery.addEventListener("change", refreshPalette);
+      } else if (schemeQuery.addListener) {
+        schemeQuery.addListener(refreshPalette);
+      }
+    }
 
     function layerOffset(l) {
       // Layers separate in turn as the slider advances, so the assembly comes
@@ -1390,6 +1460,14 @@
       if (ro) ro.disconnect(); else window.removeEventListener("resize", size);
       if (fsTimer) clearTimeout(fsTimer);
       document.removeEventListener("fullscreenchange", onFsChange);
+      if (themeObserver) themeObserver.disconnect();
+      if (schemeQuery) {
+        if (schemeQuery.removeEventListener) {
+          schemeQuery.removeEventListener("change", refreshPalette);
+        } else if (schemeQuery.removeListener) {
+          schemeQuery.removeListener(refreshPalette);
+        }
+      }
       if (isFull() && document.exitFullscreen) {
         document.exitFullscreen().catch(function () { /* already leaving */ });
       }
