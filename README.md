@@ -92,13 +92,17 @@ content/            source Markdown; the output tree mirrors this exactly
   00-meta/          research plan, method and source policy
   05-primer/        background: the eclipse computation pipeline for newcomers
   10-raw/           per-topic research notes, one folder per topic
-  20-reports/       the synthesised report and the reference matrix
+  20-reports/       executive summary, pipeline design, error budget,
+                    reading list and reference matrix, open questions
+  img/              images belonging to the site rather than one topic
 references.tsv      GENERATED bibliography, merged from content/**/refs.tsv
 glossary.tsv        GENERATED glossary, merged from content/**/terms.tsv
+images.tsv          GENERATED provenance, merged from content/**/images.tsv
 templates/
   page.html         the HTML shell ({{placeholders}})
   pandoc-fragment.html   pandoc template: emits TOC + body around a split marker
-  static/           site.css, site.js -> copied to site/assets/
+  static/           site.css, site.js, site3d.js -> copied to site/assets/
+  static/vendor/    three.min.js, fetched only when a reader opens a 3D view
 tools/build.py      the whole build
 tools/merge_refs.py fragment merger
 site/               generated output (gitignored)
