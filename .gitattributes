@@ -1,0 +1,6 @@
+# The build writes LF and is byte-for-byte deterministic; keep checkouts the same on every OS.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.webp binary
+*.pdf binary

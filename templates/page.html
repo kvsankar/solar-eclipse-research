@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en" data-theme-default="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{head_title}}</title>
+<meta name="description" content="{{description}}">
+<link rel="stylesheet" href="{{root}}assets/site.css">
+</head>
+<body data-root="{{root}}">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <a class="brand" href="{{root}}index.html">{{site_title}}</a>
+  <button id="navtoggle" class="navtoggle" aria-expanded="false">Menu</button>
+  <button id="themetoggle" class="themetoggle" title="Toggle theme">◐</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Site navigation">
+{{nav}}
+  </nav>
+  <main id="main">
+    <nav class="crumbs" aria-label="Breadcrumb">{{crumbs}}</nav>
+    <div class="{{colwrap_class}}">
+      <article class="doc">
+        <h1 class="doctitle">{{title}}</h1>
+        {{meta_block}}
+        {{body}}
+      </article>
+      {{toc_rail}}
+    </div>
+    {{children}}
+    {{prevnext}}
+    <footer class="pagefoot">
+      <p>{{source_note}}</p>
+    </footer>
+  </main>
+</div>
+<script src="{{root}}assets/site.js"></script>
+<script src="{{root}}assets/site3d.js"></script>
+</body>
+</html>

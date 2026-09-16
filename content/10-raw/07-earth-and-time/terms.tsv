@@ -1,0 +1,23 @@
+# slug	label	definition
+earth-geodetic-latitude	geodetic latitude	The latitude on maps and from GPS, defined by the normal to the reference ellipsoid. It differs from geocentric latitude by up to 11.5 arcminutes near 45 degrees.
+earth-geocentric-latitude	geocentric latitude	The angle between the equatorial plane and the line from the Earth's centre to the observer. Eclipse formulas use it, through $\rho\sin\phi'$ and $\rho\cos\phi'$, to place the observer in the fundamental plane.
+earth-reference-ellipsoid	reference ellipsoid	The oblate spheroid that stands in for the Earth's shape in geodesy and in eclipse computation, defined by an equatorial radius and a flattening (for example WGS 84 or the IAU 1976 figure).
+earth-geoid	geoid	The equipotential surface of the Earth's gravity field that mean sea level would follow. It lies between 106 m below and 85 m above the WGS 84 ellipsoid.
+earth-orthometric-height	orthometric height	Height above the geoid, which is what "elevation above sea level" and most digital elevation models give.
+earth-ellipsoidal-height	ellipsoidal height	Height above the reference ellipsoid, which is what GPS receivers measure natively and what the eclipse formulas need when the observer is placed on the ellipsoid plus a height.
+earth-ut1	UT1	Universal Time proper, a measure of the Earth's rotation angle. Eclipse predictions labelled "UT" are in UT1, obtained from TT by subtracting ΔT.
+earth-utc	UTC	Coordinated Universal Time, the atomic civil time scale kept within 0.9 s of UT1 by leap seconds. TAI − UTC has been 37 s since 2017 January 1.
+earth-tai	TAI	International Atomic Time, the continuous atomic time scale from which TT (TAI + 32.184 s) and UTC (TAI minus an integer number of leap seconds) are derived.
+earth-leap-second	leap second	A one-second step inserted into UTC to keep it within 0.9 s of UT1. The accumulated offset between TAI and UTC has been 37 s since 2017.
+earth-dut1	DUT1	The value of UT1 − UTC broadcast with time signals, rounded to 0.1 s. It is the correction needed to turn UT1 contact times into UTC.
+earth-lod	length of day (lod)	The duration of the mean solar day measured in SI seconds, minus 86400 s. Its slow growth, about 1.8 ms per century on average, is what makes ΔT increase roughly parabolically.
+earth-polar-motion	polar motion	The wandering of the Earth's rotation axis relative to the crust, a few tenths of an arcsecond, which displaces an observer's position relative to the axis by up to about 10 m.
+earth-gast	Greenwich apparent sidereal time (GAST)	The hour angle of the true equinox of date at Greenwich. The Besselian element μ is GAST minus the right ascension of the shadow axis, evaluated at the UT1 of the instant.
+earth-equation-of-equinoxes	equation of the equinoxes	The difference between apparent and mean sidereal time caused by nutation, at most about 1.1 s of time.
+earth-nutation	nutation	The short-period wobble of the Earth's axis superposed on precession, modelled by the IAU 1980 or IAU 2000A series. It moves the equinox by up to about 17 arcseconds.
+earth-precession	precession	The slow drift of the Earth's rotation axis and equinox, about 50 arcseconds per year, which fixes the equator and equinox of date to which Besselian elements are referred.
+earth-refraction	atmospheric refraction	The bending of light in the atmosphere that lifts the apparent altitude of a body, by about 34 arcminutes on the horizon, 10 arcminutes at 5 degrees and 1 arcminute at 45 degrees.
+earth-elevation-factor	elevation factor	Espenak's multiplier $\tan(90^{\circ} - A)\sin D$, where $A$ is the Sun's altitude and $D$ the difference between the Sun's azimuth and the path-limit azimuth, giving the perpendicular shift of the path limit per unit of observer elevation.
+earth-tan-f	tan f₁, tan f₂	The tangents of the half-angles of the penumbral ($f_1$) and umbral ($f_2$) shadow cones, about 0.00467 and 0.00465. They convert an observer's height above the fundamental plane into a change of shadow radius.
+earth-mu	μ (Greenwich hour angle of the shadow axis)	The Besselian element that ties the shadow to the rotating Earth. It is ephemeris sidereal time minus the right ascension of the shadow axis, so it is the element through which ΔT enters.
+earth-spice-bpc	SPICE binary PCK (bpc) Earth orientation kernel	A NAIF file of Earth orientation (precession, nutation, UT1 and polar motion) used by SVS to orient the Earth. The "predict" kernels extrapolate the IERS series into the future.

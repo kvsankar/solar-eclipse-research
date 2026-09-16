@@ -1,0 +1,3 @@
+# path	kind	licence	source	note
+10-raw/07-earth-and-time/img/delta-t-uncertainty.svg	own	own work	tools/figures/delta_t_uncertainty.py	Data figure: the standard error of Delta T against year, on a log scale, from Espenak's uncertainty table; the 265 s gore threshold is marked.
+10-raw/07-earth-and-time/img/terrain-shift.svg	own	own work	tools/figures/terrain_shift.py	Schematic of the terrain correction h cot A, drawn at a 60 degree Sun, with the quoted shifts per 1000 m at 60, 45 and 30 degrees.

@@ -1,0 +1,3 @@
+# path	kind	licence	source	note
+10-raw/05-lunar-limb/img/limb-profile.svg	own	own work	tools/figures/limb_profile.py	Schematic limb profile against the mean limb, with position angle, one peak and one valley; relief exaggerated about 57 times, not LOLA data.
+10-raw/05-lunar-limb/img/bailys-beads.svg	own	own work	tools/figures/bailys_beads.py	Schematic Herald chart: the solar limb curve h = 960''(M-1)(1-cos C) crossing an invented lunar profile, with four beads surviving in the valleys.
