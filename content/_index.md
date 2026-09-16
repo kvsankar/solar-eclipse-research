@@ -5,6 +5,26 @@ status: working
 updated: 2026-09-16
 ---
 
+Solar eclipse predictions are published by a handful of people and programs,
+and they agree to a few hundred metres at the edge of the path. The places
+where they disagree are where the modelling decisions live. This site sets out
+what a developer needs to know to compute every product, from the list of
+eclipses in a century to the second totality begins on one hillside, and to
+know how good the result is: the algorithm, the constants and where each one
+came from, the datasets, the published implementations, and what is still
+unsettled.
+
+This site was researched and written with Anthropic's Claude — every note,
+report and figure in the tree below. It was built to a fixed method: primary
+documents and published code in preference to secondary coverage, formulas
+quoted with their constants rather than paraphrased, negative findings
+recorded as findings, and a graded citation on every substantive claim. The
+grade is rendered beside each reference, so what a number rests on is visible
+where it is used. That is the check on the text, and it is the one worth
+using: follow a citation before relying on a figure here.
+[Method and source policy](00-meta/method-and-sources.md) states the rules in
+full.
+
 ::: summary
 - **One algorithm underlies every eclipse product**: Bessel's fundamental-plane method, fully stated in the 1961 Explanatory Supplement. Predictors differ in their constants and data, not their mathematics [@bes-es1961].
 - **Three inputs decide the edge of the path**: the solar radius, the lunar limb profile, and terrain. Each is worth 0.6 to 3 km at a limit. The ephemeris is worth under a metre [@val-quaglia-2021] [@moon-park-2021].
@@ -12,13 +32,6 @@ updated: 2026-09-16
 - **The solar radius is the unresolved constant.** The 1891 value of 959.63″ that almost everyone uses is a third of an arcsecond smaller than what eclipse observations measure. At one 2024 edge site that difference was the last 11 s of a 65 s smooth-Moon prediction that observation cut to 13.7 s [@val-besselian-maps-accuracy].
 - **No open-source code computes a limb-corrected path edge.** Stellarium and NASA's JavaScript cover the smooth-Moon problem completely [@sw-stellarium-sec-cpp].
 :::
-
-Eclipse predictions are published by a handful of people and programs, and
-they agree to a few hundred metres at the edge of the path. The places where
-they disagree are where the modelling decisions live. This site sets out what
-a developer needs to know to compute every product, from the list of eclipses
-in a century to the second totality begins on one hillside, and to know how
-good the result is.
 
 ## Start here
 
@@ -52,9 +65,11 @@ and the questions it could not close.
 | [Validation](10-raw/10-validation/_index.md) | Observed against predicted, predictor disagreements, the error budget and protocol |
 | [NASA SVS and Ernie Wright](10-raw/11-svs-wright/_index.md) | The 2024 paper, the SVS products and data, and the comparison with other predictors |
 
-## Evidence
+## Reference
 
-Every note is built from primary documents and public code and written to a
-fixed shape, and every claim carries a graded citation. The
-[method and source policy](00-meta/method-and-sources.md) says what counts as
-evidence.
+- [Glossary](05-primer/glossary.md): the jargon, defined standalone, with the
+  formula where a term is really a quantity.
+- [Open questions](20-reports/open-questions.md): what this corpus could not
+  close, each naming the artefact that would close it.
+- [Method and source policy](00-meta/method-and-sources.md): the grades, and
+  what each one is allowed to prove.
