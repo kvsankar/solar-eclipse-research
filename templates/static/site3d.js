@@ -433,11 +433,13 @@
     var LIFT = 1.0005;
     var DEC = 15.0;             // declination of the shadow axis
     var SWEEP = 0.90;           // drawn stretch of the path, each way
-    /* Clip every case at the same two planes. Deriving these ends from each
-       case's vertex made the cones visibly grow and shrink when the type
-       changed, even though their half-angles and drawing scale were fixed. */
-    var CONE_TOP = 2.10;
-    var CONE_BOTTOM = -1.75;
+    /* The umbra and antumbra are one double cone translated along its axis.
+       Keep the same finite length around every vertex so changing type moves
+       one shape instead of resizing it. The much wider penumbra stays clipped
+       to fixed planes around the Earth. */
+    var UMBRA_HALF_SPAN = 2.40;
+    var PENUMBRA_TOP = 2.10;
+    var PENUMBRA_BOTTOM = -1.75;
 
     /* gamma is the least distance of the axis from the geocentre, u the
        umbral radius on the fundamental plane, both in Earth radii and both in
@@ -781,7 +783,10 @@
       var g = new THREE.BufferGeometry();
       g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
       g.setIndex(idx);
-      var mesh = new THREE.Mesh(g, fillMat(colour, opacity));
+      /* The patch lies on the globe. Chords between sampled surface points
+         otherwise dip through the sphere and produce a faceted checkerboard
+         under depth testing, especially after zooming in. */
+      var mesh = new THREE.Mesh(g, surfaceMat(colour, opacity));
       mesh.renderOrder = order;
 
       /* The edge, drawn only where the shadow is what ends. Where the region
@@ -940,8 +945,8 @@
 
       // the axis, its two cones, and the vertex between them
       var x0 = -SWEEP;
-      var top = CONE_TOP;
-      var bot = CONE_BOTTOM;
+      var top = ZV + UMBRA_HALF_SPAN;
+      var bot = ZV - UMBRA_HALF_SPAN;
       function cone(rTop, rBottom, hh, hc, colour, opacity) {
         var mesh = new THREE.Mesh(
           new THREE.CylinderGeometry(rTop, rBottom, hh, 32, 1, true),
@@ -966,11 +971,14 @@
       aMoon.copy(at(x0, cur.gamma, top + 0.07));
 
       var pcone = new THREE.Mesh(
-        new THREE.CylinderGeometry(L1 - top * TAN_F1, L1 - bot * TAN_F1,
-          top - bot, 48, 1, true),
+        new THREE.CylinderGeometry(
+          L1 - PENUMBRA_TOP * TAN_F1,
+          L1 - PENUMBRA_BOTTOM * TAN_F1,
+          PENUMBRA_TOP - PENUMBRA_BOTTOM, 48, 1, true),
         fillMat(pal.dim, 0.13));
       pcone.quaternion.copy(Q_Y);
-      pcone.position.copy(at(x0, cur.gamma, (top + bot) / 2));
+      pcone.position.copy(at(
+        x0, cur.gamma, (PENUMBRA_TOP + PENUMBRA_BOTTOM) / 2));
       gPen.add(pcone);
 
       drawGround(x0);
@@ -1009,7 +1017,7 @@
          path and the path itself runs into the screen. North stays up, so a
          drag left or right turns the Earth on its own axis and carries the
          view east and west. */
-      home: { theta: 2.46, phi: 1.20, r: 4.6 },
+      home: { theta: 2.46, phi: 1.20, r: 5.8 },
       variants: {
         label: "Type",
         initial: "hybrid",
