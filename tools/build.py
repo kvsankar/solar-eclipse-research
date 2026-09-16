@@ -42,6 +42,16 @@ TEMPLATES = ROOT / "templates"
 STATIC = TEMPLATES / "static"
 
 SITE_TITLE = "Computing Solar Eclipses — Research"
+
+# Open Graph needs absolute URLs, which a relative-link static site otherwise
+# never forms. This is where the built tree is published; a build served from
+# anywhere else still works, and only its social previews point here.
+BASE_URL = "https://sankara.net/astro/solar-eclipses/"
+SOCIAL_IMAGE = "img/social-card.jpg"
+SOCIAL_IMAGE_ALT = (
+    "Totality: the solar corona around the black disc of the Moon, with pink "
+    "prominences at the limb."
+)
 SOURCE_NOTE = (
     "Built from Markdown in <code>content/</code> by <code>tools/build.py</code>. "
     "Edit the Markdown, not this page."
@@ -820,6 +830,33 @@ def fill(template: str, values: dict) -> str:
     return re.sub(r"\{\{(\w+)\}\}", repl, template)
 
 
+def render_social(node: Node) -> str:
+    """Open Graph and Twitter tags, so a shared link previews as a card.
+
+    The card is the same for every page: one image for the site, with the page
+    title and description beside it. A per-page image would mean a card for
+    each of 56 pages and no more information than this carries.
+    """
+    url = BASE_URL + ("" if node.parent is None else node.url_from_root)
+    title = SITE_TITLE if node.parent is None else f"{node.title} · {SITE_TITLE}"
+    description = node.description or SITE_TITLE
+    tags = [
+        ("og:type", "article" if node.parent is not None else "website"),
+        ("og:site_name", SITE_TITLE),
+        ("og:title", title),
+        ("og:description", description),
+        ("og:url", url),
+        ("og:image", BASE_URL + SOCIAL_IMAGE),
+        ("og:image:width", "1200"),
+        ("og:image:height", "630"),
+        ("og:image:alt", SOCIAL_IMAGE_ALT),
+    ]
+    out = [f'<meta property="{k}" content="{html.escape(v)}">' for k, v in tags]
+    out.append('<meta name="twitter:card" content="summary_large_image">')
+    out.append(f'<link rel="canonical" href="{html.escape(url)}">')
+    return "\n".join(out)
+
+
 def render_page(node: Node, root: Node, template: str, refs: dict, missing: set,
                 terms: dict, gloss_missing: set, gloss_used: set,
                 prev: Node | None = None, nxt: Node | None = None,
@@ -854,6 +891,7 @@ def render_page(node: Node, root: Node, template: str, refs: dict, missing: set,
         "toc": toc,
         "toc_rail": f'<aside class="toc-rail">{toc}</aside>' if toc else "",
         "colwrap_class": "colwrap has-toc" if toc else "colwrap",
+        "social": render_social(node),
         "body": body,
         "children": render_children(node) if node.is_dir else "",
         "prevnext": render_prevnext(node, prev, nxt, position, total),
