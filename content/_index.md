@@ -23,6 +23,8 @@ implementation stages. The
 [software comparison](10-raw/09-software-and-repos/_index.md) covers published
 eclipse calculators and open-source libraries.
 
+[Research and website source on GitHub](https://github.com/kvsankar/solar-eclipse-research).
+
 Published predictors can disagree at a path limit because they use different
 models and inputs [@val-quaglia-2021] [@val-besselian-maps-accuracy]. This site sets out
 what a developer needs to know to compute every product, from the list of

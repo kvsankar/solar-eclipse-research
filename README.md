@@ -1,5 +1,7 @@
 # eclipse-research: computing solar eclipse products
 
+**[Read the research site](https://sankara.net/astro/solar-eclipses/computing.html)**
+
 ![Totality: the solar corona around the black disc of the Moon, with pink prominences at the limb.](content/img/totality-1999-viatour.jpg)
 
 <sub>Totality of 1999 August 11, from France. Luc Viatour /

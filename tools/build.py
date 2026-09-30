@@ -58,8 +58,8 @@ SOCIAL_IMAGE_ALT = (
     "prominences at the limb."
 )
 SOURCE_NOTE = (
-    "Built from Markdown in <code>content/</code> by <code>tools/build.py</code>. "
-    "Edit the Markdown, not this page."
+    '<a href="https://github.com/kvsankar/solar-eclipse-research">'
+    'Research and website source on GitHub</a>.'
 )
 
 PANDOC_FROM = (
