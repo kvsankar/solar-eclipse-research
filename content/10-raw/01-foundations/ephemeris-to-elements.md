@@ -1,10 +1,11 @@
 ---
 title: From ephemeris to elements
-description: The ordered equations for producing a table of Besselian elements from geocentric Sun and Moon positions, what the almanacs and open-source codes do about frames, light-time and aberration, and how direct topocentric computation differs.
+description: Equations for deriving eclipse Besselian elements from Sun and Moon positions, with frames, light-time and direct topocentric alternatives.
 order: 2
 status: working
 updated: 2026-09-15
 tags: [besselian, ephemeris, jpl-de, swiss-ephemeris, skyfield]
+seo_title: Calculating Besselian Elements from an Ephemeris
 ---
 
 ::: summary

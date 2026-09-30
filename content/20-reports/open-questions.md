@@ -1,9 +1,10 @@
 ---
 title: Open questions
-description: The artefacts that would most change the conclusions, ranked, each naming the document, dataset or line of code to obtain.
+description: Outstanding eclipse calculation questions, each tied to the paper, dataset or code needed to resolve it and its effect on the conclusions.
 order: 5
 status: working
 updated: 2026-09-16
+seo_title: Open Questions in Solar Eclipse Algorithms and Modelling
 ---
 
 ::: summary

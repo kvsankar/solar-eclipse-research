@@ -1,10 +1,11 @@
 ---
 title: Error budget and validation protocol
-description: The contribution of each input to the error of a modern eclipse prediction, in seconds of contact time and metres of path edge, the record of ΔT model validation, and a test protocol with reference cases and tolerances for a new implementation.
+description: A validation protocol for eclipse calculation software, with reference cases, separate numerical and physical checks, and error-budget inputs.
 order: 3
 status: working
 updated: 2026-09-15
 tags: [validation, error-budget, delta-t, solar-radius, limb, terrain, protocol]
+seo_title: Eclipse Algorithm Validation: Reference Cases and Tolerances
 ---
 
 ::: summary

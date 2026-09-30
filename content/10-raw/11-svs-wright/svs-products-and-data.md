@@ -1,10 +1,11 @@
 ---
 title: SVS eclipse pages and datasets
-description: Every SVS eclipse product by Ernie Wright with its ID, what it releases, the method statements on the page, and the exact shapefile schema a developer will load.
+description: NASA SVS eclipse map products and data releases, with page identifiers, downloadable formats, shapefile fields and documented methods.
 order: 2
 status: working
 updated: 2026-09-15
 tags: [svs, shapefiles, kml, geojson, datasets, constants]
+seo_title: NASA SVS Solar Eclipse Maps, Shapefiles and Datasets
 ---
 
 ::: summary

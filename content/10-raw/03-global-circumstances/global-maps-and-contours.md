@@ -1,10 +1,11 @@
 ---
 title: Global maps and contours
-description: How the curves of the partial-eclipse world map are computed: rise and set curves, maximum eclipse at sunrise and sunset, curves of maximum eclipse at stated times, outline (contact-time) curves, and contours of equal magnitude and equal obscuration.
+description: How eclipse map algorithms calculate rise and set curves, contact-time outlines, magnitude contours and obscuration across the Earth.
 order: 2
 status: working
 updated: 2026-09-15
 tags: [rise-set-curves, maximum-eclipse, magnitude-contours, obscuration, world-map]
+seo_title: Solar Eclipse Map Algorithms: Contours and Contact Curves
 ---
 
 ::: summary

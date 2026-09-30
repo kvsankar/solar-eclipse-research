@@ -1,10 +1,11 @@
 ---
 title: Canons and data products
-description: Where the eclipse lists live, in what format, with which ephemeris and ΔT, which open-source code enumerates eclipses, and what the older canons from Oppolzer to Mucke and Meeus contain.
+description: Find solar eclipse catalogues and Besselian data tables, with their formats, ephemerides, ΔT models and documented calculation methods.
 order: 3
 status: working
 updated: 2026-09-15
 tags: [canon, catalogue, nasa-gsfc, imcce, hmnao, jubier, occult, data-products, open-source]
+seo_title: Solar Eclipse Catalogues: NASA Canons and Data Tables
 ---
 
 ::: summary

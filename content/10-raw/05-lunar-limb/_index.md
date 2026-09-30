@@ -1,10 +1,11 @@
 ---
 title: Lunar limb profile
-description: How the Moon's mountains and valleys enter an eclipse computation, from Watts' 1963 charts to LOLA and Kaguya DEMs, and what they change in contact times, path limits and Baily's beads.
+description: How lunar mountains and valleys enter eclipse calculation through Watts, Kaguya and LOLA profiles, affecting contacts, path limits and beads.
 order: 5
 status: working
 updated: 2026-09-15
 tags: [lunar-limb, watts, lola, kaguya, bailys-beads]
+seo_title: Lunar Limb Corrections in Solar Eclipse Calculation
 ---
 
 ::: summary

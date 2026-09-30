@@ -1,10 +1,11 @@
 ---
 title: Lunar and solar ephemerides
-description: Which ephemeris to feed an eclipse computation, what each JPL DE release changed for the Moon, how INPOP, EPM, ELP and VSOP compare, and where the errors land on the ground.
+description: Compare Sun and Moon ephemerides for eclipse calculation, including JPL DE releases, lunar ranging accuracy and effects on ground predictions.
 order: 1
 status: working
 updated: 2026-09-15
 tags: [ephemeris, jpl-de, de440, inpop, elp, vsop87, spk, tdb]
+seo_title: Solar Eclipse Ephemerides: JPL DE, INPOP, ELP and VSOP
 ---
 
 ::: summary

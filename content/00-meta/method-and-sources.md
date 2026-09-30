@@ -1,9 +1,10 @@
 ---
 title: Method and source policy
-description: What the site treats as evidence, how sources are graded, and the rules that keep formulas implementable.
+description: How this eclipse calculation guide grades papers, official datasets and software documentation, and records formulas and constants.
 order: 2
 status: working
 updated: 2026-09-15
+seo_title: Eclipse Calculation Sources: Evidence and Citation Policy
 ---
 
 ::: summary

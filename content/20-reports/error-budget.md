@@ -1,9 +1,10 @@
 ---
 title: Error budget
-description: Every input to an eclipse prediction ranked by its effect in seconds of contact time and metres on the ground, and the two product modes that follow.
+description: Rank eclipse prediction inputs by their effects on contact times and ground paths, and distinguish numerical checks from physical uncertainty.
 order: 3
 status: working
 updated: 2026-09-16
+seo_title: Solar Eclipse Prediction Accuracy: Timing and Path Errors
 ---
 
 ::: summary

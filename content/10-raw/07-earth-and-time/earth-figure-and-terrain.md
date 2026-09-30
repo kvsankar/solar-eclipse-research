@@ -1,10 +1,11 @@
 ---
 title: Earth figure and terrain
-description: The ellipsoid behind ρ sin φ' and ρ cos φ', what a sphere or a wrong ellipsoid costs, how observer height moves the path, which elevation datasets the predictors use, and whether anyone corrects for the geoid.
+description: Observer reduction formulas, ellipsoid choices, elevation datasets and geoid questions behind terrain-aware solar eclipse path calculations.
 order: 1
 status: working
 updated: 2026-09-15
 tags: [earth-figure, ellipsoid, elevation, dem, geoid, svs]
+seo_title: Earth Ellipsoid and Terrain Corrections for Eclipse Paths
 ---
 
 ::: summary

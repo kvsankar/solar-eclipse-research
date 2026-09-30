@@ -36,6 +36,8 @@ python tools/fix_math.py           # rewrite TeX that pandoc's math parser rejec
 python tools/normalise_prose.py    # house-style spelling and notation, outside quotations and code
 python tools/prose_check.py        # prose tics and long sentences
 python tools/jargon_check.py       # terms used before they are explained
+python -m unittest discover -s tools -p test_seo.py  # search metadata regression checks
+python tools/check_seo.py          # verify rendered metadata and sitemap
 python tools/make_og_image.py      # recompose content/img/social-card-v2.jpg (needs Pillow)
 ```
 
@@ -43,12 +45,42 @@ Requires **pandoc** on PATH (3.x) and Python 3.10+. No pip or npm dependencies
 for the build itself; `make_og_image.py` needs Pillow and is run by hand when
 the card changes, not on every build.
 
-## Social previews
+## Search metadata and social previews
+
+Every Markdown page carries a unique `seo_title` and `description`. The
+search title also supplies the Open Graph and Twitter title. `title` remains
+the visible heading and navigation label, so a descriptive search title does
+not lengthen every navigation entry. The description also appears on the
+parent page's card.
+
+The home page's canonical URL is
+`https://sankara.net/astro/solar-eclipses/computing.html`. The build emits
+`computing.html` alongside the identical offline entry `index.html`. Both
+identify `computing.html` as canonical. All other pages retain their existing
+URLs. Internal home links use the relative `computing.html` path, which also
+works offline. The deterministic `sitemap.xml` lists each canonical page once and omits
+the home-page aliases. It carries no modification dates because the content
+dates are not a record of every page change.
+
+After publishing, submit
+`https://sankara.net/astro/solar-eclipses/sitemap.xml` in Google Search Console
+and request inspection of `computing.html`. Compare impressions, clicks and
+positions for queries containing calculation, algorithm and computation.
+The sitemap can also be listed in the domain's root `robots.txt`, which is
+managed outside this repository.
+
+Google recommends descriptive page titles and unique descriptions. Search
+snippets can also come from visible text, so the introduction and links use
+the same terminology. Google does not use a `meta keywords` tag for ranking.
+See Google's [title guidance](https://developers.google.com/search/docs/appearance/title-link),
+[description guidance](https://developers.google.com/search/docs/appearance/snippet),
+[sitemap guidance](https://developers.google.com/search/docs/crawling-indexing/sitemaps/overview)
+and [supported meta tags](https://developers.google.com/search/docs/crawling-indexing/special-tags).
 
 Every page carries Open Graph and Twitter card tags, so a shared link previews
-as a card. They are the one part of the output that cannot be relative:
-`BASE_URL` in `tools/build.py` says where the tree is published, and only the
-previews depend on it. One image serves the whole site —
+as a card. These tags, canonical links and sitemap entries use absolute URLs.
+`BASE_URL` in `tools/build.py` says where the tree is published. Navigation
+uses relative links for offline reading. One image serves the whole site —
 `content/img/social-card-v2.jpg`, composed by `tools/make_og_image.py` from the
 totality photograph. The credit is drawn into the image because a card is
 shown without the page around it, and the licence asks for the credit beside
@@ -116,6 +148,7 @@ Front matter is optional and flat:
 ```yaml
 ---
 title: Page title              # else first H1, else filename
+seo_title: Search title         # optional; also used for social cards
 description: One line.         # shown on the parent index card
 status: draft | working | final
 updated: 2026-09-15

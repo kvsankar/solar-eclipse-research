@@ -1,10 +1,11 @@
 ---
 title: Effect of the radius on eclipse products
-description: How much path width, path limits, central duration, contact times and grazing zones move per 0.1 arcsecond of solar radius, with the published numbers and a way to expose the radius and its uncertainty.
+description: Published effects of solar radius changes on eclipse path width, limits, totality duration and contact times, with uncertainty guidance.
 order: 2
 status: working
 updated: 2026-09-15
 tags: [solar-radius, path-limits, duration, contact-times, uncertainty]
+seo_title: How Solar Radius Changes Eclipse Paths and Contact Times
 ---
 
 ::: summary

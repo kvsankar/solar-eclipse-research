@@ -1,8 +1,9 @@
 ---
 title: Reports
-description: The synthesis: the findings, the pipeline a developer should build, the error budget, the reading list, and what remains open.
+description: Research findings, an eclipse calculation pipeline, the error budget, a reading list and the outstanding questions for developers.
 order: 20
 updated: 2026-09-16
+seo_title: Solar Eclipse Calculation Guide: Findings and Pipeline
 ---
 
 Five pages, written to be read in order and to stand without the raw notes.

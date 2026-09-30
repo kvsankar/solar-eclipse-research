@@ -1,10 +1,11 @@
 ---
 title: Wright and Young 2024, the raster method
-description: What the Astronomical Journal paper actually specifies, formula by formula, and what it leaves out.
+description: Formulas and modelling choices in Wright and Young's raster eclipse calculation paper, including lunar limb profiles and terrain tests.
 order: 1
 status: working
 updated: 2026-09-15
 tags: [svs, wright, raster, limb-profile, limb-test, broken-annular, solar-radius]
+seo_title: Wright and Young 2024: Raster Eclipse Calculation Method
 ---
 
 ::: summary

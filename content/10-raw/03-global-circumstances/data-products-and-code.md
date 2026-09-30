@@ -1,10 +1,11 @@
 ---
 title: Data products and code
-description: The published path products (NASA tables, SVS shapefiles, Jubier KML, NOAA releases, GreatAmericanEclipse, Irwin), which of them carry limb and terrain corrections, the open-source code that computes paths, and a worked pipeline from Besselian polynomials to GeoJSON.
+description: Compare eclipse path tables, shapefiles and KML, and follow a calculation pipeline from Besselian elements to GeoJSON map products.
 order: 3
 status: working
 updated: 2026-09-15
 tags: [shapefiles, geojson, kml, svs, stellarium, swiss-ephemeris, github, pipeline]
+seo_title: Eclipse Path Data and Code: Besselian Elements to GeoJSON
 ---
 
 ::: summary

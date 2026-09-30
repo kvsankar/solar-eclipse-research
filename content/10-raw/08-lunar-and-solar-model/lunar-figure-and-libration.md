@@ -1,10 +1,11 @@
 ---
 title: Lunar figure, radius ratio k, and libration
-description: Centre of mass versus centre of figure, the three values of k and where they came from, the PA and ME lunar frames, and how to get topocentric libration and the axis position angle for a limb profile.
+description: Lunar radius ratio k, centre of mass versus figure, PA and ME frames, and observer-specific libration needed for eclipse limb profiles.
 order: 2
 status: working
 updated: 2026-09-15
 tags: [lunar-radius, k, centre-of-figure, libration, principal-axis, mean-earth, lola]
+seo_title: Lunar Radius, Figure and Libration in Eclipse Calculation
 ---
 
 ::: summary

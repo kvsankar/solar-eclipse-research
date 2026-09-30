@@ -1,10 +1,11 @@
 ---
 title: Commercial and institutional tools
-description: What NASA GSFC, EclipseWise, NASA SVS, Jubier, Occult 4, timeanddate, GreatAmericanEclipse, McGlaun, Eclipse Orchestrator, the phone apps and USNO compute, from which inputs, and what each documents.
+description: Compare documented eclipse calculation methods and inputs in NASA, EclipseWise, Jubier, Occult, USNO, timeanddate and other prediction tools.
 order: 1
 status: working
 updated: 2026-09-15
 tags: [software, nasa, eclipsewise, jubier, occult, svs, timeanddate, apps]
+seo_title: Solar Eclipse Predictors: NASA, Jubier, Occult and USNO
 ---
 
 ::: summary

@@ -1,10 +1,11 @@
 ---
 title: Solar radius
-description: Which solar radius an eclipse computation should use, where each value in circulation comes from, and what a 0.1 arcsecond change does to path limits, durations and contact times.
+description: Compare solar radius choices for eclipse calculation and their effects on path limits, durations and local contact times.
 order: 6
 status: working
 updated: 2026-09-15
 tags: [solar-radius, bailys-beads, path-limits, constants]
+seo_title: Solar Radius in Eclipse Calculation: Values and Effects
 ---
 
 ::: summary

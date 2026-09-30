@@ -1,10 +1,11 @@
 ---
 title: SVS versus Espenak, Jubier and Irwin
-description: Where the NASA SVS path differs from the NASA eclipse site, EclipseWise, Jubier's maps and the Besselian Elements map, by how much, and which constant is responsible.
+description: Compare NASA SVS eclipse paths with Espenak, Jubier and Irwin predictions, including solar radius choices, ΔT and measured path differences.
 order: 3
 status: working
 updated: 2026-09-15
 tags: [svs, espenak, jubier, irwin, solar-radius, delta-t, comparison]
+seo_title: NASA SVS versus Espenak, Jubier and Irwin Eclipse Maps
 ---
 
 ::: summary

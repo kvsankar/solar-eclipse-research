@@ -1,10 +1,11 @@
 ---
 title: Predictor disagreements
-description: Where the NASA SVS, Espenak, Jubier, Irwin, USNO, timeanddate, Occult, Stellarium and Photo Ephemeris products differ in inputs, and by how many metres and seconds at the path edge in 2017 and 2024.
+description: Compare solar eclipse predictors and the input choices behind differences in path limits and contact times for the 2017 and 2024 eclipses.
 order: 2
 status: working
 updated: 2026-09-15
 tags: [validation, svs, espenak, jubier, irwin, solar-radius, delta-t, path-edge]
+seo_title: Why Solar Eclipse Calculators Disagree at Path Edges
 ---
 
 ::: summary

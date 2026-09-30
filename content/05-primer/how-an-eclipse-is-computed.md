@@ -1,9 +1,10 @@
 ---
-title: How an eclipse is computed
-description: One prediction followed from the ephemeris to a contact time, in plain terms, with pointers to the formulas.
+title: How to calculate a solar eclipse
+description: Follow a solar eclipse calculation from Sun and Moon positions to shadow geometry and contact times, with links to algorithms and formulas.
 order: 1
 status: working
 updated: 2026-09-16
+seo_title: How to Calculate a Solar Eclipse: Methods and Formulas
 ---
 
 ::: summary

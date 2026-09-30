@@ -1,10 +1,11 @@
 ---
 title: Foundations
-description: Besselian elements, the fundamental plane, and how the elements are derived from an ephemeris of the Sun and Moon.
+description: The foundations of Besselian eclipse calculation: the fundamental plane, shadow geometry and elements derived from Sun and Moon positions.
 order: 1
 status: working
 updated: 2026-09-15
 tags: [besselian, fundamental-plane, foundations]
+seo_title: Besselian Eclipse Calculation: Elements and Geometry
 ---
 
 ::: summary

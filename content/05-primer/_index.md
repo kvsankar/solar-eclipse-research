@@ -1,8 +1,9 @@
 ---
 title: Primer
-description: Background for a developer new to eclipse computation: how a prediction is built, why the Moon's edge and the Sun's size matter, and the glossary.
+description: Start learning solar eclipse calculation with a plain-language prediction walkthrough, explanations of modelling choices and a glossary.
 order: 5
 updated: 2026-09-16
+seo_title: Solar Eclipse Calculation: A Developer's Introduction
 ---
 
 Start here if you have not computed an eclipse before. The

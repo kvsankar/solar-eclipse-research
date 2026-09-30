@@ -1,10 +1,11 @@
 ---
 title: Besselian elements and the fundamental plane
-description: The eight elements, the fundamental-plane geometry, sign conventions, units, time scales, the constants k and s0, and the polynomial form NASA and Meeus publish.
+description: Besselian elements for solar eclipse calculation, with fundamental-plane geometry, units, sign conventions, constants and polynomial tables.
 order: 1
 status: working
 updated: 2026-09-15
 tags: [besselian, fundamental-plane, constants, delta-t]
+seo_title: Besselian Elements: Solar Eclipse Geometry and Constants
 ---
 
 ::: summary

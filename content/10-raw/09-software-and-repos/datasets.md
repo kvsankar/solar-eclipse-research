@@ -1,10 +1,11 @@
 ---
 title: Datasets
-description: Where to download the Besselian element tables, SVS GIS products, lunar DEMs, terrestrial DEMs, ΔT tables and ephemeris kernels an eclipse pipeline needs, with formats verified on 2026-09-15.
+description: Download sources for Besselian tables, eclipse maps, lunar and terrestrial elevation models, ΔT data and ephemeris kernels.
 order: 4
 status: working
 updated: 2026-09-15
 tags: [datasets, besselian, lola, sldem2015, srtm, deltat, de440]
+seo_title: Solar Eclipse Calculation Datasets and Download Sources
 ---
 
 ::: summary

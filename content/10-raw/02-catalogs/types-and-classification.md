@@ -1,10 +1,11 @@
 ---
 title: Types and classification
-description: The inequalities in gamma and the umbral radius that separate partial, annular, total, hybrid, central and non-central eclipses, and the definition and derivation of every quantity a catalogue lists per eclipse.
+description: The formulas and thresholds used to classify solar eclipses as partial, annular, total, hybrid, central or non-central.
 order: 2
 status: working
 updated: 2026-09-15
 tags: [eclipse-types, gamma, hybrid, non-central, magnitude, greatest-eclipse]
+seo_title: Solar Eclipse Classification: Gamma and Umbral Radius
 ---
 
 ::: summary

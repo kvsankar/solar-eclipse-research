@@ -32,14 +32,16 @@ jobs:
 
       - name: Build site
         run: |
+          python -m unittest discover -s tools -p test_seo.py
           python tools/merge_refs.py
           python tools/build.py --clean
-          cp site/index.html site/computing.html
+          python tools/check_seo.py
 
       - name: Verify deployment payload
         run: |
           test "$REMOTE_PATH" = "/var/www/sankara.net/astro/solar-eclipses/"
           test -f site/computing.html
+          test -f site/sitemap.xml
           test -f site/assets/site.css
           test -f site/assets/site.js
           test -f site/assets/site3d.js

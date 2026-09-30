@@ -1,10 +1,11 @@
 ---
 title: Local circumstances
-description: From Besselian elements or a topocentric ephemeris to one observer's contact times, magnitude, obscuration, position angles, altitude, duration, the corrections that move those numbers by seconds, and the public code that computes them.
+description: Methods for calculating eclipse contact times, magnitude, obscuration and duration at an observer's location, with corrections and public code.
 order: 4
 status: working
 updated: 2026-09-15
 tags: [local-circumstances, besselian, topocentric, contacts, bailys-beads]
+seo_title: Local Solar Eclipse Calculation: Contacts and Magnitude
 ---
 
 ::: summary

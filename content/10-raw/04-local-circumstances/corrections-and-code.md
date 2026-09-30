@@ -1,10 +1,11 @@
 ---
 title: Corrections that move contact times, Baily's beads, and public code
-description: How much the lunar limb, the solar radius, k, ΔT, observer height, refraction and the centre-of-figure offset shift local contact times, how bead events are predicted from the limb profile at the site, and what each public implementation does.
+description: How lunar limb data, solar radius, ΔT and observer height affect eclipse contact calculations, with bead predictions and public implementations.
 order: 3
 status: working
 updated: 2026-09-15
 tags: [local-circumstances, limb-correction, bailys-beads, solar-radius, delta-t, refraction, code]
+seo_title: Eclipse Contact Corrections: Lunar Limb, Radius and Code
 ---
 
 ::: summary

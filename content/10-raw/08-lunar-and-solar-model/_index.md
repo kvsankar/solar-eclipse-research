@@ -1,10 +1,11 @@
 ---
 title: Lunar and solar model
-description: The ephemerides that place the Moon and Sun, the physical model of the Moon (centre of mass versus figure, the radius ratio k, the PA and ME frames, libration) and what each choice costs in arcseconds, seconds and kilometres.
+description: Ephemerides, lunar radius, centre of figure, coordinate frames and libration choices used by solar eclipse calculation algorithms.
 order: 8
 status: working
 updated: 2026-09-15
 tags: [ephemeris, jpl-de, lunar-radius, libration, lunar-frames]
+seo_title: Sun and Moon Models for Solar Eclipse Algorithms
 ---
 
 ::: summary

@@ -1,10 +1,11 @@
 ---
 title: ΔT and Earth rotation
-description: How TT − UT1 enters the Besselian elements, the ΔT models from Morrison and Stephenson to the IERS series, how far off a prediction is one to a hundred years ahead, and what each predictor used for 2017 and 2024.
+description: How ΔT connects terrestrial time to Earth rotation in eclipse prediction, with historical models, IERS data and forecast uncertainty.
 order: 2
 status: working
 updated: 2026-09-15
 tags: [delta-t, ut1, utc, leap-seconds, polar-motion, sidereal-time, iers]
+seo_title: ΔT and Earth Rotation in Solar Eclipse Prediction
 ---
 
 ::: summary

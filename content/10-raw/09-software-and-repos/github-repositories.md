@@ -1,10 +1,11 @@
 ---
 title: GitHub repositories
-description: Thirty public repositories that compute solar eclipse products, with language, stars, last commit, method, constants, limb and terrain handling, and a comparison matrix flagging the five most complete.
+description: Compare public eclipse calculation repositories by language, algorithms, constants, lunar limb and terrain support, and documented validation.
 order: 3
 status: working
 updated: 2026-09-15
 tags: [software, github, repositories, besselian, limb, terrain]
+seo_title: Solar Eclipse Algorithms on GitHub: Repository Comparison
 ---
 
 ::: summary

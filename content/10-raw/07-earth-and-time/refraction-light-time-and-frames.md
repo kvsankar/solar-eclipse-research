@@ -1,10 +1,11 @@
 ---
 title: Refraction, light-time and frames
-description: Whether refraction belongs in contact times and paths, what the almanac formulas are and how big the effect is, why apparent places and consistent aberration matter far more, the TT versus TDB question, and a table of every effect with its size and who includes it.
+description: Refraction, apparent positions, aberration, light-time and TT versus TDB in eclipse calculations, with documented effects and implementation choices.
 order: 3
 status: working
 updated: 2026-09-15
 tags: [refraction, aberration, light-time, tdb, apparent-place, effects-table]
+seo_title: Eclipse Calculation: Refraction, Light-Time and Frames
 ---
 
 ::: summary

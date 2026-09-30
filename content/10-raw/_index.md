@@ -1,8 +1,9 @@
 ---
 title: Raw research
-description: Per-topic notes, one folder per topic, from the fundamental plane to validation against observed eclipses.
+description: Research notes on solar eclipse algorithms, from Besselian elements and eclipse paths to contact times, lunar terrain and validation.
 order: 10
 updated: 2026-09-15
+seo_title: Solar Eclipse Algorithms: Research Notes and Formulas
 ---
 
 Working notes, one topic per folder. Each note ends with **what this changes**

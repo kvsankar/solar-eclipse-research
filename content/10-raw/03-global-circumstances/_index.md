@@ -1,10 +1,11 @@
 ---
 title: Global circumstances
-description: How the central line, the umbral and penumbral limits, the shadow outlines, the rise and set curves, the magnitude contours and the path products on a world map are computed from Besselian elements.
+description: Calculate global eclipse circumstances: the central line, path limits, shadow outlines, durations and partial-eclipse map contours.
 order: 3
 status: working
 updated: 2026-09-15
 tags: [global-circumstances, path, limits, besselian]
+seo_title: Solar Eclipse Path Calculation: Global Circumstances
 ---
 
 ::: summary

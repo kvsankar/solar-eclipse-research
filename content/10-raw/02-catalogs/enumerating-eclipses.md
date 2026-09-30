@@ -1,10 +1,11 @@
 ---
 title: Enumerating eclipses
-description: Three ways to list every solar eclipse in a period, the method and constants behind the NASA Five Millennium Canon, Saros and Inex numbering, and the accuracy ceiling set by ΔT.
+description: Compare Meeus's approximate eclipse search with ephemeris-based algorithms, including classification, Saros numbering and ΔT limits.
 order: 1
 status: working
 updated: 2026-09-15
 tags: [enumeration, meeus, five-millennium-canon, saros, inex, delta-t]
+seo_title: Finding Solar Eclipses: Meeus and Ephemeris Algorithms
 ---
 
 ::: summary

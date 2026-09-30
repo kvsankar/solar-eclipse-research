@@ -1,10 +1,11 @@
 ---
 title: Catalogues and types
-description: How every solar eclipse in a period is found, how each one is typed as partial, annular, total or hybrid, and which canons and data products carry the results.
+description: How algorithms find and classify solar eclipses, and which catalogues provide reference data for testing eclipse calculation software.
 order: 2
 status: working
 updated: 2026-09-15
 tags: [catalogues, canon, saros, eclipse-types, enumeration]
+seo_title: Solar Eclipse Catalogue Algorithms and Classification
 ---
 
 ::: summary

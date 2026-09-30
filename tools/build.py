@@ -16,6 +16,7 @@ Design rules:
 
 Front matter (optional, YAML-ish, flat) understood per file:
     title:       page title           (else first H1, else filename)
+    seo_title:   optional document and social-card title, separate from navigation
     description: one-line summary     (shown on parent index cards)
     status:      draft | working | final
     tags:        [a, b] or block list
@@ -43,10 +44,10 @@ STATIC = TEMPLATES / "static"
 
 SITE_TITLE = "Computing Solar Eclipses — Research"
 
-# Open Graph needs absolute URLs, which a relative-link static site otherwise
-# never forms. This is where the built tree is published; a build served from
-# anywhere else still works, and only its social previews point here.
+# Canonicals, social cards and the sitemap use the publication URL. Navigation
+# stays relative so the same output also opens from file://.
 BASE_URL = "https://sankara.net/astro/solar-eclipses/"
+HOME_FILENAME = "computing.html"
 # Versioned filename. Cloudflare serves images with max-age=604800, so a card
 # changed in place keeps its stale bytes in front of the scrapers for a week.
 # Renaming is the one invalidation that needs no API credentials; bump the
@@ -529,7 +530,7 @@ class Node:
     def url_from_root(self) -> str:
         rel = self.rel.as_posix()
         if self.is_dir:
-            return "index.html" if rel in ("", ".") else f"{rel}/index.html"
+            return HOME_FILENAME if rel in ("", ".") else f"{rel}/index.html"
         return f"{rel}.html"
 
     @property
@@ -704,7 +705,7 @@ def render_nav(root: Node, current: Node) -> str:
         return "\n".join(out)
 
     home_cls = ' class="current"' if current is root else ""
-    home = f'<ul><li class="sec"><a{home_cls} href="{prefix}index.html">Home</a></li></ul>'
+    home = f'<ul><li class="sec"><a{home_cls} href="{prefix}{root.url_from_root}">Home</a></li></ul>'
     return home + "\n" + render(root.children, 0)
 
 
@@ -834,6 +835,29 @@ def fill(template: str, values: dict) -> str:
     return re.sub(r"\{\{(\w+)\}\}", repl, template)
 
 
+def public_url(node: Node) -> str:
+    """One publication URL per page, including the existing home-page filename."""
+    return BASE_URL + node.url_from_root
+
+
+def page_head_title(node: Node) -> str:
+    """Use an authored search title without changing the navigation label."""
+    authored = str(node.meta.get("seo_title") or "").strip()
+    if authored:
+        return authored
+    return node.title if node.parent is None else f"{node.title} · {SITE_TITLE}"
+
+
+def write_sitemap(nodes: list[Node]) -> None:
+    """List canonical HTML URLs only, without fabricated modification dates."""
+    urls = sorted(public_url(node) for node in nodes)
+    lines = ['<?xml version="1.0" encoding="UTF-8"?>',
+             '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+    lines.extend(f"  <url><loc>{html.escape(url)}</loc></url>" for url in urls)
+    lines.append("</urlset>")
+    (OUT / "sitemap.xml").write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
+
+
 def render_social(node: Node) -> str:
     """Open Graph and Twitter tags, so a shared link previews as a card.
 
@@ -841,8 +865,8 @@ def render_social(node: Node) -> str:
     title and description beside it. A per-page image would mean a card for
     each of 56 pages and no more information than this carries.
     """
-    url = BASE_URL + ("" if node.parent is None else node.url_from_root)
-    title = SITE_TITLE if node.parent is None else f"{node.title} · {SITE_TITLE}"
+    url = public_url(node)
+    title = page_head_title(node)
     description = node.description or SITE_TITLE
     image = BASE_URL + SOCIAL_IMAGE
     tags = [
@@ -895,12 +919,10 @@ def render_page(node: Node, root: Node, template: str, refs: dict, missing: set,
     values = {
         "title": html.escape(node.title),
         "site_title": html.escape(SITE_TITLE),
-        # The home page's own title is the site title, so pairing the two in
-        # the document title says the same thing twice in the browser tab.
-        "head_title": html.escape(SITE_TITLE) if node.parent is None
-        else html.escape(node.title) + " &middot; " + html.escape(SITE_TITLE),
+        "head_title": html.escape(page_head_title(node)),
         "description": html.escape(node.description or SITE_TITLE),
         "root": rel_root(node.depth),
+        "home_url": root.url_from_root,
         "nav": render_nav(root, node),
         "crumbs": render_crumbs(node, root),
         "meta_block": render_meta_block(node),
@@ -1151,6 +1173,10 @@ def main() -> int:
         node.out_path.write_text(out_html, encoding="utf-8", newline="\n")
         pages += 1
 
+    # The publication filename and offline index share identical content and
+    # identify computing.html as canonical. Deployment needs no URL rewrite.
+    shutil.copyfile(root.out_path, OUT / HOME_FILENAME)
+    write_sitemap(order)
     assets = copy_assets()
     index_bytes = write_search_index(search)
     if not args.quiet:

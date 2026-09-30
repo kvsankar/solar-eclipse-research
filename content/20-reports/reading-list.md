@@ -1,9 +1,10 @@
 ---
 title: Reading list and reference matrix
-description: The papers, code and datasets a developer should take in order, and what each one uniquely provides.
+description: Papers, eclipse algorithms, public code and datasets to read in order, with a reference matrix explaining what each source provides.
 order: 4
 status: working
 updated: 2026-09-16
+seo_title: Eclipse Calculation Reading List: Papers, Code and Datasets
 ---
 
 ::: summary

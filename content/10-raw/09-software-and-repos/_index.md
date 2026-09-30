@@ -1,10 +1,11 @@
 ---
 title: Software and repositories
-description: Survey of the programs, web services, libraries, public repositories and datasets that compute solar eclipse products, with their inputs, constants, licences and documented validation.
+description: Compare eclipse calculation software, web services, open-source libraries and datasets by methods, constants, licences and validation evidence.
 order: 9
 status: working
 updated: 2026-09-15
 tags: [software, repositories, datasets, survey]
+seo_title: Solar Eclipse Calculation Software, Libraries and Data
 ---
 
 ::: summary

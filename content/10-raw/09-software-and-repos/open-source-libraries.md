@@ -1,10 +1,11 @@
 ---
 title: Open-source libraries
-description: What Stellarium, Swiss Ephemeris, Astronomy Engine, Skyfield, PyEphem, libnova, NOVAS, SOFA, astropy, sunpy, SPICE, Horizons and the Meeus ports provide toward solar eclipse computation, with the constants and methods read from their code.
+description: What Stellarium, Swiss Ephemeris, Astronomy Engine, Skyfield and other libraries provide for eclipse calculations, based on documented code.
 order: 2
 status: working
 updated: 2026-09-15
 tags: [software, stellarium, swisseph, skyfield, spice, astronomy-engine, meeus]
+seo_title: Open-Source Solar Eclipse Calculation Libraries
 ---
 
 ::: summary

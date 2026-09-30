@@ -1,9 +1,10 @@
 ---
 title: Scope and coverage
-description: The eleven topics, the question each answers, the standard of detail they are held to, and the limits of the evidence behind them.
+description: Eleven research topics covering eclipse calculation, from finding eclipses and mapping paths to local contact times and validation.
 order: 1
 status: working
 updated: 2026-09-16
+seo_title: Solar Eclipse Calculation Research: Scope and Coverage
 ---
 
 ::: summary

@@ -1,10 +1,11 @@
 ---
 title: "Datasets: Watts, Kaguya, LOLA"
-description: Every limb dataset with its resolution, reference sphere, frame, accuracy, file format and download location, and the centre-of-figure offset that separates the old data from the new.
+description: Compare lunar limb datasets for eclipse predictions: resolution, reference spheres, coordinate frames, accuracy, formats and download sources.
 order: 2
 status: working
 updated: 2026-09-15
 tags: [watts, kaguya, lalt, lola, ldem, sldem2015, datasets]
+seo_title: Lunar Limb Datasets: Watts, Kaguya and LRO LOLA
 ---
 
 ::: summary

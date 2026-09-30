@@ -1,9 +1,10 @@
 ---
 title: Pipeline design
-description: Nine stages from ephemeris kernels to limb-corrected umbra polygons, with the formulas, constants, outputs and validation case for each.
+description: Nine stages of eclipse calculation, from ephemeris kernels to contacts and path polygons, with formulas, constants, outputs and validation cases.
 order: 2
 status: working
 updated: 2026-09-16
+seo_title: Solar Eclipse Calculation Pipeline: Algorithms and Formulas
 ---
 
 ::: summary

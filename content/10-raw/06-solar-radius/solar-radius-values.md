@@ -1,10 +1,11 @@
 ---
 title: Solar radius values and their provenance
-description: Every solar radius in circulation, the edge each one measures, its wavelength and uncertainty, and which eclipse predictor uses which.
+description: Solar radius values used in eclipse predictions, with their provenance, wavelength, limb definitions, uncertainty and adopting software.
 order: 1
 status: working
 updated: 2026-09-15
 tags: [solar-radius, auwers, iau-2015, helioseismology, bailys-beads, flash-spectrum]
+seo_title: Solar Radius Values: Constants Used in Eclipse Predictions
 ---
 
 ::: summary

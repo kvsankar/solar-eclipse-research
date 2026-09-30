@@ -1,10 +1,11 @@
 ---
 title: Earth model and time scales
-description: The figure of the Earth, observer height and terrain, ΔT and Earth rotation, refraction, light-time and time scales, with the size of every effect and which predictors include it.
+description: Earth shape, terrain, ΔT, rotation, refraction and time scales in eclipse calculation, with the size and treatment of each effect.
 order: 7
 status: working
 updated: 2026-09-15
 tags: [earth-figure, delta-t, refraction, time-scales]
+seo_title: Earth Models and Time Scales in Eclipse Calculation
 ---
 
 ::: summary

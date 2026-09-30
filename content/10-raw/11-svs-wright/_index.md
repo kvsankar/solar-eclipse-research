@@ -1,10 +1,11 @@
 ---
 title: NASA SVS and Ernie Wright
-description: The raster-oriented, terrain-aware eclipse maps of NASA's Scientific Visualization Studio, the 2024 Astronomical Journal paper that documents them, the datasets they released, and how they differ from Espenak, Jubier and Irwin.
+description: NASA SVS terrain-aware eclipse maps, the Wright and Young 2024 paper, released datasets and comparisons with other eclipse predictors.
 order: 11
 status: working
 updated: 2026-09-15
 tags: [svs, wright, raster, lunar-limb, lola, shapefiles]
+seo_title: NASA SVS Eclipse Calculation: Wright and Young's Method
 ---
 
 ::: summary

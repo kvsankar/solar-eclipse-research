@@ -1,10 +1,11 @@
 ---
 title: Limb profile methods
-description: From Watts' charts to LOLA point clouds, the geometry that produces a limb-height table for one observer at one instant, and what it changes in contact times and path limits.
+description: Geometry for deriving observer-specific lunar limb profiles from charts and elevation data, and applying them to eclipse contacts and limits.
 order: 1
 status: working
 updated: 2026-09-15
 tags: [lunar-limb, watts, lola, sldem2015, contact-times, path-limits]
+seo_title: Lunar Limb Profile Algorithms for Eclipse Predictions
 ---
 
 ::: summary

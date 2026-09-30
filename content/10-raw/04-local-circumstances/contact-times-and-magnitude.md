@@ -1,10 +1,11 @@
 ---
 title: Contact times, magnitude and position angles from Besselian elements
-description: The Explanatory Supplement reduction from Besselian elements to one observer's contacts, magnitude, obscuration, P and V angles, altitude, azimuth and duration, checked line by line against NASA's JavaScript Solar Eclipse Explorer.
+description: Besselian formulas for local solar eclipse contact times, magnitude, obscuration and position angles, compared with NASA's JavaScript code.
 order: 1
 status: working
 updated: 2026-09-15
 tags: [local-circumstances, besselian, contacts, magnitude, obscuration, position-angle]
+seo_title: Eclipse Contact Time, Magnitude and Obscuration Formulas
 ---
 
 ::: summary

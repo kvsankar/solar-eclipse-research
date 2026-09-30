@@ -57,6 +57,7 @@ SURFACE_ENV = CONFIG_ROOT / "env" / "surfaces" / f"{SURFACE}.env"
 # The payload files the workflow asserts before it will deploy.
 REQUIRED = [
     "computing.html",
+    "sitemap.xml",
     "assets/site.css",
     "assets/site.js",
     "assets/site3d.js",
@@ -190,10 +191,7 @@ def build() -> None:
     log("building")
     run([sys.executable, "tools/merge_refs.py"], ROOT)
     run([sys.executable, "tools/build.py", "--clean"], ROOT)
-    # The public URL ends in computing.html; the build's home page is the page
-    # that belongs there. The rest of the tree ships with it so the links and
-    # assets that page uses keep resolving.
-    shutil.copyfile(SITE / "index.html", SITE / "computing.html")
+    # The build emits computing.html and its canonical sitemap together.
 
 
 def verify_payload() -> None:
@@ -211,6 +209,7 @@ def verify_payload() -> None:
             f"computing.html does not contain {SMOKE_STRING!r}, "
             "which the post-deploy check greps for."
         )
+    run([sys.executable, "tools/check_seo.py"], ROOT)
 
 
 # -------------------------------------------------------------------- deploy

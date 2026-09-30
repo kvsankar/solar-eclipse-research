@@ -1,10 +1,11 @@
 ---
 title: Observed versus predicted
-description: Published comparisons of timed contacts and Baily's bead events with predictions, from the IOTA edge campaigns to the 2024 edge experiments, with the measured offsets in seconds and metres.
+description: Published comparisons of predicted and observed eclipse contacts and Baily's beads, including timed path-edge experiments in 2017 and 2024.
 order: 1
 status: working
 updated: 2026-09-15
 tags: [validation, bailys-beads, solar-radius, path-edge, iota]
+seo_title: Eclipse Predictions versus Observed Contacts and Beads
 ---
 
 ::: summary

@@ -1,8 +1,9 @@
 ---
-title: Computing Solar Eclipses
-description: How solar eclipse computational products are computed, from catalogues to contact times, at the depth of NASA SVS's 2024 work.
+title: Computing Solar Eclipses: Calculation and Algorithms
+description: Solar eclipse calculation and prediction algorithms, with formulas, Besselian elements, contact times, lunar limb data and accuracy comparisons.
 status: working
 updated: 2026-09-16
+seo_title: Solar Eclipse Calculation: Algorithms, Data and Accuracy
 ---
 
 ![Everything this site computes is the geometry behind this photograph, and
@@ -12,6 +13,15 @@ the solar radius that sets where the corona begins is still disputed at a
 third of an arcsecond. Totality of 1999 August 11, photographed from France
 by Luc Viatour / [lucnix.be](https://lucnix.be), CC BY-SA 3.0
 [@glob-nasa-google-2024] [@val-besselian-maps-accuracy].](img/totality-1999-viatour.jpg){.hero}
+
+This guide covers solar eclipse calculation algorithms, their formulas,
+constants, datasets and validation evidence. Start with
+[how to calculate a solar eclipse](05-primer/how-an-eclipse-is-computed.md)
+for the geometry, or follow the
+[eclipse calculation pipeline](20-reports/pipeline-design.md) for the
+implementation stages. The
+[software comparison](10-raw/09-software-and-repos/_index.md) covers published
+eclipse calculators and open-source libraries.
 
 Solar eclipse predictions are published by a handful of people and programs,
 and they agree to a few hundred metres at the edge of the path. The places
@@ -45,7 +55,7 @@ full.
 
 - [Executive summary](20-reports/executive-summary.md): the findings that
   carry the most weight.
-- [Pipeline design](20-reports/pipeline-design.md): nine stages with formulas,
+- [Eclipse calculation algorithms and pipeline](20-reports/pipeline-design.md): nine stages with formulas,
   constants, outputs and validation cases.
 - [Error budget](20-reports/error-budget.md): every input ranked in seconds
   and metres.

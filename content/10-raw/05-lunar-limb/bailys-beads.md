@@ -1,10 +1,11 @@
 ---
 title: Baily's beads
-description: How bead events are defined and predicted from the limb profile, how IOTA has used them since 1979 to measure the solar radius, and what the solar-limb definition does to the result.
+description: How Baily's bead events are predicted from lunar limb profiles, and how their observed timings constrain the solar radius.
 order: 3
 status: working
 updated: 2026-09-15
 tags: [bailys-beads, solar-radius, iota, occult, limb-profile]
+seo_title: Baily's Beads Calculation: Lunar Valleys and Solar Radius
 ---
 
 ::: summary

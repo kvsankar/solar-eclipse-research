@@ -1,10 +1,11 @@
 ---
 title: The direct topocentric method
-description: Finding contacts as the instants when the topocentric angular separation of Sun and Moon equals the sum or difference of their apparent semidiameters, and how USNO, Swiss Ephemeris, sunpy, Skyfield, astropy, PyEphem, Stellarium, Horizons and SPICE support it.
+description: Calculate local eclipse contacts from apparent Sun and Moon directions and angular radii, with the capabilities of astronomy libraries.
 order: 2
 status: working
 updated: 2026-09-15
 tags: [local-circumstances, topocentric, swiss-ephemeris, spice, skyfield, astropy]
+seo_title: Topocentric Eclipse Calculation: Direct Contact Algorithms
 ---
 
 ::: summary

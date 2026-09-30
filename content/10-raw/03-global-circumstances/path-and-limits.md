@@ -1,10 +1,11 @@
 ---
 title: Path and limits
-description: The formulas for the central line, the umbral and penumbral limits, the shadow outline, duration, path width, greatest eclipse and umbra speed, with the oblate-Earth treatment and the limb and terrain corrections that the main implementations apply.
+description: Formulas for solar eclipse paths and limits, with central duration, path width, shadow speed and corrections for Earth, limb and terrain.
 order: 1
 status: working
 updated: 2026-09-15
 tags: [central-line, limits, outline, path-width, duration, oblate-earth, besselian]
+seo_title: Calculating Eclipse Paths, Limits, Widths and Durations
 ---
 
 ::: summary

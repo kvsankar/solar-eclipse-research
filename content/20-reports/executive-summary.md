@@ -1,9 +1,10 @@
 ---
 title: Executive summary
-description: One algorithm, four constants that decide the edges, one published state-of-the-art method, and no open-source implementation of it.
+description: The main findings on eclipse prediction methods, constants, lunar limb and terrain modelling, software availability and validation evidence.
 order: 1
 status: working
 updated: 2026-09-16
+seo_title: Solar Eclipse Calculation: Research Findings for Developers
 ---
 
 ::: summary

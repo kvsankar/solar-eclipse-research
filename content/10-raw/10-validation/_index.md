@@ -1,10 +1,11 @@
 ---
 title: Validation and error budget
-description: How eclipse predictions have been checked against timed observations, how far the major predictors disagree at the path edge, and what each term contributes to the error of a modern prediction.
+description: How eclipse calculations are tested against observations and other predictors, with contact timing, path-edge differences and error budgets.
 order: 10
 status: working
 updated: 2026-09-15
 tags: [validation, error-budget, solar-radius, delta-t, path-edge]
+seo_title: Validating Solar Eclipse Calculations: Errors and Evidence
 ---
 
 ::: summary
