@@ -3,16 +3,16 @@ title: Open questions
 description: Outstanding eclipse calculation questions, each tied to the paper, dataset or code needed to resolve it and its effect on the conclusions.
 order: 5
 status: working
-updated: 2026-09-16
+updated: 2026-09-30
 seo_title: Open Questions in Solar Eclipse Algorithms and Modelling
 ---
 
 ::: summary
-- **The code behind the SVS maps is unpublished.** The paper's ten lines of SPICE calls and the released shapefiles are the only ground truth. A release would let the pipeline design be checked line by line [@svs-wright-young-2024].
+- **The code behind the SVS maps is unpublished.** The paper's SPICE examples and released shapefiles provide public reference products. Observed contacts supply independent checks. A release would let the pipeline design be checked line by line [@svs-wright-young-2024].
 - **The 2024 solar radius is unsettled by the data that could settle it.** The IOTA reductions of the 2023 and 2024 bead videos are not yet published, and the 2024 limit observations collected by the Besselian Elements team have no published reduction [@sun-iota-dunham-2024] [@svs-irwin-quaglia-2024-technical].
-- **Three sources are unavailable**: Occult's help file, distributed only inside the Windows installer; Solar Eclipse Maestro's statement of its ephemeris and ΔT, which its help pages omit; and timeanddate's ephemeris, $k$ and ΔT source, which its accuracy page does not name. Jubier's browser calculator is public, and its constants are in the software note.
+- **Some program inputs lack a complete public description.** Occult's installed help is needed for its input policy. The cited Solar Eclipse Maestro help does not specify its ephemeris and ΔT, and timeanddate's accuracy page does not name its ephemeris, $k$ or ΔT source. Jubier's client constants are documented in the software note [@sw-occult4] [@sw-jubier-sem] [@sw-timeanddate-accuracy].
 - **Two standard texts are cited only through implementations**: Meeus's *Elements of Solar Eclipses 1951-2200* and chapter 11 of the 2013 Explanatory Supplement.
-- **Only the enumeration is independently reproduced.** Meeus's series and Kluepfel's Saros formula are implemented and checked against the NASA catalogue; every Besselian, limb and terrain number is quoted from its source. The first act of any implementation is to reproduce the reference cases.
+- **The end-to-end limb-and-terrain pipeline needs numerical validation.** Catalogue comparisons are available for Meeus's series and Kluepfel's Saros formula. The other stages need the named table, contact and polygon fixtures before they can claim product accuracy [@cat-meeus-1991-aa] [@cat-vangent-cycles].
 :::
 
 ## Ranked by how much a different answer would move the design
@@ -21,15 +21,16 @@ seo_title: Open Questions in Solar Eclipse Algorithms and Modelling
    ephemeris and Earth DEM resolution.** The paper names DE440 and the product
    pages name DE421; the ΔT is inside an Earth-orientation kernel; the map
    pixel size is unstated. The SVS API JSON for page 5123 would settle it.
-   Until then the `umbra_hi` polygons are the ground truth and the
+   The `umbra_hi` polygons are reference products, and the
    stage 8 design is a reconstruction [@svs-wright-young-2024]
    [@svs-5123-2024-map].
 
 2. **A published reduction of the 2024 edge observations.** Irwin and
    Quaglia's team collected limit observations in 2024, and IOTA's Solon,
    Maine recording is promised for the Journal for Occultation Astronomy.
-   Either would decide whether 959.95″ or a value nearer 960.0″ is the
-   default, which moves every edge-mode limit by up to 100 m
+   These reductions would help test the radius and detection conventions.
+   A change of 0.05 arcseconds is about 100 m in the cited edge geometry,
+   rather than a universal bound for every path limit
    [@val-dunham-iota-2024] [@svs-irwin-quaglia-2024-technical].
 
 3. **A quantitative SVS-against-Irwin comparison.** Difference Irwin's 2024
@@ -46,7 +47,8 @@ seo_title: Open Questions in Solar Eclipse Algorithms and Modelling
 
 5. **Herald 1983's error budget should be transcribed in full.** The 1992
    Supplement points to it for "the total effect and its components" of the
-   limb. The centre-of-figure and limb-sampling terms remain unquantified
+   limb. Transcribe its original components and compare them with the modern
+   centre-of-figure and limb-sampling terms already tabulated in the error budget
    [@limb-herald-1983] [@val-es1992].
 
 6. **Meeus, *Elements of Solar Eclipses 1951-2200*.** Its local-circumstances
@@ -65,13 +67,14 @@ seo_title: Open Questions in Solar Eclipse Algorithms and Modelling
 
 9. **Smith and colleagues 2010 and Barker and colleagues 2016.** The LOLA
    centre-of-figure vector and the SLDEM2015 mean radius are secondary
-   values, unconfirmed against the primary publications, neither of which is
-   accessible [@limb-smith-2010-lola] [@limb-barker-2016-sldem].
+   values, reported secondhand and unconfirmed against the primary
+   publications [@limb-smith-2010-lola] [@limb-barker-2016-sldem].
 
-10. **A refraction number.** No published source quantifies the effect of
-    standard refraction on first and fourth contact at Sun altitudes of 2° and 5° in
-    seconds. A ray-traced test case would replace the bound derived in
-    the Earth-and-time note [@earth-es1992].
+10. **A refraction number.** The cited sources do not quantify a general physical
+    contact-time shift at Sun altitudes of 2 and 5 degrees. A specified
+    atmosphere and ray-traced finite-distance geometry are needed before
+    assigning a correction. A common angular remapping of both limbs alone
+    preserves contact [@earth-es1992].
 
 11. **The undocumented NASA CSV columns** `PNS`, `UNS`, `NCN`, `nSer`,
     `nSeq`, `nJLE`, which appear to encode limits and Saros sequence
@@ -90,13 +93,16 @@ seo_title: Open Questions in Solar Eclipse Algorithms and Modelling
 - Reproduce one SVS 2024 `umbra_hi` polygon from SLDEM2015 with the limb test
   as written. This is the end-to-end check of stage 8, and the paper states
   the method in enough detail to perform it [@svs-2024-shapefiles-zip].
-- Run SPICE `gfoclt_c` with a `pinpoint` surface site, an ellipsoid Sun and a
-  LOLA-derived DSK Moon, and compare its FULL interval with a limb-corrected
-  C2 to C3 from Occult or Solar Eclipse Maestro. If it agrees to a second,
-  a DSK Moon is a second route to a shaped limb [@loc-spice-gfoclt].
+- Compare a LOLA-derived DSK silhouette with the profile-based test.
+  `gfoclt_c` supports DSK paired with POINT and the ANY condition. It
+  does not support a DSK Moon paired with an ellipsoid Sun for FULL or
+  ANNULAR intervals. Finite-disc contacts need a separate limb-containment
+  implementation. Use two ellipsoids with `gfoclt_c` for a smooth baseline
+  [@loc-spice-gfoclt].
 - Compute from LDEM the mean limb radius averaged over position angle and
   libration, and compare with 1738.09 km ($k = 0.2725076$) and 1736.65 km
-  ($k = 0.272281$). No published value exists [@moon-williams-2013].
+  ($k = 0.272281$). The sources compared here do not give this observer-and-libration average
+  [@moon-williams-2013].
 - Difference the SVS `umbra_hi` centre coordinates against Espenak's central
   line at the same instants to put the ephemeris-plus-ΔT difference in
   kilometres [@glob-nasa-path-2024].

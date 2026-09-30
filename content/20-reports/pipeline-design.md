@@ -3,7 +3,7 @@ title: Pipeline design
 description: Nine stages of eclipse calculation, from ephemeris kernels to contacts and path polygons, with formulas, constants, outputs and validation cases.
 order: 2
 status: working
-updated: 2026-09-16
+updated: 2026-09-30
 seo_title: Solar Eclipse Calculation Pipeline: Algorithms and Formulas
 ---
 
@@ -11,7 +11,7 @@ seo_title: Solar Eclipse Calculation Pipeline: Algorithms and Formulas
 - **Nine stages, one configuration record.** Ephemeris and time, enumeration, Besselian elements, global circumstances, partial-eclipse maps, local circumstances, terrain, lunar limb, and products with uncertainty. Every product carries the record of constants and data versions that produced it, set out before stage 1.
 - **Two computational paths from one ephemeris layer.** An elements path for catalogues, maps and anything that must be reproducible from a published table, and a direct topocentric path for site-level work and limb tests. They must agree to 0.1 s on the same inputs [@bes-quaglia-2021] [@loc-usno-sec].
 - **The smooth-Moon stages are textbook and have reference implementations.** The 1961 Explanatory Supplement for the formulas, Stellarium for the global curves, NASA's `program.js` for local circumstances [@bes-es1961] [@sw-stellarium-sec-cpp] [@loc-jsex-program-js].
-- **The limb and terrain stages follow Wright and Young 2024** and have no open implementation. They replace the circular shadow with a per-pixel test against an 18,000-element profile [@svs-wright-young-2024].
+- **The limb and terrain stages follow Wright and Young 2024** without a public generating implementation in the surveyed releases. They replace the circular shadow with a per-pixel test against an 18,000-element profile [@svs-wright-young-2024].
 - **Each stage has a named validation case** with a tolerance drawn from the [error budget](error-budget.md).
 :::
 
@@ -20,8 +20,8 @@ seo_title: Solar Eclipse Calculation Pipeline: Algorithms and Formulas
 ## The configuration record
 
 Every run starts by fixing, and every output ends by printing, the following.
-Predictors state some of these and none states all of them, and the
-differences between predictors reduce to differences here [@val-quaglia-2021] [@svs-irwin-quaglia-2024-technical].
+These fields specify the inputs needed for a reproducible comparison.
+Algorithm and solver choices also matter [@val-quaglia-2021] [@svs-irwin-quaglia-2024-technical].
 
 | Item | Almanac mode | Edge mode |
 |---|---|---|
@@ -32,16 +32,17 @@ differences between predictors reduce to differences here [@val-quaglia-2021] [@
 | Lunar radius | $k_1 = 0.2724880$ penumbral to match the NASA GSFC tables, 0.2725076 to match EclipseWise and the bulletins; $k_2 = 0.272281$ umbral | LOLA profile on a 1737.4 km datum; $k$ only for penumbral products |
 | Terrain | sea level | SRTM GL1 or Copernicus GLO-30, converted to ellipsoidal height |
 | ΔT | value printed with the table being matched | latest USNO `deltat.data` or `deltat.preds`, with its date |
-| Refraction | none, stated | none, stated; optional flagged C1 and C4 adjustment below 5°, and a warning flag on any contact with the Sun below 10° |
+| Refraction | None for geometric contacts, stated | None for geometric contacts. Model displayed altitude and visibility separately. Quantitative contact shifts require validated ray tracing [@earth-espenak-tp2001] [@sun-quaglia-2021] |
 | Time scale internal | TT | TT |
 
 Sources for each choice are in the stage notes below and in
 [Earth model and time](../10-raw/07-earth-and-time/_index.md) and
 [lunar and solar model](../10-raw/08-lunar-and-solar-model/_index.md).
-The default solar radius is contested: the evidence from the solar radius and
-from validation favours 959.95″, while the foundations, local-circumstances
-and limb practice favour 959.63″ with the measured value available. The two
-modes satisfy both. The frame kernel is named `moon_de440_200625.tf` in Wright and
+The edge-mode radius is an explicit modelling option from the cited
+flash-spectrum analysis. It is not a settled physical constant. Keep the
+959.63 arcsecond convention available for reproducing the corresponding
+tables. Detector and limb definitions affect other radius determinations
+[@sun-quaglia-2021] [@sun-lamy-2015] [@val-guhl-2023]. The frame kernel is named `moon_de440_200625.tf` in Wright and
 Young's appendix; NAIF now serves the 2025 revision of the same frame as
 `moon_de440_250416.tf` [@svs-wright-young-2024] [@moon-naif-moon-fk-de440].
 
@@ -49,14 +50,16 @@ Young's appendix; NAIF now serves the 2025 revision of the same frame as
 
 **Inputs.** `de440s.bsp` (1849 to 2150, 31 MB) for the Sun, Earth and Moon;
 the DE440 lunar PCK and frame kernel; IERS `finals.all` or USNO `deltat.data`
-and `deltat.preds`; a leap-second table [@moon-naif-summaries]
+and `deltat.preds`; a leap-second table. Reject dates outside the chosen
+kernel's coverage. Catalogue work over wider epochs needs a full kernel
+covering those dates [@moon-naif-summaries]
 [@moon-jpl-bsp-readme] [@earth-iers-bulletin-a] [@earth-usno-deltat-preds].
 
 **Contract.** The layer exposes, at a TT instant: apparent geocentric places
 of the Sun and Moon on the true equator and equinox of date, with light-time
 and aberration applied to both; apparent topocentric places for a site;
-Greenwich apparent sidereal time; the observer-to-Moon vector in the Moon
-mean-Earth frame. The Moon is read as body 301 relative to 399 and the Sun as
+Greenwich apparent sidereal time; the Moon-to-observer vector in the Moon
+mean-Earth frame for libration. The Moon is read as body 301 relative to 399 and the Sun as
 body 10, never the barycentre, since the Sun wanders up to 1.6 solar radii
 from it [@moon-folkner-2014]. TT may stand in for TDB, the difference being
 under 2 m on the shadow [@earth-circ179].
@@ -86,7 +89,8 @@ $u < 0.00464\sqrt{1 - \gamma^2}$ and otherwise annular; partial
 magnitude $(1.5433 + u - |\gamma|)/(0.5461 + 2u)$ [@cat-meeus-1991-aa].
 
 **Then refine.** For each candidate, compute the elements of stage 3 and take
-γ as the minimum of $\sqrt{x^2 + y^2}$. Decide the final type on the umbral
+γ as $\sqrt{x^2+y^2}$ at its minimum, with the sign of $y$ to preserve the
+catalogue's north/south convention [@bes-nasa-glossary]. Decide the final type on the umbral
 radius at the surface point under the axis, at greatest eclipse and at both
 ends of the central line, so that hybrids and their three classes fall out.
 Keep a non-central class: 94 eclipses in five millennia have a one-limit
@@ -105,8 +109,13 @@ series, then within 0.1 s from the elements [@cat-nasa-5mkse-ascii].
 **Inputs.** Apparent geocentric places from stage 1, $k_1$, $k_2$, $s_0$,
 $\pi_0 = 8.794″$, $a_e$, ΔT.
 
-**Equations, in order** [@bes-es1961] [@bes-es1992]. With $b = r_m / R$, both
-distances in the same unit, the shadow axis direction $(a, d)$ and scale $g$ come from
+**Equations, in order** [@bes-es1961] [@bes-es1992]. Form the dimensionless
+distance ratio $b$ before choosing separate output units. In the Supplement's
+parallax form, $b=\sin\pi_0/(R\sin\pi_m)$ with the Sun's distance $R$ in au.
+For the coordinates below, $r_m=1/\sin\pi_m$ is the lunar distance in Earth
+equatorial radii. The cone equations retain $R$ in au. Convert all angular
+inputs, including $s_0$ and $\pi_0$ supplied in arcseconds, to radians before
+evaluating trigonometric functions. The shadow axis direction $(a,d)$ and scale $g$ come from
 $g\cos d\cos a = \cos\delta_\odot\cos\alpha_\odot - b\cos\delta_m\cos\alpha_m$
 and its two companions. The Moon's coordinates in the fundamental system are
 
@@ -147,9 +156,12 @@ inconsistency [@bes-es1961] [@bes-nasa-csv].
 $\rho_1 = \sqrt{1 - e^2\cos^2 d}$, $\rho_2 = \sqrt{1 - e^2\sin^2 d}$ and a
 rotated declination $d_1$. In that frame the central line at time $t$ is
 $\xi = x$, $\eta_1 = y/\rho_1$, $\zeta_1 = \sqrt{1 - x^2 - \eta_1^2}$
-[@glob-es1961]. Longitudes follow from $\lambda = \theta - \mu_{UT}$ with
-$\mu_{UT} = \mu - 1.002738 \times 15\,\Delta T$ arcseconds, which is where ΔT
-enters the map [@glob-rherale].
+[@glob-es1961]. For west-positive longitude, $\lambda_W = \mu_{UT} - H$, where $H$ is the
+local hour angle recovered from the observer geometry. With angles in
+degrees and ΔT in seconds,
+$\mu_{UT} = \mu - \frac{1.002738\times15}{3600}\,\Delta T$.
+This correction is for ephemeris-meridian elements. Omit it if μ was already
+computed from actual UT1 sidereal time [@glob-rherale].
 
 **Limits.** A point is on a limit when the eclipse begins and ends at the same
 instant, which gives $\tan Q = (b' - \zeta d' - a'\sec Q)/(c' - \zeta\mu'\cos d)$
@@ -158,9 +170,11 @@ procedure for whole curves: scan $Q$ by degrees, inverse-interpolate, iterate
 ζ to $10^{-5}$ Earth radii, assign north or south by the sign of $L\cos Q$
 [@glob-es1961] [@glob-es1992].
 
-**Duration and width.** Central duration $2L_2/n$ with
-$L_2 = l_2 - \zeta\tan f_2$; path width by Mikhailov's formula as transcribed
-in Stellarium [@glob-es1992] [@glob-stellarium-sec]. Rise and set curves from
+**Duration and width.** Central duration $D = 2|L_2|/n$ with
+$L_2 = l_2 - \zeta\tan f_2$ and positive relative speed $n$ in Earth radii
+per hour, so $D$ is in hours. Accurate elapsed duration is C3 minus C2 for
+the fixed site. Path width uses the positive magnitude of Mikhailov's
+expression as transcribed in Stellarium [@glob-es1992] [@glob-stellarium-sec]. Rise and set curves from
 $\cos(\gamma - M) = (m^2 + 1 - l_1^2)/(2m)$ at $\zeta = 0$; curves of maximum
 eclipse from $\tan Q = -(y' - \eta')/(x' - \xi')$ sweeping ζ [@glob-es1961].
 
@@ -177,23 +191,32 @@ table at three times, expecting 1 km and 0.1 s [@glob-es1961]
 
 Equal-magnitude and equal-obscuration curves are not solved directly. The
 Supplements interpolate on the maximum-eclipse curves; SVS and the open
-Eclipse-Engine rasterise instead. For each grid cell find the time of maximum
-by minimising $\Delta - L_1$, evaluate magnitude and the two-circle obscuration
-with the exact lens formula, and contour with marching squares, padding the
-grid edge and refining vertices near the time of maximum
+Eclipse-Engine rasterise instead. For each grid cell, optimise the quantity being contoured over its visible
+interval. Maximum magnitude and maximum obscuration need not occur at the
+same instant. Use closest approach as a search seed, and keep apparent radii
+time-dependent. Evaluate obscuration with the exact lens formula and
+contour with marching squares. Pad the grid edge and refine vertices near
+the selected product's maximum
 [@glob-es1961] [@glob-rherale] [@glob-enrique7mc].
 
 ## Stage 6: local circumstances, smooth Moon
 
-**Observer.** $\rho\sin\phi' = (S + h/a)\sin\phi$, $\rho\cos\phi' = (C + h/a)\cos\phi$
-with $C = (\cos^2\phi + (1 - f)^2\sin^2\phi)^{-1/2}$ and $S = (1 - f)^2 C$,
-$h$ the ellipsoidal height. Hour angle $\theta = \mu(t) - \lambda - 1.002738\,\Delta T$
-with west longitude positive [@earth-es1992] [@loc-es1961-local].
+**Observer.** Define $\nu = (\cos^2\phi + (1-f)^2\sin^2\phi)^{-1/2}$ and
+$S = (1-f)^2\nu$. Then
+$\rho\sin\phi' = (S+h/a)\sin\phi$ and
+$\rho\cos\phi' = (\nu+h/a)\cos\phi$, where $h$ and $a$ use the same
+length unit. For west-positive longitude, the local hour angle is
+$\theta = \mu(t) - \lambda_W - \frac{1.002738\times15}{3600}\,\Delta T$
+with angles in degrees and ΔT in seconds. Apply this correction only to the
+ephemeris-meridian μ, not to an already-UT1 μ [@earth-es1992] [@loc-es1961-local].
 
 **Reduction.** Form $(\xi, \eta, \zeta)$ and their rates, $u = x - \xi$,
 $v = y - \eta$, $m = \sqrt{u^2 + v^2}$, and the observer's-plane radii
-$L_1' = L_1 - \zeta\tan f_1$, $L_2' = L_2 - \zeta\tan f_2$. Maximum eclipse
-iterates $t \leftarrow t - (uu' + vv')/n^2$. Contacts are the roots of
+$L_1' = l_1 - \zeta\tan f_1$, $L_2' = l_2 - \zeta\tan f_2$,
+starting from the tabulated fundamental-plane radii $l_1$ and $l_2$.
+Closest approach is a search seed obtained by iterating
+$t \leftarrow t-(uu'+vv')/n^2$. For maximum magnitude or obscuration, optimise
+that actual product with time-dependent apparent radii. Contacts are the roots of
 $m = L_1'$ (C1, C4) and $m = |L_2'|$ (C2, C3), found by the 1992 edition's
 direct inverse interpolation on $u^2 + v^2 - L^2$ rather than the auxiliary
 angle [@loc-es1961-local] [@loc-es1992-ch8].
@@ -202,12 +225,16 @@ angle [@loc-es1961-local] [@loc-es1992-ch8].
 penumbra and $(L_1' - L_2')/(L_1' + L_2')$ inside the umbra or antumbra,
 switching at $m = |L_2'|$. Obscuration is the lens area
 $S' = (s^2 A + B - s\sin C)/\pi$ with $s = (L_1' - L_2')/(L_1' + L_2')$ the
-ratio of the lunar to the solar radius, $B$ and $C$ the angles at the solar
-and lunar centres of the triangle formed with an intersection point, and
-$A = \pi - B - C$; never a function of magnitude alone.
-Position angle $P$ from $\text{atan2}(\pm u, \pm v)$ with the sign reversal for
-interior contacts of a total eclipse; vertex angle $V = P - C$ with
-$\tan C = \xi/\eta$ [@loc-es1961-local] [@loc-nasa-locirc-2001].
+ratio of the lunar to the solar radius. In this source formula, use
+$A$ at the lunar centre, $B$ at the solar centre, and $C$ at either intersection
+of the disc boundaries, with $A = \pi-B-C$. These triangle labels are local
+to the lens formula and are unrelated to Herald's angular offset below.
+Magnitude and obscuration depend on the radius ratio as well as separation.
+At totality the reported magnitude switches to the diameter-ratio
+convention, so it need not be continuous at the inner contact.
+Position angle $P$ comes from $\mathrm{atan2}(\pm u,\pm v)$ with the sign
+reversal for interior contacts of a total eclipse. The vertex angle is
+$V = P-q$, where $q$ is the parallactic angle and $\tan q = \xi/\eta$ [@loc-es1961-local] [@loc-nasa-locirc-2001].
 
 **Second path.** The direct topocentric method: root-find
 $\delta(t) = r_s \pm r_m$ on apparent topocentric positions from stage 1, as
@@ -259,15 +286,24 @@ $s = (d_0/d)/r$, $a = sL_i$, $\theta = 2\pi i/n + c$,
 $\rho = a^2 + \delta^2 - 2a\delta\cos(\theta - \phi)$: the eclipse is not
 total if any $\rho < 1$. Trivial exclusions: outside the umbra if
 $s\max(L) - \delta < 1$, inside if $s\min(L) - \delta \ge 1$. Reverse the sense
-for annularity. Antialias with $\epsilon = A(p)/10$. The broken-annular locus
-is $\max(L) - \min(L) > \delta$ where both tests fail
+for annularity. Antialias with $\epsilon = A(p)/10$. The paper also prints the broken-annular expression
+$\max(L)-\min(L)>\delta$. This is a quoted criterion, not a directly
+validated comparison with the units defined here. Angular profile radii and
+solar-radius-normalised separation must first share a common normalisation.
+Use the full limb-containment tests for classification, and validate any
+broken-annular criterion against that geometry
 [@svs-wright-young-2024].
 
 **Contacts and beads.** C2 and C3 at a site are the first and last time steps
 at which the test passes. Baily's beads are the same test per limb element:
 each event is the instant the solar limb, drawn with Herald's curve
-$h = 960″(M - 1)(1 - \cos P)$, clears a valley floor, reported with its
-position angle and depth. Keep Herald's tangency construction as a
+$h = 960\,\text{arcseconds}\,(M-1)(1-\cos C)$, clears a valley floor.
+Here $C$ is the offset from the nominal contact point, which Herald calls
+$P$. It is not the contact position angle $P$ in stage 6 or the lens-formula
+triangle angle. Convert the inward-positive totality curve to the profile's
+outward-positive radial convention before forming a displacement. A valley
+delays C2 and advances C3 relative to the same reference limb. Report each
+event's position angle and depth. Keep Herald's tangency construction as a
 cross-check because the bulletins' examples are stated in its terms
 [@limb-herald-1983] [@limb-espenak-tp2001].
 
@@ -279,7 +315,8 @@ a [?graze-zone] between them, 5 to 10 km wide [@limb-espenak-tp2001].
 is retired: LOLA products are referenced to the centre of mass in the DE421
 mean-Earth frame, which is the frame the ephemeris orients. The 0.69 km gap
 between the 1737.4 km datum and the 1738.09 km sphere of $k = 0.2725076$ is a
-constant to add only when quoting heights against the almanac mean limb
+datum conversion: subtract 0.6908 km from heights above the smaller
+sphere when quoting them against the almanac mean limb
 [@limb-lola-ldem128-label] [@moon-naif-moon-fk-de440].
 
 **Validation.** The Lusaka corrections of +4.0 s at C2 and −1.2 s at C3,
@@ -291,11 +328,16 @@ correction each paper derived [@val-tp2001-bulletin] [@svs-2024-shapefiles-zip]
 
 ## Stage 9: products and uncertainty
 
-Every product carries the stage 0 record and a per-run error estimate that
-sums the [error budget](error-budget.md) rows in quadrature for the
-configuration used. A smooth-Moon run reports about 2 km at a limit; a
-true-limb run with 959.95″ reports 100 to 200 m. Limits are drawn three times,
-at $s_0$ and $s_0 \pm \sigma$. Products for dates before 1600 or after 2300
+Every product carries the configuration record and an estimate that
+distinguishes known corrections, unresolved model choices and quantified input
+uncertainty. The [error budget](error-budget.md) tabulates diagnostic scales,
+not a universal list of standard deviations. Combine compatible standard
+uncertainties in quadrature only when independence is established. Otherwise
+propagate covariance or report model scenarios. Test the resulting band
+against reference observations before assigning a coverage probability
+[@report-jcgm-gum-2008]. Limits are evaluated at $s_0$ and its stated
+alternatives. The cited 100 to 200 m edge scales are case-specific rather
+than an accuracy guarantee. Products for dates before 1600 or after 2300
 carry a longitude gore for the ΔT standard error. This is stricter than the
 Five Millennium Canon, which draws gores only where σ exceeds 265 s, before
 the year 1 and after 2300 [@val-quaglia-2021] [@val-gsfc-uncertainty]
@@ -314,8 +356,11 @@ the year 1 and after 2300 [@val-quaglia-2021] [@val-gsfc-uncertainty]
 
 ## What this does not cover
 
-Refraction is left out of contacts and limits by every predictor and by this
-design, with the reason stated in the output: it cancels to first order in a
-relative-angle condition and is unpredictable below 5° [@earth-espenak-tp2001].
+This design reports geometric contacts. A common one-to-one angular
+refraction mapping applied consistently to both complete limbs preserves
+their contact. A centre-only correction with circular limbs does not provide
+a validated residual. Atmospheric ray bending and near-horizon visibility
+need a separate specified model. The cited sources do not establish a
+general contact-time adjustment [@earth-espenak-tp2001] [@sun-quaglia-2021].
 Lunar eclipses, transits and occultations reuse stages 1 and 8 but are out of
 scope.

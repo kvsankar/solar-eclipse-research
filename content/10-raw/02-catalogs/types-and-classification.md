@@ -3,7 +3,7 @@ title: Types and classification
 description: The formulas and thresholds used to classify solar eclipses as partial, annular, total, hybrid, central or non-central.
 order: 2
 status: working
-updated: 2026-09-15
+updated: 2026-09-30
 tags: [eclipse-types, gamma, hybrid, non-central, magnitude, greatest-eclipse]
 seo_title: Solar Eclipse Classification: Gamma and Umbral Radius
 ---
@@ -30,7 +30,7 @@ The catalogue's definitions, Section 1.2.8 [@cat-espenak-meeus-2009-catalog]:
 
 ![One quantity separates the four types: where the vertex of the umbral cone falls relative to the Earth's surface. It falls short for an annular eclipse, so the widening antumbra lands; it falls beyond for a total one, so the umbra itself lands; and for a hybrid it falls between the two, so the same eclipse changes type along its own path. The dashed arc in the fourth panel carries every point as far from the Moon as the vertex is: the middle of the path lies inside it and is total, the ends lie outside it and are annular. A partial eclipse is the case where the axis misses the Earth and only the penumbra lands.](img/eclipse-types.svg){.fig3d scene="eclipse-types"}
 
-The NASA glossary defines the cones: the [?umbra|umbra] is "the darkest part of the Moon's shadow. From within the umbra, the Sun is completely blocked by the Moon"; the [?antumbra|antumbra] is "that part of the Moon's shadow that extends beyond the umbra"; the [?penumbra|penumbra] is "the weak or pale part of the Moon's shadow" [@cat-nasa-glossary]. In [?besselian-elements|Besselian elements] the umbral radius on the [?fundamental-plane|fundamental plane] is $l_2$, negative when the umbral vertex lies above the plane, and the penumbral radius is $l_1$. Whether a given surface point sees the umbra or the antumbra is the sign of the umbral radius projected to that point.
+The NASA glossary defines the cones: the [?umbra|umbra] is "the darkest part of the Moon's shadow. From within the umbra, the Sun is completely blocked by the Moon"; the [?antumbra|antumbra] is "that part of the Moon's shadow that extends beyond the umbra"; the [?penumbra|penumbra] is "the weak or pale part of the Moon's shadow" [@cat-nasa-glossary]. In [?besselian-elements|Besselian elements] the umbral radius on the [?fundamental-plane|fundamental plane] is $l_2$, negative when the umbral vertex lies below the fundamental plane, and the penumbral radius is $l_1$. Whether a given surface point sees the umbra or the antumbra is the sign of the umbral radius projected to that point.
 
 ## Central and non-central
 
@@ -131,7 +131,7 @@ Each row of the catalogue holds the following. Definitions are quoted from Secti
 
 **Sun altitude and azimuth.** "The Sun's altitude at the geographic position intersected by the axis of the lunar shadow cone is given at the instant of greatest eclipse. For partial eclipses, the Sun's altitude is always 0° because the shadow axis misses Earth." Azimuth is 0° north, 90° east [@cat-espenak-meeus-2009-catalog]. Derivation: the altitude is $\arcsin$ of the $z$ component of the surface point in the fundamental frame, since the axis direction is the direction to the Sun.
 
-**Path width.** "For central eclipses (total, annular, or hybrid), the width of the path of totality or annularity (kilometers) is given at the geographic position intersected by the axis of the lunar shadow cone at the instant of greatest eclipse." Derivation: the umbral radius at the surface, $L_2 = l_2 - \zeta \tan f_2$ with $\zeta$ the height of the surface point above the fundamental plane, doubled and divided by the cosine of the angle between the axis and the local vertical. The Swiss Ephemeris computes the core diameter at the surface as `*dcore = (s/dsmt*(drad*2 - dmoon) - dmoon)*cosf1` and the outline width from it [@cat-espenak-meeus-2009-catalog] [@cat-swisseph-swecl]. The catalogue's two $k$ values make the umbral width narrower for total and wider for annular eclipses than the IAU value would.
+**Path width.** "For central eclipses (total, annular, or hybrid), the width of the path of totality or annularity (kilometers) is given at the geographic position intersected by the axis of the lunar shadow cone at the instant of greatest eclipse." Path width is the separation of the two limits measured perpendicular to the direction of ground motion. Use [Mikhailov's width formula](../03-global-circumstances/path-and-limits.md#path-width) or measure the computed limits. Dividing $2|L_2|$ by the cosine of the solar zenith angle gives the local footprint's major-axis approximation, rather than the track width for an arbitrary motion direction [@glob-es1992] [@glob-stellarium-sec].
 
 **Central line duration.** "The central line duration of the total or annular phase (in minutes and seconds) is given at the geographic position intersected by the axis ... at the instant of greatest eclipse. In the case of a total or hybrid eclipse, this duration is very nearly, but not exactly, the maximum duration of the total phase along the entire umbral path. For an annular eclipse, the duration at greatest eclipse may be near either the minimum or maximum duration of the annular phase along the path. If the annular phase duration exceeds approximately 2.3 min, then it corresponds to the near maximum duration along the central line track. If the annular phase duration is less, however, then it corresponds to a near minimum and the annular duration increases towards the ends of the central path" [@cat-espenak-meeus-2009-catalog]. Derivation: twice the surface umbral radius divided by the speed of the shadow across the surface, which is the derivative of $(x, y)$ minus the rotational velocity of the surface point projected on the fundamental plane. The 2.3 min rule follows from the shadow speed being lowest near greatest eclipse while the antumbral radius is largest at the path ends where the surface is farther from the Moon.
 
@@ -163,7 +163,7 @@ Classification is not a post-processing label. It depends on the $k$ constant an
 
 ## Open questions
 
-- Obtain the *Explanatory Supplement to the Astronomical Almanac* (1992 or 2013 edition), chapter on eclipses, to quote the standard formulas for path width and central duration from the elements. The derivations above are stated from the geometry and from the Swiss Ephemeris code, not from the almanac text.
+- The almanac duration and width equations are quoted in [Path and limits](../03-global-circumstances/path-and-limits.md#duration-on-the-central-line). Obtain Mikhailov 1931 to verify the original width derivation against the transcription cited there [@glob-es1992] [@glob-stellarium-sec].
 - Obtain Meeus 2002, cited as "Meeus, 2002a" in the catalogue, for the derivation of the one-in-600-million estimate for non-central hybrids.
 - Obtain the Astronomy Engine test fixtures that motivated the 0.014 km bias, to see which Espenak eclipses were the marginal cases [@cat-astronomy-engine].
 - Obtain the source or documentation for the NASA CSV columns `PNS`, `UNS`, `NCN`, `nSer`, `nSeq`, `nJLE`, which appear to encode limits and Saros sequence but are undocumented [@cat-nasa-besselian-csv].

@@ -37,6 +37,7 @@ python tools/normalise_prose.py    # house-style spelling and notation, outside 
 python tools/prose_check.py        # prose tics and long sentences
 python tools/jargon_check.py       # terms used before they are explained
 python -m unittest discover -s tools -p test_seo.py  # search metadata regression checks
+python -m unittest discover -s tools -p 'test_*.py'  # numerical and source contracts
 python tools/check_seo.py          # verify rendered metadata and sitemap
 python tools/make_og_image.py      # recompose content/img/social-card-v2.jpg (needs Pillow)
 ```

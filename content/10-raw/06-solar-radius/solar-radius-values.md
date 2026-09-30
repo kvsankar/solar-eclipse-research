@@ -3,7 +3,7 @@ title: Solar radius values and their provenance
 description: Solar radius values used in eclipse predictions, with their provenance, wavelength, limb definitions, uncertainty and adopting software.
 order: 1
 status: working
-updated: 2026-09-15
+updated: 2026-09-30
 tags: [solar-radius, auwers, iau-2015, helioseismology, bailys-beads, flash-spectrum]
 seo_title: Solar Radius Values: Constants Used in Eclipse Predictions
 ---
@@ -15,8 +15,8 @@ seo_title: Solar Radius Values: Constants Used in Eclipse Predictions
 - **The seismic radius is about 300 km smaller.** f-mode helioseismology gives 695,680 ± 30 km. Haberreiter, Schmutz and Kosovichev showed that the inflection point of the limb-darkening profile sits 0.333 ± 0.008 Mm above the $\tau_{\mathrm{Ross}} = 2/3$ surface. That offset is the basis of the IAU 2015 nominal value of 695,700 km [@sun-schou-1997] [@sun-haberreiter-2008] [@sun-prsa-2016].
 - **Space limb measurements scatter by 0.5 arcseconds.** HMI at 617.3 nm during the 2012 Venus transit gave 959.57 ± 0.02 arcseconds. SOHO/MDI during the Mercury transits gave 960.12 ± 0.09 arcseconds. PICARD/SODISM gave 696,156 ± 145 km at 607.1 nm [@sun-emilio-2015] [@sun-emilio-2012] [@sun-meftah-2018].
 - **Eclipse measurements cluster at 959.95 to 960.0 arcseconds.** Lamy et al. found 959.99 ± 0.06 arcseconds from 17 photometer light curves at four eclipses. Quaglia et al. found 959.95 ± 0.05 arcseconds from the 2017 flash spectrum. Adassuriya found 959.89 ± 0.18 arcseconds from 2010 beads. Kubo's 1970 to 1991 values lie in 959.74 to 959.88 arcseconds [@sun-lamy-2015] [@sun-quaglia-2021] [@sun-adassuriya-2011] [@sun-kubo-1993].
-- **The eclipse radius is 0.32 arcseconds or 232 km larger than Auwers'.** Totality ends only when the last photospheric light is gone, and photospheric light is detectable at least 0.65 arcseconds beyond the inflection point [@sun-raponi-sigismondi-2011] [@sun-quaglia-2021].
-- **No predictor except Irwin's and the simulator inside The Photographer's Ephemeris (Photo Ephemeris) has switched.** NASA SVS used 696,000 km in both 2017 and 2024, Jubier and Occult default to 959.63 arcseconds, and Solar Eclipse Maestro and Occult let the user change it [@sun-wright-young-2024] [@sun-jubier-map-help] [@sun-quaglia-2021].
+- **Quaglia's flash-spectrum fit is 0.32 arcseconds above Auwers'.** That is about 232 km at 1 au. Eclipse radius estimates depend on limb, wavelength and light-detection models, so the fit is not a settled constant [@sun-quaglia-2021] [@sun-lamy-2015].
+- **The surveyed products offer several radius presets.** Irwin adopts 959.95 arcseconds, and Photo Ephemeris offers it in the bead simulator. Jubier's map uses 959.63 arcseconds, while user-configurable programs also permit other values. The 2017 SVS products state 696,000 km [@sun-svs-4515] [@sun-photoephemeris-technote] [@sun-jubier-map-help] [@sun-quaglia-2021].
 :::
 
 **The question.** An eclipse computation needs a single number for the angular radius of the Sun at 1 au. Which numbers are in circulation, what did each measurement actually measure, how large are the uncertainties, why do eclipse-derived radii come out about 0.3 arcseconds larger than the almanac value, and which value does each predictor use? This note answers those questions with quoted values. The companion note [Effect of the radius on eclipse products](effect-on-eclipse-products.md) converts the differences into kilometres of path limit and seconds of totality.
@@ -106,7 +106,8 @@ Eclipses measure a different edge. The observable is the time at which photosphe
 | Raponi and Sigismondi 2011 | 2010 January 15, Uganda and India videos | inflection point bounded by −0.190 < ΔR < +0.050 arcseconds | limb-darkening function reconstructed from bead light curves | Kaguya (SELENE) LALT, 4.1 m radial error | panchromatic and green ND [@sun-raponi-sigismondi-2011] |
 | Lamy et al. 2015 | 2010 July 11, 2012 November 13, 2013 November 3, 2015 March 20 | 959.94 ± 0.02, 960.02 ± 0.04, 959.99 ± 0.09, 960.01 ± 0.09; mean 959.99 ± 0.06 arcseconds (696,246 ± 45 km) | 17 unattended photometers, light curves at C2 and C3 fitted to synthetic curves | Kaguya (SELENE) topographic model | 540 nm [@sun-lamy-2015] |
 | Quaglia et al. 2021 | 2017 August 21, southern limit near Vale, Oregon | 959.95 ± 0.05 arcseconds; visual estimate 960.01 ± 0.08 | [?flash-spectrum] video, light curves of the last and first beads matched to simulations | LRO LOLA SLDEM2015 at 256 and LDEM at 128 pixels per degree, lunar datum 1738.091 km, Irwin's model | 480, 580 and 640 nm, no wavelength dependence [@sun-quaglia-2021] |
-| Jubier et al. 2021 and Guhl 2023 | not stated | 959.98 and 960.01 arcseconds | cited by Wright and Young; not read | | [@sun-wright-young-2024] |
+| Jubier et al. 2021 | not stated | 959.98 arcseconds | reported secondhand by Wright and Young; original method unconfirmed | not stated | [@sun-wright-young-2024] |
+| Guhl 2023 | 2023 April 20, Cape Range | 960.01 ± 0.12 arcseconds | bead timings with Occult | LOLA | 535 nm [@val-guhl-2023] |
 | Dunham, Sofia, Guhl and Herald 2016 | eclipses since the 1990s | "[956.40", 956.80"]" as printed by Quaglia et al., evidently 959.40 to 959.80 | IOTA bead timings | Watts then Kaguya | [@sun-dunham-2016] [@sun-quaglia-2021] |
 
 Three points about this table. First, the modern high-resolution results agree: Lamy 959.99 ± 0.06, Quaglia 959.95 ± 0.05, Jubier 959.98, Guhl 960.01, Adassuriya 959.89 ± 0.18 and Jubier's help-page figure of 959.98 ± 0.02 [@sun-jubier-map-help] all fall within 0.1 arcseconds of 959.95. Wright and Young list the first four together and call the need for consensus "acute" [@sun-wright-young-2024]. Second, the Kilcik 2009 value of 959.22 ± 0.04 is 0.7 arcseconds below the others. The abstract describes an imaging analysis, not bead timing at the path limit, so it is measuring a different edge and should not be pooled with the bead results [@sun-kilcik-2009]. Third, IOTA no longer claims to see solar radius variation. Dunham wrote in 2024: "We thought in previous years that our analysis of timings of total and annular eclipses observed near the path edges showed variations in the solar radius. But now we believe that the real errors of the observations were larger than earlier formal estimates [...] So now we believe the solar radius is constant, or nearly so" [@sun-iota-dunham-2024].
@@ -167,12 +168,12 @@ Quaglia et al. state the eclipse result: the eclipse solar radius "can be quite 
 | Raponi and Sigismondi 2011 [@sun-raponi-sigismondi-2011] | Direct evidence that photospheric light extends 0.65 arcseconds beyond the inflection point. |
 | Wright and Young 2024 [@sun-wright-young-2024] | NASA's own position, the 696,000 km assumption, and the sensitivity 1 s ↔ 0.03 arcseconds near the limits. |
 | Dunham, IOTA 2024 [@sun-iota-dunham-2024] | The IOTA retraction of radius variation and the practical 2 km umbral-depth rule. |
-| SVS 4515 [@sun-svs-4515] | The only SVS page that prints the constants block. |
+| SVS 4515 [@sun-svs-4515] | The 2017 limb-and-terrain product constants block. |
 
 ## What a developer should do
 
 1. Store the solar radius as a named, versioned constant in arcseconds at 1 au and convert with $R_\odot = a \sin s_0$, recording which convention you use, since arcsine and arctangent differ by 0.011 arcseconds.
-2. Default the umbral and antumbral computations (path limits, C2, C3, central duration, bead simulation) to the eclipse solar radius 959.95 arcseconds and carry ± 0.05 arcseconds as its uncertainty [@sun-quaglia-2021]. Keep 959.63 arcseconds available as a compatibility mode, because every published almanac product and most third-party checks still use it.
+2. Provide 959.95 ± 0.05 arcseconds as the Quaglia flash-spectrum preset for umbral and antumbral products. State its detection and limb model. Keep 959.63 arcseconds as a documented conventional preset. Timing-based radius estimates also depend on the instrument and reduction method [@sun-quaglia-2021] [@val-guhl-tegtmeier-2018].
 3. Never use the IAU 2015 nominal value or astropy's `R_sun` for eclipse geometry. It is 0.73 arcseconds smaller than the eclipse radius and would widen the path by about 2.5 to 4 km [@sun-wright-young-2024].
 4. Read first: Quaglia et al. 2021 (arXiv 2107.09416) for the definition and the sensitivity plots, Lamy et al. 2015 for the photometer method, Haberreiter et al. 2008 for the physics, and section 6.4 of Wright and Young 2024 for the state of the debate.
 5. Data to obtain: the LOLA SLDEM2015 and LDEM at 128 pixels per degree grids used by Irwin and by Wright, whose labels and download locations are in [Datasets: Watts, Kaguya, LOLA](../05-lunar-limb/datasets-watts-kaguya-lola.md), because an eclipse radius is only meaningful together with the limb profile it was fitted against.
@@ -184,8 +185,8 @@ The pipeline design gains one explicit parameter, `solar_radius_arcsec`, with a 
 ## Open questions
 
 - Obtain Auwers 1891 (Astronomische Nachrichten 128, 361) and confirm the eclipse-contact component of the mean and the stated uncertainty [@sun-auwers-1891].
-- Obtain the Jubier et al. 2021 and Guhl 2023 papers cited by Wright and Young for 959.98 and 960.01 arcseconds and record their limb datasets and wavelengths [@sun-wright-young-2024].
+- Obtain Jubier et al. 2021 and record its method, wavelength and limb dataset. Guhl's 2023 bead timings and 535 nm result are documented in [observed versus predicted](../10-validation/observed-vs-predicted.md#april-20-and-october-14) [@val-guhl-2023].
 - Obtain Kilcik et al. 2009 in full to establish which edge the 959.22 ± 0.04 arcsecond value measures [@sun-kilcik-2009].
 - Obtain the IOTA analyses of the 2023 October 14 annular and 2024 April 8 total eclipse bead videos, which Dunham says will appear in the Journal for Occultation Astronomy, for a post-2021 eclipse radius [@sun-iota-dunham-2024].
-- Obtain an explicit statement by Espenak of the solar radius used in the Five Millennium Canon, NASA/TP-2006-214141. Searches of eclipsewise.com and eclipse.gsfc.nasa.gov for "solar radius" and "959.63" returned only the lunar-radius page and the prediction explanation, neither of which names the solar value [@sun-espenak-seradius] [@sun-gsfc-explain].
+- Obtain a run-specific statement of the solar radius used in the Five Millennium Canon, NASA/TP-2006-214141. The cited lunar-radius and prediction pages do not explicitly name that solar constant [@sun-espenak-seradius] [@sun-gsfc-explain].
 - Read the Occult 4 help text for the solar-radius input in the Baily's beads tool to record Herald's default and any correction option.

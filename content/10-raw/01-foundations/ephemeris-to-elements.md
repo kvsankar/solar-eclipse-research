@@ -3,7 +3,7 @@ title: From ephemeris to elements
 description: Equations for deriving eclipse Besselian elements from Sun and Moon positions, with frames, light-time and direct topocentric alternatives.
 order: 2
 status: working
-updated: 2026-09-15
+updated: 2026-09-30
 tags: [besselian, ephemeris, jpl-de, swiss-ephemeris, skyfield]
 seo_title: Calculating Besselian Elements from an Ephemeris
 ---
@@ -12,7 +12,7 @@ seo_title: Calculating Besselian Elements from an Ephemeris
 - **Inputs are apparent geocentric places** of the Sun and Moon referred to the true equator and equinox of date, plus the Sun's distance and the Moon's parallax, at instants of TT. The 1961 Supplement names exactly these inputs [@bes-es1961]. Every implementation read for this note uses them, and none uses ICRF/J2000 directions without first rotating to the equator of date [@bes-swisseph-swecl] [@bes-solareclipses-formulas] [@bes-celestialprogramming-gen].
 - **Fourteen equations, in order,** take those inputs to $x, y, d, \mu, l_1, l_2, \tan f_1, \tan f_2$. They are listed below with the constants each one needs [@bes-es1961] [@bes-es1992].
 - **The almanacs computed elements at 10-minute steps and differentiated numerically.** NASA and Meeus publish a polynomial fitted to five samples over six hours. The polynomial is a publication format [@bes-es1992] [@bes-nasa-2024-elements].
-- **No general-purpose open library generates elements from a JPL ephemeris as a documented, validated function.** Skyfield's maintainer says shadow projection "would require more sophisticated calculations than currently available" [@bes-skyfield-801]. The Swiss Ephemeris computes the geometry live but never exposes $x, y, l_1, l_2$ [@bes-swisseph-swecl]. Eclipse-Engine ships elements "fitted to the JPL DE440s ephemeris" but not the fitting code [@bes-eclipse-engine].
+- **The surveyed general-purpose libraries do not expose a validated JPL-to-elements function.** Skyfield's maintainer says shadow projection "would require more sophisticated calculations than currently available" [@bes-skyfield-801]. The Swiss Ephemeris computes the geometry live but never exposes $x, y, l_1, l_2$ [@bes-swisseph-swecl]. Eclipse-Engine ships elements "fitted to the JPL DE440s ephemeris" but not the fitting code [@bes-eclipse-engine].
 - **Direct topocentric computation** replaces the elements by the apparent topocentric separation of the two centres and their apparent semidiameters. The Swiss Ephemeris `eclipse_how()` and the USNO eclipse computer work this way, and Quaglia et al. extend it to the full limb profile [@bes-swisseph-swecl] [@bes-usno-eclipse-computer] [@bes-quaglia-2021].
 :::
 
@@ -39,7 +39,7 @@ Symbols used below.
 - $\pi_0 = 8.794$ arcseconds: the solar parallax at 1 au.
 - $s_0 = 959.63$ arcseconds: the solar semidiameter at 1 au.
 - $k$: the lunar radius ratio, one value per cone.
-- $\theta$: the Greenwich apparent sidereal time at the TT instant less ΔT.
+- $\theta$: ephemeris sidereal time evaluated at the numerical TT epoch as if it were UT1 for NASA ephemeris-meridian elements. Angles in this generator must use one consistent unit.
 
 All lengths are in Earth equatorial radii unless stated. Sources: the 1961 Supplement section 9B and the 1992 Supplement sections 8.322 and 8.323 [@bes-es1961] [@bes-es1992].
 
@@ -75,7 +75,11 @@ $$
 $$
 \mu = \theta - a
 $$
-with $\theta$ the Greenwich apparent sidereal time [@bes-es1992]. To match NASA, evaluate $\theta$ at UT1 $= t - \Delta T$ with a stated ΔT and record that ΔT with the table [@bes-nasa-2024-elements] [@bes-aravpanwar]. To follow the 1961 convention instead, evaluate the sidereal time at the TT instant as if it were UT, call the result the ephemeris sidereal time, and let users shift their longitudes by $1.002738\,\Delta T$ [@bes-es1961].
+For NASA ephemeris-meridian elements, evaluate the sidereal-time expression at the numerical TT epoch as if it were UT1, then form $\mu = \theta-a$. The consumer converts it to the actual UT1 hour angle once:
+
+$$\mu_{\mathrm{UT1}} = \mu - \omega_\oplus\Delta T,\qquad \omega_\oplus = \frac{1.002738\times15}{3600}\ \mathrm{degrees\ per\ second}$$
+
+Here μ and $\mu_{\mathrm{UT1}}$ are in degrees and ΔT is in seconds. NASA's JavaScript Solar Eclipse Explorer (JSEX) implements the correction in radians as `delta_t_s / 13713.44` [@bes-es1961] [@bes-nasa-jsex-source]. An alternative generator evaluates Greenwich apparent sidereal time at UT1 = TT − ΔT. Its μ already contains the correction, so its consumer must omit the downstream subtraction. Record which convention the element set uses [@bes-es1992].
 
 **Step 5. Cone half-angles.**
 $$
@@ -98,9 +102,9 @@ $l_2 < 0$ total, $l_2 > 0$ annular [@bes-es1961].
 
 **Step 8. Repeat** steps 0 to 7 at each sample instant. The 1992 Supplement used a 10-minute grid "but for some instances additional calculations at an interval of 30 seconds or less are necessary", and took derivatives numerically [@bes-es1992].
 
-**Step 9. Fit.** For publication, sample at $t = -2, -1, 0, +1, +2$ hours about $t_0$ and fit $a_0 + a_1 t + a_2 t^2 + a_3 t^3$ by least squares to each of $x, y, d, \mu, l_1, l_2$. NASA describes "a least-squares fit to elements calculated at five uniformly spaced times over a six hour period centered at $t_0$" [@bes-nasa-2024-elements] [@bes-nasa-1998-elements]. Miller's page shows the normal equations solved by Gauss-Jordan elimination and reports that $\mu$ needs only first degree and $d, l_1, l_2$ only second [@bes-celestialprogramming-gen]. The NASA CSV confirms: $\mu$ has a zero quadratic coefficient in every row inspected, $d, l_1, l_2$ have three coefficients, $x, y$ have four [@bes-nasa-csv]. Five samples and a cubic leave one degree of freedom, so the fit is nearly an interpolation. Publish $\tan f_1, \tan f_2$ at $t_0$.
+**Step 9. Fit.** NASA describes five uniformly spaced samples over six hours centred on $t_0$. Including the endpoints gives $t = -3, -1.5, 0, +1.5, +3$ hours. This grid follows arithmetically from the published span, rather than from unpublished fitting code [@bes-nasa-2024-elements] [@bes-nasa-1998-elements]. Fit $x$ and $y$ with cubics, $d$, $l_1$ and $l_2$ with quadratics, and μ with the order specified by the source table. Unwrap μ before fitting across a 360-degree boundary. The Canon CSV's inspected rows have zero quadratic μ coefficients [@bes-nasa-csv]. Miller's example instead uses $t = -2, -1, 0, +1, +2$ hours and Gauss-Jordan least squares. That is a four-hour sampling configuration [@bes-celestialprogramming-gen]. Record the grid and check the polynomial throughout its claimed validity interval. Publish $\tan f_1$ and $\tan f_2$ at $t_0$ [@bes-nasa-2024-elements].
 
-**Step 10. Record metadata.** Ephemeris and version, TT reference $t_0$, ΔT, $k_1$, $k_2$, $s_0$, $\pi_0$, ellipsoid, and whether the lunar position is centre of mass [@bes-nasa-2024-elements] [@bes-ew-de405].
+**Step 10. Record metadata.** Ephemeris and version, TT reference $t_0$, μ convention, ΔT in seconds, $k_1$, $k_2$, $s_0$, $\pi_0$, ellipsoid, and whether the lunar position is centre of mass [@bes-nasa-2024-elements] [@bes-ew-de405].
 
 A check for the developer: with the NASA 2024 April 8 elements, $x^2 + y^2$ at $t = 0$ gives $\sqrt{0.318244^2 + 0.219764^2} = 0.3868$, and the catalogue's gamma of 0.34314 is the minimum of that distance at 18:18:29 TDT, the catalogued time of greatest eclipse [@bes-nasa-csv].
 
@@ -123,7 +127,7 @@ Here `drad` is the solar radius, `dmoon` the lunar diameter, `dsm` the Sun-Moon 
 
 ## Open-source generators found
 
-The full repository inventory and its comparison matrix are in [GitHub repositories](../09-software-and-repos/github-repositories.md). This section keeps only what each repository does about generating elements. Searches were run for "besselian elements" with python, javascript, fortran, rust and C, for Skyfield-based eclipse code, and for the Swiss Ephemeris, Occult, USNO and IMCCE. Findings:
+The repository inventory and its comparison matrix are in [GitHub repositories](../09-software-and-repos/github-repositories.md). The table distinguishes generators from consumers of existing elements.
 
 | Code | Language | Generates elements? | Ephemeris and constants | Validation stated |
 |---|---|---|---|---|
@@ -137,7 +141,7 @@ The full repository inventory and its comparison matrix are in [GitHub repositor
 | Skyfield itself [@bes-skyfield-801] | Python | No. The maintainer states that projecting the shadow cone is not implemented | DE4xx | not applicable |
 | Miller's 5MCSE mirror [@bes-miller-5mcse-repo] | data | No. Repackages NASA's CSV as JSON and JavaScript | NASA VSOP87/ELP2000 | not applicable |
 
-Negative findings: no Fortran or C code that generates elements from a JPL ephemeris with documented validation against the almanac was found. Occult's public tutorial mentions solar eclipses only in its feature list [@bes-occult-tutorial]. No IMCCE page describing its own Besselian-element computation was located in the searches run. The USNO eclipse computer describes a topocentric method, not elements [@bes-usno-eclipse-computer]. Yuk Tung Liu's derivation page returned an access error and a JavaScript-only stub, and the Observable notebook by Yamahata returned rate-limit errors on two attempts, so neither was read.
+Within the implementations compared here, no Fortran or C generator documents validation of its JPL-derived elements against an almanac. Occult's public tutorial mentions solar eclipses only in its feature list [@bes-occult-tutorial]. The cited IMCCE material does not document an element generator. The USNO eclipse computer describes a topocentric method, not elements [@bes-usno-eclipse-computer]. The comparison excludes Yuk Tung Liu's derivation and Yamahata's Observable notebook because their equations are not established by the artefacts cited here.
 
 ## Elements versus direct topocentric computation
 
@@ -165,7 +169,7 @@ When each is used:
 
 - Use elements for catalogues, maps, path limits, and any product that must be reproducible from a published table, and for matching NASA or the Almanac, because their constants and fits are documented [@bes-nasa-2024-elements].
 - Use direct topocentric computation when the ephemeris is at hand and the question is local: contact times at one site, Baily's beads, flash-spectrum timing, eclipse solar radius. It removes the polynomial truncation, the constant $\tan f$ approximation, the ellipsoid auxiliaries, and the split of $k$ into two values, and it lets a limb profile replace $k$ entirely [@bes-quaglia-2021].
-- The two agree to well under a second when the same ephemeris, radii and ΔT are used. The observed differences between predictors come from those inputs, not from the method. Quaglia et al. report Occult's Baily's beads tool giving durations 2 s or more longer than their model at the same site, and Solar Eclipse Maestro 4 s or more, attributed to limb handling [@bes-quaglia-2021].
+- Compare the two methods using the same ephemeris, radii, ΔT and limb definition. The source comparison does not establish a universal sub-second agreement guarantee. Quaglia et al. report Occult's Baily's beads tool giving durations 2 s or more longer than their model at the same site, and Solar Eclipse Maestro 4 s or more, attributed to limb handling [@bes-quaglia-2021].
 
 ## Sources compared
 

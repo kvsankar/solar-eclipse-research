@@ -3,7 +3,7 @@ title: Canons and data products
 description: Find solar eclipse catalogues and Besselian data tables, with their formats, ephemerides, ΔT models and documented calculation methods.
 order: 3
 status: working
-updated: 2026-09-15
+updated: 2026-09-30
 tags: [canon, catalogue, nasa-gsfc, imcce, hmnao, jubier, occult, data-products, open-source]
 seo_title: Solar Eclipse Catalogues: NASA Canons and Data Tables
 ---
@@ -12,7 +12,7 @@ seo_title: Solar Eclipse Catalogues: NASA Canons and Data Tables
 - **NASA GSFC is the machine-readable reference.** One ASCII catalogue of 11,898 rows and one CSV of Besselian polynomial elements for the same eclipses, both derived from the Five Millennium Canon with VSOP87D and ELP-2000/82, are downloadable without registration and reproducible with the credit line "Eclipse Predictions by Fred Espenak, NASA's GSFC" [@cat-nasa-5mkse-ascii] [@cat-nasa-besselian-csv] [@cat-gmiller-besselian].
 - **IMCCE has its own six-millennium canon.** 14,155 solar eclipses from $-2999$ to $+3000$ computed with ELP2000, VSOP82, Chebyshev ephemerides SLP98, Stephenson 1984 for TT−UT, $k = 0.2725076$ and a solar semidiameter of 15′59.63″ at 1 au [@cat-imcce-theories] [@cat-imcce-parametres] [@cat-imcce-resultats].
 - **EclipseWise extends the count to 14,261.** Espenak's later six-millennium catalogue lists 5,042 partial, 4,761 annular, 3,820 total and 638 hybrid eclipses. Van Gent reports it was computed from JPL DE406 [@cat-eclipsewise-catalog] [@cat-vangent-tables].
-- **Only two mainstream libraries enumerate solar eclipses.** Astronomy Engine and the Swiss Ephemeris. Skyfield has lunar eclipses only, libnova has no eclipse header at all, and no astropy eclipse finder was found [@cat-astronomy-engine] [@cat-swisseph-doc] [@cat-skyfield-almanac] [@cat-libnova-headers].
+- **Two surveyed mainstream libraries enumerate solar eclipses.** Astronomy Engine and the Swiss Ephemeris. Skyfield has lunar eclipses only, libnova has no eclipse header at all, and no astropy eclipse finder was found [@cat-astronomy-engine] [@cat-swisseph-doc] [@cat-skyfield-almanac] [@cat-libnova-headers].
 - **The older canons set the numbering and the baselines.** Oppolzer 1887 covers 8,000 solar eclipses from $-1207$ to $+2161$ with hand-computed circular-arc paths. Mucke and Meeus 1983 covers 10,774 eclipses from $-2003$ to $+2526$ with Besselian elements. Meeus 1989 gives elements for 570 eclipses from 1951 to 2200 [@cat-espenak-meeus-2009-catalog] [@cat-meeus-1989-elements].
 :::
 
@@ -20,7 +20,7 @@ seo_title: Solar Eclipse Catalogues: NASA Canons and Data Tables
 
 ## NASA GSFC eclipse site
 
-The site publishes the Five Millennium Canon (NASA/TP-2006-214141) and the revised Five Millennium Catalog (NASA/TP-2009-214174) and everything derived from them. The catalogue itself says the tables are "available via the Web at http://eclipse.gsfc.nasa.gov/SEcat5/catalog.html. Organized into 100-year intervals, the tables have individual links to eclipse maps and Saros series tables" [@cat-espenak-meeus-2009-catalog] [@cat-nasa-catalog-index]. The site was intermittently unreachable on 2026-09-15; unless a reference note says otherwise, every page cited from it is as of that date.
+The site publishes the Five Millennium Canon (NASA/TP-2006-214141) and the revised Five Millennium Catalog (NASA/TP-2009-214174) and everything derived from them. The catalogue itself says the tables are "available via the Web at http://eclipse.gsfc.nasa.gov/SEcat5/catalog.html. Organized into 100-year intervals, the tables have individual links to eclipse maps and Saros series tables" [@cat-espenak-meeus-2009-catalog] [@cat-nasa-catalog-index]. The source versions and reference dates are recorded in the bibliography.
 
 **Publications.** The canon text is `5MCSE/5MCSE-Text11.pdf` (the `Text10` link on the publication page returns 404) with twelve map PDFs of 19.5 to 21.8 MB each. The catalogue is `5MCSE/TP2009-214174.pdf`, 13.2 MB [@cat-nasa-5mcse-page] [@cat-nasa-5mkse-page].
 
@@ -46,7 +46,7 @@ The live IMCCE service at `ssp.imcce.fr/forms/solar-eclipses` is a JavaScript ap
 
 ## HMNAO
 
-The portal at `astro.ukho.gov.uk/eclipse/` returned HTTP 503 on every attempt on 2026-09-15 and no archive snapshot was retrievable. Search summaries state it covers "1501 CE to 2100 CE inclusive, with a total of 2,881 eclipses made up of 1,421 solar and 1,460 lunar eclipses" and that "the mapping information is based on data derived from solar and lunar eclipse software used in the production of The Astronomical Almanac". This is search-summary provenance only [@cat-hmnao-portal].
+The HMNAO portal at `astro.ukho.gov.uk/eclipse/` is reported secondhand to cover "1501 CE to 2100 CE inclusive, with a total of 2,881 eclipses made up of 1,421 solar and 1,460 lunar eclipses" and that "the mapping information is based on data derived from solar and lunar eclipse software used in the production of The Astronomical Almanac". This is reported secondhand and unconfirmed [@cat-hmnao-portal].
 
 ## Xavier Jubier
 
@@ -58,7 +58,7 @@ Dave Herald's page lists among Occult's capabilities "Solar and lunar eclipses, 
 
 ## timeanddate
 
-The site blocked all automated fetches. Search summaries of its help pages state that its eclipse calculations "account for changes in the speed of Earth's rotation using a value called Delta T", quote ΔT values near 69 to 75 s for current eclipses, and describe magnitude as computed from Besselian elements [@cat-timeanddate-accuracy]. No ephemeris or $k$ statement was found. Search-summary provenance only.
+The cited secondhand descriptions of timeanddate's help pages state that its eclipse calculations "account for changes in the speed of Earth's rotation using a value called Delta T", quote ΔT values near 69 to 75 s for current eclipses, and describe magnitude as computed from Besselian elements [@cat-timeanddate-accuracy]. No ephemeris or $k$ statement was found. Reported secondhand and unconfirmed.
 
 ## Open-source code that enumerates eclipses
 
@@ -74,9 +74,9 @@ keeps only what each project does about enumeration.
 
 **Meeus ports.** `soniakeys/meeus` (Go, MIT) implements Chapter 54 as `eclipse.Solar(year)` returning type, central flag, JDE of maximum, $\gamma$, $u$, penumbral radius and partial magnitude, with the book's constants verbatim [@cat-soniakeys-meeus-go]. A C# walkthrough of the same chapter exists on squarewidget.com [@cat-squarewidget-meeus].
 
-**Small projects found by GitHub search** (queries "solar eclipse catalog", "eclipse finder", "saros", "besselian elements", "solar eclipse prediction", "eclipse calculator meeus" on 2026-09-15). "solar eclipse catalog" and "eclipse calculator meeus" returned no repositories. Others:
+**Additional surveyed projects:**
 
-- `erikbern/eclipse-finder` (Python): "Simple Modal script that uses Astropy to find eclipses in the 2020-2030 period" by brute-force separation search. That a user had to write it is the evidence that astropy itself has no eclipse function [@cat-erikbern-eclipse-finder].
+- `erikbern/eclipse-finder` (Python): "Simple Modal script that uses Astropy to find eclipses in the 2020-2030 period" by brute-force separation search. This project adds its own eclipse search on Astropy positions. Its existence alone does not establish the absence of an Astropy search API [@cat-erikbern-eclipse-finder].
 - `cjwinchester/full-moons-solstices-equinoxes-eclipses` (Python): 23,289 events 1550 to 2649, lunar eclipses from Skyfield with DE440, and "Solar eclipse data comes from NASA's Five Millenium Catalog of Solar Eclipses", output as CSV [@cat-cjwinchester-almanac].
 - `i230010/sedategenerator_v2` (Python): generates a CSV with UT1 and TT datetimes, ΔT and the Besselian polynomial coefficients $x_0..x_3$, $y_0..y_3$, $d_0..d_3$, $l_{10}..l_{13}$, $l_{20}..l_{23}$, $\mu_0..\mu_3$, $\tan f_1$, $\tan f_2$ over a year range with a time step in seconds; no method or validation is documented [@cat-sedategenerator].
 - `RyuuNeko1107/umbra-rs` (Rust): an AI-authored experiment with design documents targeting ±1 to 2 s in greatest-eclipse time and sub-km central lines, explicitly "not ready for use" and not validated against JPL DE [@cat-umbra-rs].
@@ -85,7 +85,7 @@ keeps only what each project does about enumeration.
 
 **libnova** (LGPL, C). The `src/libnova` header directory contains `solar.h`, `lunar.h`, `rise_set.h`, `parallax.h` and thirty others, none for eclipses, and a code search for "eclipse" in the repository returned zero hits [@cat-libnova-headers].
 
-No Zenodo dataset of solar eclipse catalogues or Besselian elements was found in searches for "Zenodo solar eclipses catalog CSV JSON Besselian elements". The NASA CSV and its GitHub mirror are the only machine-readable element sets located.
+The cited NASA CSV and its GitHub mirror provide machine-readable elements with a documented catalogue origin. The comparison here does not establish the absence of other archived element sets.
 
 ## The older canons
 
@@ -132,8 +132,8 @@ Nothing in the pipeline design. The NASA files are sufficient as a reference set
 
 ## Open questions
 
-- Obtain the IMCCE canon's per-type counts and its statement of the Earth-rotation series, from the pages `stlp-canon-imcce-resultats.html` whose table did not render, or from IMCCE's *Le manuel des éclipses* (2005) [@cat-imcce-resultats].
+- Obtain the IMCCE canon's per-type counts and its statement of the Earth-rotation series, from the original `stlp-canon-imcce-resultats.html` table, or from IMCCE's *Le manuel des éclipses* (2005) [@cat-imcce-resultats].
 - Obtain a confirmed statement of the ephemeris behind the EclipseWise six-millennium catalogue, either from EclipseWise or from Espenak's *Thousand Year Canon of Solar Eclipses 1501 to 2500* [@cat-eclipsewise-catalog].
-- Obtain the HMNAO Eclipse Portal pages when the server is up, in particular whether Besselian elements are exported and which ephemeris the Astronomical Almanac software used for 1501 to 2100 [@cat-hmnao-portal].
+- Obtain the HMNAO Eclipse Portal method and export documents, in particular whether Besselian elements are exported and which ephemeris the Astronomical Almanac software used for 1501 to 2100 [@cat-hmnao-portal].
 - Obtain Occult 4's help topic on solar eclipses to record its ephemeris, $k$ and limb usage from the author's own text [@cat-occult4].
 - Obtain the Skyfield pull request 1076 test file to see which reference list it compares with [@cat-skyfield-pr-1076].

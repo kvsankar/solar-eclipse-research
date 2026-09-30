@@ -3,7 +3,7 @@ title: Global maps and contours
 description: How eclipse map algorithms calculate rise and set curves, contact-time outlines, magnitude contours and obscuration across the Earth.
 order: 2
 status: working
-updated: 2026-09-15
+updated: 2026-09-30
 tags: [rise-set-curves, maximum-eclipse, magnitude-contours, obscuration, world-map]
 seo_title: Solar Eclipse Map Algorithms: Contours and Contact Curves
 ---
@@ -98,7 +98,7 @@ The obscuration at a point with magnitude $m$ and Moon/Sun apparent diameter rat
 
 $$A = \rho^2\arccos\frac{s^2 + \rho^2 - 1}{2s\rho} + \arccos\frac{s^2 + 1 - \rho^2}{2s} - \frac12\sqrt{(-s + 1 + \rho)(s + 1 - \rho)(s - 1 + \rho)(s + 1 + \rho)}$$
 
-and the obscuration is $A/\pi$, with the special cases $\rho^2$ (annular, $s \le |1 - \rho|$ and $\rho < 1$), 1 (total) and 0 ($s \ge 1 + \rho$) [@glob-enrique7mc]. The timeanddate magnitude page distinguishes the same two quantities, which the search index summarised as "magnitude relates to diameter ratios while obscuration relates to area coverage". Its map page itself could not be fetched, returning HTTP 403, and the archive copy returned only navigation, so its contouring method is unrecorded here [@glob-timeanddate-magnitude]. The Swiss Ephemeris returns both quantities per location in `attr[0]` (fraction of diameter) and `attr[2]` (obscuration) [@glob-swisseph-doc].
+and the obscuration is $A/\pi$, with the special cases $\rho^2$ (annular, $s \le |1 - \rho|$ and $\rho < 1$), 1 (total) and 0 ($s \ge 1 + \rho$) [@glob-enrique7mc]. The cited secondhand description of timeanddate distinguishes diameter-based magnitude from area-based obscuration. Its contouring method is not established by that evidence, which remains unconfirmed [@glob-timeanddate-magnitude]. The Swiss Ephemeris returns both quantities per location in `attr[0]` (fraction of diameter) and `attr[2]` (obscuration) [@glob-swisseph-doc].
 
 The magnitude and obscuration contours are computed for maximum eclipse at each point, so a contour map must hold the time free per cell. That is why SVS's `penum17_1m` product, which fixes the time, and `penum17`, which fixes the level, are different datasets [@glob-svs-4518]. NASA's remark that the magnitude curves "parallel the penumbral and umbral limits" is the geometric reason the raster approach works well: the field is smooth away from the terminator [@glob-nasa-map-explain].
 
@@ -121,7 +121,7 @@ All curves are computed in ephemeris time and labelled in Universal Time through
 ## What a developer should do
 
 1. Compute the classic curves from the Supplement formulas, using $\zeta$ as the sweep parameter for the maximum-eclipse curves and $Q$ for the outlines. Keep the below-horizon roots when the map needs closed contours.
-2. For magnitude and obscuration contours, rasterise: for each grid cell find the time of maximum by bracketing the derivative condition $\tan Q = -(y' - \eta')/(x' - \xi')$ or by direct minimisation of $\Delta - L_1$, evaluate $m$ and the two-circle obscuration, and contour with marching squares. Follow Eclipse-Engine's practice of padding the grid edge with real values and refining vertices near the time of maximum [@glob-rherale].
+2. For each grid cell, optimise the quantity being contoured over the visible eclipse interval. Maximise magnitude for magnitude contours and fractional obscuration for obscuration contours. Use closest approach to seed the search, then evaluate the time-dependent apparent radii and the appropriate magnitude branch. Maximum magnitude and maximum obscuration need not occur at the same instant [@glob-es1961]. Contour the resulting fields with marching squares. Eclipse-Engine pads the grid edge with real values and refines contour vertices [@glob-rherale].
 3. Compute obscuration with the exact two-circle formula and the annular special case, never from magnitude alone [@glob-enrique7mc].
 4. Label every curve with the time system used and the $\Delta T$ adopted.
 
@@ -133,5 +133,5 @@ Nothing in the architecture beyond confirming that the partial-eclipse map is a 
 
 - The NASA method for the magnitude curves on the SEmono maps: no page read states whether they are interpolated or rasterised [@glob-nasa-map-explain].
 - Gossner, S. D., "A correction to the time of maximum obscuration in solar eclipses", AJ 60, 383 (1955), cited by the 1961 Supplement for the difference between the two maximum conditions [@glob-es1961].
-- The timeanddate map methodology page, blocked at fetch time. A copy is needed to say how its magnitude animation is computed [@glob-timeanddate-magnitude].
+- The timeanddate map-method document specifying how its magnitude animation and contour objective are computed [@glob-timeanddate-magnitude].
 - The Explanatory Supplement 2013 equations 11.89 and 11.94, to confirm Stellarium's three-pass iteration for the maximum-at-horizon curve [@glob-es2013].

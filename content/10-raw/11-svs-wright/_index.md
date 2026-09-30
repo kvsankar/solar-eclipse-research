@@ -3,7 +3,7 @@ title: NASA SVS and Ernie Wright
 description: NASA SVS terrain-aware eclipse maps, the Wright and Young 2024 paper, released datasets and comparisons with other eclipse predictors.
 order: 11
 status: working
-updated: 2026-09-15
+updated: 2026-09-30
 tags: [svs, wright, raster, lunar-limb, lola, shapefiles]
 seo_title: NASA SVS Eclipse Calculation: Wright and Young's Method
 ---
@@ -13,12 +13,12 @@ seo_title: NASA SVS Eclipse Calculation: Wright and Young's Method
 - **The core idea** is to test every map pixel, at every time step, against a lunar limb profile built from the SLDEM2015 and LOLA LDEM elevation models, with the observer lifted to the SRTM terrain height above the WGS 84 ellipsoid via the EGM96 geoid [@svs-wright-young-2024].
 - **The datasets** are ESRI shapefiles and KML in WGS 84 longitude and latitude: umbra polygons at 1 s and 10 s steps, path outlines, central line, duration contours at 30 s and obscuration contours at 1 per cent and 5 per cent [@svs-5073-2023-2024-map-data].
 - **The constants** stated by SVS are DE421, Earth radius 6378.137 km, WGS 84 flattening, Moon datum radius 1737.4 km, Sun radius 696,000 km (959.645 arcseconds at 1 au) and, for 2017, $\Delta T$ = 68.917 s [@svs-4515-2017-path].
-- **The differences** from other predictors come from the solar radius (959.63 versus 959.95 arcseconds), the limb, and terrain, not from the ephemeris. Espenak's own site says limb corrections move limits by 1 to 3 km [@svs-espenak-2024-path].
+- **Limb and terrain are explicit sources of path differences.** Espenak states that limb corrections shift limits by 1 to 3 km. Solar-radius and Earth-orientation differences also matter. Ephemeris effects require matched-epoch comparison [@svs-espenak-2024-path] [@svs-wright-young-2024].
 :::
 
 ## What this topic covers
 
-This topic covers the one modern eclipse-mapping method that is both published in full and backed by released data. It takes the 2024 Astronomical Journal paper formula by formula, inventories every SVS eclipse page and the files it releases down to the shapefile schema a developer will load, and sets the SVS path against the NASA eclipse site, EclipseWise, Jubier's maps and the Besselian Elements map to say which constant explains each disagreement.
+This topic covers a published raster eclipse-mapping method backed by released data. It takes the 2024 Astronomical Journal paper formula by formula, inventories every SVS eclipse page and the files it releases down to the shapefile schema a developer will load, and sets the SVS path against the NASA eclipse site, EclipseWise, Jubier's maps and the Besselian Elements map to say which constant explains each disagreement.
 
 Notes in this topic:
 
@@ -28,6 +28,6 @@ Notes in this topic:
 
 ## What this topic changes for the pipeline
 
-The limb correction stops being a post-processing step on Besselian contacts and becomes a per-pixel test, so one code path produces the path limits, central line, duration contours and obscuration contours. The released umbra polygons and cities file become the pipeline's ground truth, fixing the target constants, resolutions and outputs. The limb profile, not the ephemeris, sets the resolution floor at about 600 m.
+The raster approach replaces a contact-time post-processing correction with a per-pixel limb test. Released polygons and city times provide reference products, while observed contacts supply independent evidence. The 0.02-degree profile spacing corresponds to about 600 m along the lunar circumference. It is a sampling interval, rather than a terrestrial path-edge uncertainty [@svs-wright-young-2024] [@svs-2024-shapefiles-zip] [@val-quaglia-2021].
 
-No public code exists, and no repository by Wright or SVS was found. Every SVS page and the paper PDF were read from Wayback Machine snapshots, because svs.gsfc.nasa.gov refused connections and iopscience.iop.org sat behind a bot wall at the time of writing (2026 September). The snapshot date is recorded in the note field of each row of `refs.tsv`.
+The compared paper and SVS product pages do not provide a source release of the raster solver. Bibliography notes identify the archived copies used for the documented releases [@svs-wright-young-2024] [@svs-5073-2023-2024-map-data].

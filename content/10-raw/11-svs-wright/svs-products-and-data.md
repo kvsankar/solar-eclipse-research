@@ -3,7 +3,7 @@ title: SVS eclipse pages and datasets
 description: NASA SVS eclipse map products and data releases, with page identifiers, downloadable formats, shapefile fields and documented methods.
 order: 2
 status: working
-updated: 2026-09-15
+updated: 2026-09-30
 tags: [svs, shapefiles, kml, geojson, datasets, constants]
 seo_title: NASA SVS Solar Eclipse Maps, Shapefiles and Datasets
 ---
@@ -13,8 +13,8 @@ seo_title: NASA SVS Solar Eclipse Maps, Shapefiles and Datasets
 - **The 2024 umbra_hi layer** has 6,741 polygons at 1 s intervals from 17:56:00 to 19:48:20 UTC with twelve attributes including centre longitude and latitude, duration, Sun altitude and azimuth, libration and Moon distance [@svs-2024-shapefiles-zip].
 - **The constants** on the SVS pages: Earth radius 6378.137 km, WGS 84, EGM96, Moon radius 1737.4 km, Sun radius 696,000 km, DE421, and for 2017 $\Delta T$ = 68.917 s [@svs-4515-2017-path].
 - **The cities file** gives contact times to the second for 32,174 US places [@svs-cities-2024-json].
-- **No code, no 2019 to 2021 products.** No repository was found, and the archived SVS feeds show no limb-corrected products for the 2019, 2020 or 2021 eclipses.
-- **Everything was read from Wayback snapshots** because svs.gsfc.nasa.gov refused connections at the time of writing (2026 September). Snapshot dates are in `refs.tsv`.
+- **The documented release pages provide data rather than a source implementation.** The September 2026 inventory identifies no limb-corrected product for the 2019 to 2021 eclipses. The archived feeds cover only ten entries each, so this is not proof of absence across the SVS catalogue [@svs-archived-feeds].
+- **Archived SVS pages document released maps.** Reference entries identify snapshot dates and distinguish original artefacts from archived copies [@svs-4518-2017-map-shapefiles] [@svs-5073-2023-2024-map-data].
 :::
 
 **The question.** Which SVS pages carry Ernie Wright's eclipse calculations, what files do they release, what do the pages say about method, and what does a developer find inside the archives?
@@ -49,7 +49,7 @@ The same page states that elevations and the limb "were ignored" for that animat
 | Delta UTC | 69.184 s (TT minus TAI plus 37 leap seconds) |
 | $\Delta T$ | 68.917 s |
 
-The Sun radius in kilometres is unchanged at 696,000 km. The arcsecond equivalent moved from 959.634 to 959.645, which is a change in the au or distance conversion rather than in the physical radius. The animation runs at 30 times real time, 10:12 am PDT to 2:52 pm EDT [@svs-4515-2017-path].
+The physical radius stays at 696,000 km. At the fixed modern au of 149,597,870.7 km, arctangent gives 959.634 arcseconds and arcsine gives 959.645 arcseconds. These arithmetic conversions match the printed equivalents. The pages do not state which conversion produced each value [@svs-4314-2017-usa] [@svs-4515-2017-path] [@sun-prsa-2016]. The animation runs at 30 times real time, 10:12 am PDT to 2:52 pm EDT [@svs-4515-2017-path].
 
 **SVS 4517, "Umbra Shapes"**, released 2016 December 13 and updated 2024 January 25, is the explainer page for the shape of the umbra [@svs-4517-umbra-shapes]. Its method statements, read in full:
 
@@ -105,7 +105,7 @@ Every `.prj` is `GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",63
 
 ## 2019, 2020 and 2021
 
-No SVS product for the 2019 July 2, 2020 December 14 or 2021 December 4 eclipses with limb or terrain corrections was found. The archived SVS atom feeds for `people=Ernie+Wright`, `keywords=Solar+Eclipse`, `keywords=Eclipse+2020`, `missions=LRO`, `series=2017+Solar+Eclipse` and `search=eclipse` were read from Wayback captures between 2024 and 2025. The `Eclipse 2020` feed contains one item, a Spanish-language safety video, SVS 13668. Each feed is truncated to ten entries, so absence in the feeds is not proof of absence on the site. The live SVS search API returned no results, because the host refused connections at the time of writing (2026 September).
+The archived SVS feeds examined for the 2019 July 2, 2020 December 14 and 2021 December 4 eclipses identify no limb-and-terrain-corrected map release. Each feed contains at most ten entries. They therefore cannot establish absence across the full SVS catalogue. The bibliography identifies the feed queries and snapshot dates [@svs-archived-feeds].
 
 ## The 2023 annular and 2024 total eclipses
 
@@ -156,7 +156,7 @@ The cities JSON is described as covering "over 32k major cities in the US" with 
 
 Interpretation of the umbra attributes, from the field names and values: CenterLon and CenterLat are the shadow-axis intersection in degrees, CenterAlt is height in metres and is 0 throughout, Duration is totality at the centre in seconds, SunAlt and SunAz are the Sun's altitude and azimuth in degrees at the centre, MoonL and MoonB are the [?libration] in longitude and latitude in degrees, MoonC is the [?axis-angle] in degrees (339.24, matching the $c$ of the paper's limb test) and MoonDist is the observer to Moon distance in kilometres, the $d$ of the limb test [@svs-2024-shapefiles-zip] [@svs-wright-young-2024]. The first umbra_hi polygons have 19, 83 and 112 vertices as the umbra rises over the Pacific. umbra_lo polygons in the middle of the path have 200 to 320 vertices at a coordinate quantisation of about 0.0049 degrees. umbra_hi coordinates are quantised at about 0.00049 degrees, roughly 50 m.
 
-The 2024 umbra_hi centre at 17:56:00 UTC is 109.84 W, 19.15 N, and Espenak's central line table gives 20 19.2 N, 108 45.8 W at 18:00 UT [@svs-espenak-2024-path]. Four minutes of shadow motion at the stated speed accounts for the difference. A direct comparison of the two predictions at a common instant was not made here and is an open question below.
+The 2024 umbra_hi centre at 17:56:00 UTC is 109.84 W, 19.15 N, and Espenak's central line table gives 20 19.2 N, 108 45.8 W at 18:00 UT [@svs-espenak-2024-path]. Four minutes of shadow motion at the stated speed accounts for the difference. A comparison at a common instant and common time scale is needed to measure the residual.
 
 `2024eclipse_kml.zip`, 299 MB, read from the Wayback capture of 2025 February 12, contains center.kml, duration.kml, penumbra.kml, ppath.kml, ppath01.kml, umbra_hi.kml, umbra_lo.kml, upath_hi.kml and upath_lo.kml, read from the zip central directory with an HTTP range request [@svs-2024-kml-zip]. penumbra.kml has no shapefile counterpart. No GeoJSON is released. The cities file is the only JSON.
 
@@ -164,9 +164,9 @@ The 2024 umbra_hi centre at 17:56:00 UTC is 109.84 W, 19.15 N, and Espenak's cen
 
 ## Software, code and talks
 
-No public implementation exists. GitHub holds no repository by Wright or by the Scientific Visualization Studio for the raster method, and no independent reimplementation of it, under any of the terms characteristic of the method: the umbra and the lunar limb, SPICE and limb profiles, the LOLA and SLDEM models, raster shadow maps over a digital elevation model, and the limb correction to Besselian elements. No GitHub account matches the author's name [@svs-github-api-search]. Semantic Scholar holds no author record linking Wright to other eclipse papers, and Crossref lists the AJ paper as his only eclipse publication [@svs-crossref-wright]. No personal site or blog is established as of 2026 September. The older SVS animator pages from 2009 and 2011 list his visualisations only, back to the Tycho skymap and LOLA footprint animations, with no biography [@svs-animator-page-2009].
+The compared SVS release pages and Wright and Young paper do not link a source release of the raster implementation. The September 2026 GitHub inventory identifies no author release or general independent raster-path reimplementation. This scope does not rule out other public limb or bead code [@svs-github-api-search] [@svs-wright-young-2024].
 
-What is documented about the stack: the paper's appendix prints C code against SPICE and names the kernels [@svs-wright-young-2024], the 2015 page says the Besselian method "was adapted to the routines available in NAIF's SPICE software library" [@svs-4314-2017-usa], and the 2017 shapefile page says the map "was rendered in animation software" [@svs-4518-2017-map-shapefiles]. No page and no part of the paper supports the sometimes repeated claim that Wright used Maya or RenderMan for the eclipse calculation itself. The only public talks found are the narrated SVS videos 12412 and 5186 and the map tours 5086 and 14474. No AAS or AGU abstract was found through Crossref, and ADS could not be queried without an API token.
+The paper's appendix gives C calls against SPICE and names its kernels [@svs-wright-young-2024]. The 2015 animation page describes Bessel's method adapted to SPICE, and the 2017 release page distinguishes shadow calculation from rendering [@svs-4314-2017-usa] [@svs-4518-2017-map-shapefiles]. These sources do not identify Maya or RenderMan as the eclipse solver.
 
 ## Sources compared
 
@@ -192,7 +192,7 @@ The SVS archives become the validation set for the pipeline. They fix the target
 ## Open questions
 
 - **The 1 s archive for 2017**, `eclipse2017_shapefiles_1s.zip` at SVS 4518, was not downloaded. Fetch it and confirm the attribute schema matches the 2024 umbra_hi schema.
-- **The 2023 annular archive**, `2023eclipse_shapefiles.zip`, has not been downloaded, because the CDX query timed out. Its umbra_hi layer holds antumbra polygons and would test the reversed limb test.
+- **The 2023 annular archive**, `2023eclipse_shapefiles.zip`, has no parsed schema in this corpus. Its umbra_hi layer holds antumbra polygons and would test the reversed limb test.
 - **The obscuration raster zip** at SVS 5248 (194 MB) would show whether the global grid is 8192 by 4096 and whether obscuration is computed with the limb.
 - **The SVS API JSON for 5123** may list software or funding fields that the HTML omits. Fetch `https://svs.gsfc.nasa.gov/api/5123` when the host is reachable.
 - **A same-instant comparison** of umbra_hi centre coordinates with Espenak's central-line table would quantify the ephemeris and $\Delta T$ difference in kilometres.

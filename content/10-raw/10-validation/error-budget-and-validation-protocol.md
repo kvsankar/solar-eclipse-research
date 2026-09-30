@@ -3,16 +3,16 @@ title: Error budget and validation protocol
 description: A validation protocol for eclipse calculation software, with reference cases, separate numerical and physical checks, and error-budget inputs.
 order: 3
 status: working
-updated: 2026-09-15
+updated: 2026-09-30
 tags: [validation, error-budget, delta-t, solar-radius, limb, terrain, protocol]
 seo_title: Eclipse Algorithm Validation: Reference Cases and Tolerances
 ---
 
 ::: summary
-- **Nobody has published a complete error budget.** Quaglia et al. state the accuracy of the ephemeris, Earth orientation and lunar topography inputs and conclude the solar radius is the only term that matters [@val-quaglia-2021]. Espenak states the limb and $\Delta T$ terms [@val-gsfc-2024-google] [@val-gsfc-uncertainty]. Wright and Young state the terrain rule [@val-wright-young-2024]. The table below assembles them.
-- **For a present-day eclipse the budget is dominated by three terms of 0.6 to 3 km each at the edge.** Solar radius, 0.32 arcseconds or 600 m. The lunar limb if omitted, 1 to 3 km. Terrain if omitted, $h \cot a$ and up to 3 km. Everything else is below 100 m and 0.5 s once $\Delta T$ is refreshed, the umbral $k$ or a profile is used, and the profile is referenced to the centre of mass. The ephemeris is under 1 m [@val-quaglia-2021] [@val-gsfc-2024-google] [@val-svs-4517].
+- **The sources compared here supply separate budget components.** Quaglia gives input accuracies and radius sensitivity. Espenak gives limb and ΔT terms. Wright and Young give terrain and sampling requirements. They do not provide a complete calibrated covariance model for every eclipse product [@val-quaglia-2021] [@val-gsfc-2024-google] [@val-wright-young-2024].
+- **Omitted limb, terrain and radius choices can shift modern path edges by kilometres.** The cited examples give about 600 m per limit for a 0.32 arcsecond radius change, 1 to 3 km for limb omission and up to 3 km for terrain. These are model sensitivities, rather than independent standard uncertainties. Remaining errors depend on the corrections and geometry [@val-quaglia-2021] [@val-gsfc-2024-google] [@val-svs-4517].
 - **At the central line the same terms are seconds, not tens of seconds.** Radius 1.6 to 1.8 s, limb 1 to 3 s and up to 15 s in extreme geometry, $\Delta T$ realised errors 0.4 to 2.3 s in 2017 and 2024 [@val-quaglia-2021] [@val-photoephemeris-technote] [@val-usno-deltat-data].
-- **ΔT model errors grow as the square of the distance from the present.** Morrison and Stephenson's rule $\sigma = 0.8\,t^2$ s with $t$ in centuries from 1820 gives 265 s at year 0 and 54 s at 1000, and Huber's model gives 1885 s at 3000 [@val-gsfc-uncertainty]. Total-eclipse records pin the rotational frame only to the width of the band, "a few minutes of time" [@val-stephenson-2016].
+- **ΔT uncertainty depends on the model and epoch.** The historical rule $\sigma = 0.8t^2$ s uses centuries from 1820 and applies from 1000 BCE to 1200 CE. Huber's extrapolation scales as $N^{3/2}\sqrt{1+N/2500}$ for lead time $N$ in years, approaching a quadratic only at long lead times. NASA tabulates 1885 s at year 3000 [@val-gsfc-uncertainty].
 - **Successive ΔT analyses differ by more than their quoted sigmas.** The 1986 and 1997 Stephenson curves differ by 1294 s at AD 300, and 2026 work on Ming records bounds 1542 to $-328$ s $\le \Delta T \le 332$ s [@val-gsfc-deltat-hist] [@val-hayakawa-2026-china].
 - **A validation protocol exists in pieces.** Hand-checkable examples in the 1961 Explanatory Supplement, the Lusaka limb-correction example in the 2001 NASA bulletin, the Vale and Stephenville edge records, and the IOTA/ES bead tables give reference cases at every level from Besselian elements to bead events [@val-es1961] [@val-tp2001-bulletin] [@val-quaglia-2021] [@val-besselian-maps-accuracy] [@val-guhl-tegtmeier-2018].
 :::
@@ -25,14 +25,14 @@ This table is the home of the sourced raw rows. The ranked version, which orders
 
 | Term | Mid-path contact time | Edge position or duration | Source |
 |---|---|---|---|
-| Lunar ephemeris (DE430 to DE440) | negligible, lunar distance residuals under 1 m against laser ranging | negligible | [@val-quaglia-2021] |
+| Lunar ephemeris | Quaglia reports DE440 lunar-distance residuals below 1 m against laser ranging | This is not a three-dimensional orbit or path-edge error bound | [@val-quaglia-2021] [@svs-park-2021-de440] |
 | Solar and Earth ephemeris | negligible at the present epoch, lunar position "better than an arcsecond within several centuries" | negligible | [@val-5mcse-tp2009] |
 | Earth orientation (precession, nutation, polar motion), measured | under 1 mas, under 0.1 m on the ground | same | [@val-quaglia-2021] |
 | UT1, measured after the fact | well under 1 ms, under 0.5 m | same | [@val-quaglia-2021] |
 | $\Delta T$ prediction error, realised, 2017 | $-0.4$ s (the NASA eclipse site map at eclipse.gsfc.nasa.gov, 68.4 s against 68.84 s), $-0.04$ s (EclipseWise 68.8 s) | 150 m east-west at $40^{\circ}$ for 0.4 s, arithmetic | [@val-gsfc-2017-google] [@val-eclipsewise-2017-prime] [@val-usno-deltat-data] |
 | $\Delta T$ prediction error, realised, 2024 | +1.4 s (NASA eclipse site map 70.6 s), +2.1 to +2.3 s (EclipseWise 71.3 to 71.5 s) against 69.20 s | 500 to 800 m east-west at $40^{\circ}$, arithmetic; 16.5 s for the 1987 canon, about 6 km | [@val-gsfc-2024-google] [@val-eclipsewise-2024-circ] [@val-usno-deltat-data] [@val-timeanddate-sanantonio] |
 | $\Delta T$ prediction error, claimed a priori | under 0.5 s | under 180 m, arithmetic | [@val-jubier-map-help] |
-| Solar radius, $959.63''$ versus $959.95''$ | 1.6 s of central-line duration (2017), 1.8 s for $960.00''$ | 600 m per limit, 19.3 s of duration a few hundred metres inside the Vale limit, 11 s at Stephenville | [@val-quaglia-2021] [@val-earthsky-2024-edges] [@val-besselian-maps-accuracy] |
+| Solar radius convention | For 959.63 to 960.00 arcseconds, 1.8 s less central-line duration in Figure 2; the fitted 959.95 value gives 1.6 s in section 5 | About 600 m per limit for a 0.32 arcsecond change; Vale's 19.3 s reduction uses a 0.37 arcsecond change. Stephenville compares different implementations | [@val-quaglia-2021] [@val-besselian-maps-accuracy] |
 | Solar radius, residual uncertainty $\pm 0.05''$ | 0.1 s | 100 m band | [@val-quaglia-2021] |
 | Lunar limb profile, omitted | 1 to 3 s per Espenak, up to 2 s per contact per the Explanatory Supplement, up to about 15 s in extreme cases per The Photographer's Ephemeris (Photo Ephemeris) | 1 to 3 km per limit, 33 s of duration at Stephenville | [@val-gsfc-2024-google] [@val-es1992] [@val-photoephemeris-technote] [@val-besselian-maps-accuracy] |
 | Lunar limb profile, Watts era | systematic errors reaching $0.4''$ at some position angles, predictions $\pm 0.3''$ | 600 to 750 m | [@val-tp2001-bulletin] |
@@ -46,12 +46,12 @@ This table is the home of the sourced raw rows. The ranked version, which orders
 | Observer position, consumer GPS | none on time at mid-path | $\pm 100$ m | [@val-tp2001-bulletin] |
 | Observer clock, GPS-stamped video | 0.05 s per bead at 25 frames per second | same | [@val-guhl-tegtmeier-2018] |
 | Observer clock, visual with UTC timer | "a couple of seconds" on a duration | same | [@val-besselian-maps-accuracy] |
-| Bead reduction, filtered 8-bit video | $\pm 0.1''$ per bead, $+0.2''$ systematic if overexposed | 200 to 400 m equivalent | [@val-guhl-tegtmeier-2018] |
+| Bead reduction, filtered 8-bit video | About 0.1 arcseconds per-bead scatter in the northern reduction; southern overexposed result discarded | No universal signed correction for saturation or thresholding | [@val-guhl-tegtmeier-2018] |
 | Implementation, same inputs | 2 s (Occult) to 4 s (Solar Eclipse Maestro) longer than Irwin's model at Vale | $0.03''$ to $0.07''$ of radius, 60 to 130 m | [@val-quaglia-2021] |
 
 Arithmetic used. One arcsecond at the Moon's mean distance of 384,400 km is 1.864 km, so $0.32''$ is 0.60 km. One second of $\Delta T$ is $15.041''$ of longitude at the sidereal rate, which is 465 m at the equator and 356 m at $40^{\circ}$ latitude. The Five Millennium Canon, NASA/TP-2006-214141, states the same rule as 240 s per degree [@val-5mcse-tp2009]. The $k$ difference is $0.2725076 - 0.272281$ Earth radii of 6378.137 km [@val-gsfc-sepredictions] [@val-es1992]. The terrain shift is $h \cot a$ [@val-wright-young-2024].
 
-The pattern is that a smooth-Moon, standard-radius, sea-level prediction carries three independent errors of 0.6 to 3 km at the limits, and a true-limb, terrain-corrected prediction with $s_0$ near $959.95''$ carries a residual of about 100 m from the radius uncertainty plus an implementation spread worth 60 to 130 m. Quaglia et al. put the residual as "fuzzy bands 100 m wide" [@val-quaglia-2021]. Dunham's practical margin of 2.0 km of umbral depth covers the instrumental sensitivity to faint beads that no computation can remove [@val-dunham-iota-2024].
+A smooth-Moon, standard-radius, sea-level prediction omits several effects that reach kilometres in the cited cases. A reduced umbral $k$ already approximates valley depths, so its contribution overlaps limb omission. Quaglia describes a 100 m fuzzy band for its fitted radius and geometry, and a same-radius implementation spread equivalent to 60 to 130 m. These are different quantities. Neither establishes a universal coverage probability or combined accuracy bound [@val-quaglia-2021].
 
 ## Who has published budgets
 
@@ -61,7 +61,7 @@ The pattern is that a smooth-Moon, standard-radius, sea-level prediction carries
 - The 1992 Explanatory Supplement states the limb term for central-line contacts and refers to Herald 1983 for "the total effect and its components" [@val-es1992] [@val-herald-1983].
 - Wright and Young state the terrain rule and the limb sampling requirement [@val-wright-young-2024].
 - Dunham states the observational margin [@val-dunham-iota-2024].
-- No SVS page, no Sigismondi paper and no Herald document read here gives a full table. Herald 1983 is the one artefact that may.
+- The compared SVS, Quaglia and Espenak sources do not provide a complete calibrated covariance model. Herald's graphical method and scan are documented in [limb profile methods](../05-lunar-limb/limb-profile-methods.md). Its original component budget still requires a numerical transcription [@limb-herald-1983].
 
 ## Validation of ΔT models against historical eclipses
 
@@ -69,7 +69,7 @@ Stephenson, Morrison and Hohenkerk analysed 180 timed Babylonian eclipse observa
 
 $$\Delta T = -320.0 + (32.5 \pm 0.6)\left(\frac{\text{year} - 1825}{100}\right)^2 \text{ s},$$
 
-corresponding to a length-of-day increase of $+1.78 \pm 0.03$ ms per century, against $+2.3 \pm 0.1$ ms per century expected from tidal friction alone [@val-stephenson-2016]. The 2021 addendum extends the spline fits to 2025 and tabulates uncertainties in HMNAO Table S15.2020. It was not readable at the time of writing (2026 September) and is known only through the ytliu0 implementation and later citations [@val-morrison-2021] [@val-ytliu-deltat].
+corresponding to a length-of-day increase of $+1.78 \pm 0.03$ ms per century, against $+2.3 \pm 0.1$ ms per century expected from tidal friction alone [@val-stephenson-2016]. The 2021 addendum extends the spline fits to 2025 and tabulates uncertainties in HMNAO Table S15.2020. The spline and table details are reported secondhand through the ytliu0 implementation and later citations, and remain unconfirmed against the original table [@val-morrison-2021] [@val-ytliu-deltat].
 
 Espenak's uncertainty page gives the Morrison and Stephenson 2004 rule $\sigma = 0.8\,t^2$ s with $t = (\text{year} - 1820)/100$, valid from $-1000$ to 1200. Decade fluctuations give about 20 s from 1300 to 1600. The telescopic era gives 5 s at 1700, 1 s at 1800 and 0.1 s at 1900. Huber's Brownian-motion model covers the years outside the record [@val-gsfc-uncertainty]. The tabulated values are:
 
@@ -100,7 +100,7 @@ Collected in the predictor-disagreements note and repeated here in one line each
 
 ## Validation protocol for a new implementation
 
-The protocol has five levels. Each level names a [?reference-case], the quantity compared, and a tolerance derived from the budget above. Times are given in the scale each source prints. [?tt|TT] appears as TDT or TD in NASA and EclipseWise tables and as ET before 1984. Times labelled UT are UT1 as published, observed times are UTC, and the difference is under 0.9 s and below every tolerance here.
+The protocol has five levels. Each level names a [?reference-case], quantity and proposed agreement tolerance. These are numerical regression goals, rather than universal physical-accuracy bounds. Match source-specific inputs before applying a tolerance. [?tt|TT] appears as TDT or TD in NASA and EclipseWise tables and as ET before 1984. Times labelled UT are UT1 as published, and observed times are UTC. Convert absolute timestamps to one scale before comparing contacts. Obtain DUT1 = UT1 − UTC from the precise IERS Earth-orientation record for the event. Use UT1 = UTC + DUT1 and UTC = UT1 − DUT1. Store the value, epoch and source. The permitted difference below 0.9 s cannot be ignored for subsecond tolerances [@earth-iers-bulletin-a]. A nearly constant DUT1 cancels in a short C3-minus-C2 duration.
 
 ### Level 1: Besselian elements and global circumstances
 
@@ -151,7 +151,7 @@ USNO deltat.data and IERS bulletins for $\Delta T$ and polar motion [@val-usno-d
 ## What a developer should do
 
 1. Implement the five-level protocol as an automated test suite, with the constants of each reference case pinned in the test and the tolerance stated beside it.
-2. Emit a per-run error estimate that sums the budget rows in quadrature for the configuration actually used, and print it with the path limit as a band. A smooth-Moon run should report about 2 km at the limit. A true-limb run with $959.95''$ should report about 100 to 200 m.
+2. Correct known significant biases before estimating uncertainty. The uncertainty of the correction still propagates. This includes Type B uncertainty evaluated from calibration, bounds or other evidence rather than repeated measurements. Full omission shifts and inter-program spread are not automatically independent standard deviations. Combine compatible standard uncertainties in quadrature only after establishing independence. Otherwise propagate covariance or report recomputed scenario ranges [@report-jcgm-gum-2008]. Validate a limit band against reference observations before assigning a coverage probability [@val-quaglia-2021].
 3. Store $\Delta T$ with its source and date and warn when the eclipse is more than one year past the last measured value, or more than 300 years from the present, where the Canon's own maps switch to gores.
 4. Read first: Quaglia et al. 2021 section 1 and section 4, Espenak's uncertainty page, Stephenson et al. 2016 section 2, and the 2001 bulletin's limb section.
 
@@ -161,7 +161,7 @@ The pipeline design gains an explicit uncertainty output and a test corpus. The 
 
 ## Open questions
 
-- Obtain Herald 1983, JBAA 93, 241, which the Explanatory Supplement says estimates the total limb effect and its components, so that measured components replace the derived centre-of-figure figures and the "not quantified" limb-sampling cell [@val-herald-1983].
+- Transcribe the remaining error-budget components from the available Herald 1983 scan and compare them with the modern derived terms. The graphical construction is in [limb profile methods](../05-lunar-limb/limb-profile-methods.md#the-correction-to-contact-times) [@limb-herald-1983].
 - Obtain Morrison et al. 2021 and HMNAO Table S15.2020 to tabulate the current $\sigma(\Delta T)$ by year and replace the 2004 rule [@val-morrison-2021].
 - Obtain the DE440 versus DE421 lunar position difference at the 2024 epoch, in metres, to close the ephemeris row with a number rather than "negligible".
 - Obtain the per-site residuals behind Photo Ephemeris's eight-site verification, or the recordings themselves, to add bead-level cases from 2019 and 2023 October.

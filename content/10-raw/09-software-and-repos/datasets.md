@@ -3,14 +3,14 @@ title: Datasets
 description: Download sources for Besselian tables, eclipse maps, lunar and terrestrial elevation models, ΔT data and ephemeris kernels.
 order: 4
 status: working
-updated: 2026-09-15
+updated: 2026-09-30
 tags: [datasets, besselian, lola, sldem2015, srtm, deltat, de440]
 seo_title: Solar Eclipse Calculation Datasets and Download Sources
 ---
 
 ::: summary
 - **NASA's machine-readable Besselian elements** are one 5.95 MB CSV with 11,898 rows and 54 columns covering -1999 to +3000, including the cubic polynomial coefficients, $\tan f_1$, $\tan f_2$, $t_0$ and ΔT per eclipse.
-- **SVS GIS products** for 2017, 2023 and 2024 are zipped shapefiles and KML with central line, duration contours, obscuration contours, umbra polygons at 1-second and 10-second cadence, and a city-times JSON. The SVS host refused connections at the time of writing (2026 September), and the Wayback Machine served the pages.
+- **SVS GIS products** for 2017, 2023 and 2024 are zipped shapefiles and KML with central line, duration contours, obscuration contours, umbra polygons at 1-second and 10-second cadence, and a city-times JSON. Bibliography entries identify the archived product-page copies.
 - **Lunar topography**: LOLA LDEM cylindrical grids at 4, 16, 64 and 128 pixels per degree as single IMG files of 2 MB to 2.1 GB, 256 pixels per degree in four hemisphere files, and 1024 pixels per degree in tiles of about 944 MB, plus SLDEM2015 in global and tiled forms. Kaguya (SELENE) LALT is at JAXA DARTS.
 - **Terrestrial topography**: SRTMGL1 (1 arcsecond) from LP DAAC and Copernicus GLO-30 from the AWS Open Data Registry.
 - **ΔT**: USNO `deltat.data` (observed) and `deltat.preds` (predicted), IERS `finals.all.iau2000.txt` for UT1-UTC and polar motion, and NASA's Canon polynomials for long-range values.
@@ -23,7 +23,7 @@ seo_title: Solar Eclipse Calculation Datasets and Download Sources
 
 **NASA CSV.** `https://eclipse.gsfc.nasa.gov/eclipse_besselian_from_mysqldump2.csv`, linked from the Five Millennium Catalog page as "Catalog of Solar Eclipse Besselian elements in CSV format" [@sw-nasa-5mcse-catalog]. Downloaded 2026-09-15: 5,952,576 bytes, 11,898 data rows plus header [@sw-nasa-bessel-csv]. Columns: `year, month, day, td_ge, dt, luna_num, saros, eclipse_type, gamma, magnitude, lat_ge, lng_ge, lat_dd_ge, lng_dd_ge, sun_alt, sun_azm, path_width, central_duration, duration_secs, cat_no, canon_plate, julian_date, t0, x0, x1, x2, x3, y0, y1, y2, y3, d0, d1, d2, mu0, mu1, mu2, l10, l11, l12, l20, l21, l22, tan_f1, tan_f2, tmin, tmax, etype, PNS, UNS, NCN, nSer, nSeq, nJLE` [@sw-nasa-bessel-csv]. The first row (-1999 June 12, type T) has `dt` = 46438.2 s, `t0` = 3.0, `x0` = -0.056331, `x1` = 0.5538768, `tan_f1` = 0.0046008, `tan_f2` = 0.0045779, `tmin` = -3, `tmax` = 3 [@sw-nasa-bessel-csv]. The $d$ and $\mu$ polynomials are quadratic and $x$ and $y$ cubic in this file, matching the per-eclipse HTML pages [@sw-nasa-bessel-2024]. The elements were computed with VSOP87 and ELP-2000/82 and the Canon ΔT [@sw-nasa-5mcse-catalog].
 
-**Per-eclipse HTML pages.** `https://eclipse.gsfc.nasa.gov/SEbeselm/SEbeselm2001/SE2024Apr08Tbeselm.html` and siblings give the same polynomials with $k_1$, $k_2$, ΔT and the solar semi-diameter [@sw-nasa-bessel-2024].
+**Per-eclipse HTML pages.** `https://eclipse.gsfc.nasa.gov/SEbeselm/SEbeselm2001/SE2024Apr08Tbeselm.html` and siblings use the same polynomial format as the CSV. They may carry coefficients and ΔT from a different ephemeris run. Pin the exact source table. The 2024 HTML table has $x_0 = -0.318157$ and $y_0 = 0.219747$, unlike the Canon CSV pair $-0.31824401$ and $0.21976399$ [@sw-nasa-bessel-2024] [@sw-nasa-bessel-csv].
 
 **Path tables.** `https://eclipse.gsfc.nasa.gov/SEpath/SEpath2001/SE2024Apr08Tpath.html` gives limits and central line at 120-second intervals as preformatted text in WGS 84 [@sw-nasa-path-2024].
 
@@ -39,7 +39,7 @@ seo_title: Solar Eclipse Calculation Datasets and Download Sources
 | 2023 Oct 14 | SVS 5073 | `2023eclipse_shapefiles.zip`, `2023eclipse_kml.zip`, `cities-eclipse-2023.json` under `/vis/a000000/a005000/a005073/` | See layer list below [@sw-svs-5073] |
 | 2024 Apr 8 | SVS 5073, SVS 5123 | `2024eclipse_shapefiles.zip`, `2024eclipse_kml.zip`, `cities-eclipse-2024.json` | See layer list below [@sw-svs-5073] [@sw-svs-5123] |
 
-Each 2023 and 2024 zip contains `center`, `duration` (30-second isocontours), `ppath` (5 per cent obscuration contours), `ppath01` (1 per cent), `umbra_hi` (1-second umbra polygons, region limited), `umbra_lo` (10-second, global), `upath_hi` and `upath_lo` [@sw-svs-5073]. The city JSON has `LON`, `LAT`, `NAME`, `STATE` and an `ECLIPSE` array of UTC times at 0.01, 50, 100, 50 and 0.01 per cent of maximum coverage for over 32,000 US cities [@sw-svs-5073]. Inputs were SRTM and LRO LOLA plus Kaguya (SELENE), with JPL DE421 on the product pages and DE440 in the paper's appendix, as set out in [Wright and Young 2024](../11-svs-wright/wright-2024-paper.md) [@sw-svs-5073] [@sw-svs-4518]. At the time of writing (2026 September) svs.gsfc.nasa.gov refused TCP connections, so the zip URLs could not be verified live and the pages were read from Wayback Machine snapshots dated 2025 [@sw-svs-5073].
+Each 2023 and 2024 zip contains `center`, `duration` (30-second isocontours), `ppath` (5 per cent obscuration contours), `ppath01` (1 per cent), `umbra_hi` (1-second umbra polygons, region limited), `umbra_lo` (10-second, global), `upath_hi` and `upath_lo` [@sw-svs-5073]. The city JSON has `LON`, `LAT`, `NAME`, `STATE` and an `ECLIPSE` array of UTC times at 0.01, 50, 100, 50 and 0.01 per cent of maximum coverage for over 32,000 US cities [@sw-svs-5073]. Inputs were SRTM and LRO LOLA plus Kaguya (SELENE), with JPL DE421 on the product pages and DE440 in the paper's appendix, as set out in [Wright and Young 2024](../11-svs-wright/wright-2024-paper.md) [@sw-svs-5073] [@sw-svs-4518]. Archived product-page copies are identified by snapshot date in the bibliography. The 2024 and standard 2017 archives are documented in [SVS products and data](../11-svs-wright/svs-products-and-data.md).
 
 ## Lunar limb and topography data
 
@@ -82,7 +82,7 @@ Which of these grids to use, and what each costs in contact time, is settled in 
 |---|---|---|---|---|
 | Besselian elements CSV [@sw-nasa-bessel-csv] | NASA GSFC | CSV, 54 columns | One row per eclipse, cubic polynomials | Yes |
 | SVS 2023 and 2024 GIS [@sw-svs-5073] | NASA SVS | Shapefile, KML, JSON | 1 s and 10 s umbra polygons | Pages via archive only |
-| SVS 2017 GIS [@sw-svs-4518] | NASA SVS | Shapefile | 10 s and 1 s | Pages via archive only |
+| SVS 2017 GIS [@sw-svs-4518] | NASA SVS | Shapefile | 10 min and 1 min in the standard archive; 1 s umbra in the high-resolution archive | Official page and archived copies |
 | LOLA LDEM [@sw-lola-gdr-img] | NASA PDS | PDS3 IMG plus LBL | 4 to 1024 pixels per degree | Yes |
 | SLDEM2015 [@sw-sldem2015] | NASA PDS | PDS3 IMG | Global and tiles | Yes |
 | Kaguya LALT [@sw-darts-selene] | JAXA DARTS | Not read | Not read | Root page yes |
@@ -103,7 +103,7 @@ Nothing in the stage design. It confirms that every input the SVS pipeline used 
 
 ## Open questions
 
-- Obtain the SVS shapefile zips themselves and record their coordinate reference system and attribute schema (the pages describe layers but not attributes) [@sw-svs-5073].
+- Obtain the 2017 one-second and 2023 archives and record their schemas. The 2024 and standard 2017 archive schemas and CRS are in [SVS products and data](../11-svs-wright/svs-products-and-data.md#inside-the-2024-shapefile-archive).
 - Obtain the Kaguya LALT product listing and label format from DARTS [@sw-darts-selene].
 - Obtain the current NAIF location of `de421.bsp`, since the standard generic-kernel path returned 404.
 - Obtain the format of SolarEclipseWorkbench's `lunar_limb_band_v1.bin` and its provenance [@sw-repo-sew].

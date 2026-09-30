@@ -3,16 +3,16 @@ title: Validation and error budget
 description: How eclipse calculations are tested against observations and other predictors, with contact timing, path-edge differences and error budgets.
 order: 10
 status: working
-updated: 2026-09-15
+updated: 2026-09-30
 tags: [validation, error-budget, solar-radius, delta-t, path-edge]
 seo_title: Validating Solar Eclipse Calculations: Errors and Evidence
 ---
 
 ::: summary
-- **Only edge observations test a prediction.** A 0.37 arcsecond change of solar radius moves a 2017 central-line duration by 1.8 s and the duration a few hundred metres inside the southern limit by 19.3 s, so every quantitative test since 1973 has been made at or near a path limit [@val-quaglia-2021].
-- **Four independent campaigns since 2010 put the eclipse solar radius between 959.95 and 960.01 arcseconds**, about 0.32 arcseconds above the 959.63 arcseconds nearly every product uses, which is 610 m per path limit [@val-lamy-2015] [@val-quaglia-2021] [@val-guhl-2023] [@val-earthsky-2024-edges].
+- **Near-limit observations provide sensitive radius tests.** The cited 0.37 arcsecond change shortens a central-line duration by 1.8 s and the Vale duration by 19.3 s. Published campaigns also include central-line observations [@val-quaglia-2021] [@val-lamy-2015].
+- **The cited modern flash-spectrum and light-curve fits infer radii around 959.95 to 960.01 arcseconds.** Earlier timing-based results also include lower values. Limb, detector and reduction models affect these estimates [@val-lamy-2015] [@val-quaglia-2021] [@val-guhl-2023] [@val-guhl-tegtmeier-2018].
 - **The cleanest 2024 edge test observed 13.7 s of totality where six public products predicted 12.9 s to 65 s.** Only a true-limb model with the larger radius came within a second [@val-besselian-maps-accuracy].
-- **At the edge the budget is dominated by three terms of 0.6 to 3 km each:** the solar radius, the lunar limb if omitted, and terrain if omitted. Everything else is below 100 m and 0.5 s once ΔT is refreshed and a profile is used [@val-quaglia-2021] [@val-gsfc-2024-google].
+- **Limb omission, terrain omission and radius choices reach kilometres in cited edge cases.** These shifts are not independent standard uncertainties. Remaining terms depend on the adopted corrections, geometry and measurement model [@val-quaglia-2021] [@val-gsfc-2024-google].
 - **A five-level test protocol can be assembled from published cases**, from the 1961 Explanatory Supplement worked examples through the 2001 Lusaka limb corrections to the Vale, Stephenville and bead-timing records [@val-es1961] [@val-tp2001-bulletin] [@val-guhl-tegtmeier-2018].
 :::
 

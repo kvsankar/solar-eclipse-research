@@ -3,7 +3,7 @@ title: Foundations
 description: The foundations of Besselian eclipse calculation: the fundamental plane, shadow geometry and elements derived from Sun and Moon positions.
 order: 1
 status: working
-updated: 2026-09-15
+updated: 2026-09-30
 tags: [besselian, fundamental-plane, foundations]
 seo_title: Besselian Eclipse Calculation: Elements and Geometry
 ---
@@ -11,7 +11,7 @@ seo_title: Besselian Eclipse Calculation: Elements and Geometry
 ::: summary
 - **Eight numbers describe the shadow.** $x, y, d, \mu, l_1, l_2$ vary with time and $\tan f_1, \tan f_2$ are held constant for the eclipse. Everything a global or local product computes follows from them and their rates [@bes-es1961] [@bes-nasa-beselm].
 - **Two lunar radius ratios, never one.** $k = 0.272281$ for all umbral and antumbral contacts, and for penumbral contacts 0.2724880 in the Five Millennium Canon and the NASA pages derived from it, 0.2725076 in the NASA bulletins and on EclipseWise [@bes-nasa-radius] [@bes-nasa-2024-elements].
-- **ΔT enters only through $\mu$.** The elements themselves are free of it. A published $\mu$ is a Greenwich hour angle carried against a TT argument, and the shift of 15.041 arcseconds of longitude per second of ΔT is applied when $\mu$ becomes a longitude [@bes-es1961] [@bes-lasteclipse].
+- **The μ convention controls the ΔT correction.** NASA ephemeris-meridian μ requires a downstream shift of 15.041 arcseconds per second of ΔT. A μ generated using actual UT1 sidereal time already contains that correction [@bes-nasa-jsex-source] [@bes-es1961] [@bes-lasteclipse].
 - **The solar semidiameter is a parameter, not a constant.** Every published prediction uses Auwers' $s_0 = 959.63$ arcseconds at 1 au, while eclipse observations give about 959.95 arcseconds [@bes-quaglia-2021].
 - **No open library generates elements from a JPL ephemeris as a documented, validated function.** Skyfield does not project the shadow, and the Swiss Ephemeris computes the geometry live without ever exposing $x, y, l_1, l_2$ [@bes-skyfield-801] [@bes-swisseph-swecl].
 :::
@@ -42,7 +42,7 @@ of $(x, y, d, \mu, l_1, l_2)$ against TT plus the two cone constants and a
 metadata record naming the ephemeris, ΔT, $k_1$, $k_2$, $s_0$, the ellipsoid
 and $t_0$. Global and local circumstances consume only that record. Two design
 decisions follow from it: the umbral $k$ and the solar semidiameter are inputs
-rather than constants, and ΔT is carried as metadata rather than applied inside
-the elements. The topocentric path is built as a second, independent engine
+rather than constants. The metadata records the μ convention and ΔT so that
+the Earth-rotation correction is applied once. The topocentric path is built as a second, independent engine
 from the same ephemeris layer, and the agreement of the two is a regression
 test.

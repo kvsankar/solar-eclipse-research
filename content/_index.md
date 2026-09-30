@@ -2,7 +2,7 @@
 title: Computing Solar Eclipses: Calculation and Algorithms
 description: Solar eclipse calculation and prediction algorithms, with formulas, Besselian elements, contact times, lunar limb data and accuracy comparisons.
 status: working
-updated: 2026-09-16
+updated: 2026-09-30
 seo_title: Solar Eclipse Calculation: Algorithms, Data and Accuracy
 ---
 
@@ -23,32 +23,26 @@ implementation stages. The
 [software comparison](10-raw/09-software-and-repos/_index.md) covers published
 eclipse calculators and open-source libraries.
 
-Solar eclipse predictions are published by a handful of people and programs,
-and they agree to a few hundred metres at the edge of the path. The places
-where they disagree are where the modelling decisions live. This site sets out
+Published predictors can disagree at a path limit because they use different
+models and inputs [@val-quaglia-2021] [@val-besselian-maps-accuracy]. This site sets out
 what a developer needs to know to compute every product, from the list of
 eclipses in a century to the second totality begins on one hillside, and to
 know how good the result is: the algorithm, the constants and where each one
 came from, the datasets, the published implementations, and what is still
 unsettled.
 
-This site was researched and written with Anthropic's Claude — every note,
-report and figure in the tree below. It was built to a fixed method: primary
-documents and published code in preference to secondary coverage, formulas
-quoted with their constants rather than paraphrased, negative findings
-recorded as findings, and a graded citation on every substantive claim. The
-grade is rendered beside each reference, so what a number rests on is visible
-where it is used. That is the check on the text, and it is the one worth
-using: follow a citation before relying on a figure here.
-[Method and source policy](00-meta/method-and-sources.md) states the rules in
-full.
+The source policy prioritises primary documents and published code.
+Equations carry their constants, and substantive claims carry graded
+citations. Follow the cited artefact before relying on a number.
+[Method and source policy](00-meta/method-and-sources.md) defines the grades
+and the evidence each one provides.
 
 ::: summary
-- **One algorithm underlies every eclipse product**: Bessel's fundamental-plane method, fully stated in the 1961 Explanatory Supplement. Predictors differ in their constants and data, not their mathematics [@bes-es1961].
-- **Three inputs decide the edge of the path**: the solar radius, the lunar limb profile, and terrain. Each is worth 0.6 to 3 km at a limit. The ephemeris is worth under a metre [@val-quaglia-2021] [@moon-park-2021].
-- **The state of the art is Wright and Young 2024**, NASA SVS's raster method with an 18,000-element lunar limb from LRO and SELENE topography and every observer on the terrain. It is published, open access, and has no public code [@svs-wright-young-2024].
-- **The solar radius is the unresolved constant.** The 1891 value of 959.63″ that almost everyone uses is a third of an arcsecond smaller than what eclipse observations measure. At one 2024 edge site that difference was the last 11 s of a 65 s smooth-Moon prediction that observation cut to 13.7 s [@val-besselian-maps-accuracy].
-- **No open-source code computes a limb-corrected path edge.** Stellarium and NASA's JavaScript cover the smooth-Moon problem completely [@sw-stellarium-sec-cpp].
+- **Bessel's method underlies classical eclipse tables and maps.** Direct topocentric calculations and raster limb tests provide alternative routes. Predictors differ in their algorithms as well as their constants and data [@bes-es1961] [@bes-quaglia-2021] [@svs-wright-young-2024].
+- **Solar radius, lunar limb and terrain can move a path limit by hundreds of metres to kilometres.** Their effects depend on the geometry and on which corrections the predictor includes [@val-quaglia-2021] [@val-svs-4517].
+- **Wright and Young 2024 describe NASA SVS's terrain-aware raster method.** It uses an 18,000-element lunar limb from LRO and Kaguya (SELENE) topography. The paper is open access, while the surveyed public releases contain data rather than the generating code [@svs-wright-young-2024] [@svs-2024-shapefiles-zip].
+- **The adopted solar radius remains a modelling choice.** Flash-spectrum and light-curve studies infer values around 959.95 to 960.01 arcseconds. At Stephenville in 2024, predictions of 24.5 s and 12.9 s bracketed the observed 13.7 s. That comparison changes several implementation inputs, so it does not isolate the radius contribution [@sun-quaglia-2021] [@sun-lamy-2015] [@val-besselian-maps-accuracy].
+- **The surveyed open implementations do not derive limb-corrected path limits.** Stellarium and NASA's JavaScript provide smooth-Moon products. The repository survey also includes a LOLA-based bead construction for a single eclipse [@sw-stellarium-sec-cpp] [@sw-nasa-jsex-program-js] [@sw-repo-eclipse-2026-rojas].
 :::
 
 ## Start here

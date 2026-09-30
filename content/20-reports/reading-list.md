@@ -3,7 +3,7 @@ title: Reading list and reference matrix
 description: Papers, eclipse algorithms, public code and datasets to read in order, with a reference matrix explaining what each source provides.
 order: 4
 status: working
-updated: 2026-09-16
+updated: 2026-09-30
 seo_title: Eclipse Calculation Reading List: Papers, Code and Datasets
 ---
 
@@ -34,7 +34,7 @@ seo_title: Eclipse Calculation Reading List: Papers, Code and Datasets
 | 14 | Prša and colleagues 2016, AJ 152:41 [@sun-prsa-2016] | peer-reviewed | What the IAU 2015 nominal radius is and is not | The reason not to use astropy's constant |
 | 15 | Fiala, Dunham and Sofia 1994 [@limb-fiala-dunham-sofia-1994] | peer-reviewed | The IOTA edge method for solar radius from beads, results 1715 to 1987 | |
 | 16 | Guhl and Tegtmeier 2018 and Guhl 2023, Journal for Occultation Astronomy [@val-guhl-tegtmeier-2018] [@val-guhl-2023] | trade | Per-bead residual tables for 2017 and 2023 with Occult, LOLA and Kaguya | The bead-level validation cases |
-| 17 | Rozelot and Kosovichev 2026, arXiv 2605.23794 [@sun-rozelot-kosovichev-2026] | preprint | The only review tabulating canonical, nominal, seismic and eclipse radii side by side | |
+| 17 | Rozelot and Kosovichev 2026, arXiv 2605.23794 [@sun-rozelot-kosovichev-2026] | preprint | A review comparing canonical, nominal, seismic and eclipse radii | |
 
 ## Code, in reading order
 
@@ -45,7 +45,7 @@ seo_title: Eclipse Calculation Reading List: Papers, Code and Datasets
 | 3 | Swiss Ephemeris `swecl.c` [@sw-swisseph-swecl] | AGPL or paid | The geometric alternative: `eclipse_where` for the central point, `eclipse_how` and `eclipse_when_loc` for topocentric contacts with a bracketed search, an explicit error budget in the comments | Moon 3476.3 km, Sun 1,392,000 km, factor 0.99916 for interior contacts |
 | 4 | Astronomy Engine [@cat-astronomy-engine] | MIT | A second independent enumerator in five languages, shadow axis against a dilated sphere | Sun 695,700 km, Moon 1737.4 km |
 | 5 | Eclipse-Engine [@sw-repo-eclipse-engine] | AGPL-3.0 | Rasterised obscuration contours, antimeridian and pole pitfalls, the 15.041″/s ΔT rule | Elements fitted to DE440s, fitting code unpublished |
-| 6 | tomasrojasc/eclipse-2026 [@sw-repo-eclipse-2026-rojas] | none stated | The only open LOLA bead construction, with the correct orientation kernel, for one eclipse | LDEM_16, `moon_pa_de421` |
+| 6 | tomasrojasc/eclipse-2026 [@sw-repo-eclipse-2026-rojas] | none stated | A surveyed open LOLA bead construction, with an orientation kernel, for one eclipse | LDEM_16, `moon_pa_de421` |
 | 7 | tahze0/solar-eclipse-explorer [@sw-repo-tahze0] | MIT | A template for catalogue-scale validation against the NASA CSV | 0.26 percent median width error over 300 eclipses |
 | 8 | Eclipse-Engine, 2027 visualiser and `besselian` [@glob-rherale] [@glob-enrique7mc] [@glob-aravpanwar] | mixed | Compact ellipsoid formulations in JavaScript and Python, three-time validation against NASA tables | WGS84, $k_2 = 0.272281$ |
 
@@ -55,11 +55,11 @@ seo_title: Eclipse Calculation Reading List: Papers, Code and Datasets
 |---|---|---|---|---|
 | Besselian elements CSV, 11,898 rows, 54 columns | NASA GSFC | CSV, 5.95 MB | Regression fixture for stage 3; carries $t_0$ and ΔT but not $k$ or the ephemeris | [@cat-nasa-besselian-csv] |
 | Five Millennium ASCII catalogue | NASA GSFC | text, 11,898 rows | Fixture for stages 2 and 3: types, γ, magnitude, Saros | [@cat-nasa-5mkse-ascii] |
-| SVS 2017, 2023 and 2024 shapefiles and cities JSON | NASA SVS | zipped shapefiles, KML, JSON | Ground truth for limb-and-terrain umbra polygons at 1 s and for city contact times | [@sw-svs-5073] [@svs-2024-shapefiles-zip] |
+| SVS 2017, 2023 and 2024 shapefiles and cities JSON | NASA SVS | zipped shapefiles, KML, JSON | Reference products for limb-and-terrain polygons and city contacts. Cadence depends on the selected archive | [@sw-svs-5073] [@svs-2024-shapefiles-zip] |
 | LOLA LDEM_128 | NASA PDS | PDS3 IMG, 2.12 GB, 128 ppd, 237 m | Development limb dataset; 0.13″ per cell | [@limb-lola-ldem128-label] |
 | SLDEM2015 and polar LDEM tiles | NASA PDS | PDS3 IMG, 512 ppd, 60 m, 3 to 4 m vertical | Production limb dataset with polar coverage above 60° | [@limb-sldem2015-label] |
 | SRTM GL1 or Copernicus GLO-30, with EGM96 or EGM2008 | NASA LP DAAC, ESA | HGT or cloud-optimised GeoTIFF | Terrain stage; orthometric heights need the geoid | [@earth-srtm-guide] [@earth-copdem] |
-| `de440s.bsp`, `moon_pa_de440_200625.bpc`, `moon_de440_250416.tf` (the 2025 revision of the `moon_de440_200625.tf` the paper cites) | NAIF | SPK 31 MB, binary PCK, frame kernel | Ephemeris and lunar orientation in the ME frame | [@moon-naif-summaries] [@moon-naif-moon-fk-de440] |
+| `de440s.bsp`, `moon_pa_de440_200625.bpc`, `moon_de440_250416.tf` (the 2025 revision of the `moon_de440_200625.tf` the paper cites) | NAIF | SPK 31 MB, binary PCK, frame kernel | Ephemeris and lunar orientation in the ME frame. The small SPK covers 1849–2150; wider catalogue epochs need a matching full kernel | [@moon-naif-summaries] [@moon-naif-moon-fk-de440] |
 | `deltat.data`, `deltat.preds`, `finals.all` | USNO, IERS | text | ΔT measured and predicted with errors, UT1 and polar motion | [@earth-usno-deltat-data] [@earth-usno-deltat-preds] [@earth-iers-bulletin-a] |
 | Watts charts, VizieR VI/122 | CDS | table | Only to reproduce pre-2009 bulletins, with the Morrison and Appleby corrections | [@limb-vizier-vi122] |
 

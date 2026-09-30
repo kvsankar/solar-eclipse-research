@@ -3,7 +3,7 @@ title: Effect of the radius on eclipse products
 description: Published effects of solar radius changes on eclipse path width, limits, totality duration and contact times, with uncertainty guidance.
 order: 2
 status: working
-updated: 2026-09-15
+updated: 2026-09-30
 tags: [solar-radius, path-limits, duration, contact-times, uncertainty]
 seo_title: How Solar Radius Changes Eclipse Paths and Contact Times
 ---
@@ -89,8 +89,8 @@ Espenak's graze zones are bands around each mean limit within which the lunar li
 
 ## What a developer should do
 
-1. Expose `solar_radius_arcsec` (default 959.95, uncertainty 0.05, provenance "Quaglia et al. 2021, Lamy et al. 2015") as a top-level parameter of every product, alongside the ephemeris, ΔT and limb dataset identifiers. Provide the preset 959.63 so users can reproduce NASA, Jubier and Occult output.
-2. Compute every path limit twice more, at $s \pm \sigma_s$, and publish the three lines. With $\sigma_s = 0.05$ arcseconds the band is ± 0.1 km at the fundamental plane and ± 0.1 to 0.15 km on the ground. Add the limb-profile uncertainty in quadrature and state the combined width. Quaglia's "fuzzy bands 100 m wide" is the physical floor [@sun-quaglia-2021].
+1. Expose `solar_radius_arcsec` with a named measurement model and provenance. Offer the Quaglia 959.95 ± 0.05 arcsecond flash-spectrum fit as a preset, alongside 959.63 arcseconds for reproducing conventional products. The fitted uncertainty is tied to that method and limb model [@sun-quaglia-2021].
+2. Recompute path limits at $s_0 \pm \sigma_s$ for the adopted radius fit. With $\sigma_s = 0.05$ arcseconds, the quoted geometry gives about ± 0.1 km at the fundamental plane and ± 0.1 to 0.15 km on the ground. Correct known significant biases and propagate the uncertainty of the correction. Type B uncertainty may come from calibration, bounds or other evidence rather than repeated measurements. Full omitted-limb shifts and inter-program spread are not automatically independent standard deviations. Establish independence before combining compatible standard uncertainties in quadrature. Otherwise propagate covariance or report model scenarios [@report-jcgm-gum-2008]. Quaglia's 100 m fuzzy band describes its radius model and geometry, rather than a universal accuracy floor [@sun-quaglia-2021].
 3. Report central duration with a ± 0.3 s radius term for two-minute eclipses. Near a limit, report the duration as the range obtained from the $s \pm \sigma_s$ runs.
 4. For local circumstances within about 2 km of a limit, print the [?umbral-depth] and a warning that the radius uncertainty dominates, following Dunham's 2 km rule [@sun-iota-dunham-2024].
 5. When comparing against a reference product, first match its radius, its $k$ and its limb dataset. A 0.03 to 0.07 arcsecond difference between Occult, Solar Eclipse Maestro and Irwin's model at the same nominal radius is otherwise mistaken for a bug [@sun-quaglia-2021].

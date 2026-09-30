@@ -3,15 +3,15 @@ title: GitHub repositories
 description: Compare public eclipse calculation repositories by language, algorithms, constants, lunar limb and terrain support, and documented validation.
 order: 3
 status: working
-updated: 2026-09-15
+updated: 2026-09-30
 tags: [software, github, repositories, besselian, limb, terrain]
 seo_title: Solar Eclipse Algorithms on GitHub: Repository Comparison
 ---
 
 ::: summary
 - **Thirty repositories were inventoried** from GitHub API searches on 2026-09-15 across Python, JavaScript, TypeScript, Rust, Go, Java, C++ and Julia. Most are small (0 to 3 stars) and recent (2024 to 2026). Star counts measure popularity, not correctness.
-- **Three method families.** Consumers of NASA's Canon Besselian elements are tahze0, aravpanwar, Absolute-Eclipse, johnarban, umbra-atlas and Eclipse-Engine. Geometric computation on Astronomy Engine or Skyfield is used by angristan, mf4633, eclipsite, eclipse-3d-sim, jpatka and eclipse-2026. Meeus and textbook ports are astronomia, soniakeys/meeus, Starainrt/astro and johanley.
-- **Only tomasrojasc/eclipse-2026 builds Baily's beads from LOLA**, using `ldem_16.img` with `moon_pa_de421_1900-2050.bpc` orientation. Only SolarEclipseWorkbench ships a limb band file. Nobody derives path limits from a limb profile.
+- **Three method families.** NASA Canon coefficient consumers include tahze0, aravpanwar, Absolute-Eclipse, johnarban and umbra-atlas. Eclipse-Engine consumes independently fitted DE440s elements. Geometric computation on Astronomy Engine or Skyfield and Meeus/textbook ports provide other routes [@sw-repo-eclipse-engine] [@sw-repo-tahze0] [@sw-astronomy-engine-c] [@sw-astronomia-eclipse].
+- **The survey includes public limb work.** tomasrojasc/eclipse-2026 builds beads from LOLA for the 2026 eclipse, and SolarEclipseWorkbench ships a limb band file. The surveyed repositories do not derive general limb-corrected path limits [@sw-repo-eclipse-2026-rojas] [@sw-repo-sew].
 - **Terrain is handled by four.** Eclipse-Engine uses a DEM plus OpenStreetMap buildings, eclipsite uses EU-DEM at 25 m, eclipse-3d-sim ray-casts Copernicus at 30 m, and umbra-eclipse-atlas reads Copernicus through Open-Meteo.
 - **Documented validation is rare**: Absolute-Eclipse reports 1 to 5 s residuals against Espenak, eclipsite 0.36 s mean against NASA elements and 0.60 s RMS against IGN durations, tahze0 a 0.26 per cent median path-width error over 300 eclipses, Starainrt/astro second-level global agreement with NASA.
 - **Five most complete**: Stellarium, covered in [open-source libraries](open-source-libraries.md), then RHerAle/Eclipse-Engine, tahze0/solar-eclipse-explorer, tomasrojasc/eclipse-2026, Xeratec/eclipsite. NASA's JSEX and its ports remain the cleanest minimal reference.
@@ -19,15 +19,15 @@ seo_title: Solar Eclipse Algorithms on GitHub: Repository Comparison
 
 **The question.** Which public repositories contain substantive solar eclipse computation, what do they implement, from which formulas and elements, with which constants, and do any of them handle limb profiles, terrain or catalogue generation?
 
-## How the inventory was built
+## Inventory scope
 
-The GitHub repository search API was queried for "besselian elements", "solar eclipse calculator", "solar eclipse path", "eclipse circumstances", "solar eclipse besselian", "eclipse limb profile" (zero results), "baily beads", "eclipse explorer", "eclipse predictor", "pyeclipse", "eclipsecalc", and "solar eclipse" restricted to Rust, Go, Julia, Java and C++, each sorted by stars, on 2026-09-15 [@sw-github-api-search]. Metadata for language, stars, last push and licence comes from the repos endpoint on the same day [@sw-github-api-search]. READMEs were then read for every repository below. Repositories that only process eclipse photographs, such as timelapse aligners and corona processing, were excluded, as was unrelated software named "Eclipse". The plausible project names "eclipsecalc", "SolarEclipseCalc", "pyeclipse", "solareclipse.js", "Eclipse-Path", "moon-shadow" and "eclipse_predictor" matched no substantive eclipse-computation repository except those listed.
+The inventory covers thirty public eclipse-computation repositories documented on 2026-09-15. Repository metadata and author documentation identify languages, licences and capabilities. Star counts and last-push dates describe that snapshot. Image-processing software and unrelated products named Eclipse are outside the scope [@sw-github-api-search].
 
 ## Repositories
 
-### Elements consumers (NASA Canon Besselian elements)
+### Besselian element consumers
 
-**RHerAle/Eclipse-Engine**. JavaScript, AGPL-3.0, 0 stars, last push 2026-09-14. The engine behind eclipseradar.com for 2026 to 2050: "Besselian shadow geometry: contacts, obscuration, magnitude, central line, limits, shadow outline, and obscuration bands", plus spectral irradiance with limb darkening and ICNIRP exposure limits, "Terrain analysis: skyline toward the Sun from elevation models and OpenStreetMap building data", and solar-limb video stabilisation. Its `data/eclipses.json` is "the catalogue of Besselian elements, fitted to the JPL DE440s ephemeris", so it generates elements rather than copying NASA's. No dependencies. Data CC-BY-SA-4.0 [@sw-repo-eclipse-engine].
+**RHerAle/Eclipse-Engine**. JavaScript, AGPL-3.0, 0 stars, last push 2026-09-14. The engine behind eclipseradar.com for 2026 to 2050: "Besselian shadow geometry: contacts, obscuration, magnitude, central line, limits, shadow outline, and obscuration bands", plus spectral irradiance with limb darkening and ICNIRP exposure limits, "Terrain analysis: skyline toward the Sun from elevation models and OpenStreetMap building data", and solar-limb video stabilisation. Its `data/eclipses.json` is "the catalogue of Besselian elements, fitted to the JPL DE440s ephemeris", The repository consumes these independent elements. Its element-fitting generator is not published in the surveyed repository. No dependencies. Data CC-BY-SA-4.0 [@sw-repo-eclipse-engine].
 
 **tahze0/solar-eclipse-explorer**. Python, MIT code, 0 stars, last push 2026-09-08. Reconstructs all 11,898 Canon eclipses "computed locally from NASA Five Millennium Canon Besselian elements" from `eclipse_besselian_from_mysqldump2.csv`, with umbra and penumbra modules, a 14-step build pipeline and reported "median 0.26% error" in path width against catalogue values on 300 reference eclipses [@sw-repo-tahze0].
 
@@ -121,7 +121,7 @@ The GitHub repository search API was queried for "besselian elements", "solar ec
 
 ## Negative findings
 
-No repository was found that derives the northern and southern umbral limits from a lunar limb profile, which is what SVS's `umbra_hi` polygons encode [@sw-svs-5073]. No repository was found that reads Watts charts. No general-purpose library ships a LOLA-derived limb profile as a reusable function. The GitHub query "eclipse limb profile" returned zero repositories [@sw-github-api-search].
+The thirty-repository September 2026 inventory includes no implementation deriving general northern and southern umbral limits from lunar profiles, no Watts-chart reader and no reusable general-library LOLA profile function. This scope leaves room for implementations outside the inventory and for the single-eclipse bead work listed above [@sw-github-api-search].
 
 ## Sources compared
 
@@ -138,11 +138,11 @@ Clone Stellarium sparsely (`src/core`, `src/gui`) and read `SolarEclipseComputer
 
 ## What this changes
 
-Nothing in the stage design. It establishes that a limb-corrected limit computation has to be written, not imported, and that LOLA-based bead prediction has a small worked precedent.
+Nothing in the stage design. The surveyed implementations do not supply a general limb-corrected path-limit library, and that LOLA-based bead prediction has a small worked precedent.
 
 ## Open questions
 
 - Obtain `data/eclipses.json` and the fitting script from RHerAle/Eclipse-Engine and compare its 2026 elements against NASA's page [@sw-repo-eclipse-engine].
 - Obtain tomasrojasc/eclipse-2026's limb-profile module and test it against Jubier's 2026 Baily's beads diagram for one site [@sw-repo-eclipse-2026-rojas] [@sw-jubier-calc-js].
 - Obtain SolarEclipseWorkbench's `lunar_limb_band_v1.bin` format description [@sw-repo-sew].
-- Obtain the `@astronomy-bundle/solar-eclipse` npm package source (the fetch of its npm page returned 404) to see which element set it bundles [@sw-repo-umbra-atlas].
+- Obtain the `@astronomy-bundle/solar-eclipse` npm package source to see which element set it bundles [@sw-repo-umbra-atlas].

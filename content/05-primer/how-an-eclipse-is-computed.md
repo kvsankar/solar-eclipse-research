@@ -3,13 +3,13 @@ title: How to calculate a solar eclipse
 description: Follow a solar eclipse calculation from Sun and Moon positions to shadow geometry and contact times, with links to algorithms and formulas.
 order: 1
 status: working
-updated: 2026-09-16
+updated: 2026-09-30
 seo_title: How to Calculate a Solar Eclipse: Methods and Formulas
 ---
 
 ::: summary
 - **A solar eclipse is a shadow problem.** The Moon casts two cones, the [?umbra] and the [?penumbra], and the computation asks where and when each cone touches the Earth.
-- **Bessel's method describes the shadow on one plane** through the Earth's centre, the [?fundamental-plane], with eight numbers, the [?besselian-elements]. Every map and every table is derived from those eight numbers.
+- **Bessel's method describes a smooth shadow on one plane** through the Earth's centre, the [?fundamental-plane], using the [?besselian-elements]. Direct topocentric calculations are another route to local contacts. Terrain and limb tests require additional inputs [@bes-es1961] [@bes-quaglia-2021] [@svs-wright-young-2024].
 - **The elements carry the constants.** The Sun's radius, the Moon's radius and the choice of ephemeris all enter here, so two tables of elements for the same eclipse can differ.
 - **The Earth rotates under the shadow**, and how far it has rotated depends on [?delta-t], the one input that cannot be computed in advance.
 - **The Moon is not round and the Sun has no edge.** Those two facts, not the orbits, set the limit of what any prediction can promise at the edge of the path.
@@ -26,9 +26,9 @@ observers see a ring of Sun around the Moon, an annular eclipse. The outer
 cone is the penumbra, and anyone inside it sees a partial eclipse.
 
 The whole computation is the geometry of those cones against a rotating,
-slightly flattened Earth. The orbits of the Earth and Moon are known to
-centimetres from laser ranging, so the cones are known almost perfectly
-[@moon-park-2021]. What is not known perfectly is the size of the Sun, the
+slightly flattened Earth. Modern ephemerides fit recent lunar laser-ranging observations with range
+residuals near a centimetre. That is not an accuracy bound on every component
+of the Earth-Moon position [@moon-park-2021]. What is not known perfectly is the size of the Sun, the
 shape of the Moon's edge, and how far the Earth has turned.
 
 ## Bessel's plane
@@ -112,12 +112,11 @@ umbra from an ellipse into a polygon with one side per valley
 Totality means the last of the bright photosphere has gone. Where exactly the
 photosphere ends is a question of physics, not geometry. The value almost every
 prediction uses, 959.63 arcseconds at one astronomical unit, dates from 1891.
-Timing the beads at the edge of the path in eclipses since 2010 gives a Sun
-about a third of an arcsecond larger. That third of an arcsecond moves each
-edge of the path inward by about 600 m and, for someone standing near the
-edge, can take ten seconds off a short totality, and, combined with the
-lunar limb, a minute. It is the
-largest unresolved number in the subject
+Flash-spectrum and light-curve studies infer a radius about a third of an
+arcsecond larger. Timing-based bead results depend on the adopted lunar limb
+and detection threshold. The cited radius difference moves a limit inward
+by about 600 m in the studied geometry. Its duration effect depends on the
+observer's distance from that limit
 [@sun-quaglia-2021] [@val-besselian-maps-accuracy].
 
 ![The corona is what the eye sees, but it is not what the computation solves for. Totality is the instant the last of the photosphere is hidden, and the photosphere has no sharp edge, so the moment has to be defined by a chosen radius rather than observed from the image. NASA's Scientific Visualization Studio, from Kerrville, Texas, 2024 April 8 [@sun-quaglia-2021].](img/totality-corona-2024.jpg)
@@ -129,11 +128,10 @@ from the elements with a round Moon and observers at sea level, and Espenak
 states that the limb moves the limits by 1 to 3 km. Xavier Jubier's
 interactive maps add limb corrections at a clicked point. NASA's Scientific
 Visualization Studio, in Ernie Wright's work for 2017, 2023 and 2024, puts
-every map pixel at its true height and tests it against the true limb, and is
-the reference standard against which the others are measured. Dave Herald's
+every map pixel at its true height and tests it against the true limb, and provides
+reference map products for comparison. Dave Herald's
 Occult is the
-occultation community's tool for beads. The rest of the world's apps embed
-one of these or NASA's element tables
+occultation community's tool for beads. Other surveyed apps use several computational methods and input datasets
 [@svs-espenak-2024-path] [@svs-wright-young-2024] [@sw-occult4].
 
 The [reports](../20-reports/_index.md) turn this into a pipeline a developer

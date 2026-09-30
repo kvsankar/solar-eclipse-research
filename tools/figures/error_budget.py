@@ -25,7 +25,6 @@ ROWS = [
     (4,  "Terrain omitted",                  None,    3000.0, "up to 3 km", True),
     (5,  "Lunar limb omitted",              1000.0,   3000.0, "1 to 3 km",  True),
     (7,  "Lunar radius k, umbral, IAU value", None,   1400.0, "1.4 km",     False),
-    (19, "Moon light-time omitted",          None,    1300.0, "1.3 km",     False),
     (9,  "Centre of figure against centre of mass", 500.0, 1000.0, "0.5 to 1 km", False),
     (8,  "ΔT prediction error, realised in 2024",   500.0,  800.0, "500 to 800 m", False),
     (10, "Watts-era limb data",              600.0,   750.0, "600 to 750 m", False),
@@ -40,7 +39,6 @@ ROWS = [
     (22, "ELP-2000/82 truncated as in the Canon", None, 10.0, "10 m",      False),
     (23, "Polar motion",                      None,    10.0, "about 10 m", False),
     (25, "TT against TDB",                    None,     2.0, "2 m",        False),
-    (20, "Ephemeris, DE421 to DE440",         None,     0.9, "under 1 m",  False),
 ]
 
 # --- layout ---------------------------------------------------------------
@@ -67,17 +65,19 @@ f = Figure(
     title="The ranked error budget, as position error at an eclipse limit",
     desc=(
         "A horizontal bar chart on a logarithmic axis running from one metre to "
-        "ten kilometres. Twenty-two terms from the error budget are ranked from "
+        "ten kilometres. Twenty terms from the error budget are ranked from "
         "largest to smallest. Two implementation bugs head the list at tens of "
         "kilometres: a geometric Sun paired with an apparent Moon at 38 km and TT "
         "used where UT belongs at 32 km, with a sphere used instead of the "
         "ellipsoid at 21 km behind them. Three shaded bars follow at kilometre "
         "scale and are the terms the corpus calls dominant: terrain omitted at up "
         "to 3 km, the lunar limb omitted at 1 to 3 km, and the choice of solar "
-        "radius at 600 m. Below them the lunar radius constant, lunar light-time, "
+        "radius at 600 m. Below them the lunar radius constant, "
         "the centre-of-figure offset and the delta T prediction error lie between "
-        "400 m and 1.4 km. Everything else falls under 200 m, and the ephemeris "
-        "terms at the foot of the chart are between 16 m and under a metre."
+        "400 m and 1.4 km. Watts-era, sidereal-time and UT1/UTC effects also exceed "
+        "200 m. The ephemeris terms at the foot are comparisons between releases, "
+        "not accuracy bounds against truth. Bars mix model omissions, differences "
+        "and uncertainty components; they cannot all be summed in quadrature."
     ),
 )
 

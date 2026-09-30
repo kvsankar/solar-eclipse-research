@@ -3,17 +3,17 @@ title: The direct topocentric method
 description: Calculate local eclipse contacts from apparent Sun and Moon directions and angular radii, with the capabilities of astronomy libraries.
 order: 2
 status: working
-updated: 2026-09-15
+updated: 2026-09-30
 tags: [local-circumstances, topocentric, swiss-ephemeris, spice, skyfield, astropy]
 seo_title: Topocentric Eclipse Calculation: Direct Contact Algorithms
 ---
 
 ::: summary
-- **The method is one equation.** With $\delta(t)$ the topocentric angular separation of the centres and $r_s$, $r_m$ the apparent semidiameters, the exterior contacts are the roots of $\delta = r_s + r_m$, the interior contacts the roots of $\delta = |r_s - r_m|$, and maximum eclipse the minimum of $\delta$. USNO's Solar Eclipse Computer and Swiss Ephemeris both work this way [@loc-usno-sec] [@loc-swecl-c].
+- **The method is one equation.** With $\delta(t)$ the topocentric angular separation of the centres and $r_s$, $r_m$ the apparent semidiameters, the exterior contacts are the roots of $\delta = r_s + r_m$, the interior contacts the roots of $\delta = |r_s - r_m|$, and minimum separation supplies a starting point for maximum eclipse. USNO's Solar Eclipse Computer and Swiss Ephemeris both work this way [@loc-usno-sec] [@loc-swecl-c].
 - **USNO iterates topocentric positions with IAU radii,** Sun 696000 km and Moon 1737.4 km, finds maximum first and then searches backwards and forwards for the contacts, and corrects the reported altitude for standard refraction [@loc-usno-sec].
 - **Swiss Ephemeris `eclipse_when_loc` brackets the minimum separation with a shrinking three-point search.** It then finds the exterior contacts as zeros of $(r_s + r_m) - \delta$ over $\pm 2$ h and the interior contacts as zeros of $|r_s - r_m| - \delta$ over $\pm 2$ min. For the interior contacts the lunar radius is scaled by 0.99916, and that factor is $k = 0.272281$ in disguise [@loc-swecl-c].
 - **The general-purpose libraries give the ingredients, not the product.** Skyfield's `separation_from()` on apparent topocentric positions, astropy's `get_body` plus `separation`, PyEphem's `separation()` and `radius`, Horizons' observer tables and SPICE's `gfsep_c` all yield $\delta(t)$ and the radii. None of them ships a solar-eclipse contact routine [@loc-skyfield-examples] [@loc-pyephem-quick] [@loc-horizons-manual] [@loc-spice-gfsep].
-- **Two exceptions ship something.** sunpy's `eclipse_amount()` returns obscuration at an observer with a selectable lunar radius, and SPICE's `gfoclt_c` finds FULL, ANNULAR and PARTIAL occultation intervals for ellipsoid or DSK-shaped bodies from any observer defined as an SPK object [@loc-sunpy-eclipse-amount] [@loc-spice-gfoclt].
+- **Two exceptions ship something.** SunPy 8.0's `eclipse_amount()` returns obscuration as a percentage from 0 to 100. SPICE's `gfoclt_c` finds FULL, ANNULAR and PARTIAL intervals for two ellipsoids. Its DSK support requires the other target to be POINT and the event type ANY [@loc-sunpy-eclipse-amount] [@loc-spice-gfoclt].
 - **Frame mistakes are the usual bug.** astropy's `separation()` is evaluated in the frame of the first coordinate, so an ICRS separation is barycentric, not topocentric [@loc-astropy-common-errors]. Stellarium turns topocentric coordinates off to form Besselian elements and never uses the separation method for eclipses [@loc-stellarium-sec].
 :::
 
@@ -25,11 +25,11 @@ At time $t$ the observer at geodetic position $(\phi, \lambda, h)$ sees the Sun'
 
 - first and fourth contact: $\delta = r_s + r_m$,
 - second and third contact: $\delta = |r_s - r_m|$, total if $r_m > r_s$, annular if $r_m < r_s$,
-- maximum eclipse: $\delta$ minimal,
+- minimum separation: minimise $\delta$ as a search seed. For maximum magnitude or obscuration, optimise that specific quantity with time-dependent radii [@loc-swecl-c] [@loc-es1992-ch8],
 - magnitude (partial): $(r_s + r_m - \delta)/(2r_s)$, and ratio $r_m/r_s$ once the discs nest,
 - obscuration: the lens area of the two discs divided by $\pi r_s^2$, whose closed form is in [contact times, magnitude and position angles](contact-times-and-magnitude.md).
 
-"Apparent topocentric" means the positions include light time for the Moon and Sun, aberration, and the diurnal parallax of the site with its height. Refraction is optional and, if applied, must be applied to both bodies before the separation is formed. The Besselian and the topocentric method agree to the extent that the ephemeris, the radii and $\Delta T$ agree: the Besselian elements are themselves a compressed geocentric ephemeris of the two bodies [@loc-es1992-ch8].
+"Apparent topocentric" means the positions include light time for the Moon and Sun, aberration, and the diurnal parallax of the site with its height. Nominal contact geometry excludes refraction. Atmospheric models affect displayed altitude and visibility. A contact adjustment requires a consistent treatment of both complete limbs, rather than shifting only their centres [@loc-nasa-locirc-2001]. The Besselian and the topocentric method agree to the extent that the ephemeris, the radii and $\Delta T$ agree: the Besselian elements are themselves a compressed geocentric ephemeris of the two bodies [@loc-es1992-ch8].
 
 ## USNO Solar Eclipse Computer
 
@@ -37,7 +37,7 @@ The USNO service describes its algorithm in three sentences: "The computation of
 
 ## Swiss Ephemeris `swe_sol_eclipse_how` and `swe_sol_eclipse_when_loc`
 
-The file swecl.c is the most complete open implementation of the topocentric method and was read in full [@loc-swecl-c].
+Swiss Ephemeris implements the topocentric method in `swecl.c` [@loc-swecl-c].
 
 **Constants.** `DSUN = 1392000000.0 / AUNIT`, `DMOON = 3476300.0 / AUNIT`, `RSUN = DSUN/2`, `RMOON = DMOON/2`, so the Sun's radius is 696000 km and the Moon's 1738.15 km ($k = 0.27252$) [@loc-swecl-c].
 
@@ -86,7 +86,7 @@ $0.99916 \times 1738.15\ \text{km} = 1736.69\ \text{km}$, and $0.272281 \times 6
 
 ## sunpy `eclipse_amount`
 
-sunpy provides `sunpy.coordinates.sun.eclipse_amount(observer, *, moon_radius='IAU')`, which returns the obscuration at an observer `SkyCoord` for its time, "using the simplifying assumption that the Moon has a constant radius". The `'IAU'` option is $R_\mathrm{moon}/R_\mathrm{earth} = 0.2725076$ and `'minimum'` is $0.272281$, the latter "more accurate for total eclipse contact predictions but less accurate for partial eclipse measurements" in the documentation's paraphrase. Light travel time is included. The docstring recommends a JPL ephemeris because astropy's built-in lunar position "is appreciably inaccurate" [@loc-sunpy-eclipse-amount]. Contact times are not returned. A root finder on this function against 0, and on $1 - \mathrm{amount}$, reproduces them.
+SunPy 8.0 provides `sunpy.coordinates.sun.eclipse_amount(observer, *, moon_radius='IAU')`, which returns the obscuration as a percentage from 0 to 100 at an observer `SkyCoord` for its time, "using the simplifying assumption that the Moon has a constant radius". The `'IAU'` option is $R_\mathrm{moon}/R_\mathrm{earth} = 0.2725076$ and `'minimum'` is $0.272281$, the latter "more accurate for total eclipse contact predictions but less accurate for partial eclipse measurements" in the documentation's paraphrase. Light travel time is included. The docstring recommends a JPL ephemeris because astropy's built-in lunar position "is appreciably inaccurate" [@loc-sunpy-eclipse-amount]. Contact times are not returned. Zero coverage outside the eclipse and 100 per cent coverage during totality form plateaus. A generic root solver can accept any point on a plateau. Annular coverage stays below 100 per cent, so a full-coverage threshold cannot find annular C2 or C3. Use an explicit transition search for coverage boundaries, or solve $\delta-(r_s+r_m)=0$ for C1/C4 and $\delta-|r_s-r_m|=0$ for C2/C3 with time-dependent radii [@loc-sunpy-eclipse-amount] [@loc-usno-sec].
 
 ## Skyfield
 
@@ -99,11 +99,11 @@ moon = bluffton.at(time).observe(eph['moon']).apparent()
 elongation_degrees = sun.separation_from(moon).degrees
 ```
 
-The `.apparent()` call applies light time, aberration and deflection, and `wgs84.latlon` with `elevation_m` gives the topocentric origin. Apparent radii come from the documented pattern `Angle(radians=np.arcsin(radius_km / distance.km) * 2.0)` for the angular diameter [@loc-skyfield-examples]. The documentation's `find_discrete` and `find_minima` almanac searchers can then locate the roots of $\delta - (r_s \pm r_m)$ and the minimum of $\delta$. Skyfield's examples page has lunar-eclipse support but no solar-eclipse example and no contact-time function [@loc-skyfield-examples].
+The `.observe()` call applies light time, and `.apparent()` adds aberration and deflection, and `wgs84.latlon` with `elevation_m` gives the topocentric origin. Apparent radii come from the documented pattern `Angle(radians=np.arcsin(radius_km / distance.km) * 2.0)` for the angular diameter [@loc-skyfield-examples]. The documentation's `find_discrete` and `find_minima` almanac searchers can then locate the roots of $\delta - (r_s \pm r_m)$ and the minimum of $\delta$. Skyfield's examples page has lunar-eclipse support but no solar-eclipse example and no contact-time function [@loc-skyfield-examples].
 
 ## astropy
 
-astropy gives `get_body("moon", time, loc)` and `get_body("sun", time, loc)` for an `EarthLocation`, and `moon.separation(sun)`. Erik Bernhardsson's 2024 note uses exactly that pair and minimises the separation with scipy's Nelder-Mead to find where on Earth the eclipse is central, without computing contacts or obscuration [@loc-erikbern-2024]. The astropy documentation's "Common mistakes" page warns that `separation()` is computed in the frame of the coordinate it is called on, so `star.separation(moon)` in ICRS is a barycentric separation while `moon.separation(star)` from a geocentric or topocentric frame is the observed one [@loc-astropy-common-errors]. No open astropy issue proposing a solar-eclipse contact routine was found in the searches run for this note. The feature lives in sunpy instead [@loc-sunpy-eclipse-amount].
+astropy gives `get_body("moon", time, loc)` and `get_body("sun", time, loc)` for an `EarthLocation`, and `moon.separation(sun)`. Erik Bernhardsson's 2024 note uses exactly that pair and minimises the separation with scipy's Nelder-Mead to find where on Earth the eclipse is central, without computing contacts or obscuration [@loc-erikbern-2024]. The astropy documentation's "Common mistakes" page warns that `separation()` is computed in the frame of the coordinate it is called on, so `star.separation(moon)` in ICRS is a barycentric separation while `moon.separation(star)` from a geocentric or topocentric frame is the observed one [@loc-astropy-common-errors]. Astropy supplies coordinates rather than solar-eclipse contacts. SunPy supplies obscuration [@loc-sunpy-eclipse-amount]. Its reduction includes more than light time, as described in [ephemerides](../08-lunar-and-solar-model/ephemerides.md#software-that-evaluates-these-ephemerides).
 
 ## PyEphem
 
@@ -115,7 +115,7 @@ Horizons has no eclipse or occultation product. Its observer tables, from a topo
 
 ## SPICE `gfoclt_c` and `gfsep_c`
 
-`gfoclt_c` "determines time intervals when an observer sees one target body occulted by, or in transit across, another". Occultation types are FULL ("the full occultation of the body designated by back by the body designated by front"), ANNULAR ("front blocks part of, but not the limb of, back"), PARTIAL ("front blocks part, but not all, of the limb of back") and ANY, which "must be used if either the front or back target body is modeled as a point". Shapes are ELLIPSOID from the kernel-pool radii, POINT, and DSK for topographic models. Aberration corrections are NONE, LT, CN, XLT and XCN. "The step size should be shorter than the shortest occultation duration and the shortest time interval between two occultation events", and roots are accepted when bracketed within `SPICE_GF_CNVTOL`. The first documented example finds the December 2001 solar eclipse as an 85 minute interval of Moon occulting Sun as seen from Earth's centre [@loc-spice-gfoclt]. To use a surface site as the observer, the site must exist as an SPK object, which NAIF's `pinpoint` utility produces from a body-fixed position; the documentation does not spell this out but the observer argument is a body name. With DSK shapes the Moon's actual limb is used. That is the only library route found in this topic that folds a limb model into contact times without a separate post-correction.
+`gfoclt_c` "determines time intervals when an observer sees one target body occulted by, or in transit across, another". Occultation types are FULL ("the full occultation of the body designated by back by the body designated by front"), ANNULAR ("front blocks part of, but not the limb of, back"), PARTIAL ("front blocks part, but not all, of the limb of back") and ANY, which "must be used if either the front or back target body is modeled as a point". Shapes are ELLIPSOID from the kernel-pool radii, POINT, and DSK for topographic models. Aberration corrections are NONE, LT, CN, XLT and XCN. "The step size should be shorter than the shortest occultation duration and the shortest time interval between two occultation events", and roots are accepted when bracketed within `SPICE_GF_CNVTOL`. The first documented example finds the December 2001 solar eclipse as an 85 minute interval of Moon occulting Sun as seen from Earth's centre [@loc-spice-gfoclt]. To use a surface site as the observer, the site must exist as an SPK object, which NAIF's `pinpoint` utility produces from a body-fixed position; the documentation does not spell this out but the observer argument is a body name. The permitted shape pairs are ELLIPSOID with ELLIPSOID, ELLIPSOID with POINT, or DSK with POINT. The point target requires ANY. `gfoclt_c` cannot pair a DSK Moon with a finite ellipsoid Sun for FULL or ANNULAR contacts. Use two ellipsoids for a smooth-body baseline, and a separate finite-disc ray or silhouette test for lunar topography [@loc-spice-gfoclt].
 
 `gfsep_c` complements it: "determine time intervals when the angular separation between the position vectors of two target bodies relative to an observer satisfies a numerical relationship", with shapes SPHERE and POINT and relations `=`, `<`, `>`, `LOCMIN`, `LOCMAX`, `ABSMIN`, `ABSMAX`. A SPHERE takes its radius as the maximum of `BODYnnn_RADII`. With SPHERE the separation is measured between the limbs rather than the centres, so `= 0` with SPHERE for both bodies is the exterior contact condition and `ABSMIN` gives maximum eclipse [@loc-spice-gfsep].
 
@@ -129,16 +129,16 @@ Stellarium does not use the separation method for its eclipse tables. `calcSolar
 |---|---|---|---|---|---|
 | USNO Solar Eclipse Computer [@loc-usno-sec] | Topocentric, JPL (version unstated) | 696000 km, 1737.4 km | Iterate to maximum, then step out | Altitude only | Yes, with P, V |
 | Swiss Ephemeris [@loc-swecl-c] | Topocentric apparent, `SEFLG_TOPOCTR` | 696000 km, 1738.15 km, x0.99916 inside | Parabolic bracketing, 10 s then finer | Visibility only | Yes, plus sunrise/sunset |
-| sunpy [@loc-sunpy-eclipse-amount] | astropy topocentric with light time | 0.2725076 or 0.272281 | None (user root-finds) | None | Obscuration only |
+| sunpy [@loc-sunpy-eclipse-amount] | astropy topocentric with light time | 0.2725076 or 0.272281 | None; user solves geometric contacts | None | Obscuration percentage only |
 | Skyfield [@loc-skyfield-807] | Apparent topocentric | User supplies | User uses `find_discrete` | Optional via altaz | No |
 | astropy [@loc-erikbern-2024] | `get_body` at EarthLocation | User supplies | User | None in separation | No |
 | PyEphem [@loc-pyephem-quick] | Topocentric with refraction by default | `radius` attribute | User | On unless pressure = 0 | No |
 | Horizons [@loc-horizons-manual] | Topocentric tables | Angular diameter column | User | Optional model | No |
-| SPICE gfoclt [@loc-spice-gfoclt] | Any SPK observer, LT or CN | Ellipsoid or DSK | Built-in interval search | None | Intervals of FULL, ANNULAR, PARTIAL |
+| SPICE gfoclt [@loc-spice-gfoclt] | Any SPK observer, LT or CN | Two ellipsoids, or DSK with POINT | Built-in interval search | None | FULL/ANNULAR/PARTIAL for two ellipsoids; DSK with POINT supports ANY only |
 
 ## What a developer should do
 
-Build the topocentric method as the independent check of the Besselian reduction, not as a replacement. Use a JPL ephemeris through Skyfield or sunpy, with apparent topocentric positions that include light time and aberration and exclude refraction. Fix the radii at $R_s = 696000$ km and $R_m = 0.2725076\,R_e$ for exterior contacts and $0.272281\,R_e$ for interior contacts to match NASA. Find the contacts with a bracketed root finder on $\delta - (r_s \pm r_m)$ seeded from the minimum of $\delta$ [@loc-usno-sec] [@loc-swecl-c] [@loc-sunpy-eclipse-amount]. Agreement with the Besselian result should be within 0.1 s when the same ephemeris and $\Delta T$ feed both. Read swecl.c `eclipse_when_loc` for the search structure and `eclipse_how` for the obscuration code, and gfoclt_c's documentation for the DSK route to a limb-aware contact.
+Build the topocentric method as the independent check of the Besselian reduction, not as a replacement. Use a JPL ephemeris through Skyfield or sunpy, with apparent topocentric positions that include light time and aberration and exclude refraction. Fix the radii at $R_s = 696000$ km and $R_m = 0.2725076\,R_e$ for exterior contacts and $0.272281\,R_e$ for interior contacts to match NASA. Find contacts with a bracketed root finder on $\delta-(r_s+r_m)$ and $\delta-|r_s-r_m|$, seeded from minimum separation [@loc-usno-sec] [@loc-swecl-c] [@loc-sunpy-eclipse-amount]. Agreement with the Besselian result should be within 0.1 s when the same ephemeris and $\Delta T$ feed both. Read swecl.c `eclipse_when_loc` for the search structure and `eclipse_how` for the obscuration code, and `gfoclt_c`'s documentation for its supported shape pairs. Use a separate limb-containment test for the finite Sun against lunar topography [@loc-spice-gfoclt].
 
 ## What this changes
 
@@ -147,5 +147,5 @@ Nothing in the pipeline's data flow. It adds a second, cheaper validation path. 
 ## Open questions
 
 - Obtain the JPL ephemeris version and $\Delta T$ source behind the USNO Solar Eclipse Computer, which the service page does not state [@loc-usno-sec].
-- Run gfoclt_c with a `pinpoint`-defined surface site, ELLIPSOID for the Sun and a DSK Moon from LOLA, and record how its FULL interval compares with a limb-corrected C2 to C3 from Occult or Solar Eclipse Maestro.
-- Locate the astropy or astroplan issue tracker entry, if any, that proposes solar-eclipse contact support. None surfaced in this note's searches.
+- Construct a finite-solar-disc limb test from SPICE positions and lunar topography, then compare C2 and C3 with Occult or Solar Eclipse Maestro. `gfoclt_c` does not support a DSK Moon paired with an ELLIPSOID Sun [@loc-spice-gfoclt].
+- Obtain a versioned Astropy or astroplan proposal for solar-eclipse contact support if comparing future library capabilities.

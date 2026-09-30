@@ -3,14 +3,14 @@ title: Observed versus predicted
 description: Published comparisons of predicted and observed eclipse contacts and Baily's beads, including timed path-edge experiments in 2017 and 2024.
 order: 1
 status: working
-updated: 2026-09-15
+updated: 2026-09-30
 tags: [validation, bailys-beads, solar-radius, path-edge, iota]
 seo_title: Eclipse Predictions versus Observed Contacts and Beads
 ---
 
 ::: summary
-- **Every quantitative test of an eclipse prediction against observation has been made at or near a path limit.** Mid-path contact timings are too insensitive: a 0.37 arcsecond change in solar radius moves a 2017 central-line duration by 1.8 s but moves the duration a few hundred metres inside the southern limit by 19.3 s [@val-quaglia-2021].
-- **Predictions that use the standard solar radius of 959.63 arcseconds place the path limit too far out by roughly 600 m.** Four independent campaigns since 2010 give an [?eclipse-solar-radius] between 959.95 and 960.01 arcseconds [@val-lamy-2015] [@val-quaglia-2021] [@val-guhl-2023] [@val-wright-young-2024]. The difference of 0.32 arcseconds at the Moon's distance is 610 m on the ground [@val-earthsky-2024-edges].
+- **Near-limit observations are especially sensitive radius tests.** Raising the solar radius from 959.63 to 960.00 arcseconds shortens the cited 2017 central-line duration by 1.8 s and the Vale duration by 19.3 s. Published campaigns also include central-line observations [@val-quaglia-2021] [@val-lamy-2015].
+- **The cited flash-spectrum and light-curve fits exceed the conventional 959.63 arcseconds.** Quaglia and Lamy infer 959.95 and 959.99 arcseconds. At the Moon's mean distance, a 0.32 arcsecond increase reduces the smooth shadow radius by about 600 m. Ground-limit shifts also depend on geometry, limb and terrain [@val-lamy-2015] [@val-quaglia-2021].
 - **The cleanest 2024 edge test observed 13.7 s of totality where six public predictions said 12.9 s to 65 s.** At Stephenville, Texas, Irwin's true-limb model with the larger radius came within one second. timeanddate, eclipse2024.org and Jubier's uncorrected duration were 40 to 50 s too long [@val-besselian-maps-accuracy].
 - **Bead-by-bead residuals from good video are at the 0.1 arcsecond level.** IOTA/ES reduced 16 beads from 700 m inside the 2017 northern limit to a mean radius correction of +0.03 arcseconds, with individual beads scattered between minus 0.10 and +0.14 arcseconds [@val-guhl-tegtmeier-2018].
 - **IOTA has withdrawn its earlier claim of a varying solar radius.** Dunham now attributes the eclipse-to-eclipse scatter of the 1980s and 1990s campaigns to observational error larger than the formal estimates, and recommends sites at least 2.0 km inside the corrected limit [@val-dunham-iota-2024].
@@ -20,13 +20,13 @@ seo_title: Eclipse Predictions versus Observed Contacts and Beads
 
 **The question.** When someone has stood at a known position with a GPS-stamped clock and recorded second and third contact, or the beads around them, how far were the published predictions off, in seconds of time and in metres of path edge, and which input explains the offset?
 
-Times labelled UT below are UT1 as published, and observed times are UTC. The difference is under 0.9 s and below every tolerance quoted here.
+Times labelled UT are UT1 as published, and observed times are UTC. Convert absolute timestamps to one scale before comparing contacts. Obtain DUT1 = UT1 − UTC from the IERS Earth-orientation record for the event. Use UT1 = UTC + DUT1 and UTC = UT1 − DUT1. Store the value, epoch and source with the reference case. The permitted difference below 0.9 s cannot be ignored for subsecond tolerances [@earth-iers-bulletin-a]. A nearly constant DUT1 cancels in a short C3-minus-C2 duration.
 
-## Why only edge observations count
+## Why edge observations are sensitive
 
-The duration of totality at the central line depends weakly on the inputs. Quaglia et al. computed, for the 2017 August 21 eclipse, the effect of raising the solar radius from the standard $s_0 = 959.63''$ to $960.00''$ at 1 au. On the central line the duration dropped by 1.8 s. At their site a few hundred metres inside the southern limit near Vale, Oregon, it dropped by 19.3 s. The distance from the site to the limit went from 1200 m to under 400 m [@val-quaglia-2021]. Wright and Young state the same sensitivity the other way round: very close to the limit, a discrepancy of 1 s in duration corresponds to an error as small as 20 km, or $0.03''$, in solar radius [@val-wright-young-2024]. Every test with a measurable residual therefore comes from an [?edge-observation] near a [?path-limit].
+The duration of totality at the central line depends weakly on the inputs. Quaglia et al. computed, for the 2017 August 21 eclipse, the effect of raising the solar radius from the standard $s_0 = 959.63''$ to $960.00''$ at 1 au. On the central line the duration dropped by 1.8 s. At their site a few hundred metres inside the southern limit near Vale, Oregon, it dropped by 19.3 s. The distance from the site to the limit went from 1200 m to under 400 m [@val-quaglia-2021]. Wright and Young state the same sensitivity the other way round: very close to the limit, a discrepancy of 1 s in duration corresponds to an error as small as 20 km, or $0.03''$, in solar radius [@val-wright-young-2024]. An [?edge-observation] near a [?path-limit] amplifies radius sensitivity. Lamy's campaigns also used central-line observations, as Quaglia reports [@val-quaglia-2021] [@val-lamy-2015].
 
-The second reason is that only the edge separates the inputs. Maley's description of the IOTA method states that the difference of the northern and southern limit residuals removes the ephemeris error and leaves the solar radius residual [@val-eclipsetours-edge]. A mid-path contact time mixes ephemeris, $\Delta T$, radius and limb into one number that cannot be decomposed.
+Paired observations near opposite limits can help separate radius and positional effects. Maley's description of the IOTA method states that the difference of the northern and southern limit residuals removes the ephemeris error and leaves the solar radius residual [@val-eclipsetours-edge]. A mid-path contact time mixes ephemeris, $\Delta T$, radius and limb into one number that cannot be decomposed.
 
 ## IOTA and IOTA/ES campaigns, 1973 to 2017
 
@@ -48,7 +48,7 @@ at 1 au with no significant wavelength dependence between 480 and 640 nm [@val-q
 
 The consequences for a 2017 prediction at the central line: totality of 2m10.0s with the Auwers radius becomes 2m08.4s with the new one, a change of 1.6 s. The authors note this matters for scripted cameras [@val-quaglia-2021]. Treating the photospheric edge as a layer $0.05''$ thick makes the duration a range, 2m08.3s to 2m08.5s, and turns the path limits into fuzzy bands 100 m wide [@val-quaglia-2021].
 
-The same paper contains the only published cross-check of three implementations at a single edge site. All were run with $s_0 = 959.63''$. Irwin's model gave C2 17:25:34.3 and C3 17:26:06.9 UTC, a duration of 32.6 s. For the same radius, Occult's Baily's beads tool gave durations 2 s or more longer, and Solar Eclipse Maestro 4 s or more longer. Equivalently, for a given observed duration Occult would infer a radius $0.03''$ higher than Irwin's model and Solar Eclipse Maestro $0.07''$ higher. A bend in the duration-versus-radius curve at $960.15''$, caused by third contact jumping to a different valley, appears in neither application [@val-quaglia-2021].
+The same paper contains a cross-check of three implementations at a single edge site. All were run with $s_0 = 959.63''$. Irwin's model gave C2 17:25:34.3 and C3 17:26:06.9 UTC, a duration of 32.6 s. For the same radius, Occult's Baily's beads tool gave durations 2 s or more longer, and Solar Eclipse Maestro 4 s or more longer. Equivalently, for a given observed duration Occult would infer a radius $0.03''$ higher than Irwin's model and Solar Eclipse Maestro $0.07''$ higher. A bend in the duration-versus-radius curve at $960.15''$, caused by third contact jumping to a different valley, appears in neither application [@val-quaglia-2021].
 
 ### Guhl and Tegtmeier, IOTA/ES at both limits
 
@@ -56,7 +56,7 @@ The northern station 2017USN1 (Elke and Konrad Guhl) was at $43^{\circ} 40' 23.5
 
 The southern station 2017USS1 (Carmen and Andreas Tegtmeier) was at $37^{\circ} 13' 6.20''$ N, $89^{\circ} 40' 49.26''$ W, 106 m, about 15 km south-west of Cape Girardeau, Missouri, which the authors describe as approximately 1100 m outside the totality zone. Beads were recorded but the video was overexposed, and the per-bead corrections were all between $+0.17''$ and $+0.33''$ with a mean of $+0.25''$. The authors treat the southern result as showing "the limits of the method with the 8 bit video signal" and report the northern station alone as their result, while noting that the two-station average would be $959.88''$ [@val-guhl-tegtmeier-2018]. The paper also records that the IOTA/ES bead programme ended with 2017 because spacecraft measurements were judged better after 2012 [@val-guhl-tegtmeier-2018].
 
-The southern station's overexposed $+0.25''$ is close to the later consensus value, and the northern station's $+0.03''$ is not. Nothing in the paper resolves this. Overexposure makes faint beads appear earlier at disappearance and later at reappearance, which mimics a larger Sun, so the authors' decision to discard the southern value is defensible on its own terms. Whether the 700 m northern site was affected by a specific valley is not discussed.
+The southern video was overexposed. Guhl and Tegtmeier treat its radius correction as unreliable and describe the limits of their 8-bit signal. The paper does not supply a general correction for overexposure. The discarded value cannot be treated as an independent confirmation of later radius estimates [@val-guhl-tegtmeier-2018].
 
 ### The NASA limb-corrected greatest duration
 
@@ -64,11 +64,11 @@ Espenak's 2017 interactive map states that the smooth-Moon greatest duration is 
 
 ### Crowd-sourced stations
 
-Maley and Lisa Clapper set up student stations near Minden, Nebraska, at the southern edge, to determine "the true vs predicted edge of an eclipse path" [@val-maley-edge]. A search-engine summary of an EclipseWise page describes 15 stations using smartphones. Nugent's summary of the 2018 IOTA meeting records that "there weren't enough volunteers to reach the goals of determining historical accuracies of the solar diameter" [@val-iota-meeting-2018]. Dunham singles out Fred Bruenjes's recording from his home about 2 km north of the southern limit as the best portrayal of edge phenomena in 2017 but states that it "was not timed accurately" [@val-dunham-iota-2024]. No numeric result from any Kentucky, Nebraska or Oregon crowd station was found in IOTA's journal, on IOTA's web pages or in the meeting summary. That absence is a finding: the 2017 citizen edge programme produced no published offsets.
+Maley and Lisa Clapper set up student stations near Minden, Nebraska, at the southern edge, to determine "the true vs predicted edge of an eclipse path" [@val-maley-edge]. Nugent's summary of the 2018 IOTA meeting records that "there weren't enough volunteers to reach the goals of determining historical accuracies of the solar diameter" [@val-iota-meeting-2018]. Dunham singles out Fred Bruenjes's recording from his home about 2 km north of the southern limit as the best portrayal of edge phenomena in 2017 but states that it "was not timed accurately" [@val-dunham-iota-2024]. The cited IOTA meeting summary and Dunham page give no numerical offsets from those student stations. That source scope does not establish that no other reduction exists [@val-iota-meeting-2018] [@val-dunham-iota-2024].
 
-## 2019 and the pre-2024 radius consensus
+## Radius measurements before 2024
 
-The measured values and their provenance are collected in [solar radius values](../06-solar-radius/solar-radius-values.md). This section keeps the rows that come from timed edge observations. Guhl's 2023 paper tabulates the IOTA/ES station results as $-0.04''$ for 2016 September 1, $+0.03''$ for 2017 August 21, and $-0.08''$ for 2019 July 2 [@val-guhl-2023]. Lamy et al. obtained 17 photometer determinations across the 2010, 2012, 2013 and 2015 eclipses, with Kaguya limb data, of $959.94'' \pm 0.02''$, $960.02'' \pm 0.04''$, $959.99'' \pm 0.09''$ and $960.01'' \pm 0.09''$, average $959.99'' \pm 0.06''$ at 540 nm, equivalent to $696{,}246 \pm 45$ km [@val-lamy-2015]. Wright and Young list the modern eclipse values as $959.99'' \pm 0.06''$ (Lamy), $959.95'' \pm 0.05''$ (Quaglia), $959.98''$ (Jubier et al. 2021) and $960.01''$ (Guhl 2023) [@val-wright-young-2024]. Jubier's own map help states that the true photospheric radius is "closer to 959.98 arc-seconds at one astronomical unit ($\pm 0.02$ arc-second)" while the map computes with $959.63''$ [@val-jubier-map-help]. The IOTA/ES filtered-video results sit below this consensus and the light-curve results sit on it.
+The measured values and their provenance are collected in [solar radius values](../06-solar-radius/solar-radius-values.md). This section keeps the rows that come from timed edge observations. Guhl's 2023 paper tabulates the IOTA/ES station results as $-0.04''$ for 2016 September 1, $+0.03''$ for 2017 August 21, and $-0.08''$ for 2019 July 2 [@val-guhl-2023]. Lamy et al. obtained 17 photometer determinations across the 2010, 2012, 2013 and 2015 eclipses, with Kaguya limb data, of $959.94'' \pm 0.02''$, $960.02'' \pm 0.04''$, $959.99'' \pm 0.09''$ and $960.01'' \pm 0.09''$, average $959.99'' \pm 0.06''$ at 540 nm, equivalent to $696{,}246 \pm 45$ km [@val-lamy-2015]. Wright and Young list the modern eclipse values as $959.99'' \pm 0.06''$ (Lamy), $959.95'' \pm 0.05''$ (Quaglia), $959.98''$ (Jubier et al. 2021) and $960.01''$ (Guhl 2023) [@val-wright-young-2024]. Jubier's own map help states that the true photospheric radius is "closer to 959.98 arc-seconds at one astronomical unit ($\pm 0.02$ arc-second)" while the map computes with $959.63''$ [@val-jubier-map-help]. The IOTA/ES filtered-video results include lower estimates than these light-curve results. The method difference remains unresolved.
 
 ## 2023 April 20 and October 14
 
@@ -96,7 +96,7 @@ The Besselian Elements team stood in Stephenville City Park, very close to the p
 | Besselian Elements (Irwin), true limb, $959.95''$ | 12.9 s |
 | **Observed** | **13.7 s** |
 
-The team notes that the differences between the predicted northern limits "can be of the order of a couple kilometers" and that all predictions other than Irwin's differ from the observation by "several tens of seconds, well beyond the level of experimental uncertainty" [@val-besselian-maps-accuracy]. The experiment is the team's own test of its own model, and the grading here reflects that. It nevertheless separates the inputs cleanly. The smooth-limb, standard-radius products are 40 to 50 s too long. Those are timeanddate, eclipse2024.org and Jubier uncorrected. Adding the limb profile, which is Jubier's corrected column, removes about 33 s. Adding the larger radius removes the remaining 11 s.
+The team reports differences of kilometres between predicted limits [@val-besselian-maps-accuracy]. Jubier's uncorrected and corrected columns change duration from 57.4 s to 24.5 s, a same-program limb correction of 32.9 s. Irwin's 12.9 s prediction with 959.95 arcseconds agrees with the observed 13.7 s within the stated timing uncertainty. The 11.6 s difference between the corrected Jubier and Irwin predictions does not isolate the radius contribution. Their solvers, ephemerides, Earth orientation and limb/terrain treatments also differ [@val-besselian-maps-accuracy] [@val-quaglia-2021].
 
 ### Solon, Maine
 
@@ -121,7 +121,7 @@ Collecting the numbers above by cause:
 | Solar radius $959.63''$ instead of about $959.95''$ | Quaglia 2017, Stephenville 2024, EarthSky | 600 m per limit, 1.6 to 1.8 s at central line, 10 to 20 s within a few hundred metres of a limit |
 | Smooth Moon instead of limb profile | Stephenville 2024 (57.4 s to 24.5 s), NASA 2017 greatest duration (+1.5 s) | 1 to 3 s typical at centre, tens of seconds at the edge |
 | Implementation differences at the same inputs | Irwin versus Occult versus Solar Eclipse Maestro at Vale | 2 to 4 s of duration, or $0.03''$ to $0.07''$ of radius |
-| Bead timing noise, filtered video, 8 bit | 2017USN1, 2023AUN1 | $\pm 0.1''$ per bead, systematic $+0.2''$ when overexposed |
+| Bead reduction, filtered video | 2017USN1, 2023AUN1 | About 0.1 arcseconds scatter per bead in these reductions; the overexposed southern result was discarded |
 | Observer clock, visual contacts | Stephenville UTC timer | about 2 s on a duration |
 | Site position | Dunham on Irwin's 90 m sigma | 90 m to 2 km of recommended margin |
 
@@ -135,7 +135,7 @@ Ephemeris and $\Delta T$ do not appear because no edge report has attributed a r
 | Guhl and Tegtmeier 2018 [@val-guhl-tegtmeier-2018] | 2017, Thermopolis WY and Cape Girardeau MO | Bead residuals with Occult, LOLA and Kaguya | Per-bead table with times and residuals |
 | Guhl 2023 [@val-guhl-2023] | 2023 April, Cape Range | Bead residuals by FITS photometry | $960.01'' \pm 0.12''$ and the IOTA/ES series 2016 to 2023 |
 | Quaglia et al. 2023 [@val-quaglia-2023-joa] | 2023 April, Cape Range | Visual flash spectrum and photodiodes | Shows ambient-light curves overestimate the radius |
-| Besselian Elements 2024 [@val-besselian-maps-accuracy] | 2024, Stephenville TX | Timed C2 and C3 against six predictors | The only side-by-side test of public products |
+| Besselian Elements 2024 [@val-besselian-maps-accuracy] | 2024, Stephenville TX | Timed C2 and C3 against six predictors | Side-by-side test of six public products |
 | Dunham 2024 [@val-dunham-iota-2024] | 2024, Solon ME | Beads and totality at 3 km inside | IOTA's retraction of radius variability, the 2 km margin |
 | Lamy et al. 2015 [@val-lamy-2015] | 2010 to 2015 | Photometer light curves | The largest consistent radius data set |
 | Maley [@val-maley-edge] [@val-eclipsetours-edge] | 1973 to 2017 | Edge expedition method | Timing requirement, residual differencing |
@@ -143,14 +143,14 @@ Ephemeris and $\Delta T$ do not appear because no edge report has attributed a r
 
 ## What a developer should do
 
-1. Use the Stephenville 2024 record as the primary end-to-end test: site in Stephenville City Park, C2 18:39:06.6 UTC, C3 18:39:20.3 UTC, tolerance about 2 s. A smooth-Moon implementation with $959.63''$ will fail by 40 to 50 s, a limb-corrected one with $959.63''$ by about 11 s, and a limb-corrected one with $959.95''$ should pass [@val-besselian-maps-accuracy].
+1. Use the Stephenville 2024 observation as an end-to-end case: C2 18:39:06.6 UTC and C3 18:39:20.3 UTC. The stated uncertainty is about 2 s on the 13.7 s duration. Keep that duration uncertainty separate from unreported individual-contact uncertainties. Reproduce each predictor only with its pinned inputs [@val-besselian-maps-accuracy].
 2. Use the Vale 2017 site as the second test. With $s_0 = 959.63''$ the reference contacts are C2 17:25:34.3 and C3 17:26:06.9 UTC from Irwin's model, and Occult and Solar Eclipse Maestro are 2 s and 4 s longer. Any implementation should land within that 4 s spread, and should reproduce the drop of the limit distance from 1200 m to under 400 m when the radius is raised to $960.00''$ [@val-quaglia-2021].
 3. Reproduce the per-bead tables of Guhl and Tegtmeier for 2017USN1 and of Guhl for 2023AUN1 with a bead simulator using LOLA. The residual scatter of $\pm 0.1''$ is the noise floor of filtered video, so a simulator that matches the event list to within a second per bead is doing as well as the data allow [@val-guhl-tegtmeier-2018] [@val-guhl-2023].
 4. Read Quaglia et al. 2021 in full before choosing a radius, then Wright and Young 2024 section 6.4, then Dunham's 2024 page for the practical margin.
 
 ## What this changes
 
-The pipeline must carry the solar radius as a parameter and expose it to the user, with $959.95''$ or a value near it as the default for edge products and $959.63''$ available for reproducing NASA and Espenak tables. Limb-corrected contacts are mandatory for anything within 5 km of a limit. The path limit should be drawn as a band of at least 100 m and preferably with the 1-sigma lines Irwin uses, not as a line.
+The pipeline carries the solar radius and its measurement method as configuration. Provide the Quaglia 959.95 ± 0.05 arcsecond fit as a documented preset and 959.63 arcseconds for almanac reproduction. Recompute edge bands with the adopted uncertainty and limb/terrain scenarios. A quoted 100 m band from one geometry is not a universal accuracy guarantee [@val-quaglia-2021].
 
 ## Open questions
 

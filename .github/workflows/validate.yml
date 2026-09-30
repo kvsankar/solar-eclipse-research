@@ -1,0 +1,38 @@
+name: Validate research site
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Pandoc
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes pandoc
+
+      - name: Check numerical and metadata contracts
+        run: python -m unittest discover -s tools -p 'test_*.py'
+
+      - name: Check research fragments and note structure
+        run: |
+          python tools/merge_refs.py --check
+          python tools/check_notes.py
+
+      - name: Build and check rendered metadata
+        run: |
+          python tools/merge_refs.py
+          python tools/build.py --clean
+          python tools/check_seo.py
+
+      - name: Check generated bibliography consistency
+        run: git diff --exit-code -- references.tsv glossary.tsv images.tsv

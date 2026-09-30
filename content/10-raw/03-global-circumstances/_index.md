@@ -3,16 +3,16 @@ title: Global circumstances
 description: Calculate global eclipse circumstances: the central line, path limits, shadow outlines, durations and partial-eclipse map contours.
 order: 3
 status: working
-updated: 2026-09-15
+updated: 2026-09-30
 tags: [global-circumstances, path, limits, besselian]
 seo_title: Solar Eclipse Path Calculation: Global Circumstances
 ---
 
 ::: summary
-- **One algorithm, many implementations.** Every world-map product is derived from the eight Besselian elements by the method Bessel set out and Chauvenet, the 1961 Explanatory Supplement and its 1992 and 2013 revisions formalised. Stellarium is the closest thing to a complete open reference implementation [@glob-es1961] [@glob-stellarium-sec].
+- **Classical smooth-Moon world maps use Besselian elements.** The almanac formulation derives curves from these elements. Direct geometric calculations and limb-aware raster tests provide alternative computational paths [@glob-swisseph-swecl] [@glob-wright-young-2024]. Stellarium is the closest thing to a complete open reference implementation [@glob-es1961] [@glob-stellarium-sec].
 - **The oblate Earth is handled by Bessel's substitution.** Two auxiliary radii and a rotated declination turn the ellipsoid into a unit sphere, so the central line, limits and outlines all become root finds in one angle or one height [@glob-es1961] [@glob-es1992].
 - **Constants matter more than the algebra.** The lunar radius ratio $k$, the solar radius, the ellipsoid and ΔT move the path edges by kilometres. A ΔT shift is 15.041 arcseconds of longitude per second [@glob-nasa-tp2001] [@glob-rherale].
-- **Smooth-Moon limits are wrong by 1 to 3 km.** NASA, Jubier and SVS all say so. Only the SVS shapefiles publish a limb-profiled, terrain-corrected umbra polygon, and no open-source implementation of a limb-corrected path edge was found [@glob-nasa-google-2024] [@glob-svs-4518].
+- **Smooth-Moon limits are wrong by 1 to 3 km.** NASA, Jubier and SVS all say so. The released SVS shapefiles provide limb-profiled, terrain-corrected polygons. The surveyed global engines do not derive limb-corrected path edges [@glob-nasa-google-2024] [@glob-svs-4518].
 - **Magnitude and obscuration contours are rasterised, not solved.** The Supplements obtain them by inverse interpolation on the curves of maximum eclipse. SVS and Eclipse-Engine evaluate maximum obscuration per grid cell and contour the field [@glob-es1961] [@glob-svs-5123] [@glob-rherale].
 :::
 

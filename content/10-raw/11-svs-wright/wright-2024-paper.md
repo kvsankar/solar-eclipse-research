@@ -3,7 +3,7 @@ title: Wright and Young 2024, the raster method
 description: Formulas and modelling choices in Wright and Young's raster eclipse calculation paper, including lunar limb profiles and terrain tests.
 order: 1
 status: working
-updated: 2026-09-15
+updated: 2026-09-30
 tags: [svs, wright, raster, limb-profile, limb-test, broken-annular, solar-radius]
 seo_title: Wright and Young 2024: Raster Eclipse Calculation Method
 ---
@@ -14,7 +14,7 @@ seo_title: Wright and Young 2024: Raster Eclipse Calculation Method
 - **The limb profile** is built from SLDEM2015 (512 pixels per degree, 60 m at the equator) and the polar LDEM, in the Moon Mean Earth frame of DE421, on a 1737.4 km datum sphere. It is rebuilt every few minutes or whenever a libration angle changes by 0.01 degrees [@svs-wright-young-2024].
 - **The limb test** is $\rho = a^2 + \delta^2 - 2a\delta\cos(\theta-\phi)$ with the eclipse not total if $\rho < 1$. Distances are in apparent solar radii on the observer's image plane [@svs-wright-young-2024].
 - **The umbra is a polygon** because each edge is an arc of a Sun image projected through one limb valley. At 18:00 UTC on 2017 August 21 the outline had 49 sides [@svs-wright-young-2024].
-- **A third eclipse type**, broken annular, is mapped with the criterion $\max(L) - \min(L) > \delta$ [@svs-wright-young-2024].
+- **The proposed broken-annular criterion** is printed as $\max(L) - \min(L) > \delta$. Its common angular normalisation needs confirmation, and the criterion is not observationally validated in this corpus [@svs-wright-young-2024].
 - **The paper does not state** a $\Delta T$ value, a time step for 2024, a refraction model or a numerical comparison with Espenak or Jubier. Those come from the SVS pages, covered in [svs-products-and-data.md](svs-products-and-data.md) and [svs-vs-other-predictors.md](svs-vs-other-predictors.md).
 :::
 
@@ -24,9 +24,9 @@ seo_title: Wright and Young 2024: Raster Eclipse Calculation Method
 
 The published method is Wright, E. and Young, C. A. 2024, "A Raster-oriented Method for Creating Eclipse Maps", The Astronomical Journal 168:163 (13 pages), published 2024 September 19, DOI 10.3847/1538-3881/ad6b23 [@svs-wright-young-2024]. Wright's affiliation is Universities Space Research Association and the Scientific Visualization Studio, Goddard Space Flight Center, Code 606.4. Young is Associate Director for Science, Heliophysics Science Division, Code 670. Wright's ORCID is 0000-0002-5970-5019. The article is open access under the Creative Commons Attribution 4.0 licence and carries an online animation as supplementary material [@svs-wright-young-2024].
 
-Crossref confirms the DOI, the authorship and the issue date [@svs-crossref-wright], and the paper is indexed as gold open access under a CC BY licence [@svs-wright-young-2024]. NASA's September 2024 announcement [@svs-nasa-accurate-maps-article] and the USRA newsroom release [@svs-usra-newsroom-2024] both give the title and journal. No preprint exists: there is no arXiv version, and the ADS EPRINT link for bibcode 2024AJ....168..163W does not resolve.
+Crossref confirms the DOI, the authorship and the issue date [@svs-crossref-wright], and the paper is indexed as gold open access under a CC BY licence [@svs-wright-young-2024]. NASA's September 2024 announcement [@svs-nasa-accurate-maps-article] and the USRA newsroom release [@svs-usra-newsroom-2024] both give the title and journal. The bibliography records the published paper, rather than a verified preprint version.
 
-Quotations below are from the publisher's PDF as captured by the Internet Archive on 2024 November 19; the article page itself is not retrievable without a browser session [@svs-wright-young-2024].
+Quotations use the publisher's PDF preserved in the Internet Archive snapshot of 2024 November 19 [@svs-wright-young-2024].
 
 ## What the paper claims
 
@@ -65,7 +65,7 @@ The datasets are named precisely. "As of this writing, the highest-quality lunar
 
 The coordinate frame is stated: "LRO data are tied to the Moon Mean Earth (Moon ME) frame as realized by the Jet Propulsion Laboratory Developmental Ephemeris 421 (DE421)". The origin of longitude is the mean sub-Earth point, latitudes are [?planetocentric-latitude] because the DEM elevations are relative to a sphere, and the axes follow the modern convention with $x$ through longitude 0, $z$ north, $y$ east [@svs-wright-young-2024]. The LRO project's coordinate document confirms the ME system, the 1737.4 km reference radius and the selection of DE421 [@svs-lro-coordinate-system-2008].
 
-Resolution of the profile: "An L of 18,000 elements has a resolution of 0.02 degrees (roughly 600 m) and pairs well with DEMs of 240 m resolution." Too large an array "may include points not on the limb", too small "will miss small valleys" [@svs-wright-young-2024]. The 240 m figure corresponds to the 128 pixel per degree subsample of SLDEM2015, not the full 512 pixel per degree product.
+Resolution of the profile: "An L of 18,000 elements has a resolution of 0.02 degrees (roughly 600 m) and pairs well with DEMs of 240 m resolution." Too large an array "may include points not on the limb", too small "will miss small valleys" [@svs-wright-young-2024]. The 0.02-degree spacing corresponds to about 600 m along the lunar circumference. It is a sampling interval. Terrestrial edge uncertainty also depends on terrain, viewing geometry, interpolation, solar radius and map resolution [@svs-wright-young-2024]. The 240 m figure corresponds to the 128 pixel per degree subsample of SLDEM2015, not the full 512 pixel per degree product.
 
 Cost control: creating a profile for every observer "is prohibitively expensive on modest computing hardware. A reasonable compromise is to create a profile for the observer on the shadow axis at time steps of a few minutes, or whenever a libration angle has changed by some small threshold, say 0.01 degrees." Only DEM points within 75 to 105 degrees east and west longitude in SLDEM and a 450 km wide swath through each polar LDEM are processed. Libration in latitude is always small during solar eclipses because they occur near the nodes [@svs-wright-young-2024].
 
@@ -118,7 +118,7 @@ The proposed criterion is that [?broken-annular] locations are the locus of poin
 
 $$\max(L) - \min(L) > \delta,$$
 
-valid only at locations that have already failed both the totality and annularity tests [@svs-wright-young-2024]. Three examples are given. The 1894 April 6 eclipse "is never actually total, spending 2 hr as a broken annular over a span of nearly 5400 km". The 2005 April 8 hybrid has totality "flanked by more than 1300 and 730 km of broken annularity". The 2013 November 3 hybrid "has no true annular phase". Figure 13 maps the 2005 path assuming $r$ = 696,000 km and simulates Baily's beads at 1 s intervals from 21:55:26 to 21:55:32 UTC as seen from 94.02587 W, 6.45677 N. The SVS release of that simulation runs in real time from 21:55:20.5 to 21:55:35.5 UTC [@svs-5365-broken-annular].
+This is the compact criterion printed by the paper, for locations that have failed both totality and annularity tests. The comparison requires a common angular normalisation: $L$ earlier stores radians, while $\delta$ is in apparent solar radii. The criterion is not observationally validated in this corpus. Its intended normalisation requires confirmation before implementing it [@svs-wright-young-2024]. Three examples are given. The 1894 April 6 eclipse "is never actually total, spending 2 hr as a broken annular over a span of nearly 5400 km". The 2005 April 8 hybrid has totality "flanked by more than 1300 and 730 km of broken annularity". The 2013 November 3 hybrid "has no true annular phase". Figure 13 maps the 2005 path assuming $r$ = 696,000 km and simulates Baily's beads at 1 s intervals from 21:55:26 to 21:55:32 UTC as seen from 94.02587 W, 6.45677 N. The SVS release of that simulation runs in real time from 21:55:20.5 to 21:55:35.5 UTC [@svs-5365-broken-annular].
 
 ## The solar radius
 
@@ -128,7 +128,7 @@ The paper argues the [?nominal-solar-radius] "does not provide the solar radius 
 
 The sensitivity statement is quotable: "a discrepancy of 1 s in duration, for example, corresponds to an error as small as 20 km (0.03 arcseconds) in solar radius" for points very close to the path limits [@svs-wright-young-2024]. The paper recounts the March 2024 episode in which John Irwin's map, "based on a solar radius of 959.95 arcseconds", shifted the northern limit "to the southeast by several city blocks compared to maps calculated with the conventional radius", and dozens of journalists asked whether NASA would revise its map [@svs-wright-young-2024]. It did not. See [svs-vs-other-predictors.md](svs-vs-other-predictors.md).
 
-The paper does not say which solar radius the 2024 NASA map used. The SVS product pages for 2017 state 696,000 km [@svs-4515-2017-path], and the paper's Figure 13 uses the same value, so the working assumption is that all SVS maps to date use 696,000 km, which is 959.63 to 959.645 arcseconds depending on the au conversion used.
+The paper does not say which solar radius the 2024 NASA map used. The SVS product pages for 2017 state 696,000 km [@svs-4515-2017-path], and the paper's Figure 13 uses the same value, so the working assumption is that all SVS maps to date use 696,000 km, which is 959.63 to 959.645 arcseconds depending on whether the angular conversion uses arctangent or arcsine.
 
 ## Appendix A, the software stack
 
@@ -144,7 +144,7 @@ which return the observer's Moon distance and the Moon ME sub-observer longitude
 
 The observer is placed with `georec_c(lon, lat, h, earth_r, flattening, obs)`, where $h$ is ellipsoid height, and rotated to the ICRF with `pxform_c("ITRF93", "ICRF", t, omat)` using `earth_latest_high_prec.bpc`. The paper warns that "SPICE Earth orientation kernels are less reliable or nonexistent for times in the future or before 1962" and gives the SOFA equivalent, `iauC2t06a(tta, ttb, uta, utb, xp, yp, omat_inv)` followed by a transpose [@svs-wright-young-2024]. This is where [?delta-t] enters: it is implicit in the [?eop] kernel rather than a stated number. The SVS 2017 pages state the value that resulted, $\Delta T$ = 68.917 s, and describe the kernel as "earth_070425_370426_predict.bpc (ΔT corrected)" [@svs-4515-2017-path].
 
-The ephemeris is therefore DE440 at the time of writing the paper, while every SVS product page from 2015 through 2025 lists DE421 as its dataset [@svs-5123-2024-map] [@svs-5510-mar-2025-partial-map]. Both cannot be true for the same run. The likely reading is that the maps were made with DE421 and the paper's appendix was written against the current kernel set. The difference between DE421 and DE440 in the Moon's geocentric position in 2024 is far below the 600 m limb-profile resolution, so the choice has no visible effect on the products.
+Appendix A specifies DE440, whereas the compared product-page dataset lists name DE421 [@svs-wright-young-2024] [@svs-5123-2024-map] [@svs-5510-mar-2025-partial-map]. These artefacts do not identify the exact kernel for each released run. A run manifest or author statement is needed. Lunar sampling distance supplies no bound on a DE421-versus-DE440 path displacement.
 
 Nothing in the paper or on any SVS page mentions Maya, RenderMan or any commercial renderer for the eclipse calculation itself. The 2017 shapefile page says only that "the map was rendered in animation software, but maps are more typically created using GIS tools" [@svs-4518-2017-map-shapefiles]. The 2015 page says the Besselian method "was adapted to the routines available in NAIF's SPICE software library" [@svs-4314-2017-usa].
 
@@ -156,7 +156,7 @@ Nothing in the paper or on any SVS page mentions Maya, RenderMan or any commerci
 - **No Earth DEM named.** SVS pages credit SRTM [@svs-4517-umbra-shapes].
 - **No numerical comparison** with Espenak or Jubier. The only comparison is the qualitative "several city blocks" against Irwin's map.
 - **No stated uncertainty** in kilometres for its own path edges. NASA's public statement during the 2024 dispute acknowledged "a tiny but real uncertainty about the size of the Sun" and that "uncertainty in the Earth's rotation can also affect eclipse predictions on this level" [@svs-cnn-wattles-2024].
-- **No code release.** See the searches described in [svs-products-and-data.md](svs-products-and-data.md).
+- **No source release linked by the compared artefacts.** See [svs-products-and-data.md](svs-products-and-data.md).
 
 ## Prior art the paper builds on
 
@@ -192,11 +192,11 @@ Read the paper's sections 4 and 5 first. They are complete enough to implement. 
 
 ## What this changes
 
-For the pipeline design this replaces the "limb correction as a post-processing step on Besselian contacts" model with a per-pixel test. The path limits, central line, duration contours and obscuration contours are all derived products of a raster stack, which means one code path produces every map layer. It also establishes that the limb profile, not the ephemeris, sets the resolution floor at about 600 m, and that the solar radius, not the limb, is the dominant unresolved uncertainty at the limits.
+For the pipeline design, a per-pixel limb test generates the raster stack from which map layers are derived. The 18,000-element profile's 0.02-degree spacing is about 600 m along the Moon, a sampling interval rather than a path-edge accuracy bound. Radius uncertainty, terrain, viewing geometry, interpolation and raster resolution all enter the edge assessment [@svs-wright-young-2024].
 
 ## Open questions
 
 - **The 2024 run's $\Delta T$ and ephemeris.** Obtain the SVS API JSON for page 5123 or an author statement to settle whether DE421 or DE440 and which EOP kernel produced the 2024 shapefiles.
 - **The Earth DEM resolution used.** SRTM exists at 1 and 3 arcseconds. The paper's 240 m lunar pairing suggests a coarse Earth grid, but the map pixel size for 2024 is unstated. The insolation dataset is at 360/8192 degrees per pixel [@svs-5248-insolation-2024], which may be the shadow-raster grid.
 - **A test of the broken-annular criterion against observation.** The 1986 October 3 and 2023 April 20 eclipses have observers. Compare the criterion's locus with the reported bead sequences.
-- **The unpublished code.** Ask the author whether the C code can be released. Until then the shapefiles are the only ground truth.
+- **The unpublished code.** Ask the author whether the C code can be released. The released shapefiles remain reference products for the raster method. Observed contacts and other limb-corrected products provide independent validation [@val-quaglia-2021].

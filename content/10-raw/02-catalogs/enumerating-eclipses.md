@@ -3,7 +3,7 @@ title: Enumerating eclipses
 description: Compare Meeus's approximate eclipse search with ephemeris-based algorithms, including classification, Saros numbering and ΔT limits.
 order: 1
 status: working
-updated: 2026-09-15
+updated: 2026-09-30
 tags: [enumeration, meeus, five-millennium-canon, saros, inex, delta-t]
 seo_title: Finding Solar Eclipses: Meeus and Ephemeris Algorithms
 ---
@@ -151,7 +151,7 @@ The correction is $-202$ s at $-2000$, $-49$ s at 0 and $-14$ s at $+3000$, and 
 
 Section 1.6 of the canon: "the lunar ephemeris is accurate to better than an arcsecond within several centuries of the present. Even for eclipses occurring in the year −1999 (2000 BCE), the Moon's position is correct to within a small fraction of a degree. Such positional discrepancies correspond to errors in predicted eclipse paths that are below the resolution threshold of the maps." Then: "A far greater source of error in the geographic position of eclipse paths is due to the uncertainty in ΔT. ... Because 1° in longitude corresponds to 4 min of time, a ΔT value of 240 s would shift the eclipse path 1° east of its TD position." Maps whose standard error exceeds 265 s, which is 1.1° of longitude, carry a "reference gore" of two dashed meridians at $\Delta T \pm \sigma$: "The years prior to +0001 and after +2300 have uncertainties of this magnitude or greater." The worked example is the total eclipse of $-1996$ Oct 04 at 23:24 TD with $\Delta T = 46{,}358$ s and $\sigma = \pm 3{,}712$ s, so the map may be rotated $\pm 15.5^{\circ}$ [@cat-espenak-meeus-2006-canon].
 
-The standard error model is Morrison and Stephenson's $\sigma = 0.8\,t^2$ s with $t = (\text{year} - 1820)/100$, valid $-1000$ to $+1200$, giving 636 s at $-1000$, 265 s at 0 and 31 s at $+1200$. Outside that span the catalogue uses Huber's Brownian-drift model, $\sigma = 365.25\,N\,\sqrt{(N Q / 3)(1 + N/M)} / 1000$ s with $N$ years from the calibration year ($-500$ for the past, 2005 for the future), $M = 2500$ years and $Q = 0.058$ ms²/yr, giving 6,094 s at $-2000$ and 20,717 s at $-4000$ [@cat-espenak-meeus-2009-catalog] [@cat-nasa-uncertainty].
+The standard error model is Morrison and Stephenson's $\sigma = 0.8\,t^2$ s with $t = (\text{year} - 1820)/100$, valid $-1000$ to $+1200$, giving 636 s at $-1000$, 265 s at 0 and 31 s at $+1200$. Outside that span the catalogue uses Huber's Brownian-drift model, $\sigma = 365.25\,N\,\sqrt{(N Q / 3)(1 + N/M)} / 1000$ s with $N$ years from the calibration year ($-500$ for the past, 2005 for the future), $M = 2500$ years and $Q = 0.058$ ms²/yr, giving 3,732 s at −2000 and 16,291 s at −4000 [@cat-espenak-meeus-2009-catalog] [@cat-nasa-uncertainty].
 
 Stephenson, Morrison and Hohenkerk 2016 later revised the analysis: the length of day "increases at an average rate of +1.8 ms per century. This is significantly less than the rate predicted on the basis of tidal friction, which is +2.3 ms per century", with a long-term parabola $\Delta T = -320.0 + (32.5 \pm 0.6)\,((\text{year} - 1825)/100)^2$ s, "some indication of an oscillation in the lod with a period of roughly 1500 years", and the lunar acceleration implicit in JPL DE430 given as $-25.82$ arcseconds per century squared. Their method for untimed records: "a report that an eclipse was total or near-total at a known place fixes the rotational frame of the Earth" [@cat-stephenson-2016]. The NASA catalogue predates this and uses the 2004 splines and the $-20 + 32u^2$ parabola. A modern product should state which it adopts.
 

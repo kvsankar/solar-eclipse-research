@@ -3,7 +3,7 @@ title: SVS versus Espenak, Jubier and Irwin
 description: Compare NASA SVS eclipse paths with Espenak, Jubier and Irwin predictions, including solar radius choices, ΔT and measured path differences.
 order: 3
 status: working
-updated: 2026-09-15
+updated: 2026-09-30
 tags: [svs, espenak, jubier, irwin, solar-radius, delta-t, comparison]
 seo_title: NASA SVS versus Espenak, Jubier and Irwin Eclipse Maps
 ---
@@ -11,7 +11,7 @@ seo_title: NASA SVS versus Espenak, Jubier and Irwin Eclipse Maps
 ::: summary
 - **Two NASA maps disagree** for 2024 because Espenak's eclipse.gsfc.nasa.gov predictions use a smooth Moon and a sea-level Earth, and SVS uses the LOLA limb and SRTM terrain. Espenak's site says limb corrections "may shift the limits ... by ~1-3 kilometers, and change the eclipse duration by ~1-3 seconds" [@svs-espenak-2024-path].
 - **The solar radius** is the other axis of disagreement. SVS and Espenak use 696,000 km (959.63 arcseconds). Irwin and Quaglia use 959.95 plus or minus 0.05 arcseconds (696,221 km). The larger Sun narrows the path by "several city blocks" at each limit [@svs-irwin-quaglia-2024-technical] [@svs-wright-young-2024].
-- **The ephemerides differ but do not matter** at this level: the "VSOP87/ELP2000-85" the NASA eclipse site's 2024 element page names, with $\Delta T$ = 70.6 s, DE405 with $\Delta T$ = 71.5 s on EclipseWise, DE421 or DE440 with $\Delta T$ from IERS kernels at SVS, DE440 with TT minus UT1 = 69.2015 s at Besselian Elements [@svs-espenak-2024-besselian] [@svs-eclipsewise-2024-prime] [@svs-irwin-quaglia-2024-technical].
+- **The predictors use different ephemeris and Earth-orientation inputs.** NASA's SEbeselm page, EclipseWise, SVS product metadata and the SVS paper identify different runs. Their contribution to a residual requires matched-input comparison, rather than dismissal against lunar profile spacing [@svs-espenak-2024-besselian] [@svs-eclipsewise-2024-prime] [@svs-wright-young-2024].
 - **Jubier and Zeiler** produced limb-corrected umbra shapes before SVS, and Zeiler reports "good agreement despite a different computational process" when compared with Wright's 2017 results [@svs-zeiler-double-diamond].
 - **NASA did not revise its 2024 map.** Its statement said "a few city blocks one way or the other could mean 20, 10, or 0 seconds of totality" [@svs-cnn-wattles-2024].
 :::
@@ -28,11 +28,11 @@ The full side-by-side of which predictor uses which ephemeris, ΔT, radius, limb
 | EclipseWise, Espenak [@svs-eclipsewise-2024-prime] | JPL DE405 | 71.5 s | not stated on the page | $k$ = 0.2725076 penumbra, 0.2722810 umbra, no limb | ellipsoid, sea level |
 | NASA SVS, Wright [@svs-4515-2017-path] [@svs-wright-young-2024] | DE421 on product pages, DE440 in the paper's appendix | IERS EOP kernel, 68.917 s in 2017, unstated for 2024 | 696,000 km, 959.645 arcseconds | 1737.4 km datum plus SLDEM2015 and the polar LDEM limb profile | WGS 84, EGM96, SRTM terrain |
 | Besselian Elements, Irwin and Quaglia [@svs-irwin-quaglia-2024-technical] | JPL DE440 | IAU2006A with EOP, TT minus UT1 = 69.2015 s, UT1 minus UTC = minus 0.0175 s, polar motion (minus 0.015, plus 0.359) arcseconds | 696,221 plus or minus 36 km, 959.95 plus or minus 0.05 arcseconds | 1738.091 km mean plus SLDEM2015 and the LOLA LDEM at 256 and 128 pixels per degree, ME421 orientation relative to PA440 | WGS 84 at 6378.137 and 6356.752 km, Earth2014 at 60 pixels per degree plus EGM96 |
-| Jubier, interactive maps and Solar Eclipse Maestro [@svs-jubier-google-maps] | not stated on the pages read | not stated | not stated | limb profile and Baily's beads simulation offered per site | terrain elevation profile offered per site |
+| Jubier, 2024 interactive map [@sw-jubier-2024-map] [@sw-jubier-calc-js] | Canon coefficient array, separate from SEbeselm run | 69.1 s | 959.63 arcseconds per map help | server-side limb corrections, Watts/Kaguya interface | per-site elevation profile |
 
 The Irwin and Quaglia row is transcribed from the parameter table image on their technical page, which also lists the astrometric method as "light-time + gravitational light deflection + planetary aberration", the origin as "hybrid (topocentric & geocentric)", and the software as "EclipseView, LimbView & SkyWare (proprietary)" [@svs-irwin-quaglia-2024-technical].
 
-Jubier's constants are not published in any retrievable form: the interactive pages build themselves in the browser, and the Internet Archive capture of the 2024 map holds only the loader. His site index describes per-click "lunar limb profile and Baily's beads" and "terrain elevation profile" features without naming datasets [@svs-jubier-google-maps]. The paper credits Jubier's software as the engine behind Zeiler's limb-corrected maps since 2012 and cites Jubier et al. 2021 for a solar radius of 959.98 arcseconds, from a presentation whose PDF link now returns 404 [@svs-wright-young-2024].
+Jubier's 2024 coefficient array, ΔT = 69.1 s, map solar radius and client/server limb interface are documented in [commercial and institutional tools](../09-software-and-repos/commercial-and-institutional-tools.md#xavier-jubier). Maestro's limb datasets and 1738.091 km reference sphere are documented in [limb profile methods](../05-lunar-limb/limb-profile-methods.md). The run-specific server limb algorithm remains unpublished in those sources [@sw-jubier-calc-js] [@sw-jubier-2024-map].
 
 ## The limb and terrain difference
 
@@ -40,11 +40,11 @@ Espenak's own caveat sets the scale. The 2024 path page states that the predicti
 
 The terrain term is SVS's addition. On 2017 August 21 western elevations shifted the umbra "toward the southeast (in the direction of the Sun's azimuth) by as much as 3 kilometers" [@svs-4517-umbra-shapes], and the paper's Figure 1 shows a 1.5 km shift west of Idaho Falls [@svs-wright-young-2024]. The paper's rule of thumb is a shift of $h\cot a$: at 1500 m elevation and 45 degrees solar altitude the shift is 1.5 km, and at 20 degrees altitude it is 4.1 km. None of the Espenak products model this. Irwin's map does, with Earth2014 at 60 pixels per degree [@svs-irwin-quaglia-2024-technical].
 
-Zeiler's account of the 2017 comparison is the only published cross-check between independent limb-corrected implementations: Wright "independently produced similar lunar limb corrected umbral figures", and when Zeiler and Wright compared results they "found good agreement despite a different computational process" [@svs-zeiler-double-diamond]. No number is given.
+Zeiler's account of the 2017 comparison is a published qualitative cross-check between independent limb-corrected implementations: Wright "independently produced similar lunar limb corrected umbral figures", and when Zeiler and Wright compared results they "found good agreement despite a different computational process" [@svs-zeiler-double-diamond]. No number is given.
 
 ## The solar radius difference
 
-The 2024 dispute was entirely about the solar radius. Irwin's map, published on the Besselian Elements site in March 2024, "incorporates adjustments that account for the topographic elevation, both around the limb of the Moon and on the surface of the Earth", and draws "true limb eclipse limits" in orange with error bars against "traditional smooth limits" in red [@svs-irwin-2024-path]. The technical page explains the difference from NASA: it uses "an improved solar radius S equivalent to 959.95 arcseconds at 1 a.u. This is a better value to use than the 'standard' solar radius S = 959.63 arcseconds usually used in eclipse maps", backed by "recent determinations collected during solar eclipses, some by us", plus "the most recent determinations of certain other parameters ... mainly the Earth's orientation parameters" [@svs-irwin-quaglia-2024-technical]. The measurement behind 959.95 is Quaglia, Irwin, Emmanouilidis and Pessi 2021, from flash-spectrum video at the southern limit of the 2017 path [@svs-quaglia-2021-apjs].
+The 2024 public comparison focused on solar radius, while the predictors also differed in Earth orientation and limb/terrain treatment. Irwin's map, published on the Besselian Elements site in March 2024, "incorporates adjustments that account for the topographic elevation, both around the limb of the Moon and on the surface of the Earth", and draws "true limb eclipse limits" in orange with error bars against "traditional smooth limits" in red [@svs-irwin-2024-path]. The technical page explains the difference from NASA: it uses "an improved solar radius S equivalent to 959.95 arcseconds at 1 a.u. This is a better value to use than the 'standard' solar radius S = 959.63 arcseconds usually used in eclipse maps", backed by "recent determinations collected during solar eclipses, some by us", plus "the most recent determinations of certain other parameters ... mainly the Earth's orientation parameters" [@svs-irwin-quaglia-2024-technical]. The measurement behind 959.95 is Quaglia, Irwin, Emmanouilidis and Pessi 2021, from flash-spectrum video at the southern limit of the 2017 path [@svs-quaglia-2021-apjs].
 
 The size of the effect, stated by the parties:
 
@@ -74,7 +74,7 @@ SVS's own 2017 pages show the same mechanism: $\Delta T$ = 68.917 s and Delta UT
 | Terrain | Umbra shifts toward the Sun's azimuth by $h\cot a$, up to 3 km in the 2017 west | [@svs-4517-umbra-shapes] |
 | Solar radius | None between SVS and Espenak, both 696,000 km. Irwin's 959.95 narrows the path by about 0.6 km per limit | [@svs-irwin-quaglia-2024-technical] [@svs-cnn-wattles-2024] |
 | $\Delta T$ | Longitude shift of order 0.5 km between predicted and observed values | [@svs-espenak-2024-besselian] [@svs-irwin-quaglia-2024-technical] |
-| Ephemeris | Negligible at the 600 m limb-profile resolution | [@svs-wright-young-2024] |
+| Ephemeris | Requires a matched-epoch, matched-frame comparison; lunar sampling interval is not a ground-position bound | [@svs-wright-young-2024] |
 | Lunar radius convention | Espenak's two $k$ values approximate the limb, SVS uses the DEM directly | [@svs-espenak-radius-reference] |
 
 ## Sources compared
@@ -85,14 +85,14 @@ SVS's own 2017 pages show the same mechanism: $\Delta T$ = 68.917 s and Delta UT
 | Espenak Besselian elements [@svs-espenak-2024-besselian] | The polynomial elements, $\Delta T$ = 70.6 s and the two $k$ values. |
 | Espenak radius reference [@svs-espenak-radius-reference] | The rationale for $k$ = 0.272281 on umbral contacts. |
 | EclipseWise [@svs-eclipsewise-2024-prime] | DE405 and $\Delta T$ = 71.5 s, showing Espenak's two sites differ from each other. |
-| Irwin and Quaglia technical table [@svs-irwin-quaglia-2024-technical] | The only fully itemised parameter set of any predictor, including EOP values and DEM resolutions. |
+| Irwin and Quaglia technical table [@svs-irwin-quaglia-2024-technical] | An itemised parameter set including EOP values and DEM resolutions. |
 | CNN, Wattles [@svs-cnn-wattles-2024] | NASA's official response and Guinan's "couple thousand feet". |
 | Zeiler [@svs-zeiler-double-diamond] | The 2017 cross-check between Wright and Jubier-based maps. |
 | Wright and Young [@svs-wright-young-2024] | The 0.03 arcseconds per second sensitivity and the list of measured radii. |
 
 ## What a developer should do
 
-Make the solar radius a named parameter with a default and a documented alternative: 696,000 km (959.63 arcseconds) to reproduce SVS and Espenak, 959.95 arcseconds to reproduce Irwin. Report both limits on any map intended for observers near the edge. Take $\Delta T$ from IERS Bulletin A or a SPICE EOP kernel rather than a long-range prediction, and state the value used. Implement the limb from the DEM rather than through a second $k$. Do not expect ephemeris choice among DE421, DE430, DE440 to change anything at the 100 m level. For validation, compare your umbra polygons with SVS umbra_hi, your smooth-model limits with Espenak's path table, and your limb-corrected limits with Irwin's orange lines, in that order.
+Make the solar radius a named parameter with a default and a documented alternative: 696,000 km (959.63 arcseconds) to reproduce SVS and Espenak, 959.95 arcseconds to reproduce Irwin. Report both limits on any map intended for observers near the edge. Take $\Delta T$ from IERS Bulletin A or a SPICE EOP kernel rather than a long-range prediction, and state the value used. Implement the limb from the DEM rather than through a second $k$. Measure ephemeris-choice effects at the same epoch and reduction level before assigning them a numerical bound. For validation, compare your umbra polygons with SVS umbra_hi, your smooth-model limits with Espenak's path table, and your limb-corrected limits with Irwin's orange lines, in that order.
 
 ## What this changes
 
@@ -101,7 +101,7 @@ It fixes the error budget for the pipeline. At the path limits the limb contribu
 ## Open questions
 
 - **A quantitative SVS versus Irwin comparison.** Obtain Irwin's 2024 limit polylines, or the Besselian Elements app's output, and difference them against SVS upath_hi at fixed longitudes.
-- **Jubier's constants.** Read the Solar Eclipse Maestro help pages or the interactive map's info panel in a browser to record his ephemeris, $\Delta T$, solar radius and limb dataset.
+- **Jubier's server limb algorithm.** Obtain the run-specific dataset versions and contact-solver definition behind `WattsChartCorrections.php`. The public coefficient array and Maestro reference-sphere constants are already documented in the linked notes.
 - **Espenak's solar radius.** Neither page read here states the arcsecond value. The open question is kept in [solar radius values](../06-solar-radius/solar-radius-values.md), which is the home for the radius question.
 - **The 2017 Zeiler and Wright comparison.** Ask either party for the numerical residuals.
 - **Observed 2024 limits.** The Quaglia and Irwin team collected limit observations in 2024. Their published reduction would settle which radius the 2024 path actually followed.

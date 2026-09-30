@@ -3,17 +3,17 @@ title: Contact times, magnitude and position angles from Besselian elements
 description: Besselian formulas for local solar eclipse contact times, magnitude, obscuration and position angles, compared with NASA's JavaScript code.
 order: 1
 status: working
-updated: 2026-09-15
+updated: 2026-09-30
 tags: [local-circumstances, besselian, contacts, magnitude, obscuration, position-angle]
 seo_title: Eclipse Contact Time, Magnitude and Obscuration Formulas
 ---
 
 ::: summary
-- **The whole reduction is eight formulas.** Project the observer onto the [?fundamental-plane] as $(\xi,\eta,\zeta)$ and subtract from the shadow-axis coordinates $(x,y)$ to get $(u,v)$. Shrink the shadow radii to the observer's plane with $L' = L - \zeta\tan f$. Solve $u^2+v^2 = L'^2$ for the contacts and $uu'+vv'=0$ for maximum eclipse. The 1961 Explanatory Supplement gives every one of them [@loc-es1961-local].
+- **The local reduction gives contacts and closest approach.** Project the observer onto the [?fundamental-plane] as $(\xi,\eta,\zeta)$ and subtract from $(x,y)$ to get $(u,v)$. Reduce the shadow radii with $L'=L-\zeta\tan f$. Contacts solve $u^2+v^2=L'^2$. The condition $uu'+vv'=0$ gives closest approach, which seeds a search for maximum magnitude or obscuration with changing radii [@loc-es1961-local] [@loc-jsex-program-js] [@loc-eclipse-engine].
 - **NASA's JavaScript Solar Eclipse Explorer (JSEX) is that method in 1200 lines of GPL code.** Its `program.js` computes $\rho\sin\phi'$ with $b/a = 0.99664719$ and $a = 6378140$ m, and the hour angle as $\mu - \lambda_W - \Delta T/13713.44$. It iterates each contact with a Newton step until the correction is below $10^{-6}$ h, and reports P, V, altitude, azimuth, magnitude, obscuration and duration [@loc-jsex-program-js].
 - **Magnitude has two branches.** In the penumbra it is $(L_1'-m)/(L_1'+L_2')$, the fraction of the solar diameter covered. Inside the umbra or antumbra it is $(L_1'-L_2')/(L_1'+L_2')$, the ratio of the apparent diameters. NASA tables and every code read here switch branches at $m = |L_2'|$ [@loc-es1961-local] [@loc-nasa-locirc-2001].
-- **Obscuration is a lens area, never a linear function of magnitude.** With the solar radius as unit and $s$ the lunar radius, $S' = (s^2 A + B - s\sin C)/\pi$ where $A$, $B$, $C$ are the angles of the triangle formed by the two centres and an intersection point [@loc-es1961-local]. A 0.5 magnitude with equal radii hides about 39 per cent of the disc.
-- **The position angle $P$ of a contact is $\tan P = u/v$ at the contact instant,** measured eastward from the north point, with the sign of $\sin P$ reversed for the interior contacts of a total eclipse because $L_2 < 0$. The 1961 Supplement writes this angle $Q$. The vertex angle is $V = P - C$ with $\tan C = \xi/\eta$ the parallactic angle [@loc-es1961-local] [@loc-buchanan-1904].
+- **Obscuration is a lens area, never a linear function of magnitude.** The two-disc area formula gives about 39 per cent coverage at magnitude 0.5 for equal apparent radii [@loc-es1961-local].
+- **The position angle $P$ of a contact is $\tan P = u/v$ at the contact instant,** measured eastward from the north point, with the sign of $\sin P$ reversed for the interior contacts of a total eclipse because $L_2 < 0$. The 1961 Supplement writes this angle $Q$. The vertex angle is $V = P - q_{\mathrm{par}}$ with $\tan q_{\mathrm{par}} = \xi/\eta$ the parallactic angle [@loc-es1961-local] [@loc-buchanan-1904].
 - **The direct numerical alternative needs no auxiliary angles.** Tabulate $u^2+v^2-L^2$ at equal time steps and inverse-interpolate its zero. The 1992 Explanatory Supplement recommends it as simpler and free of the constant-velocity assumption [@loc-es1992-ch8].
 - **Nothing in this reduction knows about the lunar limb, refraction or the solar radius choice.** Those enter through the elements ($k$, the solar radius in $L_1$, $L_2$) and through post-corrections described in [corrections-and-code.md](corrections-and-code.md).
 :::
@@ -25,20 +25,31 @@ seo_title: Eclipse Contact Time, Magnitude and Obscuration Formulas
 Given Besselian elements $x, y, d, \mu, L_1, L_2, \tan f_1, \tan f_2$ as polynomials in $t$ about $t_0$ in [?tt], the $\Delta T$ they were computed with, and an observer $(\phi, \lambda, h)$:
 
 1. **Observer constants.** $\rho\sin\phi'$ and $\rho\cos\phi'$ from the geodetic latitude, the spheroid and the height [@loc-es1961-local].
-2. **Hour angle.** $\theta = \mu(t) - \lambda - 1.002738\,\Delta T$ with west longitude positive [@loc-es1961-local].
+2. **Hour angle.** $\theta = \mu(t) - \lambda_W - (1.002738\times15/3600)\,\Delta T$ with $\theta$, $\mu$ and west longitude $\lambda_W$ in degrees and ΔT in seconds. This applies to ephemeris-meridian elements. Do not subtract ΔT again if $\mu$ already uses UT1 [@loc-es1961-local] [@loc-jsex-program-js].
 3. **Fundamental-plane position.** $\xi$, $\eta$, $\zeta$ and their rates $\xi'$, $\eta'$ [@loc-es1961-local].
 4. **Relative coordinates.** $u = x - \xi$, $v = y - \eta$, their rates, $m$, $n$, and the observer's-plane radii $L_1' = L_1 - \zeta\tan f_1$, $L_2' = L_2 - \zeta\tan f_2$ [@loc-es1961-local].
-5. **Maximum eclipse.** Iterate $t \leftarrow t - (uu' + vv')/n^2$ to convergence [@loc-jsex-program-js].
+5. **Closest approach and maximum.** Iterate $t \leftarrow t-(uu'+vv')/n^2$ to closest approach. Then optimise the requested magnitude or obscuration with time-dependent radii [@loc-jsex-program-js] [@loc-eclipse-engine].
 6. **Eclipse type at the site.** None if $m \ge L_1'$. Partial if $m < L_1'$. Central if $m < |L_2'|$, total when $L_2' < 0$ and annular when $L_2' > 0$ [@loc-jsex-program-js].
 7. **Contacts.** Roots of $m(t) = L_1'(t)$ for C1 and C4 and of $m(t) = |L_2'(t)|$ for C2 and C3, by the auxiliary-angle Newton step $t \leftarrow t - D/n^2 \pm L'\cos\psi/n$ or by bracketing and inverse interpolation [@loc-es1961-local] [@loc-es1992-ch8].
 8. **Magnitude.** $(L_1' - m)/(L_1' + L_2')$ in the penumbra, $(L_1' - L_2')/(L_1' + L_2')$ inside the umbra or antumbra [@loc-es1961-local] [@loc-nasa-locirc-2001].
 9. **Obscuration.** Lens area with $s = (L_1' - L_2')/(L_1' + L_2')$, $S' = (s^2A + B - s\sin C)/\pi$, or $s^2$ for annular and 1 for total [@loc-es1961-local].
-10. **Position angles.** At each contact $P = \text{atan2}(u, v)$ with the sign reversed for the interior contacts of a total eclipse, and $V = P - C$ with $\tan C = \xi/\eta$ [@loc-es1961-local].
+10. **Position angles.** At each contact $P = \text{atan2}(u, v)$ with the sign reversed for the interior contacts of a total eclipse, and $V = P - q_{\mathrm{par}}$ with $q_{\mathrm{par}}=\operatorname{atan2}(\xi,\eta)$ [@loc-es1961-local].
 11. **Altitude and azimuth** from $d$, $\theta$, $\phi$. Flag or replace contacts below the horizon by sunrise or sunset [@loc-jsex-program-js].
 12. **Duration** $t_{C3} - t_{C2}$, and **UT** by subtracting $\Delta T$ from every time [@loc-es1961-local].
 13. **Corrections**, reported separately: solar radius, limb profile at C2 and C3, current $\Delta T$, height, refraction flag. Their sizes are in [corrections and code](corrections-and-code.md) [@loc-nasa-limb-help].
 
-The rest of this note is those steps with their symbols, constants and the JSEX code.
+The formulas quoted below retain each source's notation within its section. The implementation uses these translations [@loc-es1961-local] [@limb-herald-1983].
+
+| Source symbol and scope | Symbol used here | Meaning |
+|---|---|---|
+| Supplement $C$ in observer constants | $C_{\mathrm{ell}}$ | Ellipsoid auxiliary, $C_{\mathrm{ell}}=(1-e^2\sin^2\phi)^{-1/2}$ |
+| Supplement $S$ in observer constants | $S$ | Ellipsoid auxiliary, $S=(1-e^2)C_{\mathrm{ell}}$ |
+| Supplement $Q$ in contacts | $P$ | Contact position angle |
+| Supplement $C$ in vertex angles | $q_{\mathrm{par}}$ | Parallactic angle |
+| Supplement $A,B,C,S'$ in lens area | Source-local notation in the obscuration section | Lunar-centre, solar-centre and intersection angles, and covered area fraction |
+| Herald $P$ in the solar-limb curve | $C$ | Angular offset from nominal contact |
+
+The site's $Q$ denotes a global shadow-edge angle. It is distinct from the Supplement's contact-angle $Q$.
 
 ![Every symbol in the reduction is a length in one of two planes. The observer's height ζ above the fundamental plane fixes how far the two shadow radii shrink, and the in-plane difference $(u, v)$ between the observer and the shadow axis fixes everything else.](img/observer-reduction.svg)
 
@@ -46,7 +57,7 @@ The rest of this note is those steps with their symbols, constants and the JSEX 
 
 ### Geocentric coordinates of the site
 
-The 1961 Explanatory Supplement, section 9D, starts from the geodetic latitude $\phi$, the longitude $\lambda$ and the height $H$ above the spheroid [@loc-es1961-local]:
+The 1961 Explanatory Supplement, section 9D, gives the following source-local $C,S$ equations from the geodetic latitude $\phi$, the longitude $\lambda$ and the height $H$ above the spheroid [@loc-es1961-local]:
 
 $$\rho\sin\phi' = (S + H)\sin\phi, \qquad \rho\cos\phi' = (C + H)\cos\phi,$$
 
@@ -66,15 +77,15 @@ so that with $u = \arctan(0.99664719\tan\phi)$ and $h$ the height in metres,
 
 $$\rho\sin\phi' = 0.99664719\sin u + \frac{h}{6378140}\sin\phi, \qquad \rho\cos\phi' = \cos u + \frac{h}{6378140}\cos\phi.$$
 
-The constant $0.99664719 = 1 - 1/298.257$ is the IAU 1976 polar-to-equatorial ratio and 6378140 m the IAU 1976 equatorial radius. Both forms are the same ellipsoid geometry. Height enters along the local normal in both. The Eclipse-Engine code uses the $C$ and $S$ form with $N = 1/\sqrt{1-e^2\sin^2\phi}$ and a 6378.1366 km radius [@loc-eclipse-engine]. Stellarium takes the rectangular geocentric coordinates of the site from its own Earth model and divides by the equatorial radius [@loc-stellarium-astrocalc].
+The constant $0.99664719 = 1 - 1/298.257$ is the IAU 1976 polar-to-equatorial ratio and 6378140 m the IAU 1976 equatorial radius. Both forms are the same ellipsoid geometry. Height enters along the local normal in both. The Eclipse-Engine code uses the $C_{\mathrm{ell}}$ and $S$ form with $N = 1/\sqrt{1-e^2\sin^2\phi}$ and a 6378.1366 km radius [@loc-eclipse-engine]. Stellarium takes the rectangular geocentric coordinates of the site from its own Earth model and divides by the equatorial radius [@loc-stellarium-astrocalc].
 
 ### Hour angle, longitude and $\Delta T$
 
-Besselian elements are tabulated against Terrestrial (formerly Ephemeris) Time, and $\mu$ is the Greenwich hour angle of the shadow axis at that time scale. The observer's longitude is a Universal Time quantity, so the Supplement converts it to an [?ephemeris-longitude]: "The longitude $\lambda$ must be converted to the ephemeris longitude $\lambda^*$ by increasing it by $1.002738\,\Delta T$, the sidereal equivalent of $\Delta T$" [@loc-es1961-local]. The local hour angle of the axis is then
+NASA-style Besselian elements are tabulated against Terrestrial Time, formerly Ephemeris Time. Their $\mu$ is an ephemeris-meridian hour angle before the ΔT Earth-rotation correction [@loc-jsex-program-js]. The observer's longitude is a Universal Time quantity, so the Supplement converts it to an [?ephemeris-longitude]: "The longitude $\lambda$ must be converted to the ephemeris longitude $\lambda^*$ by increasing it by $1.002738\,\Delta T$, the sidereal equivalent of $\Delta T$" [@loc-es1961-local]. The local hour angle of the axis is then
 
-$$\theta = \mu - \lambda - 1.002738\,\Delta T,$$
+$$\theta = \mu - \lambda_W - (1.002738\times15/3600)\,\Delta T,$$
 
-with west longitude positive and $\Delta T$ expressed as an angle at 15 arcseconds per second.
+with west longitude $\lambda_W$, $\mu$ and $\theta$ in degrees, and ΔT in seconds. The quoted Supplement uses ΔT expressed as an angle at 15 arcseconds per time-second. The explicit factor above supplies that conversion.
 
 The JSEX code is the same statement in radians per second [@loc-jsex-program-js]:
 
@@ -104,7 +115,7 @@ The tabulated $L_1$ and $L_2$ are the penumbral and umbral radii on the fundamen
 
 $$L_1' = L_1 - \zeta\tan f_1, \qquad L_2' = L_2 - \zeta\tan f_2,$$
 
-where $f_1$ and $f_2$ are the half-angles of the penumbral and umbral cones. JSEX stores these as `l1'` and `l2'` in slots 28 and 29 [@loc-jsex-program-js]. Stellarium writes `L1 = L1 - zeta * tf1` [@loc-stellarium-astrocalc]. $L_2'$ is negative when the observer is inside the umbral cone beyond its vertex, the total case, and positive in the antumbral, annular case [@loc-es1961-local].
+where $f_1$ and $f_2$ are the half-angles of the penumbral and umbral cones. JSEX stores these as `l1'` and `l2'` in slots 28 and 29 [@loc-jsex-program-js]. Stellarium writes `L1 = L1 - zeta * tf1` [@loc-stellarium-astrocalc]. $L_2'$ is negative when the observer is inside the umbra between the Moon and its vertex, the total case, and positive in the antumbra beyond the vertex, the annular case [@loc-es1961-local].
 
 Two identities that every code read here relies on follow from the cone geometry: $(L_1' + L_2')/2$ is the apparent solar radius and $(L_1' - L_2')/2$ the apparent lunar radius, both in Earth radii projected on the observer's plane. Eclipse-Engine sets `rSun = (gm.L1 + gm.L2) / 2, rMoon = (gm.L1 - gm.L2) / 2` [@loc-eclipse-engine], and the SR123 simulator does the same [@loc-sr123-eclipse-2026].
 
@@ -123,7 +134,13 @@ with $m$ and $n$ positive. $m$ is the distance from the observer to the shadow a
 
 ### Maximum eclipse
 
-Greatest phase is when $(L_1 - m)/(L_1 + L_2)$ is a maximum. Because $L$ varies very slowly, this is when $m^2$ is a minimum, $uu' + vv' = 0$. With $T = T_0 + t$ and the velocities held constant over $t$,
+Greatest magnitude maximises the reported magnitude formula. The condition
+$uu'+vv'=0$ instead minimises $m^2$. These coincide in the fixed-radius
+approximation. With time-dependent apparent radii, closest approach is a search seed.
+Optimise the requested magnitude or obscuration over the visible interval.
+JSEX labels its closest-approach result as maximum, while Eclipse-Engine
+directly searches magnitude [@loc-jsex-program-js] [@loc-eclipse-engine].
+For $T=T_0+t$ and velocities held constant over $t$, the closest-approach step is
 
 $$t = -\frac{D}{n^2}, \qquad D = u_0 u' + v_0 v',$$
 
@@ -198,7 +215,7 @@ mid[38] = (mid[28] - mid[29]) / (mid[28] + mid[29])          // moon/sun ratio
 if ((mid[39] == 2) || (mid[39] == 3)) { mid[37] = mid[38] }  // umbral: ratio
 ```
 
-$M_1$ continues smoothly into $M_2$ at $m = |L_2'|$ in the total case, since there $L_1' - m = L_1' + L_2'$ only when $L_2' = -m$. In the annular case $M_1 < 1$ at second contact and $M_2 < 1$ throughout, so the reported "magnitude" of an annular eclipse is the diameter ratio, below one. Swiss Ephemeris reports both numbers, `attr[0]` the diameter fraction and `attr[8]` "magnitude acc. to NASA; = attr[0] for partial and attr[1] for annular and total eclipses" [@loc-swephprg].
+At the boundary of totality, $M_1=1$ while $M_2>1$. The reported magnitude switches convention there. For example, $L_1'=1$ and $L_2'=-0.025$ give $M_1=1$ at $m=0.025$, but $M_2=1.051282$. This is arithmetic from the quoted formulas. At the annular-contact boundary the two formulas agree [@loc-es1961-local] [@loc-jsex-program-js]. Swiss Ephemeris reports both numbers, `attr[0]` the diameter fraction and `attr[8]` "magnitude acc. to NASA; = attr[0] for partial and attr[1] for annular and total eclipses" [@loc-swephprg].
 
 ## Obscuration
 
@@ -206,7 +223,7 @@ $M_1$ continues smoothly into $M_2$ at $m = |L_2'|$ in the total case, since the
 
 $$s = \frac{L_1' - L_2'}{L_1' + L_2'},$$
 
-the centre separation is $1 + s - 2M_1 = 2m/(L_1' + L_2')$, and the triangle formed by the two centres $A$ (Moon), $B$ (Sun) and one intersection point $C$ of the two circles has angles
+the centre separation is $1 + s - 2M_1 = 2m/(L_1' + L_2')$, and the triangle has angle $A$ at the lunar centre, $B$ at the solar centre and $C$ at either boundary intersection. These letters and the covered fraction $S'$ below retain the Supplement's source-local lens notation. $C$ here is neither the parallactic angle nor Herald's contact-offset angle, and $S'$ is not the ellipsoid auxiliary $S$ [@loc-es1961-local]. The angles satisfy
 
 $$\cos C = \frac{L_1'^2 + L_2'^2 - 2m^2}{L_1'^2 - L_2'^2}, \qquad \cos B = \frac{L_1' L_2' + m^2}{m\,(L_1' + L_2')}, \qquad A = \pi - (B + C),$$
 
@@ -214,7 +231,7 @@ with $0 \le C \le \pi$ and $0 \le B \le \pi$. The obscured fraction is
 
 $$S' = \frac{s^2 A + B - s\sin C}{\pi}.$$
 
-"During the annular phase, $S'$ is equal to $s^2$, while it is equal to unity in the case of the total phase" [@loc-es1961-local]. The derivation is two circular segments: $S = (s^2 A + B) - (s^2\sin A\cos A + \sin B\cos B)$, and the half-chord $CE = s\sin A = \sin B$ collapses the second bracket to $s\sin C$. JSEX `getcoverage()` is a transcription [@loc-jsex-program-js]:
+"During the annular phase, $S'$ is equal to $s^2$, while it is equal to unity in the case of the total phase" [@loc-es1961-local]. The area derivation uses two circular segments: $A_{\mathrm{overlap}} = (s^2 A + B) - (s^2\sin A\cos A + \sin B\cos B)$, and the half-chord $CE = s\sin A = \sin B$ collapses the second bracket to $s\sin C$. JSEX `getcoverage()` is a transcription [@loc-jsex-program-js]:
 
 ```
 c = Math.acos((mid[28]*mid[28] + mid[29]*mid[29] - 2.0*mid[36]*mid[36]) / (mid[28]*mid[28] - mid[29]*mid[29]))
@@ -233,9 +250,9 @@ $$\alpha = \arccos\frac{\delta^2 + r_m^2 - r_s^2}{2\delta r_m}, \qquad \beta = \
 
 which is Eclipse-Engine's `obscuration(sep, rs, rm)` [@loc-eclipse-engine] and, with the square root written as $r_m^2\sin\alpha\cos\alpha + r_s^2\sin\beta\cos\beta$, Swiss Ephemeris' `sc1 + sc2` [@loc-swecl-c]. In terms of magnitude and the radius ratio $r = r_m/r_s$ the separation is $\delta/r_s = 1 + r - 2M_1$. With that substitution solareclipses.com writes obscuration as a function of $M$ and $r$ alone, building on the image-analysis derivation of Sridhar and others and correcting a sign error in it [@loc-solareclipses-obscuration] [@loc-sridhar-2012].
 
-Obscuration is smaller than magnitude through the partial phase because the covered region is a lens, not a rectangle. Espenak's glossary keeps the two apart: magnitude "is strictly a ratio of diameters and should not be confused with eclipse obscuration, which is a measure of the Sun's surface area occulted by the Moon" [@loc-eclipsewise-glossary]. The 1992 Supplement opens its section with "Magnitude is commonly confused with obscuration" [@loc-es1992-ch8].
+Obscuration and magnitude measure different quantities. For equal apparent discs, obscuration is below magnitude throughout the partial phase. With unequal radii that ordering need not hold. For example, with solar radius 1, lunar radius 1.05 and separation 0.07 in the same angular unit, the quoted lens formula gives obscuration 0.9933275253 at magnitude 0.99. The overlap remains partial because $0.07>|1.05-1|$. These values are arithmetic from the formula [@loc-es1961-local]. Espenak's glossary keeps the two apart: magnitude "is strictly a ratio of diameters and should not be confused with eclipse obscuration, which is a measure of the Sun's surface area occulted by the Moon" [@loc-eclipsewise-glossary]. The 1992 Supplement opens its section with "Magnitude is commonly confused with obscuration" [@loc-es1992-ch8].
 
-![Obscuration runs below magnitude at every magnitude short of one. With equal apparent discs a magnitude of 0.50 covers 0.391 of the solar area. The curve is computed from the lens-area formula quoted above, section 9D of the 1961 Explanatory Supplement [@loc-es1961-local].](img/magnitude-obscuration.svg)
+![For equal apparent discs, obscuration runs below magnitude before totality. A magnitude of 0.50 covers 0.391 of the solar area. The curve is computed from the lens-area formula quoted above, section 9D of the 1961 Explanatory Supplement [@loc-es1961-local].](img/magnitude-obscuration.svg)
 
 ## Position angle $P$ and vertex angle $V$
 
@@ -254,11 +271,11 @@ circumstances[31] = Math.atan2(contacttype*circumstances[24], contacttype*circum
 
 The Supplement also gives $Q = N + \psi$ with $\tan N = u'/v'$, useful when only one approximation has been made, and the 1992 edition restates the angle as the direction of the vector $(u, v)$ because "the projected shadow is a reflection of what the observer sees in the sky" [@loc-es1992-ch8]. NASA's local circumstances tables define $P$ and $V$ as "measured counter-clockwise (i.e., eastward) from the north and zenith points, respectively" [@loc-nasa-locirc-2001].
 
-The vertex angle subtracts the [?parallactic-angle] $C$:
+The implementation subtracts the [?parallactic-angle] $q_{\mathrm{par}}$. The Supplement calls it $C$ within the quotations in this paragraph [@loc-es1961-local]:
 
-$$V = P - C, \qquad \tan C = \frac{\xi}{\eta},$$
+$$V = P - q_{\mathrm{par}}, \qquad q_{\mathrm{par}} = \operatorname{atan2}(\xi,\eta).$$
 
-"$\sin C$ having the same algebraic sign as $\xi$" [@loc-es1961-local]. The same relation appears in the differential-correction section as $\tan C = (\xi + \xi'\sigma)/(\eta + \eta'\sigma)$ for the contacts at semi-duration $\sigma$ from maximum [@loc-es1961-local]. Chauvenet's formulation, as transmitted by Buchanan, is equation (385) $V = Q - C$ with $C$ from $p\sin P = \sin\phi$, $p\cos P = \cos\phi\cos\theta$, $c\sin C = \cos P\tan\theta$, $c\cos C = \sin(P - d')$, where $d'$ is the Sun's declination [@loc-buchanan-1904]. JSEX computes $C$ as the parallactic angle from the altitude [@loc-jsex-program-js]:
+"$\sin C$ having the same algebraic sign as $\xi$" [@loc-es1961-local]. The same relation appears in the differential-correction section as $\tan C = (\xi + \xi'\sigma)/(\eta + \eta'\sigma)$ for the contacts at semi-duration $\sigma$ from maximum [@loc-es1961-local]. Chauvenet's formulation, as transmitted by Buchanan, is equation (385) $V = Q - C$ with $C$ from $p\sin P = \sin\phi$, $p\cos P = \cos\phi\cos\theta$, $c\sin C = \cos P\tan\theta$, $c\cos C = \sin(P - d')$, where $d'$ is the Sun's declination [@loc-buchanan-1904]. JSEX computes $q_{\mathrm{par}}$ as the parallactic angle from the altitude [@loc-jsex-program-js]:
 
 ```
 circumstances[33] = Math.asin(coslat * circumstances[17] / Math.cos(circumstances[32]))
@@ -266,7 +283,7 @@ if (circumstances[20] < 0.0) { circumstances[33] = Math.PI - circumstances[33] }
 circumstances[34] = circumstances[31] - circumstances[33]
 ```
 
-that is $\sin C = \cos\phi\sin\theta/\cos a$, placed in the second quadrant when $\eta < 0$, and $V = P - C$. Jubier's calculator reports $V$ as an o'clock value and notes that this differs from the NASA bulletins, where $V$ is counter-clockwise in degrees [@loc-jubier-calc-instr].
+that is $\sin q_{\mathrm{par}} = \cos\phi\sin\theta/\cos a$, placed in the second quadrant when $\eta < 0$, and $V = P - q_{\mathrm{par}}$. Jubier's calculator reports $V$ as an o'clock value and notes that this differs from the NASA bulletins, where $V$ is counter-clockwise in degrees [@loc-jubier-calc-instr].
 
 ## Altitude, azimuth and visibility
 
@@ -285,7 +302,7 @@ and the row is flagged (r) or (s) [@loc-jsex-program-js] [@loc-jsex-key]. The bi
 
 ## Duration and time output
 
-Duration of the central phase is $t_{C3} - t_{C2}$ in hours, printed as minutes and seconds after adding $0.05/60$ h so that the floor rounds to the nearest 0.1 s. If C2 or C3 is below the horizon the duration is measured from maximum instead [@loc-jsex-program-js]. The Supplement's semi-duration $\pm L_2\cos\psi/n$ gives the same number in one evaluation when the velocities are constant [@loc-es1961-local].
+The inspected JSEX source forms C3−C2 in hours, converts to minutes, and adds 0.05/60 minutes, or 0.05 seconds. Its formatter then prints integer minutes and seconds. If C2 or C3 is below the horizon the duration is measured from maximum instead [@loc-jsex-program-js]. The Supplement's semi-duration $\pm L_2\cos\psi/n$ gives the same number in one evaluation when the velocities are constant [@loc-es1961-local].
 
 Times come out in hours of TDT relative to $t_0$. JSEX converts to local time as `t + t0 - tz - (deltaT - 0.5)/3600`, subtracting $\Delta T$ and half a second so that the truncating formatter rounds to the nearest second [@loc-jsex-program-js]. Every other time in the table is rounded the same way.
 
@@ -295,7 +312,7 @@ For one eclipse and one site, `calculatefor()` runs `getall()` [@loc-jsex-progra
 
 1. `readform()` builds the observer constants: $\phi$, $\lambda_W$, height, time zone, $\rho\sin\phi'$, $\rho\cos\phi'$.
 2. `getmid()` iterates $t \leftarrow t - D/n^2$ from $t = 0$, each pass calling `timelocdependent()` which evaluates the polynomials and their derivatives (`timedependent()`), then $\theta$, $\xi$, $\eta$, $\zeta$, $\xi'$, $\eta'$, $u$, $v$, $u'$, $v'$, $L_1'$, $L_2'$ and $n^2$.
-3. `midobservational()` computes $P$, altitude, $C$, $V$, azimuth, visibility, then $m$, magnitude and the diameter ratio.
+3. `midobservational()` computes $P$, altitude, $q_{\mathrm{par}}$, $V$, azimuth, visibility, then $m$, magnitude and the diameter ratio.
 4. If the magnitude is positive, `getc1c4()` seeds C1 and C4 at $t_\mathrm{mid} \mp L_1'\cos\psi/n$ and iterates each with `c1c4iterate()`.
 5. If $m < |L_2'|$, `getc2c3()` seeds and iterates C2 and C3 with the sign rule for $L_2' < 0$, and sets the type to total or annular. `observational()` is then run for every contact.
 6. The horizon pattern is examined and sunrise or sunset substituted where a contact is below the horizon.
@@ -307,13 +324,13 @@ The code carries no limb profile, no refraction beyond the $-0.3^{\circ}$ thresh
 
 Chauvenet's chapter X is a transformation of Bessel's method with the same fundamental-plane quantities. Buchanan's 1904 exposition of it gives the angles of position as $Q = N + \psi$ and $V = Q - C$ (equations 276 to 279). It also keeps the old expression of magnitude in "digits", twelfths of the solar diameter, and says it becomes the modern fraction "by omitting the constant 12" [@loc-buchanan-1904]. The USNO reference list still names Chauvenet volume 1 chapter X and Green (1985) chapter 18 as the treatments of Bessel's formulation [@loc-usno-eclipse-ref].
 
-Meeus's "Elements of Solar Eclipses 1951-2200" (1989) is the source the calculator authors cite. Jubier credits it and "Astronomical Algorithms" as having "provided the algorithms for this page" [@loc-jubier-calc-instr], and The Photographer's Ephemeris bases its local circumstances on it together with the 2013 Explanatory Supplement [@loc-tpe-technote]. Bill Gray's review describes its heart as "a discussion of the use of Besselian elements" that "contained everything I needed to know to implement eclipse/occultation computations", with no treatment of how to generate the elements [@loc-projectpluto-books]. The book was not obtained for this note. "Astronomical Algorithms" chapter 54 was not obtained either. As far as this project has established, that chapter derives $\gamma$, $u$ and the magnitude at greatest eclipse from the lunar phase theory and does not carry the observer-level reduction. That is why the USNO list and the calculator authors point to "Elements" for site-level work [@loc-usno-eclipse-ref] [@loc-meeus-aa-1998]. Confirming that from the text itself is an open question below.
+Meeus's "Elements of Solar Eclipses 1951-2200" (1989) is the source the calculator authors cite. Jubier credits it and "Astronomical Algorithms" as having "provided the algorithms for this page" [@loc-jubier-calc-instr], and The Photographer's Ephemeris bases its local circumstances on it together with the 2013 Explanatory Supplement [@loc-tpe-technote]. Bill Gray's review describes its heart as "a discussion of the use of Besselian elements" that "contained everything I needed to know to implement eclipse/occultation computations", with no treatment of how to generate the elements [@loc-projectpluto-books]. The local-circumstances chapter of "Elements" remains unavailable in the cited evidence [@loc-meeus-elements-1989]. The first-edition "Astronomical Algorithms" chapter 52 has been read and reproduced in [enumerating eclipses](../02-catalogs/enumerating-eclipses.md#meeuss-approximate-method). It supplies enumeration and greatest-eclipse quantities rather than the observer-level reduction. Second-edition chapter 54 is not claimed as directly verified by that first-edition reading [@cat-meeus-1991-aa] [@loc-meeus-aa-1998].
 
 ## Sources compared
 
 | Source | Formulation | Observer model | Contact solver | What it has that the others do not |
 |---|---|---|---|---|
-| Explanatory Supplement 1961, 9D [@loc-es1961-local] | Closed formulas with auxiliary angle $\psi$ | $C$, $S$, $H$ in Earth radii, $e^2 = 0.00672267$ then $0.00669454$ | $t = L\cos\psi/n - D/n^2$, second approximation | Differential corrections $\partial t/\partial\lambda, \partial\phi, \partial H, \partial\Delta T$; three worked examples; ionosphere heights |
+| Explanatory Supplement 1961, 9D [@loc-es1961-local] | Closed formulas with auxiliary angle $\psi$ | $C_{\mathrm{ell}}$, $S$, $H$ in Earth radii, $e^2 = 0.00672267$ then $0.00669454$ | $t = L\cos\psi/n - D/n^2$, second approximation | Differential corrections $\partial t/\partial\lambda, \partial\phi, \partial H, \partial\Delta T$; three worked examples; ionosphere heights |
 | Explanatory Supplement 1992, 8.36 [@loc-es1992-ch8] | Vector restatement | Same | Inverse interpolation on $u^2+v^2-L^2$ recommended | Explicit warning list: ephemeris consistency, rotation, centre of figure, limb, refraction |
 | Chauvenet via Buchanan [@loc-buchanan-1904] | Bessel's method transformed | Same quantities | Successive approximation | $Q = N + \psi$ form, $V$ from $P$, $C$ auxiliaries, magnitude in digits |
 | NASA JSEX program.js [@loc-jsex-program-js] | 1961 formulas | $0.99664719$, 6378140 m | Newton iteration to $10^{-6}$ h | Sunrise/sunset substitution, obscuration, (r)/(s) flags, full source |
@@ -322,7 +339,7 @@ Meeus's "Elements of Solar Eclipses 1951-2200" (1989) is the source the calculat
 
 ## What a developer should do
 
-Implement the 1961 Explanatory Supplement section 9D formulas exactly as quoted above and test against `program.js`, which is GPL and self-contained [@loc-es1961-local] [@loc-jsex-program-js]. Use the NASA element files as the first test data because their $\Delta T$ is embedded and the JSEX output for any city is published, so a match to the second is a full regression test [@loc-jsex-index] [@loc-jsex-key]. Solve the contacts by the direct root-finding of the 1992 edition rather than the auxiliary angle, because it makes no constant-velocity assumption and handles windows containing a single contact cleanly [@loc-es1992-ch8] [@loc-eclipse-engine]. Report magnitude in NASA's two branches and obscuration from the lens area, and label the branch. Compute $P$ from $\text{atan2}(\pm u, \pm v)$ with the total-eclipse sign reversal and $V$ from the parallactic angle $\tan C = \xi/\eta$. Keep every time in TT internally and subtract $\Delta T$ once at output. Read the 1961 text first, then the 1992 section 8.36, then the JSEX code.
+Implement the 1961 Explanatory Supplement section 9D formulas exactly as quoted above and test against `program.js`, which is GPL and self-contained [@loc-es1961-local] [@loc-jsex-program-js]. Use the NASA element files as the first test data because their $\Delta T$ is embedded and the JSEX output for any city is published, so a match to the second is a full regression test [@loc-jsex-index] [@loc-jsex-key]. Solve the contacts by the direct root-finding of the 1992 edition rather than the auxiliary angle, because it makes no constant-velocity assumption and handles windows containing a single contact cleanly [@loc-es1992-ch8] [@loc-eclipse-engine]. Report magnitude in NASA's two branches and obscuration from the lens area, and label the branch. Compute $P$ from $\text{atan2}(\pm u, \pm v)$ with the total-eclipse sign reversal and $V=P-q_{\mathrm{par}}$ using the quadrant-resolved parallactic angle. Keep every time in TT internally and subtract $\Delta T$ once at output. Read the 1961 text first, then the 1992 section 8.36, then the JSEX code.
 
 ## What this changes
 
@@ -331,7 +348,6 @@ Nothing in the global-circumstances pipeline. The local reduction consumes the s
 ## Open questions
 
 - Obtain "Elements of Solar Eclipses 1951-2200" (Meeus 1989) and record its local-circumstances chapter formula by formula, in particular whether it uses the auxiliary angle $\psi$ or direct root finding and which spheroid constants it fixes [@loc-meeus-elements-1989].
-- Obtain "Astronomical Algorithms" chapter 54 and confirm from the text that it stops at $\gamma$, $u$ and greatest-eclipse magnitude and refers site-level work to "Elements" [@loc-meeus-aa-1998].
 - Obtain the 2013 Explanatory Supplement chapter 11 and note whether section 8.36 of 1992 was carried over unchanged, including the inverse-interpolation recommendation [@loc-es2013-ch11].
-- Obtain the Sky and Telescope BASIC listing `solarecl.bas` (Sinnott's "Astronomical Computing" column), which the search index describes as "Local circumstances of a solar eclipse". The download returned a Cloudflare challenge and the Wayback copy an error page.
-- Retrieve the Wayback snapshot of Chris O'Byrne's original "Eclipse Calculator" (chris.obyrne.com/Eclipses/calculator.html). The live host now serves a parking page and the 2016 snapshot fetched contains only site assets.
+- Obtain the Sky and Telescope BASIC listing `solarecl.bas` (Sinnott's "Astronomical Computing" column), which the search index describes as "Local circumstances of a solar eclipse". The source listing remains unconfirmed against its advertised description.
+- Retrieve the Wayback snapshot of Chris O'Byrne's original "Eclipse Calculator" (chris.obyrne.com/Eclipses/calculator.html). The cited 2016 snapshot contains site assets but no verified calculator source.

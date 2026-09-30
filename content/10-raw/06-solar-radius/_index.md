@@ -3,17 +3,17 @@ title: Solar radius
 description: Compare solar radius choices for eclipse calculation and their effects on path limits, durations and local contact times.
 order: 6
 status: working
-updated: 2026-09-15
+updated: 2026-09-30
 tags: [solar-radius, bailys-beads, path-limits, constants]
 seo_title: Solar Radius in Eclipse Calculation: Values and Effects
 ---
 
 ::: summary
 - **Three values are in circulation.** The canonical 959.63 arcseconds at 1 au of Auwers 1891, the IAU 2015 nominal radius of exactly 695,700 km, which is 959.22 arcseconds, and an eclipse radius near 959.95 arcseconds measured from the edge of totality. They differ because they measure different layers of the Sun [@sun-rozelot-kosovichev-2026] [@sun-quaglia-2021].
-- **The eclipse radius is 0.32 arcseconds, or 232 km, larger than the canonical value,** because totality ends only when the last photospheric light is gone [@sun-quaglia-2021] [@sun-lamy-2015].
-- **That 0.32 arcseconds moves each path limit inward by 0.6 to 0.9 km on the ground** and costs about 1.8 s of central duration, which is roughly half a second per 0.1 arcseconds [@sun-quaglia-2021] [@sun-iota-dunham-2024].
+- **Quaglia's flash-spectrum fit is 0.32 arcseconds above the canonical value.** That is about 232 km at 1 au. The result depends on the adopted limb and detection model [@sun-quaglia-2021] [@sun-lamy-2015].
+- **That 0.32 arcseconds moves each path limit inward by 0.6 to 0.9 km on the ground** and costs about 1.6 s of central duration in Quaglia's 2017 fitted-radius example, which is roughly half a second per 0.1 arcseconds [@sun-quaglia-2021] [@sun-iota-dunham-2024].
 - **Near a path limit the sensitivity is about ten times the central-line figure,** and one second of duration corresponds to about 0.03 arcseconds of radius [@sun-quaglia-2021] [@sun-wright-young-2024].
-- **The settled design is two modes,** 959.63 arcseconds to reproduce almanac and NASA products and 959.95 ± 0.05 arcseconds for edge products, with the radius carried as an explicit parameter and its uncertainty published as a band [@sun-quaglia-2021] [@sun-wright-young-2024].
+- **The recommended presets retain their provenance.** Provide 959.63 arcseconds for conventional-product reproduction and the Quaglia 959.95 ± 0.05 arcsecond fit for its eclipse photospheric model. Publish sensitivity bands with their assumptions [@sun-quaglia-2021] [@sun-wright-young-2024].
 :::
 
 ## What this topic covers

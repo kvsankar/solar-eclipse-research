@@ -3,7 +3,7 @@ title: "Datasets: Watts, Kaguya, LOLA"
 description: Compare lunar limb datasets for eclipse predictions: resolution, reference spheres, coordinate frames, accuracy, formats and download sources.
 order: 2
 status: working
-updated: 2026-09-15
+updated: 2026-09-30
 tags: [watts, kaguya, lalt, lola, ldem, sldem2015, datasets]
 seo_title: Lunar Limb Datasets: Watts, Kaguya and LRO LOLA
 ---
@@ -33,13 +33,13 @@ seo_title: Lunar Limb Datasets: Watts, Kaguya and LRO LOLA
 
 ## Kaguya (SELENE) LALT
 
-**Instrument and mission.** The Laser Altimeter on the Japanese Kaguya (SELENE) orbiter, launched 2007, produced the first complete polar topography and a global shape model complete to degree and order 359 on a quarter-degree grid, published by Araki et al. in Science in 2009 [@limb-araki-2009]. The paper was not read for this note, and the numbers are from search summaries.
+**Instrument and mission.** The Laser Altimeter on the Japanese Kaguya (SELENE) orbiter, launched 2007, produced a global shape model reported as complete to degree and order 359 on a quarter-degree grid. These specifications are reported secondhand from Araki et al. in Science in 2009 and remain unconfirmed against the paper [@limb-araki-2009].
 
 **Products at JAXA DARTS.** The PDS3 dataset `SLN-L-LALT-5-TOPO-GGT-MAP-V2.0` at `https://data.darts.isas.jaxa.jp/pub/pds3/sln-l-lalt-5-topo-ggt-map-v2.0/` contains `LALT_GGT_MAP.IMG` (63 MB) with label `LALT_GGT_MAP.lbl` [@limb-darts-kaguya-faq] [@limb-ltvt-kaguya-wiki]. The label states: MAP_RESOLUTION 16 pixel/degree, MAP_SCALE 1.8952094015 km/pixel, A_AXIS_RADIUS 1737.400 km, 32-bit PC_REAL samples in km, OFFSET 0, SCALING_FACTOR 1, COORDINATE_SYSTEM_NAME "MEAN EARTH/POLAR AXIS OF DE421", version 2.0, and that the altitudes are relative to a 1737.4 km sphere centred on the centre of mass, interpolated with the GMT `sphinterpolate` routine on a 0.0625 degree grid [@limb-lalt-ggt-map-label]. Sibling datasets hold the numeric table `LALT_GGT_NUM`, the polar grids `LALT_GT_NP` and `LALT_GT_SP` at 64 points per degree out to 10 degrees from each pole, and the spherical harmonic coefficients `LALT_SH` [@limb-ltvt-kaguya-wiki] [@limb-darts-kaguya-faq].
 
 **Resolution at the limb.** 1.895 km per pixel is about one arcsecond at the Moon. The raw LALT tracks that Occult and Eclipse Orchestrator used are sampled about every 1.5 km along track with a height accuracy of ±1 m [@limb-sigismondi-thesis-2011] [@limb-eclipse-orchestrator-lro]. The Terrain Camera's SLDEM2013 is a separate 4096 pixels per degree, about 7.4 m, stereo DEM at DARTS [@limb-darts-kaguya-faq].
 
-**Mean radius.** The LALT shape model gives a mean radius of 1737.15 km. That value is reported secondhand from the DARTS material and is not confirmed in the FAQ itself [@limb-darts-kaguya-faq]. SLDEM2015's own mean radius from its $C_{00}$ term is given as 1737.1512 km, 248.8 m below the 1737.4 km reference, on a secondary report of Barker et al. rather than the paper [@limb-barker-2016-sldem]. Both say the same thing: the reference sphere is 250 m larger than the actual mean radius, so the average limb height in a DEM-derived profile is about $-0.13$ arcseconds.
+**Mean radius.** The LALT shape model gives a mean radius of 1737.15 km. That value is reported secondhand from the DARTS material and is not confirmed in the FAQ itself [@limb-darts-kaguya-faq]. SLDEM2015's mean radius from its $C_{00}$ term is reported secondhand as 1737.1512 km, 248.8 m below the 1737.4 km reference, and remains unconfirmed against Barker et al. [@limb-barker-2016-sldem]. These values describe a global surface average. An observer-specific limb keeps the maximum angular radius in each direction. Its average height cannot be inferred from the global mean radius [@limb-wright-young-2024].
 
 ## LRO LOLA: the LDEM series
 
@@ -51,7 +51,7 @@ seo_title: Lunar Limb Datasets: Watts, Kaguya and LRO LOLA
 
 **Accuracy.** LOLA's vertical precision is about 10 cm and its accuracy about 1 m per shot [@limb-pgda-sldem2015]. The LOLA team's geodetic grid is accurate to about 10 m radially and 100 m spatially with respect to the centre of mass, a figure taken secondhand from Smith et al. 2010 and still to be confirmed against the paper [@limb-smith-2010-lola]. No accuracy statement appears in the LDEM_128 label or the GDR catalogue [@limb-lola-ldem128-label] [@limb-lola-gdr-dscat].
 
-**Frame.** The [?moon-me-frame|mean Earth/polar axis frame] of DE421. Wright and Young note that the latitude and longitude origin of Moon ME is the mean sub-Earth point [@limb-wright-young-2024]. They load the DE440 lunar orientation kernels for their computation, a different ephemeris from the DE421 named in the label. JPL DE421 is what every SVS product page lists, while the paper's appendix uses DE440, and the difference is under a metre at the Moon [@limb-wright-young-2024]. The difference between the two ME realisations is at the level of metres on the surface and is not a concern at limb-profile resolution.
+**Frame.** The [?moon-me-frame|mean Earth/polar axis frame] of DE421. Wright and Young use DE440 lunar orientation kernels in their appendix, while the SVS product pages specify DE421 [@limb-wright-young-2024] [@limb-svs-4517] [@limb-svs-5073]. Orbit differences and frame-alignment differences are distinct quantities. The matching frame choice and NAIF's dated DE440-to-DE421 ME alignment comparison are documented in [lunar figure and libration](../08-lunar-and-solar-model/lunar-figure-and-libration.md#the-mean-earthpolar-axis-frame-and-the-constant-rotation). That alignment comparison does not establish a universal sub-metre orbit difference.
 
 ## SLDEM2015
 
@@ -81,11 +81,11 @@ The practical consequence: a DEM height is a distance from the centre of mass, s
 
 ## What a developer should do
 
-Take `ldem_128.img` and its label as the development dataset: it is one file, 2.12 GB, global including the poles, and its 0.13 arcsecond cell is below the 0.2 s timing target. Move to SLDEM2015 at 256 or 512 pixels per degree only when a bead-level simulation is wanted, and then stitch LDEM polar tiles above 60 degrees. Decode LDEM heights as $0.5\times\mathrm{DN}$ metres and SLDEM heights as kilometres, both above 1737.4 km. Keep the Watts data only for reproducing historical bulletins, and when doing so apply the Morrison and Appleby harmonic correction and the Watts-angle offset explicitly.
+Take `ldem_128.img` and its label as the development dataset. It is global, including the poles, at 2.12 GB and 236.9 m per cell [@limb-lola-gdr-dir] [@limb-lola-ldem128-label]. Cell spacing is not a contact-time accuracy bound. Test the profile's timing convergence for the chosen observer and grazing geometry. For finer sampling, use SLDEM2015 at 256 or 512 pixels per degree and stitch LDEM polar tiles above 60 degrees [@limb-ode-sldem]. Decode LDEM heights as $0.5\times\mathrm{DN}$ metres and SLDEM heights as kilometres, both above 1737.4 km [@limb-lola-ldem128-label] [@limb-sldem2015-label]. Apply the Morrison and Appleby harmonic correction and the Watts-angle offset when reproducing Watts-based bulletins [@limb-morrison-appleby-1981] [@limb-vizier-vi122].
 
 ## What this changes
 
-The datum choice removes the centre-of-figure stage from the pipeline. The 0.69 km gap between the 1737.4 km DEM sphere and the 1738.09 km sphere of $k = 0.2725076$ becomes a constant that must be added when profile heights are quoted against the almanac mean limb [@limb-jubier-sem-limb-window]. Nothing else in the Besselian stages changes.
+The datum choice removes the empirical centre-of-figure correction from a centre-of-mass profile. To express a physical height against the 1738.0908 km almanac sphere, subtract 0.6908 km from its height above the 1737.4 km DEM datum. For an angular profile, subtract the chosen reference sphere's angular radius at the observer's distance [@limb-lola-ldem128-label] [@limb-jubier-sem-limb-window]. Nothing else in the Besselian stages changes.
 
 ## Open questions
 
