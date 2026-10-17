@@ -3,7 +3,7 @@ title: Executive summary
 description: The main findings on eclipse prediction methods, constants, lunar limb and terrain modelling, software availability and validation evidence.
 order: 1
 status: working
-updated: 2026-09-30
+updated: 2026-10-17
 seo_title: Solar Eclipse Calculation: Research Findings for Developers
 ---
 
@@ -144,6 +144,23 @@ rests on:
    worked examples, NASA's tables, the Lusaka limb example, the Vale and
    Stephenville edge records, and the IOTA bead tables
    [@val-es1961] [@val-tp2001-bulletin] [@val-guhl-tegtmeier-2018].
+
+## Beyond solar eclipses
+
+The same geometry computes the other events of the family.
+[Lunar eclipses, occultations and transits](other-events.md) compares them.
+Each event has one input that dominates its accuracy. For lunar eclipses it
+is the atmospheric enlargement of the Earth's shadow, where crater timings
+favour a layer of about 87 km [@lun-herald-sinnott-2014]. For lunar
+occultations it is the limb and the event position angle, and most
+predictions now agree with video timings to 0.3 s
+[@limb-occult-accuracy-2016]. For transits it is the solar and planetary
+radii, at 10 to 21 seconds of time per arcsecond of contact radius
+[@tr-es1961] [@tr-eso-eis-b1] [@tr-ew-tm2019]. For planetary satellites it is the satellite ephemeris, which
+mutual events test at 5 to 50 milliarcseconds [@jup-saquet-2018]
+[@sats-arlot-2012-phesat09]. For occultations by minor bodies it is the
+body's orbit and the star's position, which Gaia has reduced to about
+10 milliarcseconds [@mb-ferreira-2022].
 
 ## The limits of this statement
 

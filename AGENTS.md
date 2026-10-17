@@ -11,6 +11,14 @@ times, magnitude, obscuration, Baily's beads). The target depth is Ernie
 Wright's NASA SVS work on the 2024 eclipse: lunar limb profiles from LRO LOLA,
 the solar radius question, Earth and Moon modelling, ephemerides, time scales.
 
+The same geometry extends to the other events of the family, each in its own
+topic: lunar eclipses (`12-`, prefix `lun`), lunar occultations of stars and
+planets (`13-`, `occ`), transits of Mercury and Venus (`14-`, `tr`), Jupiter's
+satellites (`15-`, `jup`), Saturn and the outer satellites (`16-`, `sats`), and
+occultations by planets and minor bodies (`17-`, `mb`). The report
+`content/20-reports/other-events.md` relates them to the solar pipeline. Term
+slugs in these topics carry the topic prefix as well.
+
 The deliverable is a static research site, built from Markdown exactly the way
 `Essence-10/astrophotography-rental` is built: pandoc, graded citations,
 glossary explainers, deterministic output. The audience is a software

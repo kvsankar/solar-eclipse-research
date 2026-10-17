@@ -3,7 +3,7 @@ title: Open questions
 description: Outstanding eclipse calculation questions, each tied to the paper, dataset or code needed to resolve it and its effect on the conclusions.
 order: 5
 status: working
-updated: 2026-09-30
+updated: 2026-10-17
 seo_title: Open Questions in Solar Eclipse Algorithms and Modelling
 ---
 
@@ -87,6 +87,32 @@ seo_title: Open Questions in Solar Eclipse Algorithms and Modelling
     code), but no page states the ephemeris behind the server. timeanddate's
     accuracy page names neither its ephemeris, its $k$ nor its ΔT source [@sw-jubier-2024-map]
     [@sw-jubier-calc-js] [@sw-timeanddate-accuracy].
+
+## Lunar eclipses, occultations and transits
+
+Each new topic ends with its own list. These are the artefacts that would
+change the most across them.
+
+- **Occult's help file.** It would state Occult's lunar eclipse enlargement
+  rule, its graze binning, its treatment of planet phase and its asteroid
+  elements. Occult is closed source and its help ships only with the
+  installer [@sw-occult4].
+- **The current Astronomical Almanac sections on lunar eclipses, occultations
+  and satellite phenomena.** They would show whether the Almanac still uses
+  Chauvenet's 2 per cent enlargement, whether it still prints occultations of
+  planets and bright stars, and which satellite theory its tables use
+  [@lun-herald-sinnott-2014] [@occ-es1992].
+- **Meeus's *Transits* (1989) and Espenak's statement of his transit
+  constants.** The NASA transit catalogues rest on the first. The second would
+  confirm the inferred 8.41 arcsecond Venus semidiameter
+  [@tr-nasa-mercury-catalog] [@tr-eso-eis-b1].
+- **Lieske 1998 (E5) in full, and the NOE technical notes.** These define the
+  Galilean theories behind IMCCE's tables before and after 2015
+  [@jup-imcce-phenjupiter-readme].
+- **A source for the height in Jupiter's atmosphere at which an eclipse
+  reaches half flux.** No source read states it.
+- **A ring-transmission model for satellite eclipses at Saturn.** No public
+  tool examined applies ring optical depth [@sats-nssdc-rings].
 
 ## Experiments that require no further sources
 

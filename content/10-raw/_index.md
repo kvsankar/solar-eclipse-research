@@ -1,9 +1,9 @@
 ---
 title: Raw research
-description: Research notes on solar eclipse algorithms, from Besselian elements and eclipse paths to contact times, lunar terrain and validation.
+description: Research notes on eclipse, occultation and transit algorithms, from Besselian elements and eclipse paths to contact times, lunar terrain and validation.
 order: 10
-updated: 2026-09-15
-seo_title: Solar Eclipse Algorithms: Research Notes and Formulas
+updated: 2026-10-17
+seo_title: Eclipse, Occultation and Transit Algorithms: Research Notes
 ---
 
 Working notes, one topic per folder. Each note ends with **what this changes**

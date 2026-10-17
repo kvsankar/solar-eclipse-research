@@ -1,16 +1,16 @@
 ---
 title: Scope and coverage
-description: Eleven research topics covering eclipse calculation, from finding eclipses and mapping paths to local contact times and validation.
+description: Seventeen research topics covering solar and lunar eclipses, occultations and transits, from finding events to local contact times and validation.
 order: 1
 status: working
-updated: 2026-09-16
-seo_title: Solar Eclipse Calculation Research: Scope and Coverage
+updated: 2026-10-17
+seo_title: Eclipse, Occultation and Transit Research: Scope and Coverage
 ---
 
 ::: summary
 - **The question is how eclipse computational products are computed well enough to build one**, from the list of eclipses in a period, through world maps of the path, to the second at which totality begins for one observer standing on one hillside.
 - **The reference standard is NASA SVS's 2024 work**, published as Wright and Young 2024: a lunar limb from LRO and SELENE topography, terrain under every observer, and a JPL ephemeris, traced through to the shape of the umbra on the ground.
-- **All eleven topics are covered.** Each rests on primary documents and public code, is recorded in raw notes with graded citations, and is carried into the reports.
+- **All seventeen topics are covered.** Each rests on primary documents and public code, is recorded in raw notes with graded citations, and is carried into the reports.
 - **The gaps are named artefacts**: the SVS code, Occult's help file, Meeus's *Elements*, the 2013 Supplement's eclipse chapter, and the unpublished 2024 edge reductions.
 :::
 
@@ -29,7 +29,7 @@ The subject is **what a developer needs to know to compute every one of
 these products**, and to know how good the result is, organised by product
 from coarse to fine.
 
-## The eleven topics
+## The seventeen topics
 
 | Product | Question | Topic | Covered |
 |---|---|---|---|
@@ -44,6 +44,12 @@ from coarse to fine.
 | Any product | What software and repositories exist, and how complete are they? | [Software and repositories](../10-raw/09-software-and-repos/_index.md) | Yes; thirty repositories inventoried |
 | Any product | How well do predictions match observation? | [Validation and error budget](../10-raw/10-validation/_index.md) | Yes; the budget assembled and a five-level protocol |
 | The reference standard | What exactly did SVS do for 2017, 2023 and 2024? | [NASA SVS and Ernie Wright](../10-raw/11-svs-wright/_index.md) | Yes; the paper in full, with the datasets inventoried |
+| Lunar eclipse contacts and maps | How are lunar eclipses computed, and how large is the Earth's shadow? | [Lunar eclipses](../10-raw/12-lunar-eclipses/_index.md) | Yes; three enlargement rules with constants, Herald and Sinnott 2014 read in full |
+| Occultation times and graze lines | How are occultations of stars and planets by the Moon computed and reduced? | [Lunar occultations](../10-raw/13-lunar-occultations/_index.md) | Yes; the 1961 Supplement's method, the archive and its error budget |
+| Transit contacts | How are transits of Mercury and Venus computed? | [Transits](../10-raw/14-transits/_index.md) | Yes; contact solution, local formulas and predictor comparison |
+| Jovian satellite phenomena | How are eclipses, occultations, transits and mutual events of the Galilean satellites computed? | [Jupiter's satellites](../10-raw/15-jupiter-satellites/_index.md) | Yes; theories by version and the classical two-cone method |
+| Saturnian and outer satellite phenomena | How are Saturn's satellite phenomena, ring geometry and mutual events computed? | [Saturn and outer satellites](../10-raw/16-saturn-and-outer-satellites/_index.md) | Yes; theories, ring model and mutual-event accuracy |
+| Minor-body occultation paths | How are occultations of stars by asteroids, TNOs and planets predicted and reduced? | [Planets and minor bodies](../10-raw/17-occultations-by-planets-and-minor-bodies/_index.md) | Yes; SORA's paper checked against its code |
 
 ## The standard of detail
 
@@ -71,8 +77,9 @@ locations, and code cited by file when the program is public.
 
 ## What is deliberately out of scope
 
-- Lunar eclipses, transits and occultations, except where the same machinery
-  is reused and the source says so.
+- Transits seen from other planets, except a short section on Phobos and
+  Deimos seen from Mars in the Saturn and outer satellites topic. Exoplanet
+  transits and occultations by artificial satellites are also out of scope.
 - Eclipse weather, photography, safety and travel.
 - Historical eclipse identification as a discipline, except where it validates
   a ΔT model.

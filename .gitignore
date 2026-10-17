@@ -29,3 +29,6 @@ Thumbs.db
 # people's material, two whole cloned repositories among it, staged for commit.
 var/
 .playwright-mcp/
+
+# Private planning companion, cloned here; see the project notes.
+/engineering/

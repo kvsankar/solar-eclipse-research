@@ -34,7 +34,7 @@ The Watts angle is not the true [?position-angle-of-axis|axis angle]. The VizieR
 
 ### Systematic errors and the Morrison and Appleby corrections
 
-Occultation analyses by Van Flandern in 1970 and Morrison in 1979 showed that the average cross-section of Watts' datum is slightly elliptical and that its implicit centre, the [?centre-of-figure|centre of figure], is displaced from the point the lunar ephemeris tracks [@limb-morrison-1979] [@limb-morrison-appleby-1981]. Morrison and Appleby then analysed 66,000 occultation timings from 1943 to 1979 and found that the radius, shape and centre of the datum all vary with libration, producing errors that reach 0.4 arcseconds at some position angles [@limb-morrison-appleby-1981].
+Occultation analyses by Van Flandern in 1970 and Morrison in 1979 showed that the average cross-section of Watts' datum is slightly elliptical and that its implicit centre, the [?centre-of-figure|centre of figure], is displaced from the point the lunar ephemeris tracks [@occ-morrison-1979] [@limb-morrison-appleby-1981]. Morrison and Appleby then analysed 66,000 occultation timings from 1943 to 1979 and found that the radius, shape and centre of the datum all vary with libration, producing errors that reach 0.4 arcseconds at some position angles [@limb-morrison-appleby-1981].
 
 Their reduction assumed a datum radius of 1737.97 km, equivalent to a semi-diameter of 932.58 arcseconds at the mean distance corresponding to an equatorial horizontal parallax of 3422.608 arcseconds [@limb-morrison-appleby-1981]. The correction they derive is to be added to Watts' heights when the charts are used with a centre-of-mass ephemeris. It is a second-order harmonic in the position angle $Q$ measured eastward from the projected north pole:
 

@@ -5,6 +5,7 @@ code, URLs, math and citation tags untouched.
 
     python tools/normalise_prose.py --check   # report, change nothing
     python tools/normalise_prose.py           # rewrite content/**/*.md
+    python tools/normalise_prose.py --help    # this text; any other argument is refused
 
 Protected spans, in this order: fenced code blocks, inline code spans, math
 (`$...$` and `$$...$$`), URLs, markdown link targets, `[@slug]`, `[?slug]`,
@@ -85,8 +86,15 @@ def process(body: str) -> str:
     return joined
 
 
-def main() -> int:
-    check = "--check" in sys.argv
+def main(argv: list[str] | None = None) -> int:
+    args = sys.argv[1:] if argv is None else argv
+    if args in (["-h"], ["--help"]):
+        print(__doc__.strip())
+        return 0
+    if args not in ([], ["--check"]):
+        print(f"unknown arguments: {' '.join(args)}; use --check or no arguments", file=sys.stderr)
+        return 2
+    check = args == ["--check"]
     changed = 0
     for md in sorted(CONTENT.rglob("*.md")):
         text = md.read_text(encoding="utf-8")

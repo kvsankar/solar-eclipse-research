@@ -3,7 +3,7 @@ title: Reading list and reference matrix
 description: Papers, eclipse algorithms, public code and datasets to read in order, with a reference matrix explaining what each source provides.
 order: 4
 status: working
-updated: 2026-09-30
+updated: 2026-10-17
 seo_title: Eclipse Calculation Reading List: Papers, Code and Datasets
 ---
 
@@ -74,6 +74,30 @@ seo_title: Eclipse Calculation Reading List: Papers, Code and Datasets
 | 4 | Vale, Oregon, 2017, 711 m | C2 17:25:34.3, C3 17:26:06.9 UTC at 959.63″; limit distance 1200 m falling under 400 m at 960.00″ | 2 s, 100 m | [@val-quaglia-2021] |
 | 4 | Stephenville, Texas, 2024 | observed C2 18:39:06.6, C3 18:39:20.3 UTC, 13.7 s | 3 s with true limb and 959.95″; about 24 s expected at 959.63″ as a negative control | [@val-besselian-maps-accuracy] |
 | 5 | Thermopolis 2017 and Cape Range 2023 bead tables | 16 events each with axis angles and times | 1 s per event at the derived radius correction | [@val-guhl-tegtmeier-2018] [@val-guhl-2023] |
+
+## Lunar eclipses, occultations and transits
+
+Read [Lunar eclipses, occultations and transits](other-events.md) first for
+how these events relate to the solar pipeline. Then, per event:
+
+| Event | Source | Grade | What it uniquely provides |
+|---|---|---|---|
+| Lunar eclipses | Herald and Sinnott 2014, JBAA 124:247 [@lun-herald-sinnott-2014] | peer-reviewed | The 87 km shadow layer from 22,539 crater timings, and the recommended rule |
+| Lunar eclipses | Espenak and Meeus 2009, Five Millennium Canon of Lunar Eclipses, NASA/TP-2009-214172 [@lun-5mcle-tp2009] | primary | Danjon's rule, the catalogue method, ΔT and the visibility maps |
+| Lunar eclipses | VizieR VI/140 [@lun-vizier-vi140] | primary | The crater timings as a test set |
+| Lunar occultations | Explanatory Supplement 1961, section 10 [@occ-es1961] | peer-reviewed | Elements at conjunction, the station reduction and $kn\cos\psi$ |
+| Lunar occultations | VizieR VI/132C [@occ-vizier-vi132c] | primary | The archive from 1623, its LOLA limb grid and its default corrections |
+| Grazes | IOTA manual 2007 [@occ-iota-manual-2007] | trade | Graze profiles, the height shift and station placement |
+| Transits | Explanatory Supplement 1961, section 9F [@tr-es1961] | peer-reviewed | The transit contact solution and worked examples to 0.1 s |
+| Transits | IMCCE for ESO VT-2004, sheet B1 [@tr-eso-eis-b1] | primary | Stated constants and a rigorous worked example for Paris |
+| Transits | Schneider, Pasachoff and Golub 2004 [@tr-spg-2004] | peer-reviewed | The black drop as an instrumental effect |
+| Galilean satellites | Thuillot 1983, A&A 127:63 [@jup-thuillot-1983] | peer-reviewed | The two-cone method with an oblate Jupiter and the light-time rules |
+| Galilean satellites | IMCCE phenjupiter README [@jup-imcce-phenjupiter-readme] | primary | Which theory each year's tables use, and the mid-event definition |
+| Galilean satellites | Saquet and colleagues 2018 [@jup-saquet-2018] | peer-reviewed | PHEMU15 mutual-event astrometry and its residuals by theory |
+| Saturn's satellites | Arlot and colleagues 2012 [@sats-arlot-2012-phesat09] | peer-reviewed | PHESAT09 residuals for TASS 1.7, NOE and SAT351 |
+| Minor bodies | Gomes-Júnior and colleagues 2022, SORA [@mb-gomes-junior-2022-sora] with its code [@mb-sora-code] | peer-reviewed | The prediction and reduction equations, checked against the code |
+| Minor bodies | Herald and colleagues 2020 [@mb-herald-2020] | peer-reviewed | Chord fitting and occultation astrometry of asteroids |
+| Minor bodies | Ferreira and colleagues 2022 [@mb-ferreira-2022] | peer-reviewed | The accuracy of occultation astrometry with Gaia |
 
 ## Where the raw notes go deeper
 

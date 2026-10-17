@@ -1,13 +1,13 @@
 ---
-title: Computing Solar Eclipses: Calculation and Algorithms
-description: Solar eclipse calculation and prediction algorithms, with formulas, Besselian elements, contact times, lunar limb data and accuracy comparisons.
+title: Computing Eclipses, Occultations and Transits
+description: Solar eclipse calculation algorithms: formulas, Besselian elements, contact times and lunar limb data, extended to lunar eclipses, occultations and transits.
 status: working
-updated: 2026-09-30
+updated: 2026-10-17
 seo_title: Solar Eclipse Calculation: Algorithms, Data and Accuracy
 ---
 
-![Everything this site computes is the geometry behind this photograph, and
-the hardest parts of it are at the edges. The pink prominences ring a limb
+![Everything this site computes starts from the geometry behind this
+photograph, and the hardest parts of it are at the edges. The pink prominences ring a limb
 that is not a circle: lunar topography moves a path limit by 1 to 3 km, and
 the solar radius that sets where the corona begins is still disputed at a
 third of an arcsecond. Totality of 1999 August 11, photographed from France
@@ -15,13 +15,20 @@ by Luc Viatour / [lucnix.be](https://lucnix.be), CC BY-SA 3.0
 [@glob-nasa-google-2024] [@val-besselian-maps-accuracy].](img/totality-1999-viatour.jpg){.hero}
 
 This guide covers solar eclipse calculation algorithms, their formulas,
-constants, datasets and validation evidence. Start with
+constants, datasets and validation evidence, and the same machinery for
+lunar eclipses, occultations and transits. Start with
 [how to calculate a solar eclipse](05-primer/how-an-eclipse-is-computed.md)
 for the geometry, or follow the
 [eclipse calculation pipeline](20-reports/pipeline-design.md) for the
 implementation stages. The
 [software comparison](10-raw/09-software-and-repos/_index.md) covers published
 eclipse calculators and open-source libraries.
+
+The same shadow geometry also computes lunar eclipses, occultations of stars
+and planets, transits of Mercury and Venus, and the phenomena of Jupiter's
+and Saturn's satellites. The
+[comparison of these events](20-reports/other-events.md) sets out what each
+one adds to the solar pipeline.
 
 [Research and website source on GitHub](https://github.com/kvsankar/solar-eclipse-research).
 
@@ -57,12 +64,14 @@ and the evidence each one provides.
   and metres.
 - [Reading list](20-reports/reading-list.md): the papers, code and datasets in
   order.
+- [Lunar eclipses, occultations and transits](20-reports/other-events.md): how
+  the same geometry serves the other events, and what each one adds.
 - [Primer](05-primer/_index.md): start here if you have not computed an
   eclipse before.
 
 ## The raw notes
 
-Eleven topics, each a folder of notes with quoted formulas, graded citations
+Seventeen topics, each a folder of notes with quoted formulas, graded citations
 and the questions it could not close.
 
 | Topic | What it settles |
@@ -78,6 +87,12 @@ and the questions it could not close.
 | [Software and repositories](10-raw/09-software-and-repos/_index.md) | Four production lineages, the open libraries, thirty repositories, the datasets |
 | [Validation](10-raw/10-validation/_index.md) | Observed against predicted, predictor disagreements, the error budget and protocol |
 | [NASA SVS and Ernie Wright](10-raw/11-svs-wright/_index.md) | The 2024 paper, the SVS products and data, and the comparison with other predictors |
+| [Lunar eclipses](10-raw/12-lunar-eclipses/_index.md) | The lunar elements and six contacts, the three shadow enlargement rules, crater timings and brightness |
+| [Lunar occultations](10-raw/13-lunar-occultations/_index.md) | Occultations of stars and planets by the Moon, grazes, star catalogues and the reduction of timings |
+| [Transits of Mercury and Venus](10-raw/14-transits/_index.md) | Enumeration, transit elements, contacts and local reduction formulas, the black drop and the radii |
+| [Jupiter's satellites](10-raw/15-jupiter-satellites/_index.md) | Eclipses, occultations, transits and shadow transits of the Galilean satellites, theories and mutual events |
+| [Saturn and the outer satellites](10-raw/16-saturn-and-outer-satellites/_index.md) | Saturn's ring geometry, satellite theories and phenomena, and mutual events at Uranus and Pluto |
+| [Occultations by planets and minor bodies](10-raw/17-occultations-by-planets-and-minor-bodies/_index.md) | Asteroid and TNO occultation paths, Gaia astrometry, light curves and chords, and planet-planet occultations |
 
 ## Reference
 
