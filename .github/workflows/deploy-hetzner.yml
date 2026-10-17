@@ -48,10 +48,15 @@ jobs:
           grep -q "<title>" site/computing.html
 
       - name: Setup SSH key
+        env:
+          HETZNER_SSH_KEY: ${{ secrets.HETZNER_SSH_KEY }}
         run: |
           mkdir -p ~/.ssh
-          printf '%s\n' "${{ secrets.HETZNER_SSH_KEY }}" > ~/.ssh/deploy_key
+          # A key set from Windows can arrive with CRLF line endings, which
+          # OpenSSH rejects as "error in libcrypto". Strip them.
+          printf '%s\n' "$HETZNER_SSH_KEY" | tr -d '\r' > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
+          ssh-keygen -y -f ~/.ssh/deploy_key > /dev/null
 
       - name: Deploy owned subtree
         run: |
