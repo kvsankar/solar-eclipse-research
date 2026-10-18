@@ -50,10 +50,16 @@ are three cases:
 ## FIG: 2D figures and animations
 
 - **FIG-1** The general primer page has at least these figures:
-  1. the light path, with the three places a body can cut it;
+  1. one diagram per case (darkened, hidden, both), each a separate figure
+     at the head of its section, in which every body carries two labels:
+     its role (light source, blocking body, darkened body, observer) and
+     its name (the Sun, a star, the Moon, the Earth);
   2. the shape of the shadow: a cone with umbra, penumbra and antumbra, with
      what an observer in each sees, beside the cylinder of a point source;
-  3. one gallery figure per case, with one small panel per kind of event.
+  3. further examples, each a separate diagram in the same style with the
+     same two labels per body: the eclipse of a satellite and a shadow
+     transit (darkened); a satellite hidden by its planet and a star hidden
+     by an asteroid (hidden); a transit of Venus (both).
 - **FIG-2** Every primer figure says on its face that it is a schematic and
   not to scale. Its still frame carries its whole point with no interaction.
 - **FIG-3** Three primer figures are animated: the Moon's shadow crossing the
@@ -66,6 +72,9 @@ are three cases:
   motion. Without JavaScript the still frame is shown.
 - **FIG-5** Pressing the play button does not open the figure lightbox.
   Opening the lightbox on an animated figure shows its still frame.
+- **FIG-7** The Sun is drawn in one light, warm colour defined as a theme
+  token, so it reads as bright in both themes. No figure draws the Sun in
+  the dark accent colour.
 - **FIG-6** The schematic figures are drawn at build time by scripts in
   `tools/figures/`. They illustrate the geometry and do not compute
   positions, so they do not use the geometry module.
@@ -96,6 +105,39 @@ observer sees. They share one module, so they cannot disagree.
 - **GEO-6** The module has no dependency, touches no page, and loads both as
   a plain script from `file://` and as a module under Node, where its tests
   run.
+
+## REP: the reports
+
+- **REP-1** The executive summary opens with the light-path idea and gives
+  one paragraph of findings for each case (darkened, hidden, both) before
+  the solar eclipse findings. The solar findings follow under a heading
+  that names solar eclipses.
+- **REP-2** The pipeline report is titled "Solar eclipse pipeline" and the
+  error budget "Solar eclipse error budget". Each says in its opening
+  paragraph that it covers solar eclipses and links to the extension report.
+- **REP-3** The cross-event report is titled "Extending the pipeline to
+  other events" and comes straight after the solar eclipse pipeline. The
+  order is: executive summary, solar eclipse pipeline, extension, error
+  budget, reading list, open questions.
+- **REP-4** The reading list and the open questions each have one section per
+  research group: shared geometry and inputs, solar eclipses and transits,
+  lunar eclipses, occultations, planetary satellites.
+
+## HOME: the home page
+
+- **HOME-1** The home page's main image is a collage with at least one
+  photograph for each case: darkened, hidden and both. Every photograph is
+  public domain or CC BY-SA, with its licence confirmed on the file's own
+  page and recorded in `images.tsv`. The credits appear on the page under
+  the collage.
+- **HOME-2** The collage is built by a script from source images kept in
+  the repository, so the same sources give the same bytes.
+- **HOME-3** The home page's introduction starts with the light-path idea
+  and says that solar eclipses are covered in most depth.
+- **HOME-4** The home page's summary has one bullet per case and one on the
+  depth of the solar eclipse material.
+- **HOME-5** The home page's table of research notes is grouped by research
+  group and links every topic.
 
 ## S3D: 3D guided scenes
 

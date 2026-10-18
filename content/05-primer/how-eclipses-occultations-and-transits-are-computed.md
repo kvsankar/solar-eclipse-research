@@ -19,10 +19,11 @@ seo_title: Eclipses, Occultations and Transits Explained with One Geometry
 Light leaves a source and reaches an observer. Sometimes it travels straight
 there, as when we look at the Sun or a star. Sometimes it first lights a
 body, such as the Moon, a planet or a satellite, and reaches us by
-reflection. The light path therefore has up to three legs, and a body that
-gets in the way cuts one of them.
-
-![A body can cut the light path in three places, and each place gives a different kind of event: the lit body goes dark, the observer loses sight of it, or the observer loses sight of the source itself.](img/light-path.svg)
+reflection. A body that gets in the way cuts the path in one of three
+places: the light on its way to a lit body, the light on its way to the
+observer, or the observer's view of the source itself. The three sections
+below take each in turn. In every diagram each body has two labels: the part
+it plays, and what it is in that example.
 
 ## Darkened: a body goes dark for everyone
 
@@ -33,6 +34,8 @@ them, so a prediction is a list of times rather than a map of paths. Where
 the observer stands only decides whether the body is above their horizon
 [@lun-5mcle-tp2009].
 
+![In a lunar eclipse the Earth blocks the sunlight on its way to the Moon, so the Moon goes dark for everyone on the Earth's night side, wherever they stand.](img/case-darkened.svg)
+
 - A **lunar eclipse** is the Moon in the Earth's shadow
   [@lun-5mcle-tp2009].
 - An **eclipse of a satellite** is, for example, Io in Jupiter's shadow
@@ -42,7 +45,9 @@ the observer stands only decides whether the body is above their horizon
 - A **mutual eclipse** is one satellite in another satellite's shadow
   [@jup-imcce-phenjupiter-readme].
 
-![In each panel a body cuts the sunlight reaching another body, which goes dark for everyone who can see it: the Moon in the Earth's shadow, Io in Jupiter's shadow, and Io's shadow on Jupiter.](img/gallery-darkened.svg)
+![Jupiter blocks the sunlight on its way to Io, so Io goes dark for every observer who can see it.](img/example-satellite-eclipse.svg)
+
+![Io blocks the sunlight on its way to a patch of Jupiter's cloud tops, which shows as a dark spot: a shadow transit.](img/example-shadow-transit.svg)
 
 ![When played, the Moon crosses the Earth's shadow and its copper tint deepens in the umbra, where only sunlight bent through the Earth's atmosphere reaches it. The still frame is totality.](img/anim-lunar-eclipse.svg){.anim}
 
@@ -52,6 +57,8 @@ When a body cuts the light on its way to the observer, something disappears
 for that observer only. This is an [?occultation]. A body nearby, or one
 looking from somewhere else, may see nothing happen, so the time depends on
 where the observer stands [@occ-es1961].
+
+![In a lunar occultation the Moon blocks the starlight on its way to the observer. Only observers inside the band behind the Moon lose sight of the star.](img/case-hidden.svg)
 
 - The Moon **occults a star or a planet** [@occ-es1961].
 - An **asteroid or a trans-Neptunian object occults a star**. Only observers
@@ -70,7 +77,9 @@ body. That shadow darkens nothing, but it is how these events are computed:
 an occultation is predicted as the path of that cylinder across the Earth
 [@occ-es1961] [@mb-gomes-junior-2022-sora].
 
-![In each panel a body cuts the light on its way to the observer, so something disappears for that observer: a star behind the Moon, Io behind Jupiter, and a star behind an asteroid, seen only from inside the asteroid's shadow path.](img/gallery-hidden.svg)
+![The Sun lights Io, and Jupiter blocks the observer's view of it: an occultation of a satellite by its planet.](img/example-satellite-occultation.svg)
+
+![An asteroid blocks the starlight on its way to a narrow band across the Earth. Only observers inside that band see the star disappear.](img/example-asteroid-occultation.svg)
 
 ![When played, Io goes once round Jupiter and passes the four places where each kind of event happens. The angle between the Sun and the Earth is exaggerated to separate them. The still frame shows Io in Jupiter's shadow.](img/anim-io-orbit.svg){.anim}
 
@@ -83,12 +92,14 @@ ways. This is why the Supplement says a solar eclipse is really an
 occultation, and why it describes a [?transit] of Mercury or Venus as a
 planet's shadow falling on the Earth [@prim-es1992-terms].
 
+![In a solar eclipse the Moon blocks the observer's view of the Sun. The same observer stands in the Moon's shadow, so being in the shadow and seeing the Sun hidden are one event.](img/case-both.svg)
+
 - A **solar eclipse**: the observer stands in the Moon's shadow
   [@bes-es1961].
 - A **transit of Mercury or Venus**: the observer stands in the planet's
   shadow, which is far too narrow to cover the Sun [@tr-es1961].
 
-![The observer inside a body's shadow sees the source hidden behind that body: in the Moon's umbra the Sun is covered, and in the antumbra of Venus a small dot crosses the Sun.](img/gallery-both.svg)
+![Venus is far too small to cover the Sun, so its umbra closes before reaching the Earth. The observer stands in the antumbra and sees a dot cross the Sun.](img/example-venus-transit.svg)
 
 ![When played, the Moon's shadow slides across the Earth while, on the right, the Moon slides across the Sun as the observer at the dot sees it. The Sun is fully covered only while the umbra is on the observer. The still frame is totality.](img/anim-solar-eclipse.svg){.anim}
 

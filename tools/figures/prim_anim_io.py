@@ -11,7 +11,7 @@ from figlib import Figure, n
 
 DUR = "14s"
 f = Figure(
-    width=680, height=370,
+    width=680, height=372,
     title="One orbit of Io: four kinds of event",
     desc=("A view from above Jupiter. Sunlight comes from the left, so "
           "Jupiter's shadow is a band to its right. The Earth lies off to the "
@@ -41,13 +41,16 @@ f.text(jx + bx * 210 + 34, jy + by * 210, "hidden from the Earth", cls="label-di
 
 f.circle(jx, jy, orbit, cls="rule dashed")
 f.circle(jx, jy, jr, cls="body")
-f.text(jx, jy + 4, "Jupiter", anchor="middle", cls="label")
+f.text(jx, jy - 2, "Jupiter", anchor="middle", cls="label")
+f.text(jx, jy + 12, "the planet", anchor="middle", cls="label-dim")
 
 # Directions.
 f.line(110, 34, 40, 34, cls="accent", marker="arrow")
-f.text(118, 38, "to the Sun", cls="label")
+f.text(118, 32, "Light source", cls="label")
+f.text(118, 46, "the Sun, this way", cls="label-dim")
 f.line(jx + ex * 150, jy + ey * 150, jx + ex * 230, jy + ey * 230, cls="accent-2", marker="arrow")
-f.text(jx + ex * 236 + 4, jy + ey * 236 + 18, "to the Earth", anchor="middle", cls="label")
+f.text(jx + ex * 236 + 4, jy + ey * 236 + 16, "Observer", anchor="middle", cls="label")
+f.text(jx + ex * 236 + 4, jy + ey * 236 + 30, "on the Earth, this way", anchor="middle", cls="label-dim")
 
 
 def place(angle_deg, label, dx, dy, anchor):
@@ -64,12 +67,12 @@ place(0, "eclipse", 12, 22, "start")
 
 # Io, starting in the shadow, rotating once round Jupiter.
 f.raw(
-    f'<g><circle cx="{n(jx + orbit)}" cy="{jy}" r="8" class="body"/>'
-    f'<circle cx="{n(jx + orbit)}" cy="{jy}" r="8" class="rule"/>'
-    f'<text x="{n(jx + orbit)}" y="{jy - 14}" text-anchor="middle" class="label">Io</text>'
-    f'<animateTransform attributeName="transform" type="rotate" '
-    f'values="0 {jx} {jy};-360 {jx} {jy}" dur="{DUR}" begin="indefinite" '
-    f'repeatCount="indefinite"/></g>'
+    f'<g transform="translate({n(jx + orbit)} {jy})">'
+    f'<circle cx="0" cy="0" r="8" class="body"/><circle cx="0" cy="0" r="8" class="rule"/>'
+    f'<text x="0" y="-14" text-anchor="middle" class="label">Io</text>'
+    f'<animateMotion path="M0,0 A{orbit},{orbit} 0 1 0 {-2 * orbit},0 A{orbit},{orbit} 0 1 0 0,0" '
+    f'dur="{DUR}" begin="indefinite" repeatCount="indefinite"/></g>'
 )
+f.text(670, 344, "Io and Jupiter swap roles from one event to the next.", anchor="end", cls="label-dim")
 f.text(670, 362, "Schematic, not to scale; angles exaggerated", anchor="end", cls="label-dim")
 f.save(__file__, "../../content/05-primer/img/anim-io-orbit.svg")

@@ -54,11 +54,12 @@ f.polyline([umb[2], umb[1], ant[2]], cls="rule thin")
 for sgn in (-1, 1):
     f.line(sx, cy + sgn * sr, bx, cy + sgn * br, cls="rule thin")
     f.line(sx, cy + sgn * sr, bx, cy - sgn * br, cls="rule thin dashed")
-f.circle(sx, cy, sr, cls="body")
-f.text(sx, cy + sr + 18, "Extended source", anchor="middle", cls="label")
-f.text(sx, cy + sr + 32, "the Sun", anchor="middle", cls="label-dim")
+f.circle(sx, cy, sr, cls="sun-fill")
+f.text(sx, cy + sr + 18, "Light source", anchor="middle", cls="label")
+f.text(sx, cy + sr + 32, "the Sun, a disc", anchor="middle", cls="label-dim")
 f.circle(bx, cy, br, cls="body")
-f.text(bx, cy - br - 12, "Body", anchor="middle", cls="label")
+f.text(bx, cy - br - 26, "Blocking body", anchor="middle", cls="label")
+f.text(bx, cy - br - 11, "the Moon", anchor="middle", cls="label-dim")
 f.text((bx + vx) / 2 - 10, cy + 4, "umbra", anchor="middle", cls="label")
 f.text(600, cy + 4, "antumbra", anchor="middle", cls="label")
 f.text(560, cy - inner(560) + 18, "penumbra", anchor="middle", cls="label")
@@ -67,7 +68,7 @@ f.text(560, cy - inner(560) + 18, "penumbra", anchor="middle", cls="label")
 def observer(x, y, kind, label, ix, iy):
     f.circle(x, y, 4, cls="accent-fill")
     f.line(x, y + 5, ix, iy - 18, cls="accent thin dotted")
-    f.circle(ix, iy, 15, cls="accent-fill")     # the source as seen
+    f.circle(ix, iy, 15, cls="sun-fill")        # the source as seen
     if kind == "total":
         f.circle(ix, iy, 16, cls="sky-fill")
     elif kind == "annular":
@@ -83,18 +84,23 @@ observer(620, cy + 10, "annular", "antumbra: annular", 610, 280)
 
 # ---- bottom: point source --------------------------------------------------
 f.line(20, 335, 660, 335, cls="rule thin dashed")
-by = 400
-for dy in (-36, -18, 18, 36):
-    f.line(20, by + dy, bx - 30, by + dy, cls="accent thin", marker="arrow")
+by = 398
+for dy in (-22, -8, 8, 22):
+    f.line(26, by + dy, 250, by + dy, cls="accent thin", marker="arrow")
 f.rect(bx, by - br, x_end - bx, 2 * br, cls="cone-deep")
 f.line(bx, by - br, x_end, by - br, cls="rule thin")
 f.line(bx, by + br, x_end, by + br, cls="rule thin")
 f.circle(bx, by, br, cls="body")
-f.text(20, by + 62, "Star: a point at infinity, so its light arrives in parallel lines",
-       cls="label")
+f.circle(14, by, 4, cls="sun-fill")
+f.text(20, by + 44, "Light source", cls="label")
+f.text(20, by + 58, "a star: a point at infinity, so its light arrives in parallel lines",
+       cls="label-dim")
+f.text(bx, by - br - 24, "Blocking body", anchor="middle", cls="label")
+f.text(bx, by - br - 9, "the Moon", anchor="middle", cls="label-dim")
 f.text(470, by - 26, "cylinder: no penumbra", anchor="middle", cls="label")
 f.circle(610, by, 4, cls="accent-fill")
-f.text(610, by + 34, "star hidden", anchor="middle", cls="label-dim")
+f.text(610, by + 36, "Observer", anchor="middle", cls="label")
+f.text(610, by + 50, "the star is hidden", anchor="middle", cls="label-dim")
 
 f.text(670, 474, "Schematic, not to scale", anchor="end", cls="label-dim")
 f.save(__file__, "../../content/05-primer/img/shadow-shape.svg")

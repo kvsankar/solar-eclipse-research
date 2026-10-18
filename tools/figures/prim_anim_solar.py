@@ -43,12 +43,13 @@ f.raw(
 )
 f.circle(ex, ey, er, cls="rule")
 f.circle(ex, ey, 3.5, cls="accent-2-fill")
-f.text(ex, ey + er + 22, "The Moon's shadow on the Earth", anchor="middle", cls="label")
-f.text(ex + 8, ey - 8, "observer", cls="label-dim")
+f.text(ex, ey + er + 22, "The Moon's shadow crossing the Earth", anchor="middle", cls="label")
+f.text(ex + 8, ey - 18, "Observer", cls="label")
+f.text(ex + 8, ey - 4, "on the Earth", cls="label-dim")
 
 sx, sy = 510, 140
 f.circle(sx, sy, SUN + 14, cls="accent thin dotted")
-f.circle(sx, sy, SUN, cls="accent-fill")
+f.circle(sx, sy, SUN, cls="sun-fill")
 f.raw(
     f'<g clip-path="url(#sky)"><circle cx="{sx}" cy="{sy}" r="{MOON}" class="sky-fill">'
     f'<animate attributeName="cx" values="{sx + TRAVEL * K};{sx - TRAVEL * K}" dur="{DUR}" '
@@ -58,5 +59,9 @@ f.raw(
 )
 f.text(sx, sy + er + 22, "What the observer sees", anchor="middle", cls="label")
 f.text(sx, sy + er + 37, "still frame: the Sun covered, totality", anchor="middle", cls="label-dim")
+f.text(375, 34, "Light source", cls="label")
+f.text(375, 48, "the Sun, behind", cls="label-dim")
+f.text(645, 34, "Blocking body", anchor="end", cls="label")
+f.text(645, 48, "the Moon, the dark disc", anchor="end", cls="label-dim")
 f.text(670, 16, "Schematic, not to scale", anchor="end", cls="label-dim")
 f.save(__file__, "../../content/05-primer/img/anim-solar-eclipse.svg")

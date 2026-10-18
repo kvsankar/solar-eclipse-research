@@ -1,5 +1,6 @@
 """Acceptance tests AT-PRI-1 to AT-PRI-6 and AT-FIG-1 to AT-FIG-3 (docs/acceptance-tests.md)."""
 
+import html
 import re
 import unittest
 from pathlib import Path
@@ -25,8 +26,30 @@ KINDS = {
     "Mutual occultation": "Hidden",
     "Occultation of one planet by another": "Hidden",
 }
-STATIC = ["light-path.svg", "shadow-shape.svg", "gallery-darkened.svg",
-          "gallery-hidden.svg", "gallery-both.svg"]
+CASES = {
+    "Darkened": ("case-darkened.svg", [("Light source", "the Sun"), ("Blocking body", "the Earth"),
+                                       ("Darkened body", "the Moon"), ("Observer", "on the Earth's night side")]),
+    "Hidden": ("case-hidden.svg", [("Light source", "a star"), ("Blocking body", "the Moon"),
+                                   ("Observer", "on the Earth")]),
+    "Both": ("case-both.svg", [("Light source", "the Sun"), ("Blocking body", "the Moon"),
+                               ("Observer", "on the Earth")]),
+}
+EXAMPLES = {
+    "example-satellite-eclipse.svg": ("Darkened", [("Light source", "the Sun"), ("Blocking body", "Jupiter"),
+                                                   ("Darkened body", "Io, in Jupiter's shadow"),
+                                                   ("Observer", "on the Earth")]),
+    "example-shadow-transit.svg": ("Darkened", [("Light source", "the Sun"), ("Blocking body", "Io"),
+                                                ("Darkened body", "Jupiter's cloud tops, a patch"),
+                                                ("Observer", "on the Earth")]),
+    "example-satellite-occultation.svg": ("Hidden", [("Light source", "the Sun"), ("Lit body", "Io"),
+                                                     ("Blocking body", "Jupiter"), ("Observer", "on the Earth")]),
+    "example-asteroid-occultation.svg": ("Hidden", [("Light source", "a star"), ("Blocking body", "an asteroid"),
+                                                    ("Observer", "on the Earth, in the shadow path")]),
+    "example-venus-transit.svg": ("Both", [("Light source", "the Sun"), ("Blocking body", "Venus"),
+                                           ("Observer", "on the Earth")]),
+}
+STATIC = [c[0] for c in CASES.values()] + ["shadow-shape.svg"] + list(EXAMPLES)
+FIG_SCRIPTS = ROOT / "tools" / "figures"
 ANIMATED = ["anim-solar-eclipse.svg", "anim-lunar-eclipse.svg", "anim-io-orbit.svg"]
 
 
@@ -107,6 +130,40 @@ class PrimerFigureTest(unittest.TestCase):
         for name in STATIC + ANIMATED:
             self.assertIn(f"(img/{name})", self.text, name)
             self.assertIn(f"05-primer/img/{name}\t", self.prov, name)
+
+    def test_fig_1_case_diagrams_lead_their_sections_with_two_labels(self):
+        secs = sections(self.text)
+        for case, (name, labels) in CASES.items():
+            sec = next(v for k, v in secs.items() if k.startswith(case))
+            first = re.search(r"!\[[^\]]*\]\(img/([^)]+)\)", sec, flags=re.S).group(1)
+            self.assertEqual(first, name, case)
+            svg = (IMG / name).read_text(encoding="utf-8")
+            visible = [html.unescape(t) for t in re.findall(r"<text[^>]*>([^<]*)</text>", svg)]
+            for role, body in labels:
+                self.assertIn(role, visible, (name, role))
+                self.assertIn(body, visible, (name, body))
+
+    def test_fig_1_examples_in_their_sections_with_two_labels(self):
+        secs = sections(self.text)
+        self.assertNotIn("gallery-", self.text)
+        for name, (case, labels) in EXAMPLES.items():
+            sec = next(v for k, v in secs.items() if k.startswith(case))
+            self.assertIn(f"(img/{name})", sec, name)
+            svg = (IMG / name).read_text(encoding="utf-8")
+            visible = [html.unescape(t) for t in re.findall(r"<text[^>]*>([^<]*)</text>", svg)]
+            for role, body in labels:
+                self.assertIn(role, visible, (name, role))
+                self.assertIn(body, visible, (name, body))
+
+    def test_fig_7_sun_colour(self):
+        css = (ROOT / "templates" / "static" / "site.css").read_text(encoding="utf-8")
+        self.assertGreaterEqual(css.count("--fig-sun:"), 3)
+        self.assertIn(".figsvg .sun-fill", css)
+        for script in FIG_SCRIPTS.glob("prim_*.py"):
+            src = script.read_text(encoding="utf-8")
+            for line in src.splitlines():
+                if "accent-fill" in line:
+                    self.assertNotRegex(line.lower(), r"sun|sx, sy|# the source as seen", f"{script.name}: {line}")
 
     def test_fig_2_each_figure_says_schematic(self):
         for name in STATIC + ANIMATED:

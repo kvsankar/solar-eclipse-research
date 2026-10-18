@@ -522,6 +522,7 @@ math > semantics > mrow:first-child > mi[mathvariant="normal"]:first-child {
   --fig-accent: #8a5a2b;
   --fig-accent-2: #2d6a5a;
   --fig-fill: #ece5da;
+  --fig-sun: #f6d58a;
   --fig-fill-2: #dbd3c5;
 }
 html[data-theme="dark"] {
@@ -531,6 +532,7 @@ html[data-theme="dark"] {
   --fig-accent: #d9a066;
   --fig-accent-2: #7fd0b4;
   --fig-fill: #2a2833;
+  --fig-sun: #e9c46a;
   --fig-fill-2: #35323f;
 }
 @media (prefers-color-scheme: dark) {
@@ -541,6 +543,7 @@ html[data-theme="dark"] {
     --fig-accent: #d9a066;
     --fig-accent-2: #7fd0b4;
     --fig-fill: #2a2833;
+    --fig-sun: #e9c46a;
     --fig-fill-2: #35323f;
   }
 }
@@ -568,6 +571,7 @@ html[data-theme="dark"] {
 .figsvg .accent-2 { fill: none; stroke: var(--fig-accent-2); stroke-width: 1.6; }
 .figsvg .accent-fill { fill: var(--fig-accent); stroke: none; }
 .figsvg .accent-2-fill { fill: var(--fig-accent-2); stroke: none; }
+.figsvg .sun-fill { fill: var(--fig-sun); stroke: var(--fig-accent); stroke-width: 0.8; }
 .figsvg .sky-fill { fill: var(--bg); stroke: var(--fig-dim); stroke-width: 0.8; }
 .figsvg .dashed { stroke-dasharray: 5 4; }
 .figsvg .dotted { stroke-dasharray: 1.5 3; }
