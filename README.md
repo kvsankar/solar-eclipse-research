@@ -41,6 +41,8 @@ python tools/jargon_check.py       # terms used before they are explained
 python -m unittest discover -s tools -p test_seo.py  # search metadata regression checks
 python -m unittest discover -s tools -p 'test_*.py'  # numerical and source contracts
 python tools/check_seo.py          # verify rendered metadata and sitemap
+node --test tools/js/geometry.test.js   # the shared geometry module (spec GEO)
+python tools/check_browser.py      # headless checks of animated figures (needs Playwright)
 python tools/make_og_image.py      # recompose content/img/social-card-v3.jpg (needs Pillow)
 ```
 

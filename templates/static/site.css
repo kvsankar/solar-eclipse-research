@@ -568,6 +568,7 @@ html[data-theme="dark"] {
 .figsvg .accent-2 { fill: none; stroke: var(--fig-accent-2); stroke-width: 1.6; }
 .figsvg .accent-fill { fill: var(--fig-accent); stroke: none; }
 .figsvg .accent-2-fill { fill: var(--fig-accent-2); stroke: none; }
+.figsvg .sky-fill { fill: var(--bg); stroke: var(--fig-dim); stroke-width: 0.8; }
 .figsvg .dashed { stroke-dasharray: 5 4; }
 .figsvg .dotted { stroke-dasharray: 1.5 3; }
 .figsvg .thin { stroke-width: 0.8; }
@@ -601,6 +602,18 @@ html[data-theme="dark"] {
 .fig3d-open:hover { background: var(--surface-2); border-color: var(--line-strong); }
 .fig3d-open:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .fig3d-host.is3d > .figzoom { display: none; }
+
+/* ---- animated figures ----
+   The button exists only when the script added it (spec FIG-4). */
+.anim-play {
+  display: inline-block; margin-top: 8px;
+  font: inherit; font-size: 12px; line-height: 1;
+  padding: 6px 11px; cursor: pointer;
+  color: var(--text-dim); background: var(--surface);
+  border: 1px solid var(--line); border-radius: 999px;
+}
+.anim-play:hover { background: var(--surface-2); border-color: var(--line-strong); }
+.anim-play:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 .fig3d-stage {
   position: relative; width: 100%; margin-top: 4px;

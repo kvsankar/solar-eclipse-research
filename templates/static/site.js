@@ -422,6 +422,47 @@
     btn.appendChild(item.el);
     btn.addEventListener("click", function () { open(item, btn); });
   });
+  /* ------------------------------------------------------- animations ---
+     Spec FIG-4 and FIG-5. An animated figure's SMIL elements wait for a play
+     event, so the still frame is what a reader gets without this script.
+     With reduced motion asked for, no button is added and nothing moves. */
+  (function () {
+    if (window.matchMedia &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    document.querySelectorAll(".anim-host").forEach(function (host) {
+      var svg = host.querySelector("svg");
+      if (!svg || typeof svg.pauseAnimations !== "function") return;
+      var anims = svg.querySelectorAll("animate, animateTransform, animateMotion, set");
+      if (!anims.length) return;
+      var started = false, playing = false;
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "anim-play";
+      function show() {
+        btn.textContent = playing ? "Pause" : "Play";
+        btn.setAttribute("aria-pressed", playing ? "true" : "false");
+        btn.setAttribute("aria-label", (playing ? "Pause" : "Play") + " the animation");
+      }
+      btn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (!started) {
+          anims.forEach(function (a) { if (a.beginElement) a.beginElement(); });
+          svg.unpauseAnimations();
+          started = playing = true;
+        } else if (playing) {
+          svg.pauseAnimations();
+          playing = false;
+        } else {
+          svg.unpauseAnimations();
+          playing = true;
+        }
+        show();
+      });
+      show();
+      host.appendChild(btn);
+    });
+  })();
+
   /* ------------------------------------------------------------- search ---
      The site has no server to ask and must open from file://, where fetch()
      of a local file is refused, so the index is a script that assigns one

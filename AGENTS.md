@@ -145,6 +145,13 @@ developer new to eclipses would need: fundamental plane, gamma, umbral
 magnitude, obscuration, k, ΔT, libration, Watts angle, and so on. Definitions
 are one or two sentences, standalone.
 
+## Specifications
+
+What the site shows and how its interactive parts behave is specified in
+`docs/specs.md`, with acceptance tests in `docs/acceptance-tests.md`. A change
+to either starts there: give the requirement an ID, add its acceptance test,
+see the test fail, then build.
+
 ## Figures
 
 A figure we draw is a script in `tools/figures/` that imports `figlib.py` and
@@ -175,6 +182,11 @@ Read `tools/figures/fundamental_plane.py` as the worked example, and
    is worse in 3D, not better. The SVG must carry the whole point on its own,
    because most readers will never press the button. See README.md for the
    runtime gates and the vendored library.
+8. **Animation is an upgrade too.** Mark an image `{.anim}` and give every
+   SMIL element in its SVG `begin="indefinite"`. The script adds a Play
+   button, never starts it by itself, and adds nothing for readers who ask
+   for reduced motion, so the still frame must carry the point. Choose the
+   still frame to be the moment that matters, such as totality.
 
 ## Writing standards
 

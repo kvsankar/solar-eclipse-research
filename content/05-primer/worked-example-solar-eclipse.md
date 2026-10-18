@@ -1,9 +1,9 @@
 ---
-title: How to calculate a solar eclipse
+title: Worked example: a solar eclipse
 description: Follow a solar eclipse calculation from Sun and Moon positions to shadow geometry and contact times, with links to algorithms and formulas.
-order: 1
+order: 2
 status: working
-updated: 2026-09-30
+updated: 2026-10-18
 seo_title: How to Calculate a Solar Eclipse: Methods and Formulas
 ---
 
@@ -136,3 +136,27 @@ occultation community's tool for beads. Other surveyed apps use several computat
 
 The [reports](../20-reports/_index.md) turn this into a pipeline a developer
 can build, with the constants, the data files and the tests.
+
+## What changes for other events
+
+The steps above carry over to every event in the
+[general primer](how-eclipses-occultations-and-transits-are-computed.md). Only
+some of them change.
+
+- **A lunar eclipse** swaps the roles. The Earth casts the shadow and the
+  Moon moves through it, so the elements shrink to the Moon's position and
+  three limiting separations. The contacts are the same instant for everyone,
+  so there is no path and no step from the plane to one place. A new input,
+  the enlargement of the Earth's shadow by its atmosphere, takes the place of
+  the lunar limb [@lun-herald-sinnott-2014]. See
+  [Lunar eclipses](../10-raw/30-lunar-eclipses/_index.md).
+- **An occultation of a star** keeps every step but changes the source. The
+  star is a point at infinity, so the two cones become one cylinder of the
+  Moon's radius and there is no penumbra. The limb profile matters even more
+  near the limits, where the star grazes the Moon's edge [@occ-es1961]. See
+  [Lunar occultations](../10-raw/40-occultations/13-lunar-occultations/_index.md).
+- **A transit of Mercury or Venus** keeps every step with the planet in place
+  of the Moon. The planet is far too small to cover the Sun, so only the
+  penumbra and the antumbra reach the Earth. The planet's radius joins the
+  Sun's as an input that moves every contact [@tr-es1961]. See
+  [Transits of Mercury and Venus](../10-raw/20-solar-eclipses-and-transits/14-transits/_index.md).

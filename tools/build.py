@@ -434,6 +434,12 @@ def inline_svgs(body: str, node: "Node") -> str:
                 f'<div class="fig3d-host" data-scene="'
                 f'{html.escape(scene.group(1), quote=True)}">{markup}</div>'
             )
+        # An image marked {.anim} carries SMIL animations that wait for a
+        # play event (begin="indefinite"), so its still frame is the figure.
+        # The wrapper lets the script add a play button beside, not inside,
+        # the lightbox trigger (spec FIG-4, FIG-5).
+        if cls and "anim" in cls.group(1).split():
+            return f'<div class="anim-host">{markup}</div>'
         return markup
 
     return IMG_RE.sub(repl, body)
