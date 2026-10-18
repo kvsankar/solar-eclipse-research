@@ -11,13 +11,16 @@ times, magnitude, obscuration, Baily's beads). The target depth is Ernie
 Wright's NASA SVS work on the 2024 eclipse: lunar limb profiles from LRO LOLA,
 the solar radius question, Earth and Moon modelling, ephemerides, time scales.
 
-The same geometry extends to the other events of the family, each in its own
-topic: lunar eclipses (`12-`, prefix `lun`), lunar occultations of stars and
-planets (`13-`, `occ`), transits of Mercury and Venus (`14-`, `tr`), Jupiter's
-satellites (`15-`, `jup`), Saturn and the outer satellites (`16-`, `sats`), and
-occultations by planets and minor bodies (`17-`, `mb`). The report
-`content/20-reports/other-events.md` relates them to the solar pipeline. Term
-slugs in these topics carry the topic prefix as well.
+The same geometry extends to the other events of the family. Every event is
+one body cutting the light path from a source to an observer: the light
+reaching a body (it goes dark for everyone), the light reaching the observer
+(something is hidden from them), or both at once (the observer stands in a
+shadow and sees the Sun hidden). Topics for the other events, with their slug
+prefixes: lunar eclipses (`lun`), lunar occultations (`occ`), transits of
+Mercury and Venus (`tr`), Jupiter's satellites (`jup`), Saturn and the outer
+satellites (`sats`), and occultations by planets and minor bodies (`mb`). Term
+slugs in these topics carry the topic prefix as well. The report
+`content/20-reports/other-events.md` relates them to the solar pipeline.
 
 The deliverable is a static research site, built from Markdown exactly the way
 `Essence-10/astrophotography-rental` is built: pandoc, graded citations,
@@ -31,7 +34,13 @@ needs to know which papers, formulas, datasets and repositories matter, and why.
 content/
   00-meta/      research plan, method and source policy
   05-primer/    background: what an eclipse computation pipeline is
-  10-raw/       per-topic research notes, one folder per topic (the raw research)
+  10-raw/       research notes: group folders by kind of event, then one folder
+                per topic
+    10-shared/                     Besselian geometry, Earth and time, ephemerides, software
+    20-solar-eclipses-and-transits/  the observer in a shadow, seeing the Sun hidden
+    30-lunar-eclipses/             a body goes dark for everyone (a topic folder itself)
+    40-occultations/               a body hides something from the observer
+    50-planetary-satellites/       Jupiter and Saturn systems, every kind of event
   20-reports/   synthesis: the report, the pipeline design, the reference matrix
 references.tsv  the bibliography: slug<TAB>grade<TAB>title<TAB>url<TAB>note
 glossary.tsv    slug<TAB>label<TAB>definition
@@ -48,7 +57,7 @@ python tools/build.py --clean     # content/ -> site/
 python tools/build.py --serve     # build, then localhost:8000
 python tools/prose_check.py       # flag prose tics and long sentences
 python tools/jargon_check.py      # terms used before they are explained
-python tools/merge_refs.py        # merge content/10-raw/*/refs.tsv into references.tsv
+python tools/merge_refs.py        # merge content/**/refs.tsv into references.tsv
 ```
 
 Requires pandoc 3.x on PATH and Python 3.10+. No pip dependencies.
@@ -83,6 +92,11 @@ Requires pandoc 3.x on PATH and Python 3.10+. No pip dependencies.
    implementations that chose constants and data. Say which is which.
 
 ## Raw notes: the required shape
+
+A topic's two-digit folder number is an identifier, not a position: the group
+folder and the `order:` key set the reading order. Put a new topic in the group
+for its kind of event. Moving a published folder changes its URLs, so it needs
+a permanent redirect in the sankara.net nginx site, which `homelab` manages.
 
 Each topic folder under `content/10-raw/` contains one or more `.md` notes, an
 `_index.md`, a `refs.tsv` fragment and optionally a `terms.tsv` fragment. The

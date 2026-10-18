@@ -113,6 +113,6 @@ f.text(8, H - 10,
        "equator and 356 m at latitude 40°.",
        cls="label-dim")
 
-f.save(__file__, "../../content/10-raw/07-earth-and-time/img/delta-t-uncertainty.svg")
+f.save(__file__, "../../content/10-raw/10-shared/07-earth-and-time/img/delta-t-uncertainty.svg")
 print(f"  y for 0.1 s {n(gy(0.1))}, for 1885 s {n(gy(1885.0))}, "
       f"gore line {n(gy(GORE))}")

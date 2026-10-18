@@ -1,0 +1,2 @@
+# path	kind	licence	source	note
+10-raw/40-occultations/13-lunar-occultations/img/occultation-plane.svg	own	own work	tools/figures/occ_fundamental_plane.py	Schematic computed from the occultation elements of ES 1961 Example 10.2 (Y = +0.9753, x' = +0.6046, y' = +0.0543 Earth radii per hour, k = 0.2725); circles at true scale; Earth rotation not drawn.

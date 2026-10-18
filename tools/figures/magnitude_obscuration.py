@@ -121,6 +121,6 @@ f.text(8, H - 8,
        "Supplement, section 9D.", cls="label-dim")
 
 f.save(__file__,
-       "../../content/10-raw/04-local-circumstances/img/magnitude-obscuration.svg")
+       "../../content/10-raw/20-solar-eclipses-and-transits/04-local-circumstances/img/magnitude-obscuration.svg")
 for m in (0.0, 0.2, 0.5, 0.8, 0.95, 1.0):
     print(f"  M={m:.2f}  obscuration={obscuration(m):.4f}")

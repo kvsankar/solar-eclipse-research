@@ -106,5 +106,5 @@ f.text(8, H - 6,
        "Schematic. The Moon is drawn much larger relative to the Sun than it is.",
        cls="label-dim")
 
-f.save(__file__, "../../content/10-raw/01-foundations/img/fundamental-plane.svg")
+f.save(__file__, "../../content/10-raw/10-shared/01-foundations/img/fundamental-plane.svg")
 print(f"  vertex x={n(VERTEX_X)}  l1={n(l1)}  l2={n(l2)}")

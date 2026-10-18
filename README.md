@@ -33,7 +33,7 @@ python tools/merge_refs.py         # content/**/refs.tsv -> references.tsv, term
 python tools/build.py --clean      # content/ -> site/
 python tools/build.py --serve      # build, then http://localhost:8000
 python tools/check_notes.py        # raw notes against the shape AGENTS.md prescribes
-python tools/extract_sections.py content/10-raw/<topic>   # summaries and recommendations of a topic
+python tools/extract_sections.py content/10-raw/<group>/<topic>   # summaries and recommendations of a topic
 python tools/fix_math.py           # rewrite TeX that pandoc's math parser rejects (\rm, °, \cosec)
 python tools/normalise_prose.py    # house-style spelling and notation, outside quotations and code
 python tools/prose_check.py        # prose tics and long sentences
@@ -126,7 +126,7 @@ content/            source Markdown; the output tree mirrors this exactly
   _index.md         a directory's own page; becomes <dir>/index.html
   00-meta/          research plan, method and source policy
   05-primer/        background: the eclipse computation pipeline for newcomers
-  10-raw/           per-topic research notes, one folder per topic
+  10-raw/           research notes, grouped by kind of event, one folder per topic
   20-reports/       executive summary, pipeline design, error budget,
                     reading list and reference matrix, open questions
   img/              images belonging to the site rather than one topic

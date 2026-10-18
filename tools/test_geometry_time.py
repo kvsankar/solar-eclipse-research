@@ -13,8 +13,15 @@ ROOT = Path(__file__).resolve().parents[1]
 RAW = ROOT / "content/10-raw"
 
 
+def topic_dir(topic):
+    """A topic folder by name, wherever its group puts it."""
+    found = [p for p in RAW.rglob(topic) if p.is_dir()]
+    assert len(found) == 1, (topic, found)
+    return found[0]
+
+
 def note(topic, name):
-    return (RAW / topic / name).read_text(encoding="utf-8")
+    return (topic_dir(topic) / name).read_text(encoding="utf-8")
 
 
 class GeometryTimeContracts(unittest.TestCase):

@@ -12,8 +12,15 @@ ROOT = Path(__file__).resolve().parents[1]
 RAW = ROOT / "content/10-raw"
 
 
+def topic_dir(topic):
+    """A topic folder by name, wherever its group puts it."""
+    found = [p for p in RAW.rglob(topic) if p.is_dir()]
+    assert len(found) == 1, (topic, found)
+    return found[0]
+
+
 def note(topic, name):
-    return (RAW / topic / name).read_text(encoding="utf-8")
+    return (topic_dir(topic) / name).read_text(encoding="utf-8")
 
 
 class SoftwareValidationSVSContracts(unittest.TestCase):
@@ -124,7 +131,7 @@ class SoftwareValidationSVSContracts(unittest.TestCase):
 
     def test_negative_claims_are_scoped(self):
         for topic in ("09-software-and-repos", "10-validation", "11-svs-wright"):
-            text = "\n".join(path.read_text(encoding="utf-8") for path in (RAW / topic).glob("*.md"))
+            text = "\n".join(path.read_text(encoding="utf-8") for path in topic_dir(topic).glob("*.md"))
             for phrase in ("No public code exists", "only ground truth", "Only edge observations test", "Nobody has published a complete error budget"):
                 self.assertNotIn(phrase, text)
 
@@ -145,7 +152,7 @@ class SoftwareValidationSVSContracts(unittest.TestCase):
         refs = {line.split("\t")[0] for path in (ROOT / "content").rglob("refs.tsv")
                 for line in path.read_text(encoding="utf-8").splitlines()}
         for topic in ("06-solar-radius", "09-software-and-repos", "10-validation", "11-svs-wright"):
-            for path in (RAW / topic).glob("*.md"):
+            for path in topic_dir(topic).glob("*.md"):
                 for key in re.findall(r"\[@([^\]]+)\]", path.read_text(encoding="utf-8")):
                     self.assertIn(key, refs, str(path))
 

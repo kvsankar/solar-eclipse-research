@@ -102,10 +102,10 @@ how these events relate to the solar pipeline. Then, per event:
 ## Where the raw notes go deeper
 
 Each topic folder ends with a "Sources compared" table and a "What a
-developer should do" section. The [foundations](../10-raw/01-foundations/_index.md)
-and [local circumstances](../10-raw/04-local-circumstances/_index.md) notes
-quote the formulas; the [lunar limb](../10-raw/05-lunar-limb/_index.md) and
-[SVS](../10-raw/11-svs-wright/_index.md) notes quote the algorithm; the
-[software](../10-raw/09-software-and-repos/_index.md) note has the thirty-row
-repository matrix; the [validation](../10-raw/10-validation/_index.md) note
+developer should do" section. The [foundations](../10-raw/10-shared/01-foundations/_index.md)
+and [local circumstances](../10-raw/20-solar-eclipses-and-transits/04-local-circumstances/_index.md) notes
+quote the formulas; the [lunar limb](../10-raw/20-solar-eclipses-and-transits/05-lunar-limb/_index.md) and
+[SVS](../10-raw/20-solar-eclipses-and-transits/11-svs-wright/_index.md) notes quote the algorithm; the
+[software](../10-raw/10-shared/09-software-and-repos/_index.md) note has the thirty-row
+repository matrix; the [validation](../10-raw/20-solar-eclipses-and-transits/10-validation/_index.md) note
 has the five-level protocol in full.

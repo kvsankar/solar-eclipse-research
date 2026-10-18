@@ -109,5 +109,5 @@ f.text(8, H - 8,
        "γ = 0.35); the straight track and its tilt are idealised.",
        cls="label-dim")
 
-f.save(__file__, "../../content/10-raw/12-lunar-eclipses/img/lunar-contacts.svg")
+f.save(__file__, "../../content/10-raw/30-lunar-eclipses/img/lunar-contacts.svg")
 print(f"  P1 s={n(p1)}  U1 s={n(u1)}  U2 s={n(u2)}")

@@ -183,5 +183,5 @@ f.text(8, H - 4,
        "Schematic. Widths, uncertainty and shape are illustrative, not an event.",
        cls="label-dim")
 
-f.save(__file__, "../../content/10-raw/17-occultations-by-planets-and-minor-bodies/img/shadow-path-and-chords.svg")
+f.save(__file__, "../../content/10-raw/40-occultations/17-occultations-by-planets-and-minor-bodies/img/shadow-path-and-chords.svg")
 print(f"  slope={n(SLOPE)} half={n(HALF)} sigma={n(SIGMA)}")

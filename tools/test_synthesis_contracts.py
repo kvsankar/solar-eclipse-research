@@ -96,7 +96,7 @@ class SynthesisContracts(unittest.TestCase):
 
     def test_summaries_do_not_claim_universal_besselian_or_ground_truth(self):
         for path in ("content/_index.md", "content/20-reports/executive-summary.md",
-                     "content/05-primer/how-an-eclipse-is-computed.md"):
+                     "content/05-primer/worked-example-solar-eclipse.md"):
             page = text(path)
             self.assertNotIn("Every published eclipse product derives from one algorithm", page)
             self.assertNotIn("One algorithm underlies every eclipse product", page)

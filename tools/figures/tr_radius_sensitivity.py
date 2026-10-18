@@ -131,4 +131,4 @@ f.text(8, H - 8,
        "parallax not included.",
        cls="label-dim")
 
-f.save(__file__, "../../content/10-raw/14-transits/img/tr-radius-sensitivity.svg")
+f.save(__file__, "../../content/10-raw/20-solar-eclipses-and-transits/14-transits/img/tr-radius-sensitivity.svg")

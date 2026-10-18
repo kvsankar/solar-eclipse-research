@@ -131,6 +131,6 @@ f.text(8, H - 8,
        "but the drawn offset really is cot 60° of the drawn height.",
        cls="label-dim")
 
-f.save(__file__, "../../content/10-raw/07-earth-and-time/img/terrain-shift.svg")
+f.save(__file__, "../../content/10-raw/10-shared/07-earth-and-time/img/terrain-shift.svg")
 print(f"  edge at x={n(EDGE_X)}  observer x={n(OBS_X)}  "
       f"offset={n(OBS_X - EDGE_X)} px for h={n(Hgt)} px  cot A={n(COT)}")

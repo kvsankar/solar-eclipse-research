@@ -117,5 +117,5 @@ f.text(8, H - 24, "Data figure. Edges at Meeus's fractions of a = 375.35″/Δ, 
 f.text(8, H - 8, "Shading marks the ring bands only. It does not show optical depth.",
        cls="label-dim")
 
-f.save(__file__, "../../content/10-raw/16-saturn-and-outer-satellites/img/sats-ring-ellipse.svg")
+f.save(__file__, "../../content/10-raw/50-planetary-satellites/16-saturn-and-outer-satellites/img/sats-ring-ellipse.svg")
 print(f"  globe a={n(glob_a)} b={n(glob_b)}  ring a={n(a1)} b={n(b1)}")

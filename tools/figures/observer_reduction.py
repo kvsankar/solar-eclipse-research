@@ -172,6 +172,6 @@ f.text(8, H - 8,
        "computed for any eclipse.", cls="label-dim")
 
 f.save(__file__,
-       "../../content/10-raw/04-local-circumstances/img/observer-reduction.svg")
+       "../../content/10-raw/20-solar-eclipses-and-transits/04-local-circumstances/img/observer-reduction.svg")
 print(f"  zeta={n(ZETA)} eta={n(ETA_LEN)} u={n(U)} v={n(V)} m={n(M)}"
       f"  L1'={n(L1P)}")

@@ -2,7 +2,7 @@
 """The atmospheric layer height that each umbra-enlargement rule implies.
 
 A data figure. Every curve is computed from a formula quoted in
-`content/10-raw/12-lunar-eclipses/shadow-geometry-and-enlargement.md`:
+`content/10-raw/30-lunar-eclipses/shadow-geometry-and-enlargement.md`:
 
 * Chauvenet: umbral radius 1.02 (0.998340 pi_M - s_S + pi_S).
 * Danjon (Connaissance des Temps): 1.01 pi_M - s_S + pi_S.
@@ -130,6 +130,6 @@ f.text(8, H - 8,
        "heights are above the 45-degree radius 0.998340.",
        cls="label-dim")
 
-f.save(__file__, "../../content/10-raw/12-lunar-eclipses/img/shadow-rules.svg")
+f.save(__file__, "../../content/10-raw/30-lunar-eclipses/img/shadow-rules.svg")
 print(f"  chauvenet {n(chauvenet_km(D_MIN))}..{n(chauvenet_km(D_MAX))} km"
       f"  danjon {n(danjon_km(D_MIN))} km  hs {n(hs_km(D_MIN))} km")

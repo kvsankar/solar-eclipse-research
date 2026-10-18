@@ -186,5 +186,5 @@ f.text(8, H - 8,
        "it ever is.", cls="label-dim")
 
 f.save(__file__,
-       "../../content/10-raw/03-global-circumstances/img/path-and-limits.svg")
+       "../../content/10-raw/20-solar-eclipses-and-transits/03-global-circumstances/img/path-and-limits.svg")
 print(f"  span={n(SPAN)}  widest={n(widest(SPAN))}  arc=({n(arc_x)},{n(arc_y)})")

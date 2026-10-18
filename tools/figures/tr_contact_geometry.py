@@ -115,5 +115,5 @@ f.text(8, H - 8,
        "relative to the Sun.",
        cls="label-dim")
 
-f.save(__file__, "../../content/10-raw/14-transits/img/tr-contact-geometry.svg")
+f.save(__file__, "../../content/10-raw/20-solar-eclipses-and-transits/14-transits/img/tr-contact-geometry.svg")
 print(f"  contacts x: {n(X1)} {n(X2)} {n(X3)} {n(X4)}  P(II)={n(ang2)} deg")

@@ -163,6 +163,6 @@ f.text(8, H - 8,
        "rather than real LOLA data.",
        cls="label-dim")
 
-f.save(__file__, "../../content/10-raw/05-lunar-limb/img/limb-profile.svg")
+f.save(__file__, "../../content/10-raw/20-solar-eclipses-and-transits/05-lunar-limb/img/limb-profile.svg")
 print(f"  exaggeration x{n(EXAGGERATION)}  peak {n(p_lo)}..{n(p_hi)}  "
       f"valley {n(v_lo)}..{n(v_hi)}")

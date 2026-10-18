@@ -21,12 +21,12 @@ The solar pipeline in [pipeline design](pipeline-design.md) computes one
 event: the Moon hiding the Sun from a place on the Earth. This page asks which
 parts of that pipeline carry over to the other events of the same family, and
 what each event adds. The raw research is in six topics:
-[lunar eclipses](../10-raw/12-lunar-eclipses/_index.md),
-[lunar occultations](../10-raw/13-lunar-occultations/_index.md),
-[transits of Mercury and Venus](../10-raw/14-transits/_index.md),
-[Jupiter's satellites](../10-raw/15-jupiter-satellites/_index.md),
-[Saturn and the outer satellites](../10-raw/16-saturn-and-outer-satellites/_index.md) and
-[occultations by planets and minor bodies](../10-raw/17-occultations-by-planets-and-minor-bodies/_index.md).
+[lunar eclipses](../10-raw/30-lunar-eclipses/_index.md),
+[lunar occultations](../10-raw/40-occultations/13-lunar-occultations/_index.md),
+[transits of Mercury and Venus](../10-raw/20-solar-eclipses-and-transits/14-transits/_index.md),
+[Jupiter's satellites](../10-raw/50-planetary-satellites/15-jupiter-satellites/_index.md),
+[Saturn and the outer satellites](../10-raw/50-planetary-satellites/16-saturn-and-outer-satellites/_index.md) and
+[occultations by planets and minor bodies](../10-raw/40-occultations/17-occultations-by-planets-and-minor-bodies/_index.md).
 
 ## One geometry
 
@@ -78,16 +78,16 @@ The events differ in four places:
 
 | Event | Source | Occulter | Shadow | Receiver | Dominant input | Achievable accuracy | Topic |
 |---|---|---|---|---|---|---|---|
-| Solar eclipse | Sun | Moon | Cone | Observer | Lunar limb and solar radius | About 0.2 s for contacts with a modern limb profile | [Lunar limb](../10-raw/05-lunar-limb/_index.md) |
-| Lunar eclipse | Sun | Earth with atmosphere | Cone, enlarged | Moon | Enlargement rule | Umbral contacts to a few seconds against many observers, tens of seconds against one | [Lunar eclipses](../10-raw/12-lunar-eclipses/_index.md) |
-| Lunar occultation of a star | Star | Moon | Cylinder of radius $k$ | Observer | Limb and event position angle | Most predictions within 0.3 s of video timings | [Lunar occultations](../10-raw/13-lunar-occultations/_index.md) |
-| Lunar occultation of a planet | Planet disc | Moon | Cone with a small source | Observer | Planet outline and phase | Not quantified in the sources read | [Lunar occultations](../10-raw/13-lunar-occultations/planets-catalogues-and-reduction.md) |
-| Transit of Mercury or Venus | Sun | Planet | Cone | Observer | Solar and planetary radii | Predictors agree to about 2 s | [Transits](../10-raw/14-transits/_index.md) |
-| Galilean satellite phenomena | Sun or Jupiter | Jupiter or a satellite | Cone, oblate occulter | Satellite or observer | Satellite ephemeris | Mutual events give 5 to 50 mas | [Jupiter's satellites](../10-raw/15-jupiter-satellites/_index.md) |
-| Saturnian satellite phenomena | Sun or Saturn | Saturn, rings or a satellite | Cone, oblate and ringed | Satellite or observer | Satellite ephemeris and ring transmission | Mutual events give about 20 mas | [Saturn and outer satellites](../10-raw/16-saturn-and-outer-satellites/_index.md) |
-| Occultation of a star by a minor body | Star | Asteroid or TNO | Cylinder of the body's size | Observer | Body orbit and star position | About 10 mas with Gaia EDR3 | [Planets and minor bodies](../10-raw/17-occultations-by-planets-and-minor-bodies/_index.md) |
-| Mutual events at Uranus and Pluto | Sun or satellite | Satellite or Pluto | Cone | Satellite or observer | Satellite ephemeris and light-curve model | Formal uncertainties below 0.01 arcseconds at Uranus in 2007 | [Saturn and outer satellites](../10-raw/16-saturn-and-outer-satellites/uranus-pluto-and-others.md) |
-| Occultation of one planet by another | Farther planet | Nearer planet | Cone | Observer | Planet radii and ephemeris | Published times for 2065 disagree by more than two minutes | [Planets and minor bodies](../10-raw/17-occultations-by-planets-and-minor-bodies/planets-satellites-and-mutual-planetary-occultations.md) |
+| Solar eclipse | Sun | Moon | Cone | Observer | Lunar limb and solar radius | About 0.2 s for contacts with a modern limb profile | [Lunar limb](../10-raw/20-solar-eclipses-and-transits/05-lunar-limb/_index.md) |
+| Lunar eclipse | Sun | Earth with atmosphere | Cone, enlarged | Moon | Enlargement rule | Umbral contacts to a few seconds against many observers, tens of seconds against one | [Lunar eclipses](../10-raw/30-lunar-eclipses/_index.md) |
+| Lunar occultation of a star | Star | Moon | Cylinder of radius $k$ | Observer | Limb and event position angle | Most predictions within 0.3 s of video timings | [Lunar occultations](../10-raw/40-occultations/13-lunar-occultations/_index.md) |
+| Lunar occultation of a planet | Planet disc | Moon | Cone with a small source | Observer | Planet outline and phase | Not quantified in the sources read | [Lunar occultations](../10-raw/40-occultations/13-lunar-occultations/planets-catalogues-and-reduction.md) |
+| Transit of Mercury or Venus | Sun | Planet | Cone | Observer | Solar and planetary radii | Predictors agree to about 2 s | [Transits](../10-raw/20-solar-eclipses-and-transits/14-transits/_index.md) |
+| Galilean satellite phenomena | Sun or Jupiter | Jupiter or a satellite | Cone, oblate occulter | Satellite or observer | Satellite ephemeris | Mutual events give 5 to 50 mas | [Jupiter's satellites](../10-raw/50-planetary-satellites/15-jupiter-satellites/_index.md) |
+| Saturnian satellite phenomena | Sun or Saturn | Saturn, rings or a satellite | Cone, oblate and ringed | Satellite or observer | Satellite ephemeris and ring transmission | Mutual events give about 20 mas | [Saturn and outer satellites](../10-raw/50-planetary-satellites/16-saturn-and-outer-satellites/_index.md) |
+| Occultation of a star by a minor body | Star | Asteroid or TNO | Cylinder of the body's size | Observer | Body orbit and star position | About 10 mas with Gaia EDR3 | [Planets and minor bodies](../10-raw/40-occultations/17-occultations-by-planets-and-minor-bodies/_index.md) |
+| Mutual events at Uranus and Pluto | Sun or satellite | Satellite or Pluto | Cone | Satellite or observer | Satellite ephemeris and light-curve model | Formal uncertainties below 0.01 arcseconds at Uranus in 2007 | [Saturn and outer satellites](../10-raw/50-planetary-satellites/16-saturn-and-outer-satellites/uranus-pluto-and-others.md) |
+| Occultation of one planet by another | Farther planet | Nearer planet | Cone | Observer | Planet radii and ephemeris | Published times for 2065 disagree by more than two minutes | [Planets and minor bodies](../10-raw/40-occultations/17-occultations-by-planets-and-minor-bodies/planets-satellites-and-mutual-planetary-occultations.md) |
 
 The accuracy column quotes each topic's own figures. For solar eclipses the
 figure is the limb-corrected contact accuracy [@limb-eclipsewise-limb]. For

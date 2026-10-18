@@ -133,6 +133,6 @@ f.text(8, H - 8,
        "pixels apart.", cls="label-dim")
 
 f.save(__file__,
-       "../../content/10-raw/04-local-circumstances/img/contact-configurations.svg")
+       "../../content/10-raw/20-solar-eclipses-and-transits/04-local-circumstances/img/contact-configurations.svg")
 for name, sep, before, interior, _, _ in CONTACTS:
     print(f"  {name}: P = {position_angle(moon_offset(sep, before), interior):.1f} deg")

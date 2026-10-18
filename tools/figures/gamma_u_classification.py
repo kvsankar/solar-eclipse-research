@@ -198,6 +198,6 @@ f.text(8, H - 8,
        "quantity as l₂.",
        cls="label-dim")
 
-f.save(__file__, "../../content/10-raw/02-catalogs/img/gamma-u-classification.svg")
+f.save(__file__, "../../content/10-raw/20-solar-eclipses-and-transits/02-catalogs/img/gamma-u-classification.svg")
 print(f"  0.9972 at y={n(my(G_CENTRAL))}   1.5433 at y={n(my(G_NONE))}"
       f"   band thickness={n(my(G_CENTRAL) - my(G_CENTRAL + 0.02))} px")

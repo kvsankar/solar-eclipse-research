@@ -153,4 +153,4 @@ f.text(8, H - 8,
        "drawn as 35 degrees; at Jupiter it never exceeds about 12 degrees.",
        cls="label-dim")
 
-f.save(__file__, "../../content/10-raw/15-jupiter-satellites/img/jup-phenomena.svg")
+f.save(__file__, "../../content/10-raw/50-planetary-satellites/15-jupiter-satellites/img/jup-phenomena.svg")

@@ -2,7 +2,7 @@
 """The measured solar radius, in arcseconds at 1 au, with its uncertainties.
 
 A data figure. Every value and every uncertainty is quoted from the note
-`content/10-raw/06-solar-radius/solar-radius-values.md`, which cites the
+`content/10-raw/20-solar-eclipses-and-transits/06-solar-radius/solar-radius-values.md`, which cites the
 source for each one. Nothing is interpolated and nothing is averaged here.
 
     python tools/figures/solar_radius_values.py
@@ -129,6 +129,6 @@ f.text(NAME_X, H - 10,
        "arcseconds beyond Auwers' 19th-century limb.",
        cls="label-dim")
 
-f.save(__file__, "../../content/10-raw/06-solar-radius/img/solar-radius-values.svg")
+f.save(__file__, "../../content/10-raw/20-solar-eclipses-and-transits/06-solar-radius/img/solar-radius-values.svg")
 print(f"  rows {len(rows)}  axis {n(gx(X_MIN))}..{n(gx(X_MAX))}  "
       f"last row y={n(rows[-1][5])}")

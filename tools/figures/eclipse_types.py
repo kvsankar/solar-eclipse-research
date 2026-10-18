@@ -187,4 +187,4 @@ f.text(8, H - 8,
        "distance are exaggerated; the real vertex falls near the surface.",
        cls="label-dim")
 
-f.save(__file__, "../../content/10-raw/02-catalogs/img/eclipse-types.svg")
+f.save(__file__, "../../content/10-raw/20-solar-eclipses-and-transits/02-catalogs/img/eclipse-types.svg")

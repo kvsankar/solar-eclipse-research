@@ -123,4 +123,4 @@ f.text(8, H - 10,
        cls="label-dim")
 
 f.save(__file__,
-       "../../content/10-raw/13-lunar-occultations/img/occultation-plane.svg")
+       "../../content/10-raw/40-occultations/13-lunar-occultations/img/occultation-plane.svg")

@@ -74,5 +74,5 @@ for v in (0, 1000, 2000, 3000, 4000):
 f.text((BAR_X + bx(AXIS_MAX)) / 2.0, BOT_RULE + 38, "number of eclipses",
        anchor="middle", cls="label")
 
-f.save(__file__, "../../content/10-raw/02-catalogs/img/catalogue-composition.svg")
+f.save(__file__, "../../content/10-raw/20-solar-eclipses-and-transits/02-catalogs/img/catalogue-composition.svg")
 print(f"  longest bar ends at x={n(bx(4200))}, baseline y={n(BOT_RULE)}")

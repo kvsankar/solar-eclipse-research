@@ -33,23 +33,23 @@ from coarse to fine.
 
 | Product | Question | Topic | Covered |
 |---|---|---|---|
-| Besselian elements | What is the fundamental plane and how are the elements derived from an ephemeris? | [Foundations](../10-raw/01-foundations/_index.md) | Yes; formulas quoted from the 1961 and 1992 Supplements |
-| The list of eclipses in a period | How are eclipses found and classified? | [Catalogues and types](../10-raw/02-catalogs/_index.md) | Yes; Meeus's method tested against 221 catalogued eclipses |
-| World maps | How are global circumstances computed from the elements? | [Global circumstances](../10-raw/03-global-circumstances/_index.md) | Yes; every classic curve with its formula |
-| Site tables | How are local circumstances computed? | [Local circumstances](../10-raw/04-local-circumstances/_index.md) | Yes; checked against NASA's GPL JavaScript |
-| Limb-corrected contacts, beads, true umbra shape | How does the lunar limb profile enter? | [Lunar limb profile](../10-raw/05-lunar-limb/_index.md) | Yes; the DEM-to-profile algorithm and datasets |
-| Path width and duration at the edge | Which solar radius, and what does the choice cost? | [Solar radius](../10-raw/06-solar-radius/_index.md) | Yes; every value traced to its measurement |
-| Every product | Which Earth figure, which time scale, how much ΔT uncertainty? | [Earth model and time scales](../10-raw/07-earth-and-time/_index.md) | Yes; effects table with sizes |
-| Every product | Which ephemeris, which lunar figure, which libration model? | [Lunar and solar model](../10-raw/08-lunar-and-solar-model/_index.md) | Yes; kernel names and frames |
-| Any product | What software and repositories exist, and how complete are they? | [Software and repositories](../10-raw/09-software-and-repos/_index.md) | Yes; thirty repositories inventoried |
-| Any product | How well do predictions match observation? | [Validation and error budget](../10-raw/10-validation/_index.md) | Yes; the budget assembled and a five-level protocol |
-| The reference standard | What exactly did SVS do for 2017, 2023 and 2024? | [NASA SVS and Ernie Wright](../10-raw/11-svs-wright/_index.md) | Yes; the paper in full, with the datasets inventoried |
-| Lunar eclipse contacts and maps | How are lunar eclipses computed, and how large is the Earth's shadow? | [Lunar eclipses](../10-raw/12-lunar-eclipses/_index.md) | Yes; three enlargement rules with constants, Herald and Sinnott 2014 read in full |
-| Occultation times and graze lines | How are occultations of stars and planets by the Moon computed and reduced? | [Lunar occultations](../10-raw/13-lunar-occultations/_index.md) | Yes; the 1961 Supplement's method, the archive and its error budget |
-| Transit contacts | How are transits of Mercury and Venus computed? | [Transits](../10-raw/14-transits/_index.md) | Yes; contact solution, local formulas and predictor comparison |
-| Jovian satellite phenomena | How are eclipses, occultations, transits and mutual events of the Galilean satellites computed? | [Jupiter's satellites](../10-raw/15-jupiter-satellites/_index.md) | Yes; theories by version and the classical two-cone method |
-| Saturnian and outer satellite phenomena | How are Saturn's satellite phenomena, ring geometry and mutual events computed? | [Saturn and outer satellites](../10-raw/16-saturn-and-outer-satellites/_index.md) | Yes; theories, ring model and mutual-event accuracy |
-| Minor-body occultation paths | How are occultations of stars by asteroids, TNOs and planets predicted and reduced? | [Planets and minor bodies](../10-raw/17-occultations-by-planets-and-minor-bodies/_index.md) | Yes; SORA's paper checked against its code |
+| Besselian elements | What is the fundamental plane and how are the elements derived from an ephemeris? | [Foundations](../10-raw/10-shared/01-foundations/_index.md) | Yes; formulas quoted from the 1961 and 1992 Supplements |
+| The list of eclipses in a period | How are eclipses found and classified? | [Catalogues and types](../10-raw/20-solar-eclipses-and-transits/02-catalogs/_index.md) | Yes; Meeus's method tested against 221 catalogued eclipses |
+| World maps | How are global circumstances computed from the elements? | [Global circumstances](../10-raw/20-solar-eclipses-and-transits/03-global-circumstances/_index.md) | Yes; every classic curve with its formula |
+| Site tables | How are local circumstances computed? | [Local circumstances](../10-raw/20-solar-eclipses-and-transits/04-local-circumstances/_index.md) | Yes; checked against NASA's GPL JavaScript |
+| Limb-corrected contacts, beads, true umbra shape | How does the lunar limb profile enter? | [Lunar limb profile](../10-raw/20-solar-eclipses-and-transits/05-lunar-limb/_index.md) | Yes; the DEM-to-profile algorithm and datasets |
+| Path width and duration at the edge | Which solar radius, and what does the choice cost? | [Solar radius](../10-raw/20-solar-eclipses-and-transits/06-solar-radius/_index.md) | Yes; every value traced to its measurement |
+| Every product | Which Earth figure, which time scale, how much ΔT uncertainty? | [Earth model and time scales](../10-raw/10-shared/07-earth-and-time/_index.md) | Yes; effects table with sizes |
+| Every product | Which ephemeris, which lunar figure, which libration model? | [Lunar and solar model](../10-raw/10-shared/08-lunar-and-solar-model/_index.md) | Yes; kernel names and frames |
+| Any product | What software and repositories exist, and how complete are they? | [Software and repositories](../10-raw/10-shared/09-software-and-repos/_index.md) | Yes; thirty repositories inventoried |
+| Any product | How well do predictions match observation? | [Validation and error budget](../10-raw/20-solar-eclipses-and-transits/10-validation/_index.md) | Yes; the budget assembled and a five-level protocol |
+| The reference standard | What exactly did SVS do for 2017, 2023 and 2024? | [NASA SVS and Ernie Wright](../10-raw/20-solar-eclipses-and-transits/11-svs-wright/_index.md) | Yes; the paper in full, with the datasets inventoried |
+| Lunar eclipse contacts and maps | How are lunar eclipses computed, and how large is the Earth's shadow? | [Lunar eclipses](../10-raw/30-lunar-eclipses/_index.md) | Yes; three enlargement rules with constants, Herald and Sinnott 2014 read in full |
+| Occultation times and graze lines | How are occultations of stars and planets by the Moon computed and reduced? | [Lunar occultations](../10-raw/40-occultations/13-lunar-occultations/_index.md) | Yes; the 1961 Supplement's method, the archive and its error budget |
+| Transit contacts | How are transits of Mercury and Venus computed? | [Transits](../10-raw/20-solar-eclipses-and-transits/14-transits/_index.md) | Yes; contact solution, local formulas and predictor comparison |
+| Jovian satellite phenomena | How are eclipses, occultations, transits and mutual events of the Galilean satellites computed? | [Jupiter's satellites](../10-raw/50-planetary-satellites/15-jupiter-satellites/_index.md) | Yes; theories by version and the classical two-cone method |
+| Saturnian and outer satellite phenomena | How are Saturn's satellite phenomena, ring geometry and mutual events computed? | [Saturn and outer satellites](../10-raw/50-planetary-satellites/16-saturn-and-outer-satellites/_index.md) | Yes; theories, ring model and mutual-event accuracy |
+| Minor-body occultation paths | How are occultations of stars by asteroids, TNOs and planets predicted and reduced? | [Planets and minor bodies](../10-raw/40-occultations/17-occultations-by-planets-and-minor-bodies/_index.md) | Yes; SORA's paper checked against its code |
 
 ## The standard of detail
 

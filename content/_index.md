@@ -17,11 +17,11 @@ by Luc Viatour / [lucnix.be](https://lucnix.be), CC BY-SA 3.0
 This guide covers solar eclipse calculation algorithms, their formulas,
 constants, datasets and validation evidence, and the same machinery for
 lunar eclipses, occultations and transits. Start with
-[how to calculate a solar eclipse](05-primer/how-an-eclipse-is-computed.md)
+[how to calculate a solar eclipse](05-primer/worked-example-solar-eclipse.md)
 for the geometry, or follow the
 [eclipse calculation pipeline](20-reports/pipeline-design.md) for the
 implementation stages. The
-[software comparison](10-raw/09-software-and-repos/_index.md) covers published
+[software comparison](10-raw/10-shared/09-software-and-repos/_index.md) covers published
 eclipse calculators and open-source libraries.
 
 The same shadow geometry also computes lunar eclipses, occultations of stars
@@ -76,23 +76,23 @@ and the questions it could not close.
 
 | Topic | What it settles |
 |---|---|
-| [Foundations](10-raw/01-foundations/_index.md) | The eight Besselian elements, the equations from ephemeris to elements, the constants and their provenance |
-| [Catalogues and types](10-raw/02-catalogs/_index.md) | How eclipses are enumerated and classified, and which catalogues to use as fixtures |
-| [Global circumstances](10-raw/03-global-circumstances/_index.md) | Central line, limits, outlines, rise and set curves, durations, and the data products |
-| [Local circumstances](10-raw/04-local-circumstances/_index.md) | Contact times, magnitude, obscuration and position angles at one site, and the corrections |
-| [Lunar limb profile](10-raw/05-lunar-limb/_index.md) | Watts, Kaguya and LOLA, the DEM-to-profile geometry, and Baily's beads |
-| [Solar radius](10-raw/06-solar-radius/_index.md) | Every value in circulation, what each measures, and the effect on products |
-| [Earth model and time](10-raw/07-earth-and-time/_index.md) | The ellipsoid, terrain and geoid, ΔT models, refraction, frames |
-| [Lunar and solar model](10-raw/08-lunar-and-solar-model/_index.md) | The DE ephemerides, centre of mass against figure, $k$, libration |
-| [Software and repositories](10-raw/09-software-and-repos/_index.md) | Four production lineages, the open libraries, thirty repositories, the datasets |
-| [Validation](10-raw/10-validation/_index.md) | Observed against predicted, predictor disagreements, the error budget and protocol |
-| [NASA SVS and Ernie Wright](10-raw/11-svs-wright/_index.md) | The 2024 paper, the SVS products and data, and the comparison with other predictors |
-| [Lunar eclipses](10-raw/12-lunar-eclipses/_index.md) | The lunar elements and six contacts, the three shadow enlargement rules, crater timings and brightness |
-| [Lunar occultations](10-raw/13-lunar-occultations/_index.md) | Occultations of stars and planets by the Moon, grazes, star catalogues and the reduction of timings |
-| [Transits of Mercury and Venus](10-raw/14-transits/_index.md) | Enumeration, transit elements, contacts and local reduction formulas, the black drop and the radii |
-| [Jupiter's satellites](10-raw/15-jupiter-satellites/_index.md) | Eclipses, occultations, transits and shadow transits of the Galilean satellites, theories and mutual events |
-| [Saturn and the outer satellites](10-raw/16-saturn-and-outer-satellites/_index.md) | Saturn's ring geometry, satellite theories and phenomena, and mutual events at Uranus and Pluto |
-| [Occultations by planets and minor bodies](10-raw/17-occultations-by-planets-and-minor-bodies/_index.md) | Asteroid and TNO occultation paths, Gaia astrometry, light curves and chords, and planet-planet occultations |
+| [Foundations](10-raw/10-shared/01-foundations/_index.md) | The eight Besselian elements, the equations from ephemeris to elements, the constants and their provenance |
+| [Catalogues and types](10-raw/20-solar-eclipses-and-transits/02-catalogs/_index.md) | How eclipses are enumerated and classified, and which catalogues to use as fixtures |
+| [Global circumstances](10-raw/20-solar-eclipses-and-transits/03-global-circumstances/_index.md) | Central line, limits, outlines, rise and set curves, durations, and the data products |
+| [Local circumstances](10-raw/20-solar-eclipses-and-transits/04-local-circumstances/_index.md) | Contact times, magnitude, obscuration and position angles at one site, and the corrections |
+| [Lunar limb profile](10-raw/20-solar-eclipses-and-transits/05-lunar-limb/_index.md) | Watts, Kaguya and LOLA, the DEM-to-profile geometry, and Baily's beads |
+| [Solar radius](10-raw/20-solar-eclipses-and-transits/06-solar-radius/_index.md) | Every value in circulation, what each measures, and the effect on products |
+| [Earth model and time](10-raw/10-shared/07-earth-and-time/_index.md) | The ellipsoid, terrain and geoid, ΔT models, refraction, frames |
+| [Lunar and solar model](10-raw/10-shared/08-lunar-and-solar-model/_index.md) | The DE ephemerides, centre of mass against figure, $k$, libration |
+| [Software and repositories](10-raw/10-shared/09-software-and-repos/_index.md) | Four production lineages, the open libraries, thirty repositories, the datasets |
+| [Validation](10-raw/20-solar-eclipses-and-transits/10-validation/_index.md) | Observed against predicted, predictor disagreements, the error budget and protocol |
+| [NASA SVS and Ernie Wright](10-raw/20-solar-eclipses-and-transits/11-svs-wright/_index.md) | The 2024 paper, the SVS products and data, and the comparison with other predictors |
+| [Lunar eclipses](10-raw/30-lunar-eclipses/_index.md) | The lunar elements and six contacts, the three shadow enlargement rules, crater timings and brightness |
+| [Lunar occultations](10-raw/40-occultations/13-lunar-occultations/_index.md) | Occultations of stars and planets by the Moon, grazes, star catalogues and the reduction of timings |
+| [Transits of Mercury and Venus](10-raw/20-solar-eclipses-and-transits/14-transits/_index.md) | Enumeration, transit elements, contacts and local reduction formulas, the black drop and the radii |
+| [Jupiter's satellites](10-raw/50-planetary-satellites/15-jupiter-satellites/_index.md) | Eclipses, occultations, transits and shadow transits of the Galilean satellites, theories and mutual events |
+| [Saturn and the outer satellites](10-raw/50-planetary-satellites/16-saturn-and-outer-satellites/_index.md) | Saturn's ring geometry, satellite theories and phenomena, and mutual events at Uranus and Pluto |
+| [Occultations by planets and minor bodies](10-raw/40-occultations/17-occultations-by-planets-and-minor-bodies/_index.md) | Asteroid and TNO occultation paths, Gaia astrometry, light curves and chords, and planet-planet occultations |
 
 ## Reference
 

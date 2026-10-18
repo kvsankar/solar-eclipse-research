@@ -88,5 +88,5 @@ f.text((x(sun_years[0]) + x(sun_years[2])) / 2, 30,
 f.text(8, H - 6, "Data figure. Circles: Sun crossings (Saturnian equinoxes). "
        "Diamonds: Earth crossings.", cls="label-dim")
 
-f.save(__file__, "../../content/10-raw/16-saturn-and-outer-satellites/img/sats-crossing-timeline.svg")
+f.save(__file__, "../../content/10-raw/50-planetary-satellites/16-saturn-and-outer-satellites/img/sats-crossing-timeline.svg")
 print("  intervals", [n(b - a) for a, b in zip(sun_years, sun_years[1:])])

@@ -36,8 +36,8 @@ Algorithm and solver choices also matter [@val-quaglia-2021] [@svs-irwin-quaglia
 | Time scale internal | TT | TT |
 
 Sources for each choice are in the stage notes below and in
-[Earth model and time](../10-raw/07-earth-and-time/_index.md) and
-[lunar and solar model](../10-raw/08-lunar-and-solar-model/_index.md).
+[Earth model and time](../10-raw/10-shared/07-earth-and-time/_index.md) and
+[lunar and solar model](../10-raw/10-shared/08-lunar-and-solar-model/_index.md).
 The edge-mode radius is an explicit modelling option from the cited
 flash-spectrum analysis. It is not a settled physical constant. Keep the
 959.63 arcsecond convention available for reproducing the corresponding

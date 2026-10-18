@@ -177,7 +177,7 @@ f.text(8, H - 8,
        "exaggerated against the angle scale by about a thousand times.",
        cls="label-dim")
 
-f.save(__file__, "../../content/10-raw/05-lunar-limb/img/bailys-beads.svg")
+f.save(__file__, "../../content/10-raw/20-solar-eclipses-and-transits/05-lunar-limb/img/bailys-beads.svg")
 print(f"  base at C2 {n(BASE_C2)}  base drawn {n(BASE_NOW)}  beads {len(beads)}"
       f"  last bead near C={n(lc)}")
 for r in beads:

@@ -102,6 +102,6 @@ f.text(8, H - 8,
        "l₁ near 0.54.",
        cls="label-dim")
 
-f.save(__file__, "../../content/10-raw/01-foundations/img/besselian-xy.svg")
+f.save(__file__, "../../content/10-raw/10-shared/01-foundations/img/besselian-xy.svg")
 print(f"  shadow centre px=({PX:.1f}, {PY:.1f})  r1={R1:.1f}  r2={R2:.1f}"
       f"  gamma={GAMMA:.3f}")

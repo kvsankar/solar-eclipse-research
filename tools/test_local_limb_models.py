@@ -13,7 +13,9 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def note(topic, name):
-    return (ROOT / 'content/10-raw' / topic / name).read_text(encoding='utf-8')
+    found = [d for d in (ROOT / 'content/10-raw').rglob(topic) if d.is_dir()]
+    assert len(found) == 1, (topic, found)
+    return (found[0] / name).read_text(encoding='utf-8')
 
 
 def lens_fraction(rs, rm, separation):

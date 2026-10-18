@@ -28,7 +28,7 @@ Typical use:
                desc="A cross-section through the shadow cones ...")
     f.line(0, 160, 680, 160, cls="axis")
     f.text(340, 150, "shadow axis", anchor="middle", cls="label")
-    f.save(__file__, "../../content/10-raw/01-foundations/img/plane.svg")
+    f.save(__file__, "../../content/10-raw/10-shared/01-foundations/img/plane.svg")
 """
 
 from __future__ import annotations
