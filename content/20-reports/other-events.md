@@ -1,9 +1,9 @@
 ---
-title: Lunar eclipses, occultations and transits
+title: Extending the pipeline to other events
 description: How one shadow geometry serves lunar eclipses, occultations by the Moon and minor bodies, planetary transits and satellite phenomena, and what each event adds.
-order: 6
+order: 3
 status: working
-updated: 2026-10-17
+updated: 2026-10-18
 seo_title: Lunar Eclipse, Occultation and Transit Calculation Compared
 ---
 
@@ -17,7 +17,7 @@ seo_title: Lunar Eclipse, Occultation and Transit Calculation Compared
 
 ## The question
 
-The solar pipeline in [pipeline design](pipeline-design.md) computes one
+The [solar eclipse pipeline](pipeline-design.md) computes one
 event: the Moon hiding the Sun from a place on the Earth. This page asks which
 parts of that pipeline carry over to the other events of the same family, and
 what each event adds. The raw research is in six topics:
@@ -61,7 +61,8 @@ The events differ in four places:
    are oblate, and Saturn has rings that pass part of the light. A minor body
    has an unknown shape that the occultation measures [@jup-thuillot-1983]
    [@sats-nssdc-rings] [@mb-herald-2020].
-3. **Where the receiver is.** For a solar eclipse, a transit or an occultation
+3. **Where the receiver is.** This sets the case. In the hidden case the
+   receiver is the observer; in the darkened case it is another body. For a solar eclipse, a transit or an occultation
    the receiver is an observer on the Earth, so the time depends on the site.
    For a lunar eclipse the receiver is the Moon, and every observer sees the
    same instant. For a satellite eclipse the receiver is the satellite, and
@@ -136,7 +137,7 @@ definition of the instant.
 
 ## What generalises in the pipeline
 
-The [pipeline design](pipeline-design.md) has nine stages. All nine carry over
+The [solar eclipse pipeline](pipeline-design.md) has nine stages. All nine carry over
 in some form, and the other events add a tenth.
 
 1. **Stage 1, ephemeris, orientation and time.** The planetary ephemeris and

@@ -1,9 +1,9 @@
 ---
 title: Open questions
 description: Outstanding eclipse calculation questions, each tied to the paper, dataset or code needed to resolve it and its effect on the conclusions.
-order: 5
+order: 6
 status: working
-updated: 2026-10-17
+updated: 2026-10-18
 seo_title: Open Questions in Solar Eclipse Algorithms and Modelling
 ---
 
@@ -15,7 +15,36 @@ seo_title: Open Questions in Solar Eclipse Algorithms and Modelling
 - **The end-to-end limb-and-terrain pipeline needs numerical validation.** Catalogue comparisons are available for Meeus's series and Kluepfel's Saros formula. The other stages need the named table, contact and polygon fixtures before they can claim product accuracy [@cat-meeus-1991-aa] [@cat-vangent-cycles].
 :::
 
-## Ranked by how much a different answer would move the design
+Each research group has its own section. Within the solar section the
+questions are ranked by how much a different answer would move the design.
+
+## Shared geometry and inputs
+
+1. **Morrison, Stephenson, Hohenkerk and Zawilski 2021 and HMNAO Table
+   S15.2020.** The current ΔT sigmas by year, to replace the 2004 rule in the
+   error budget [@val-morrison-2021].
+
+2. **Smith and colleagues 2010 and Barker and colleagues 2016.** The LOLA
+   centre-of-figure vector and the SLDEM2015 mean radius are secondary
+   values, reported secondhand and unconfirmed against the primary
+   publications [@limb-smith-2010-lola] [@limb-barker-2016-sldem].
+
+3. **A refraction number.** The cited sources do not quantify a general physical
+   contact-time shift at Sun altitudes of 2 and 5 degrees. A specified
+   atmosphere and ray-traced finite-distance geometry are needed before
+   assigning a correction. A common angular remapping of both limbs alone
+   preserves contact [@earth-es1992].
+
+An experiment that requires no further sources:
+
+- Compute from LDEM the mean limb radius averaged over position angle and
+  libration, and compare with 1738.09 km ($k = 0.2725076$) and 1736.65 km
+  ($k = 0.272281$). The sources compared here do not give this observer-and-libration average
+  [@moon-williams-2013].
+
+## Solar eclipses and transits
+
+### Ranked by how much a different answer would move the design
 
 1. **The SVS source code, or an author statement of the 2024 run's ΔT,
    ephemeris and Earth DEM resolution.** The paper names DE440 and the product
@@ -61,60 +90,26 @@ seo_title: Open Questions in Solar Eclipse Algorithms and Modelling
    and the exact text of equations 11.56 to 11.94 that Stellarium
    transcribes [@bes-usno-expsupp] [@glob-es2013].
 
-8. **Morrison, Stephenson, Hohenkerk and Zawilski 2021 and HMNAO Table
-   S15.2020.** The current ΔT sigmas by year, to replace the 2004 rule in the
-   error budget [@val-morrison-2021].
+8. **The undocumented NASA CSV columns** `PNS`, `UNS`, `NCN`, `nSer`,
+   `nSeq`, `nJLE`, which appear to encode limits and Saros sequence
+   [@cat-nasa-besselian-csv].
 
-9. **Smith and colleagues 2010 and Barker and colleagues 2016.** The LOLA
-   centre-of-figure vector and the SLDEM2015 mean radius are secondary
-   values, reported secondhand and unconfirmed against the primary
-   publications [@limb-smith-2010-lola] [@limb-barker-2016-sldem].
+9. **Jubier's ephemeris and timeanddate's inputs.** Jubier's 2024 page
+   carries the Five Millennium Canon coefficients with his own ΔT of 69.1 s,
+   and the limb correction is computed server-side (Watts charts when the
+   libration in latitude exceeds 1.6°, Kaguya otherwise, per the client
+   code), but no page states the ephemeris behind the server. timeanddate's
+   accuracy page names neither its ephemeris, its $k$ nor its ΔT source [@sw-jubier-2024-map]
+   [@sw-jubier-calc-js] [@sw-timeanddate-accuracy].
 
-10. **A refraction number.** The cited sources do not quantify a general physical
-    contact-time shift at Sun altitudes of 2 and 5 degrees. A specified
-    atmosphere and ray-traced finite-distance geometry are needed before
-    assigning a correction. A common angular remapping of both limbs alone
-    preserves contact [@earth-es1992].
+### Transits of Mercury and Venus
 
-11. **The undocumented NASA CSV columns** `PNS`, `UNS`, `NCN`, `nSer`,
-    `nSeq`, `nJLE`, which appear to encode limits and Saros sequence
-    [@cat-nasa-besselian-csv].
-
-12. **Jubier's ephemeris and timeanddate's inputs.** Jubier's 2024 page
-    carries the Five Millennium Canon coefficients with his own ΔT of 69.1 s,
-    and the limb correction is computed server-side (Watts charts when the
-    libration in latitude exceeds 1.6°, Kaguya otherwise, per the client
-    code), but no page states the ephemeris behind the server. timeanddate's
-    accuracy page names neither its ephemeris, its $k$ nor its ΔT source [@sw-jubier-2024-map]
-    [@sw-jubier-calc-js] [@sw-timeanddate-accuracy].
-
-## Lunar eclipses, occultations and transits
-
-Each new topic ends with its own list. These are the artefacts that would
-change the most across them.
-
-- **Occult's help file.** It would state Occult's lunar eclipse enlargement
-  rule, its graze binning, its treatment of planet phase and its asteroid
-  elements. Occult is closed source and its help ships only with the
-  installer [@sw-occult4].
-- **The current Astronomical Almanac sections on lunar eclipses, occultations
-  and satellite phenomena.** They would show whether the Almanac still uses
-  Chauvenet's 2 per cent enlargement, whether it still prints occultations of
-  planets and bright stars, and which satellite theory its tables use
-  [@lun-herald-sinnott-2014] [@occ-es1992].
 - **Meeus's *Transits* (1989) and Espenak's statement of his transit
   constants.** The NASA transit catalogues rest on the first. The second would
   confirm the inferred 8.41 arcsecond Venus semidiameter
   [@tr-nasa-mercury-catalog] [@tr-eso-eis-b1].
-- **Lieske 1998 (E5) in full, and the NOE technical notes.** These define the
-  Galilean theories behind IMCCE's tables before and after 2015
-  [@jup-imcce-phenjupiter-readme].
-- **A source for the height in Jupiter's atmosphere at which an eclipse
-  reaches half flux.** No source read states it.
-- **A ring-transmission model for satellite eclipses at Saturn.** No public
-  tool examined applies ring optical depth [@sats-nssdc-rings].
 
-## Experiments that require no further sources
+### Experiments that require no further sources
 
 - Reproduce one SVS 2024 `umbra_hi` polygon from SLDEM2015 with the limb test
   as written. This is the end-to-end check of stage 8, and the paper states
@@ -125,10 +120,34 @@ change the most across them.
   ANNULAR intervals. Finite-disc contacts need a separate limb-containment
   implementation. Use two ellipsoids with `gfoclt_c` for a smooth baseline
   [@loc-spice-gfoclt].
-- Compute from LDEM the mean limb radius averaged over position angle and
-  libration, and compare with 1738.09 km ($k = 0.2725076$) and 1736.65 km
-  ($k = 0.272281$). The sources compared here do not give this observer-and-libration average
-  [@moon-williams-2013].
 - Difference the SVS `umbra_hi` centre coordinates against Espenak's central
   line at the same instants to put the ephemeris-plus-ΔT difference in
   kilometres [@glob-nasa-path-2024].
+
+## Lunar eclipses
+
+- **The current Astronomical Almanac section on lunar eclipses.** It would
+  show whether the Almanac still uses Chauvenet's 2 per cent enlargement
+  [@lun-herald-sinnott-2014].
+
+## Occultations
+
+- **Occult's help file.** It would state Occult's lunar eclipse enlargement
+  rule, its graze binning, its treatment of planet phase and its asteroid
+  elements. Occult is closed source and its help ships only with the
+  installer [@sw-occult4].
+- **The current Astronomical Almanac section on occultations.** It would show
+  whether the Almanac still prints occultations of planets and bright stars
+  [@occ-es1992].
+
+## Planetary satellites
+
+- **Lieske 1998 (E5) in full, and the NOE technical notes.** These define the
+  Galilean theories behind IMCCE's tables before and after 2015
+  [@jup-imcce-phenjupiter-readme].
+- **A source for the height in Jupiter's atmosphere at which an eclipse
+  reaches half flux.** No source read states it.
+- **A ring-transmission model for satellite eclipses at Saturn.** No public
+  tool examined applies ring optical depth [@sats-nssdc-rings].
+- **The current Astronomical Almanac section on satellite phenomena.** It
+  would show which satellite theory its tables use.

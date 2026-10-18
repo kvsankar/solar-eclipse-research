@@ -1,9 +1,9 @@
 ---
-title: Pipeline design
-description: Nine stages of eclipse calculation, from ephemeris kernels to contacts and path polygons, with formulas, constants, outputs and validation cases.
+title: Solar eclipse pipeline
+description: Nine stages of solar eclipse calculation, from ephemeris kernels to contacts and path polygons, with formulas, constants, outputs and validation cases.
 order: 2
 status: working
-updated: 2026-09-30
+updated: 2026-10-18
 seo_title: Solar Eclipse Calculation Pipeline: Algorithms and Formulas
 ---
 
@@ -14,6 +14,11 @@ seo_title: Solar Eclipse Calculation Pipeline: Algorithms and Formulas
 - **The limb and terrain stages follow Wright and Young 2024** without a public generating implementation in the surveyed releases. They replace the circular shadow with a per-pixel test against an 18,000-element profile [@svs-wright-young-2024].
 - **Each stage has a named validation case** with a tolerance drawn from the [error budget](error-budget.md).
 :::
+
+This pipeline computes solar eclipses, the event this site covers in most
+depth. [Extending the pipeline to other events](other-events.md) sets out
+which stages carry over to lunar eclipses, occultations, transits and
+satellite phenomena, and what each of them adds.
 
 ![Two computational paths leave the same ephemeris layer, and the design's only true cross-check is that they meet again at local circumstances within 0.1 s. Almanac mode ends at stage 6, and terrain and the lunar limb are what edge mode adds.](img/pipeline-stages.svg)
 

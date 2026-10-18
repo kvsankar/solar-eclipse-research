@@ -1,9 +1,9 @@
 ---
-title: Error budget
-description: Rank eclipse prediction inputs by their effects on contact times and ground paths, and distinguish numerical checks from physical uncertainty.
-order: 3
+title: Solar eclipse error budget
+description: Rank solar eclipse prediction inputs by their effects on contact times and ground paths, and distinguish numerical checks from physical uncertainty.
+order: 4
 status: working
-updated: 2026-09-30
+updated: 2026-10-18
 seo_title: Solar Eclipse Prediction Accuracy: Timing and Path Errors
 ---
 
@@ -14,6 +14,10 @@ seo_title: Solar Eclipse Prediction Accuracy: Timing and Path Errors
 - **The cited solar-radius component is about 100 m for ± 0.05 arcseconds.** It is separate from the reported 60 to 130 m inter-implementation spread. Neither is a universal prediction-accuracy floor [@val-quaglia-2021].
 - **Huber's future ΔT model grows with lead time.** Its values are about 0.05 s at one year, 4.6 s at twenty and 52 s at a hundred. The separate historical rule $\sigma=0.8t^2$ applies to 1000 BCE through 1200 CE, with $t$ in centuries from 1820 [@earth-nasa-deltat-uncertainty] [@val-gsfc-uncertainty].
 :::
+
+This budget covers solar eclipses. The dominant input of each other event,
+and the accuracy it allows, is in
+[Extending the pipeline to other events](other-events.md).
 
 ## The ranked budget
 

@@ -1,13 +1,14 @@
 ---
 title: Executive summary
-description: The main findings on eclipse prediction methods, constants, lunar limb and terrain modelling, software availability and validation evidence.
+description: The main findings on eclipses, occultations and transits, and in most depth on solar eclipse prediction methods, constants, lunar limb and terrain modelling, software availability and validation evidence.
 order: 1
 status: working
-updated: 2026-10-17
+updated: 2026-10-18
 seo_title: Solar Eclipse Calculation: Research Findings for Developers
 ---
 
 ::: summary
+- **Every event is a shadow, with two cases.** The observer stands in it and sees the source hidden (occultations, transits, solar eclipses), or another body stands in it and goes dark (lunar and satellite eclipses). Each event has one dominant input that is a convention or a model [@bes-es1961] [@occ-es1961] [@lun-herald-sinnott-2014] [@limb-occult-accuracy-2016].
 - **The classical almanac route uses Besselian elements.** Direct topocentric geometry and raster limb tests are alternatives. Comparisons must match both the method and its inputs [@bes-es1961] [@bes-quaglia-2021] [@svs-wright-young-2024].
 - **Solar radius, lunar limb and terrain dominate several modern path-edge comparisons.** Omitted or inconsistent corrections elsewhere can still exceed 100 m. A numerical implementation check is separate from a physical uncertainty estimate [@val-quaglia-2021] [@val-gsfc-2024-google] [@val-svs-4517].
 - **Wright and Young 2024 specify NASA SVS's raster method.** Each map pixel is placed at terrain height and tested against an 18,000-element lunar limb profile built from LRO and Kaguya (SELENE) topography. The paper is open access, and the released maps provide reference products [@svs-wright-young-2024].
@@ -18,14 +19,44 @@ seo_title: Solar Eclipse Calculation: Research Findings for Developers
 
 ## The question and the answer
 
-The question is what a developer needs to know to compute every solar
-eclipse product, from the list of eclipses in a period to the second at which
-totality begins at one place, at the depth of NASA SVS's 2024 work. The answer
-is a pipeline of nine stages, given in [pipeline design](pipeline-design.md),
-and a short list of decisions that matter more than the rest. The decisions
-follow.
+The question is what a developer needs to know to compute eclipses,
+occultations and transits, from the list of events in a period to the second
+at which one begins at one place. Every one of these events is a body casting
+a shadow, and there are two cases, set by who stands in the shadow. In the
+hidden case the observer stands in it and sees the source hidden. In the
+darkened case another body stands in it and goes dark for everyone
+[@bes-es1961] [@occ-es1961]. The next two sections give the findings for each
+case. Solar eclipses are covered in most depth, at the level of NASA SVS's
+2024 work: a pipeline of nine stages, given in the
+[solar eclipse pipeline](pipeline-design.md), and a short list of decisions
+that matter more than the rest. [Extending the pipeline to other
+events](other-events.md) sets out what each other event adds.
 
-## Shared geometry, different methods and inputs
+## Hidden: the observer is in the shadow
+
+Occultations, transits and solar eclipses are the hidden case, and the time
+of each event depends on where the observer stands. Each has one input that
+dominates its accuracy. For lunar occultations it is the limb and the event
+position angle, and most predictions now agree with video timings to 0.3 s
+[@limb-occult-accuracy-2016]. For occultations by minor bodies it is the
+body's orbit and the star's position, which Gaia has reduced to about
+10 milliarcseconds [@mb-ferreira-2022]. For transits of Mercury and Venus it
+is the solar and planetary radii, at 10 to 21 seconds of time per arcsecond
+of contact radius [@tr-es1961] [@tr-eso-eis-b1] [@tr-ew-tm2019]. For solar
+eclipses it is the solar radius, the lunar limb and the terrain, which the
+sections below cover.
+
+## Darkened: another body is in the shadow
+
+Lunar eclipses and the eclipses of planetary satellites are the darkened
+case: every observer sees the same instant, apart from light-time
+[@lun-5mcle-tp2009] [@jup-thuillot-1983]. For lunar eclipses the dominant
+input is the atmospheric enlargement of the Earth's shadow, where crater
+timings favour a layer of about 87 km [@lun-herald-sinnott-2014]. For
+planetary satellites it is the satellite ephemeris, which mutual events test
+at 5 to 50 milliarcseconds [@jup-saquet-2018] [@sats-arlot-2012-phesat09].
+
+## Solar eclipses: shared geometry, different methods and inputs
 
 Bessel's method projects the Moon's shadow onto a plane through the Earth's
 centre perpendicular to the shadow axis, the [?fundamental-plane]. Eight
@@ -121,7 +152,7 @@ and IERS ΔT files [@cat-nasa-besselian-csv] [@sw-svs-5073]
 
 ## What to build
 
-The [pipeline design](pipeline-design.md) has the detail. The decisions it
+The [solar eclipse pipeline](pipeline-design.md) has the detail. The decisions it
 rests on:
 
 1. **Two product modes, never mixed in one file.** An almanac-reproduction
@@ -144,23 +175,6 @@ rests on:
    worked examples, NASA's tables, the Lusaka limb example, the Vale and
    Stephenville edge records, and the IOTA bead tables
    [@val-es1961] [@val-tp2001-bulletin] [@val-guhl-tegtmeier-2018].
-
-## Beyond solar eclipses
-
-The same geometry computes the other events of the family.
-[Lunar eclipses, occultations and transits](other-events.md) compares them.
-Each event has one input that dominates its accuracy. For lunar eclipses it
-is the atmospheric enlargement of the Earth's shadow, where crater timings
-favour a layer of about 87 km [@lun-herald-sinnott-2014]. For lunar
-occultations it is the limb and the event position angle, and most
-predictions now agree with video timings to 0.3 s
-[@limb-occult-accuracy-2016]. For transits it is the solar and planetary
-radii, at 10 to 21 seconds of time per arcsecond of contact radius
-[@tr-es1961] [@tr-eso-eis-b1] [@tr-ew-tm2019]. For planetary satellites it is the satellite ephemeris, which
-mutual events test at 5 to 50 milliarcseconds [@jup-saquet-2018]
-[@sats-arlot-2012-phesat09]. For occultations by minor bodies it is the
-body's orbit and the star's position, which Gaia has reduced to about
-10 milliarcseconds [@mb-ferreira-2022].
 
 ## The limits of this statement
 

@@ -1,9 +1,9 @@
 ---
 title: Reading list and reference matrix
 description: Papers, eclipse algorithms, public code and datasets to read in order, with a reference matrix explaining what each source provides.
-order: 4
+order: 5
 status: working
-updated: 2026-10-17
+updated: 2026-10-18
 seo_title: Eclipse Calculation Reading List: Papers, Code and Datasets
 ---
 
@@ -14,29 +14,56 @@ seo_title: Eclipse Calculation Reading List: Papers, Code and Datasets
 - **The Explanatory Supplements and the NASA technical publications are free** on archive.org and eclipse.gsfc.nasa.gov. Meeus's *Elements of Solar Eclipses* and the 2013 Supplement are not, and are cited only through implementations that transcribe them.
 :::
 
-## Papers and books, in reading order
+Start with the four documents in the summary. Then take the shared group,
+which every event needs, and the group of the event you are building.
+[Extending the pipeline to other events](other-events.md) relates the other
+events to the solar pipeline.
+
+## Shared geometry and inputs
+
+The geometry, the Earth model, time and the ephemerides that every event
+uses.
+
+### Papers and books, in reading order
+
+| Order | Source | Grade | What it uniquely provides | Note |
+|---|---|---|---|---|
+| 1 | Explanatory Supplement 1961, chapter 9 [@bes-es1961] | peer-reviewed | Every formula for elements, global circumstances and local circumstances, with worked examples for 1961 February 15 | Free OCR on archive.org; the shortest complete statement |
+| 2 | Explanatory Supplement 1992, chapter 8 [@bes-es1992] | peer-reviewed | The vector restatement, the flattening auxiliaries, the recommendation of direct root-finding, the warning list on ephemeris consistency, rotation, centre of figure, limb and refraction | Free on archive.org; OCR garbles some equations |
+| 3 | Stephenson, Morrison and Hohenkerk 2016, Proc. R. Soc. A [@earth-smh2016] | peer-reviewed | The current ΔT spline and parabola, the lengthening-of-day rate, the historical record's scatter | Open access |
+| 4 | Park, Folkner, Williams and Boggs 2021, AJ 161:105 [@moon-park-2021] | peer-reviewed | DE440 and DE441: LLR residuals, frame, the recommendation of DE440 for 1550 to 2650 | With Williams, Boggs and Folkner 2013 for the PA and ME frames [@moon-williams-2013] |
+
+### Datasets
+
+| Dataset | Owner | Format and size | Use | Source |
+|---|---|---|---|---|
+| SRTM GL1 or Copernicus GLO-30, with EGM96 or EGM2008 | NASA LP DAAC, ESA | HGT or cloud-optimised GeoTIFF | Terrain stage; orthometric heights need the geoid | [@earth-srtm-guide] [@earth-copdem] |
+| `de440s.bsp`, `moon_pa_de440_200625.bpc`, `moon_de440_250416.tf` (the 2025 revision of the `moon_de440_200625.tf` the paper cites) | NAIF | SPK 31 MB, binary PCK, frame kernel | Ephemeris and lunar orientation in the ME frame. The small SPK covers 1849–2150; wider catalogue epochs need a matching full kernel | [@moon-naif-summaries] [@moon-naif-moon-fk-de440] |
+| `deltat.data`, `deltat.preds`, `finals.all` | USNO, IERS | text | ΔT measured and predicted with errors, UT1 and polar motion | [@earth-usno-deltat-data] [@earth-usno-deltat-preds] [@earth-iers-bulletin-a] |
+
+## Solar eclipses and transits
+
+Solar eclipses are covered in most depth, so this group is the largest.
+
+### Papers and books, in reading order
 
 | Order | Source | Grade | What it uniquely provides | Note |
 |---|---|---|---|---|
 | 1 | Wright and Young 2024, AJ 168:163 [@svs-wright-young-2024] | peer-reviewed | The raster method, the limb-profile construction with bin count and refresh rule, the limb test, the broken-annular criterion, the SPICE calls, the radius survey | Open access, CC BY. Sections 4 and 5 are implementable as written |
-| 2 | Explanatory Supplement 1961, chapter 9 [@bes-es1961] | peer-reviewed | Every formula for elements, global circumstances and local circumstances, with worked examples for 1961 February 15 | Free OCR on archive.org; the shortest complete statement |
-| 3 | Explanatory Supplement 1992, chapter 8 [@bes-es1992] | peer-reviewed | The vector restatement, the flattening auxiliaries, the recommendation of direct root-finding, the warning list on ephemeris consistency, rotation, centre of figure, limb and refraction | Free on archive.org; OCR garbles some equations |
-| 4 | Quaglia, Irwin, Emmanouilidis and Pessi 2021, ApJS 256:36 [@val-quaglia-2021] | peer-reviewed | The eclipse solar radius 959.95″ ± 0.05″, duration-versus-radius curves at the central line and at a limit, the comparison of Irwin's model with Occult and Solar Eclipse Maestro, a fully topocentric limb-based method | arXiv 2107.09416 |
-| 5 | Herald 1983, JBAA 93:241 [@limb-herald-1983] | peer-reviewed | The contact-time correction from a limb profile, the limit displacement factor, the error budget of the Watts era | ADS scan |
-| 6 | Espenak and Meeus 2009, Five Millennium Catalog, NASA/TP-2009-214174 [@cat-espenak-meeus-2009-catalog] | primary | The enumeration method, the ephemerides and truncation, the two $k$ values, the ΔT model with its correction, the type classification with counts, Saros tables | With the 2006 Canon, NASA/TP-2006-214141 [@cat-espenak-meeus-2006-canon] |
-| 7 | Espenak and Anderson 2001 bulletin, NASA/TP-1999-209484 [@limb-espenak-tp2001] | primary | The lunar limb profile and graze zone sections, the $k$ history, the elevation factor, the Lusaka worked correction | Any bulletin from 1994 to 2009 has the same sections |
-| 8 | Meeus, *Astronomical Algorithms*, chapter 54 [@cat-meeus-1991-aa] | trade | The approximate enumeration and classification with the thresholds 0.36, 0.9972, 1.5433, 0.0047, 0.00464 | 1991 edition free on archive.org as chapter 52 |
-| 9 | Stephenson, Morrison and Hohenkerk 2016, Proc. R. Soc. A [@earth-smh2016] | peer-reviewed | The current ΔT spline and parabola, the lengthening-of-day rate, the historical record's scatter | Open access |
-| 10 | Park, Folkner, Williams and Boggs 2021, AJ 161:105 [@moon-park-2021] | peer-reviewed | DE440 and DE441: LLR residuals, frame, the recommendation of DE440 for 1550 to 2650 | With Williams, Boggs and Folkner 2013 for the PA and ME frames [@moon-williams-2013] |
-| 11 | Morrison and Appleby 1981, MNRAS 196:1013 [@limb-morrison-appleby-1981] | peer-reviewed | The systematic corrections to Watts' datum, needed only to reproduce historical bulletins | ADS scan |
-| 12 | Lamy and colleagues 2015, Solar Physics 290:2617 [@sun-lamy-2015] | peer-reviewed | The largest homogeneous eclipse radius dataset, 959.99″ ± 0.06″ from 17 light curves | |
-| 13 | Haberreiter, Schmutz and Kosovichev 2008, ApJ 675:L53 [@sun-haberreiter-2008] | peer-reviewed | Why the inflection-point radius exceeds the seismic radius by 0.33 Mm, the basis of the IAU nominal value | arXiv 0711.2392 |
-| 14 | Prša and colleagues 2016, AJ 152:41 [@sun-prsa-2016] | peer-reviewed | What the IAU 2015 nominal radius is and is not | The reason not to use astropy's constant |
-| 15 | Fiala, Dunham and Sofia 1994 [@limb-fiala-dunham-sofia-1994] | peer-reviewed | The IOTA edge method for solar radius from beads, results 1715 to 1987 | |
-| 16 | Guhl and Tegtmeier 2018 and Guhl 2023, Journal for Occultation Astronomy [@val-guhl-tegtmeier-2018] [@val-guhl-2023] | trade | Per-bead residual tables for 2017 and 2023 with Occult, LOLA and Kaguya | The bead-level validation cases |
-| 17 | Rozelot and Kosovichev 2026, arXiv 2605.23794 [@sun-rozelot-kosovichev-2026] | preprint | A review comparing canonical, nominal, seismic and eclipse radii | |
+| 2 | Quaglia, Irwin, Emmanouilidis and Pessi 2021, ApJS 256:36 [@val-quaglia-2021] | peer-reviewed | The eclipse solar radius 959.95″ ± 0.05″, duration-versus-radius curves at the central line and at a limit, the comparison of Irwin's model with Occult and Solar Eclipse Maestro, a fully topocentric limb-based method | arXiv 2107.09416 |
+| 3 | Herald 1983, JBAA 93:241 [@limb-herald-1983] | peer-reviewed | The contact-time correction from a limb profile, the limit displacement factor, the error budget of the Watts era | ADS scan |
+| 4 | Espenak and Meeus 2009, Five Millennium Catalog, NASA/TP-2009-214174 [@cat-espenak-meeus-2009-catalog] | primary | The enumeration method, the ephemerides and truncation, the two $k$ values, the ΔT model with its correction, the type classification with counts, Saros tables | With the 2006 Canon, NASA/TP-2006-214141 [@cat-espenak-meeus-2006-canon] |
+| 5 | Espenak and Anderson 2001 bulletin, NASA/TP-1999-209484 [@limb-espenak-tp2001] | primary | The lunar limb profile and graze zone sections, the $k$ history, the elevation factor, the Lusaka worked correction | Any bulletin from 1994 to 2009 has the same sections |
+| 6 | Meeus, *Astronomical Algorithms*, chapter 54 [@cat-meeus-1991-aa] | trade | The approximate enumeration and classification with the thresholds 0.36, 0.9972, 1.5433, 0.0047, 0.00464 | 1991 edition free on archive.org as chapter 52 |
+| 7 | Morrison and Appleby 1981, MNRAS 196:1013 [@limb-morrison-appleby-1981] | peer-reviewed | The systematic corrections to Watts' datum, needed only to reproduce historical bulletins | ADS scan |
+| 8 | Lamy and colleagues 2015, Solar Physics 290:2617 [@sun-lamy-2015] | peer-reviewed | The largest homogeneous eclipse radius dataset, 959.99″ ± 0.06″ from 17 light curves | |
+| 9 | Haberreiter, Schmutz and Kosovichev 2008, ApJ 675:L53 [@sun-haberreiter-2008] | peer-reviewed | Why the inflection-point radius exceeds the seismic radius by 0.33 Mm, the basis of the IAU nominal value | arXiv 0711.2392 |
+| 10 | Prša and colleagues 2016, AJ 152:41 [@sun-prsa-2016] | peer-reviewed | What the IAU 2015 nominal radius is and is not | The reason not to use astropy's constant |
+| 11 | Fiala, Dunham and Sofia 1994 [@limb-fiala-dunham-sofia-1994] | peer-reviewed | The IOTA edge method for solar radius from beads, results 1715 to 1987 | |
+| 12 | Guhl and Tegtmeier 2018 and Guhl 2023, Journal for Occultation Astronomy [@val-guhl-tegtmeier-2018] [@val-guhl-2023] | trade | Per-bead residual tables for 2017 and 2023 with Occult, LOLA and Kaguya | The bead-level validation cases |
+| 13 | Rozelot and Kosovichev 2026, arXiv 2605.23794 [@sun-rozelot-kosovichev-2026] | preprint | A review comparing canonical, nominal, seismic and eclipse radii | |
 
-## Code, in reading order
+### Code, in reading order
 
 | Order | Code | Licence | What to read it for | Constants |
 |---|---|---|---|---|
@@ -49,7 +76,7 @@ seo_title: Eclipse Calculation Reading List: Papers, Code and Datasets
 | 7 | tahze0/solar-eclipse-explorer [@sw-repo-tahze0] | MIT | A template for catalogue-scale validation against the NASA CSV | 0.26 percent median width error over 300 eclipses |
 | 8 | Eclipse-Engine, 2027 visualiser and `besselian` [@glob-rherale] [@glob-enrique7mc] [@glob-aravpanwar] | mixed | Compact ellipsoid formulations in JavaScript and Python, three-time validation against NASA tables | WGS84, $k_2 = 0.272281$ |
 
-## Datasets
+### Datasets
 
 | Dataset | Owner | Format and size | Use | Source |
 |---|---|---|---|---|
@@ -58,12 +85,9 @@ seo_title: Eclipse Calculation Reading List: Papers, Code and Datasets
 | SVS 2017, 2023 and 2024 shapefiles and cities JSON | NASA SVS | zipped shapefiles, KML, JSON | Reference products for limb-and-terrain polygons and city contacts. Cadence depends on the selected archive | [@sw-svs-5073] [@svs-2024-shapefiles-zip] |
 | LOLA LDEM_128 | NASA PDS | PDS3 IMG, 2.12 GB, 128 ppd, 237 m | Development limb dataset; 0.13″ per cell | [@limb-lola-ldem128-label] |
 | SLDEM2015 and polar LDEM tiles | NASA PDS | PDS3 IMG, 512 ppd, 60 m, 3 to 4 m vertical | Production limb dataset with polar coverage above 60° | [@limb-sldem2015-label] |
-| SRTM GL1 or Copernicus GLO-30, with EGM96 or EGM2008 | NASA LP DAAC, ESA | HGT or cloud-optimised GeoTIFF | Terrain stage; orthometric heights need the geoid | [@earth-srtm-guide] [@earth-copdem] |
-| `de440s.bsp`, `moon_pa_de440_200625.bpc`, `moon_de440_250416.tf` (the 2025 revision of the `moon_de440_200625.tf` the paper cites) | NAIF | SPK 31 MB, binary PCK, frame kernel | Ephemeris and lunar orientation in the ME frame. The small SPK covers 1849–2150; wider catalogue epochs need a matching full kernel | [@moon-naif-summaries] [@moon-naif-moon-fk-de440] |
-| `deltat.data`, `deltat.preds`, `finals.all` | USNO, IERS | text | ΔT measured and predicted with errors, UT1 and polar motion | [@earth-usno-deltat-data] [@earth-usno-deltat-preds] [@earth-iers-bulletin-a] |
 | Watts charts, VizieR VI/122 | CDS | table | Only to reproduce pre-2009 bulletins, with the Morrison and Appleby corrections | [@limb-vizier-vi122] |
 
-## Reference products for validation
+### Reference products for validation
 
 | Level | Case | Values | Tolerance | Source |
 |---|---|---|---|---|
@@ -75,29 +99,41 @@ seo_title: Eclipse Calculation Reading List: Papers, Code and Datasets
 | 4 | Stephenville, Texas, 2024 | observed C2 18:39:06.6, C3 18:39:20.3 UTC, 13.7 s | 3 s with true limb and 959.95″; about 24 s expected at 959.63″ as a negative control | [@val-besselian-maps-accuracy] |
 | 5 | Thermopolis 2017 and Cape Range 2023 bead tables | 16 events each with axis angles and times | 1 s per event at the derived radius correction | [@val-guhl-tegtmeier-2018] [@val-guhl-2023] |
 
-## Lunar eclipses, occultations and transits
+### Transits of Mercury and Venus
 
-Read [Lunar eclipses, occultations and transits](other-events.md) first for
-how these events relate to the solar pipeline. Then, per event:
+| Event | Source | Grade | What it uniquely provides |
+|---|---|---|---|
+| Transits | Explanatory Supplement 1961, section 9F [@tr-es1961] | peer-reviewed | The transit contact solution and worked examples to 0.1 s |
+| Transits | IMCCE for ESO VT-2004, sheet B1 [@tr-eso-eis-b1] | primary | Stated constants and a rigorous worked example for Paris |
+| Transits | Schneider, Pasachoff and Golub 2004 [@tr-spg-2004] | peer-reviewed | The black drop as an instrumental effect |
+
+## Lunar eclipses
 
 | Event | Source | Grade | What it uniquely provides |
 |---|---|---|---|
 | Lunar eclipses | Herald and Sinnott 2014, JBAA 124:247 [@lun-herald-sinnott-2014] | peer-reviewed | The 87 km shadow layer from 22,539 crater timings, and the recommended rule |
 | Lunar eclipses | Espenak and Meeus 2009, Five Millennium Canon of Lunar Eclipses, NASA/TP-2009-214172 [@lun-5mcle-tp2009] | primary | Danjon's rule, the catalogue method, ΔT and the visibility maps |
 | Lunar eclipses | VizieR VI/140 [@lun-vizier-vi140] | primary | The crater timings as a test set |
+
+## Occultations
+
+| Event | Source | Grade | What it uniquely provides |
+|---|---|---|---|
 | Lunar occultations | Explanatory Supplement 1961, section 10 [@occ-es1961] | peer-reviewed | Elements at conjunction, the station reduction and $kn\cos\psi$ |
 | Lunar occultations | VizieR VI/132C [@occ-vizier-vi132c] | primary | The archive from 1623, its LOLA limb grid and its default corrections |
 | Grazes | IOTA manual 2007 [@occ-iota-manual-2007] | trade | Graze profiles, the height shift and station placement |
-| Transits | Explanatory Supplement 1961, section 9F [@tr-es1961] | peer-reviewed | The transit contact solution and worked examples to 0.1 s |
-| Transits | IMCCE for ESO VT-2004, sheet B1 [@tr-eso-eis-b1] | primary | Stated constants and a rigorous worked example for Paris |
-| Transits | Schneider, Pasachoff and Golub 2004 [@tr-spg-2004] | peer-reviewed | The black drop as an instrumental effect |
+| Minor bodies | Gomes-Júnior and colleagues 2022, SORA [@mb-gomes-junior-2022-sora] with its code [@mb-sora-code] | peer-reviewed | The prediction and reduction equations, checked against the code |
+| Minor bodies | Herald and colleagues 2020 [@mb-herald-2020] | peer-reviewed | Chord fitting and occultation astrometry of asteroids |
+| Minor bodies | Ferreira and colleagues 2022 [@mb-ferreira-2022] | peer-reviewed | The accuracy of occultation astrometry with Gaia |
+
+## Planetary satellites
+
+| Event | Source | Grade | What it uniquely provides |
+|---|---|---|---|
 | Galilean satellites | Thuillot 1983, A&A 127:63 [@jup-thuillot-1983] | peer-reviewed | The two-cone method with an oblate Jupiter and the light-time rules |
 | Galilean satellites | IMCCE phenjupiter README [@jup-imcce-phenjupiter-readme] | primary | Which theory each year's tables use, and the mid-event definition |
 | Galilean satellites | Saquet and colleagues 2018 [@jup-saquet-2018] | peer-reviewed | PHEMU15 mutual-event astrometry and its residuals by theory |
 | Saturn's satellites | Arlot and colleagues 2012 [@sats-arlot-2012-phesat09] | peer-reviewed | PHESAT09 residuals for TASS 1.7, NOE and SAT351 |
-| Minor bodies | Gomes-Júnior and colleagues 2022, SORA [@mb-gomes-junior-2022-sora] with its code [@mb-sora-code] | peer-reviewed | The prediction and reduction equations, checked against the code |
-| Minor bodies | Herald and colleagues 2020 [@mb-herald-2020] | peer-reviewed | Chord fitting and occultation astrometry of asteroids |
-| Minor bodies | Ferreira and colleagues 2022 [@mb-ferreira-2022] | peer-reviewed | The accuracy of occultation astrometry with Gaia |
 
 ## Where the raw notes go deeper
 
