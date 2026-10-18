@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""The hidden case, shown as a lunar occultation of a star: the Moon blocks
-the starlight on its way to the observer. Schematic."""
+"""The hidden case, shown with a point source: a lunar occultation of a star.
+The observer stands in the Moon's shadow in starlight, so the star is hidden.
+Schematic."""
 
 from prim_case import AXIS, labels, new, sun
 
 f = new(
-    "Hidden: the Moon blocks the starlight reaching the observer",
+    "Hidden: the observer stands in the Moon's shadow in starlight",
     ("Left, a star, labelled light source, sending parallel lines of light "
      "to the right. Middle, the Moon, labelled blocking body. The lines that "
      "meet the Moon stop there, and a pale band behind the Moon marks where "
@@ -31,6 +32,6 @@ f.line(ox - 5, y, mx + mr + 4, y, cls="accent-2 thin dotted")
 labels(f, stx + 14, y + 58, "Light source", "a star", anchor="middle")
 labels(f, mx, y + mr + 40, "Blocking body", "the Moon")
 labels(f, ox - 10, y + 76, "Observer", "on the Earth")
-f.text((mx + ox) / 2, y - 8, "the star is hidden in this band", anchor="middle", cls="label-dim")
+f.text((mx + ox) / 2, y - 8, "the Moon's shadow in starlight", anchor="middle", cls="label-dim")
 
 f.save(__file__, "../../content/05-primer/img/case-hidden.svg")

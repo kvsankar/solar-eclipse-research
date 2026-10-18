@@ -12,27 +12,25 @@ WORKED = PRIMER / "worked-example-solar-eclipse.md"
 IMG = PRIMER / "img"
 
 KINDS = {
-    "Solar eclipse": "Both",
-    "Transit of Mercury or Venus": "Both",
-    "Lunar eclipse": "Darkened",
-    "Eclipse of a satellite": "Darkened",
-    "Shadow transit": "Darkened",
-    "Mutual eclipse": "Darkened",
-    "Lunar occultation of a star": "Hidden",
-    "Lunar occultation of a planet": "Hidden",
-    "Occultation by an asteroid or TNO": "Hidden",
-    "Occultation of a satellite by its planet": "Hidden",
-    "Transit of a satellite": "Hidden",
-    "Mutual occultation": "Hidden",
-    "Occultation of one planet by another": "Hidden",
+    "Solar eclipse": ("Hidden", "disc"),
+    "Transit of Mercury or Venus": ("Hidden", "disc"),
+    "Lunar occultation of a star": ("Hidden", "point"),
+    "Lunar occultation of a planet": ("Hidden", "disc"),
+    "Occultation by an asteroid or TNO": ("Hidden", "point"),
+    "Occultation of a satellite by its planet": ("Hidden", "disc"),
+    "Transit of a satellite": ("Hidden", "disc"),
+    "Mutual occultation": ("Hidden", "disc"),
+    "Occultation of one planet by another": ("Hidden", "disc"),
+    "Lunar eclipse": ("Darkened", "disc"),
+    "Eclipse of a satellite": ("Darkened", "disc"),
+    "Shadow transit": ("Darkened", "disc"),
+    "Mutual eclipse": ("Darkened", "disc"),
 }
 CASES = {
-    "Darkened": ("case-darkened.svg", [("Light source", "the Sun"), ("Blocking body", "the Earth"),
-                                       ("Darkened body", "the Moon"), ("Observer", "on the Earth's night side")]),
     "Hidden": ("case-hidden.svg", [("Light source", "a star"), ("Blocking body", "the Moon"),
                                    ("Observer", "on the Earth")]),
-    "Both": ("case-both.svg", [("Light source", "the Sun"), ("Blocking body", "the Moon"),
-                               ("Observer", "on the Earth")]),
+    "Darkened": ("case-darkened.svg", [("Light source", "the Sun"), ("Blocking body", "the Earth"),
+                                       ("Darkened body", "the Moon"), ("Observer", "on the Earth's night side")]),
 }
 EXAMPLES = {
     "example-satellite-eclipse.svg": ("Darkened", [("Light source", "the Sun"), ("Blocking body", "Jupiter"),
@@ -45,12 +43,29 @@ EXAMPLES = {
                                                      ("Blocking body", "Jupiter"), ("Observer", "on the Earth")]),
     "example-asteroid-occultation.svg": ("Hidden", [("Light source", "a star"), ("Blocking body", "an asteroid"),
                                                     ("Observer", "on the Earth, in the shadow path")]),
-    "example-venus-transit.svg": ("Both", [("Light source", "the Sun"), ("Blocking body", "Venus"),
-                                           ("Observer", "on the Earth")]),
+    "example-solar-eclipse.svg": ("Hidden", [("Light source", "the Sun"), ("Blocking body", "the Moon"),
+                                             ("Observer", "on the Earth")]),
+    "example-venus-transit.svg": ("Hidden", [("Light source", "the Sun"), ("Blocking body", "Venus"),
+                                             ("Observer", "on the Earth")]),
 }
 STATIC = [c[0] for c in CASES.values()] + ["shadow-shape.svg"] + list(EXAMPLES)
 FIG_SCRIPTS = ROOT / "tools" / "figures"
 ANIMATED = ["anim-solar-eclipse.svg", "anim-lunar-eclipse.svg", "anim-io-orbit.svg"]
+
+
+def inside_with_margin(poly, x, y, margin):
+    """True when (x, y) is inside the polygon and at least margin from every edge."""
+    inside = False
+    n = len(poly)
+    for k in range(n):
+        (x1, y1), (x2, y2) = poly[k], poly[(k + 1) % n]
+        if (y1 > y) != (y2 > y) and x < x1 + (y - y1) * (x2 - x1) / (y2 - y1):
+            inside = not inside
+        dx, dy = x2 - x1, y2 - y1
+        t = max(0.0, min(1.0, ((x - x1) * dx + (y - y1) * dy) / (dx * dx + dy * dy or 1)))
+        if ((x - x1 - t * dx) ** 2 + (y - y1 - t * dy) ** 2) ** 0.5 < margin:
+            return False
+    return inside
 
 
 def front(text):
@@ -69,19 +84,20 @@ class GeneralPrimerTest(unittest.TestCase):
         self.text = GENERAL.read_text(encoding="utf-8")
         self.secs = sections(self.text)
 
-    def test_pri_1_first_page_and_the_three_cases(self):
+    def test_pri_1_first_page_and_the_two_cases(self):
         meta = front(self.text)
         self.assertEqual(meta["title"], "How eclipses, occultations and transits are computed")
         self.assertEqual(meta["order"], "1")
-        for case in ("Darkened", "Hidden", "Both"):
+        for case in ("Hidden", "Darkened"):
             self.assertTrue(any(h.startswith(case) for h in self.secs), case)
+        self.assertFalse(any(h.startswith("Both") for h in self.secs))
 
     def test_pri_2_every_kind_classified_once_with_a_live_link(self):
-        rows = re.findall(r"^\| ([^|]+?) \| (Both|Darkened|Hidden) \| \[[^]]+\]\(([^)]+)\) \|$",
+        rows = re.findall(r"^\| ([^|]+?) \| (Darkened|Hidden) \| (point|disc) \| \[[^]]+\]\(([^)]+)\) \|$",
                           self.text, flags=re.M)
-        found = {name: case for name, case, _ in rows}
+        found = {name: (case, src) for name, case, src, _ in rows}
         self.assertEqual(found, KINDS)
-        for _, _, link in rows:
+        for _, _, _, link in rows:
             self.assertTrue((PRIMER / link).resolve().is_file(), link)
 
     def test_pri_3_shadow_shape_vocabulary(self):
@@ -158,12 +174,31 @@ class PrimerFigureTest(unittest.TestCase):
     def test_fig_7_sun_colour(self):
         css = (ROOT / "templates" / "static" / "site.css").read_text(encoding="utf-8")
         self.assertGreaterEqual(css.count("--fig-sun:"), 3)
+        self.assertGreaterEqual(css.count("--fig-silhouette:"), 3)
         self.assertIn(".figsvg .sun-fill", css)
+        self.assertIn(".figsvg .silhouette-fill", css)
+        for script in FIG_SCRIPTS.glob("prim_*.py"):
+            self.assertNotIn("sky-fill", script.read_text(encoding="utf-8"), script.name)
         for script in FIG_SCRIPTS.glob("prim_*.py"):
             src = script.read_text(encoding="utf-8")
             for line in src.splitlines():
                 if "accent-fill" in line:
                     self.assertNotRegex(line.lower(), r"sun|sx, sy|# the source as seen", f"{script.name}: {line}")
+
+    def test_fig_8_observer_inside_the_stated_shadow(self):
+        for name, cls in (("example-solar-eclipse.svg", "cone-deep"), ("example-venus-transit.svg", "cone")):
+            svg = (IMG / name).read_text(encoding="utf-8")
+            obs = re.search(r'<circle cx="([-\d.]+)" cy="([-\d.]+)" r="[\d.]+" class="accent-2-fill"', svg)
+            ox, oy = float(obs.group(1)), float(obs.group(2))
+            polys = [[tuple(map(float, pt.split(","))) for pt in m.split()]
+                     for m in re.findall(rf'<polygon points="([^"]+)" class="{cls}"', svg)]
+            self.assertTrue(any(inside_with_margin(pg, ox, oy, 4) for pg in polys), name)
+        svg = (IMG / "example-solar-eclipse.svg").read_text(encoding="utf-8")
+        suns = re.findall(r'<circle cx="([-\d.]+)" cy="([-\d.]+)" r="([\d.]+)" class="sun-fill"', svg)
+        sils = re.findall(r'<circle cx="([-\d.]+)" cy="([-\d.]+)" r="([\d.]+)" class="silhouette-fill"', svg)
+        self.assertTrue(any(cx == sx and cy == sy and float(r2) >= float(r1)
+                            for sx, sy, r1 in suns for cx, cy, r2 in sils),
+                        "the inset's silhouette covers the whole Sun")
 
     def test_fig_2_each_figure_says_schematic(self):
         for name in STATIC + ANIMATED:

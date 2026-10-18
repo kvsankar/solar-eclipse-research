@@ -8,7 +8,8 @@ seo_title: Occultation Calculation: Moon, Planets and Minor Bodies
 ---
 
 In an occultation a nearer body blocks the observer's line of sight to a
-farther one. Nothing is darkened for anyone else, so the timing depends on
+farther one: the observer stands in the nearer body's shadow in the farther
+one's light. Nothing is darkened for anyone else, so the timing depends on
 where the observer stands. A star is a point at infinity, so the shadow it
 casts is a cylinder with the radius of the occulting body. That shadow lights
 nothing, but it is how these events are computed.

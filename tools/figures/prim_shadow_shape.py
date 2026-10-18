@@ -70,11 +70,12 @@ def observer(x, y, kind, label, ix, iy):
     f.line(x, y + 5, ix, iy - 18, cls="accent thin dotted")
     f.circle(ix, iy, 15, cls="sun-fill")        # the source as seen
     if kind == "total":
-        f.circle(ix, iy, 16, cls="sky-fill")
+        f.circle(ix, iy, 17, cls="sun-fill")
+        f.circle(ix, iy, 15, cls="silhouette-fill")
     elif kind == "annular":
-        f.circle(ix, iy, 10.5, cls="sky-fill")
+        f.circle(ix, iy, 10.5, cls="silhouette-fill")
     elif kind == "partial":
-        f.circle(ix + 12, iy - 6, 15, cls="sky-fill")
+        f.circle(ix + 12, iy - 6, 15, cls="silhouette-fill")
     f.text(ix, iy + 32, label, anchor="middle", cls="label")
 
 

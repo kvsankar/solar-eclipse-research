@@ -7,12 +7,11 @@ updated: 2026-10-18
 seo_title: Solar Eclipse and Transit Calculation: Research Notes
 ---
 
-In a solar eclipse and in a transit the observer stands in a body's shadow,
-which is the same as seeing the Sun hidden by that body. These events are
-therefore shadow events and line-of-sight events at once. The Moon's shadow
-can be an umbra, a penumbra or an antumbra, which gives a total, partial or
-annular eclipse. A transit is the annular case with a planet too small to
-cover the Sun.
+A solar eclipse and a transit are occultations of the Sun: the observer
+stands in a body's shadow, which is the same as seeing the Sun hidden by that
+body. The Sun is a disc, so the Moon's shadow can be an umbra, a penumbra or
+an antumbra, which gives a total, partial or annular eclipse. A transit is
+the annular case with a planet too small to cover the Sun.
 
 Solar eclipses are the deepest part of this corpus:
 

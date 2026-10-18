@@ -51,7 +51,7 @@ sx, sy = 510, 140
 f.circle(sx, sy, SUN + 14, cls="accent thin dotted")
 f.circle(sx, sy, SUN, cls="sun-fill")
 f.raw(
-    f'<g clip-path="url(#sky)"><circle cx="{sx}" cy="{sy}" r="{MOON}" class="sky-fill">'
+    f'<g clip-path="url(#sky)"><circle cx="{sx}" cy="{sy}" r="{MOON}" class="silhouette-fill">'
     f'<animate attributeName="cx" values="{sx + TRAVEL * K};{sx - TRAVEL * K}" dur="{DUR}" '
     f'begin="indefinite" repeatCount="indefinite"/>'
     f'<animate attributeName="cy" values="{sy + TRAVEL * 0.2 * K};{sy - TRAVEL * 0.2 * K}" dur="{DUR}" '

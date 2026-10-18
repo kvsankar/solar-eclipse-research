@@ -11,26 +11,34 @@ is marked removed rather than renumbered.
 
 ## The organising idea
 
-Every event on the site is one body cutting the light path from a source to
-an observer. The light either travels straight to the observer (the Sun, a
-star) or reflects off a body first (the Moon, a planet, a satellite). There
-are three cases:
+Every event on the site is one body casting a shadow in some light. The
+light is either emitted (the Sun, a star) or reflected (the Moon, a planet,
+a satellite). There are two cases, set by who stands in the shadow:
 
-- **Darkened:** the body cuts the light reaching another body. That body goes
-  dark for everyone who can see it, at one instant apart from light-time.
-- **Hidden:** the body cuts the light reaching the observer. Something
-  disappears for that observer, and the timing depends on where they stand.
-- **Both:** the body cuts the observer's view of the light source itself. The
-  observer stands in the body's shadow and sees the source hidden. Solar
-  eclipses and transits are this case.
+- **Hidden:** the observer is in the shadow. The observer sees the source of
+  that light hidden behind the blocking body, and the timing depends on
+  where they stand. Solar eclipses, transits and every occultation are this
+  case: a solar eclipse is the Moon hiding the Sun, seen from inside the
+  Moon's shadow.
+- **Darkened:** another body is in the shadow. The sunlight reaching it is
+  cut off, so it goes dark for everyone who can see it, at one instant
+  apart from light-time.
+
+Within the hidden case, two properties of the hidden source set the
+computation: whether it is a point (a star: a cylindrical shadow, so it
+vanishes at once) or a disc (the Sun, a planet, a satellite: a cone with an
+umbra, a penumbra and an antumbra), and whether it shines itself or is lit
+by the Sun (then its phase shapes the hidden outline).
 
 ## PRI: the primer
 
 - **PRI-1** The Primer's first page, "How eclipses, occultations and transits
-  are computed", explains every event as a body cutting the light path, with
-  the three cases above, in plain words before any formula.
+  are computed", explains every event as a body casting a shadow, with the
+  two cases above and the two properties of the hidden source, in plain
+  words before any formula.
 - **PRI-2** It classifies every kind of event the research notes cover into
-  one of the three cases, in one table, and links each row to the research
+  one of the two cases, in one table that also says whether the hidden or
+  darkened source is a point or a disc, and links each row to the research
   group or topic that covers it.
 - **PRI-3** It explains the shape of a shadow. An extended source gives a cone
   with an umbra, a penumbra and an antumbra, and an observer in each sees a
@@ -38,8 +46,9 @@ are three cases:
   too small to cover the source. A point source gives a cylinder with no
   penumbra.
 - **PRI-4** It relates the Explanatory Supplement's terms (eclipse,
-  occultation, transit, shadow transit) to the three cases, with the
-  Supplement cited.
+  occultation, transit, shadow transit) to the two cases, with the
+  Supplement cited: its eclipse is the darkened case, its occultation and
+  transit are the hidden case.
 - **PRI-5** It ends by pointing to the worked example, the glossary, the
   research groups and the reports.
 - **PRI-6** The solar walkthrough is titled "Worked example: a solar eclipse".
@@ -50,16 +59,21 @@ are three cases:
 ## FIG: 2D figures and animations
 
 - **FIG-1** The general primer page has at least these figures:
-  1. one diagram per case (darkened, hidden, both), each a separate figure
-     at the head of its section, in which every body carries two labels:
-     its role (light source, blocking body, darkened body, observer) and
-     its name (the Sun, a star, the Moon, the Earth);
+  1. one diagram per case, each a separate figure at the head of its
+     section, in which every body carries two labels: its role (light
+     source, blocking body, darkened body, observer) and its name (the Sun,
+     a star, the Moon, the Earth). The hidden case's diagram is a lunar
+     occultation of a star; the darkened case's is a lunar eclipse;
   2. the shape of the shadow: a cone with umbra, penumbra and antumbra, with
      what an observer in each sees, beside the cylinder of a point source;
   3. further examples, each a separate diagram in the same style with the
-     same two labels per body: the eclipse of a satellite and a shadow
-     transit (darkened); a satellite hidden by its planet and a star hidden
-     by an asteroid (hidden); a transit of Venus (both).
+     same two labels per body: a solar eclipse, a transit of Venus, a
+     satellite hidden by its planet and a star hidden by an asteroid
+     (hidden); the eclipse of a satellite and a shadow transit (darkened).
+     Wherever an observer stands in a shadow, the observer's marker sits
+     clearly inside the stated part of it, and an inset of what they see
+     matches that part: a total eclipse in the umbra, a dot on the Sun in
+     the antumbra.
 - **FIG-2** Every primer figure says on its face that it is a schematic and
   not to scale. Its still frame carries its whole point with no interaction.
 - **FIG-3** Three primer figures are animated: the Moon's shadow crossing the
@@ -74,7 +88,8 @@ are three cases:
   Opening the lightbox on an animated figure shows its still frame.
 - **FIG-7** The Sun is drawn in one light, warm colour defined as a theme
   token, so it reads as bright in both themes. No figure draws the Sun in
-  the dark accent colour.
+  the dark accent colour. A body seen against the Sun is drawn as a dark
+  silhouette, also a theme token, so it reads as dark in both themes.
 - **FIG-6** The schematic figures are drawn at build time by scripts in
   `tools/figures/`. They illustrate the geometry and do not compute
   positions, so they do not use the geometry module.
@@ -108,9 +123,9 @@ observer sees. They share one module, so they cannot disagree.
 
 ## REP: the reports
 
-- **REP-1** The executive summary opens with the light-path idea and gives
-  one paragraph of findings for each case (darkened, hidden, both) before
-  the solar eclipse findings. The solar findings follow under a heading
+- **REP-1** The executive summary opens with the shadow idea and gives
+  one paragraph of findings for each case (hidden, darkened) before the
+  solar eclipse findings. The solar findings follow under a heading
   that names solar eclipses.
 - **REP-2** The pipeline report is titled "Solar eclipse pipeline" and the
   error budget "Solar eclipse error budget". Each says in its opening
@@ -126,13 +141,14 @@ observer sees. They share one module, so they cannot disagree.
 ## HOME: the home page
 
 - **HOME-1** The home page's main image is a collage with at least one
-  photograph for each case: darkened, hidden and both. Every photograph is
+  photograph for each case, hidden and darkened, and a solar eclipse among
+  the hidden ones. Every photograph is
   public domain or CC BY-SA, with its licence confirmed on the file's own
   page and recorded in `images.tsv`. The credits appear on the page under
   the collage.
 - **HOME-2** The collage is built by a script from source images kept in
   the repository, so the same sources give the same bytes.
-- **HOME-3** The home page's introduction starts with the light-path idea
+- **HOME-3** The home page's introduction starts with the shadow idea
   and says that solar eclipses are covered in most depth.
 - **HOME-4** The home page's summary has one bullet per case and one on the
   depth of the solar eclipse material.
@@ -151,7 +167,7 @@ Status: outline. This section is completed before the scenes are built.
 
 Status: outline. This section is completed before the explorer is built.
 
-- **SBX-1** A Primer page, "Explorer", shows a side view of the light path
+- **SBX-1** A Primer page, "Explorer", shows a side view of the bodies and their shadows
   and the observer's view, linked.
 - **SBX-2** The reader picks the source (the Sun or a star), moves the bodies
   and the observer, and can play the motion.

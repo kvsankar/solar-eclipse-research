@@ -12,10 +12,11 @@ Wright's NASA SVS work on the 2024 eclipse: lunar limb profiles from LRO LOLA,
 the solar radius question, Earth and Moon modelling, ephemerides, time scales.
 
 The same geometry extends to the other events of the family. Every event is
-one body cutting the light path from a source to an observer: the light
-reaching a body (it goes dark for everyone), the light reaching the observer
-(something is hidden from them), or both at once (the observer stands in a
-shadow and sees the Sun hidden). Topics for the other events, with their slug
+a body casting a shadow, and there are two cases, set by who stands in it:
+the observer (who sees the source hidden: every occultation, transit and
+solar eclipse) or another body (which goes dark for everyone: lunar eclipses
+and satellite eclipses). The hidden source is a point (a star, a cylindrical
+shadow) or a disc (a cone with umbra, penumbra and antumbra). Topics for the other events, with their slug
 prefixes: lunar eclipses (`lun`), lunar occultations (`occ`), transits of
 Mercury and Venus (`tr`), Jupiter's satellites (`jup`), Saturn and the outer
 satellites (`sats`), and occultations by planets and minor bodies (`mb`). Term
