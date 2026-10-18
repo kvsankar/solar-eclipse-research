@@ -184,8 +184,10 @@ Read `tools/figures/fundamental_plane.py` as the worked example, and
   "NASA's JavaScript Solar Eclipse Explorer (JSEX)" and "the SVS Eclipse
   Explorer web app (SVS 5169)" are different programs; "Kaguya (SELENE)";
   "The Photographer's Ephemeris (Photo Ephemeris)"; the Five Millennium
-  Canon (NASA/TP-2006-214141) and the Five Millennium Catalogue
-  (NASA/TP-2009-214174) with the report number on first use.
+  Canon (NASA/TP-2006-214141) and the Five Millennium Catalog
+  (NASA/TP-2009-214174) with the report number on first use. A proper name
+  keeps its source's spelling, so it is "Catalog" in the name and
+  "catalogue" everywhere else.
 - **Never narrate the research process.** No "the brief", no "this session",
   no "search budget", no lists of queries, no tools and no account of how a
   page was fetched. The reader has none of those. A negative finding states

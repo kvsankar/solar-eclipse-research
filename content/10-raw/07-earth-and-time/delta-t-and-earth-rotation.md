@@ -110,7 +110,7 @@ The Catalogue's own table of the model gives 612 s at +2500, or 2.6 degrees of l
 |---|---|---|---|
 | Measured (USNO `deltat.data`) | 68.84 s (Aug 1: 68.8373, Sep 1: 68.8477) | 69.20 s (Apr 1: 69.1983, May 1: 69.2018) | [@earth-usno-deltat-data] |
 | NASA eclipse site, Espenak | 68.4 s; the 2017 Google-map page names JPL DE405 and the 2017 path-table page names VSOP87/ELP2000-85 | 70.6 s, VSOP87/ELP2000-85 | [@earth-nasa-2017-google] [@earth-nasa-2017-beselm] [@earth-nasa-2024-google] [@earth-nasa-2024-beselm] |
-| NASA SEdata page and the Catalog CSV | – | 74.0 s, the 2006 polynomial value, later revised to 70.6 s on the path and element pages; see [Besselian elements](../01-foundations/besselian-elements.md) | [@earth-nasa-deltatpoly] [@earth-5mcse] |
+| NASA SEdata page and the Five Millennium Catalog CSV | – | 74.0 s, the 2006 polynomial value, later revised to 70.6 s on the path and element pages; see [Besselian elements](../01-foundations/besselian-elements.md) | [@earth-nasa-deltatpoly] [@earth-5mcse] |
 | EclipseWise, Espenak | 68.8 s, JPL DE405 | 71.5 s, JPL DE405 | [@earth-eclipsewise-2017] [@earth-eclipsewise-2024] |
 | NASA SVS, Wright | 68.917 s ("Delta UTC 69.184 seconds (TT – TAI + 37 leap seconds)", DE421, SPICE predict kernel "ΔT corrected"); an earlier product used Delta UTC 68.184 s with 36 leap seconds | Not printed on SVS 5073, 5123 or 5219 | [@earth-svs-4515] [@earth-svs-4314] [@earth-svs-5073] |
 | Espenak and Meeus 2006 polynomial | 70.34 s (computed here) | 74.03 s (computed here) | [@earth-nasa-deltatpoly] |
@@ -119,7 +119,7 @@ The Catalogue's own table of the model gives 612 s at +2500, or 2.6 degrees of l
 | timeanddate | Not published; states that calculations "account for changes in the speed of Earth's rotation using a value called Delta T" | same | [@earth-timeanddate-accuracy] |
 | Occult | Not documented on the pages read | same | [@earth-occult4] |
 
-NASA labels its 2024 element page "VSOP87/ELP2000-85", while the Catalog text describes ELP-2000/82. Both labels are quoted here from the pages that carry them [@earth-nasa-2024-beselm] [@earth-5mcse].
+NASA labels its 2024 element page "VSOP87/ELP2000-85", while the Five Millennium Catalog text describes ELP-2000/82. Both labels are quoted here from the pages that carry them [@earth-nasa-2024-beselm] [@earth-5mcse].
 
 The errors are small for 2017: −0.44 s for NASA, −0.04 s for EclipseWise and +0.08 s for SVS, which are 160 m, 15 m and 30 m of longitude at 40°. For 2024 the two Espenak products were +1.4 s and +2.3 s high, 0.5 km and 0.8 km of longitude at 40°, a consequence of predicting in the years when ΔT still appeared to be climbing. The SVS 2017 value combines the leap-second count with a predicted UT1 − UTC of $69.184 - 68.917 = 0.267$ s, against a measured 0.347 s. Its earlier product's "36 leap seconds" shows the count was updated after the 2017 January leap second [@earth-svs-4314] [@earth-svs-4515].
 

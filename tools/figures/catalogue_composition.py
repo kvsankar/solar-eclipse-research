@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Composition of the Five Millennium Catalogue by eclipse type.
+"""Composition of the Five Millennium Catalog by eclipse type.
 
 Counts and percentages are the catalogue's own, NASA/TP-2009-214174, as
 quoted in `enumerating-eclipses.md`: 11,898 eclipses in -1999 to +3000, of
@@ -37,7 +37,7 @@ def bx(count: float) -> float:
 
 f = Figure(
     W, H,
-    title="Composition of the Five Millennium Catalogue",
+    title="Composition of the Five Millennium Catalog",
     desc=(
         "A horizontal bar chart of the 11,898 solar eclipses in the Five "
         "Millennium Catalogue by type. Partial is the longest bar at 4,200 "
@@ -48,7 +48,7 @@ f = Figure(
     ),
 )
 
-f.text(8, 28, "Five Millennium Catalogue of Solar Eclipses, "
+f.text(8, 28, "Five Millennium Catalog of Solar Eclipses, "
               "−1999 to +3000: 11,898 eclipses", cls="label")
 
 # gridlines behind the bars

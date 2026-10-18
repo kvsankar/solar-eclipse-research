@@ -43,7 +43,6 @@ KEEP = [
     "Five Millennium Catalog",
     "Catalog of Solar Eclipses",
     "Thousand Year Canon",
-    "Eclipse Catalog",
 ]
 
 SUBS: list[tuple[re.Pattern, str]] = [
