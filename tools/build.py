@@ -28,6 +28,7 @@ Front matter (optional, YAML-ish, flat) understood per file:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import html
 import json
 import re
@@ -905,6 +906,16 @@ def render_social(node: Node) -> str:
     return "\n".join(out)
 
 
+def asset_version(name: str) -> str:
+    """A short content hash for a static asset, used as its ?v= query.
+
+    Pages are served uncached but their stylesheet and scripts are cached at
+    the CDN and in browsers. Naming each request after the file's content
+    means a new page can never be paired with an old stylesheet.
+    """
+    return hashlib.sha256((STATIC / name).read_bytes()).hexdigest()[:10]
+
+
 def render_page(node: Node, root: Node, template: str, refs: dict, missing: set,
                 terms: dict, gloss_missing: set, gloss_used: set,
                 prev: Node | None = None, nxt: Node | None = None,
@@ -928,6 +939,9 @@ def render_page(node: Node, root: Node, template: str, refs: dict, missing: set,
         "head_title": html.escape(page_head_title(node)),
         "description": html.escape(node.description or SITE_TITLE),
         "root": rel_root(node.depth),
+        "v_css": asset_version("site.css"),
+        "v_js": asset_version("site.js"),
+        "v_3d": asset_version("site3d.js"),
         "home_url": root.url_from_root,
         "nav": render_nav(root, node),
         "crumbs": render_crumbs(node, root),
