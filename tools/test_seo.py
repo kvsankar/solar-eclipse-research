@@ -52,8 +52,8 @@ class SearchMetadataTests(unittest.TestCase):
 
     def test_home_names_calculation_and_algorithms(self):
         title = build.page_head_title(self.root).lower()
-        self.assertIn("solar eclipse calculation", title)
-        self.assertIn("algorithms", title)
+        for term in ("eclipse", "occultation", "transit", "calculation", "algorithms"):
+            self.assertIn(term, title)
 
     def test_social_and_document_titles_use_the_same_page_metadata(self):
         node = self.nodes[-1]

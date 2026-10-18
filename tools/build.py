@@ -42,17 +42,17 @@ OUT = ROOT / "site"
 TEMPLATES = ROOT / "templates"
 STATIC = TEMPLATES / "static"
 
-SITE_TITLE = "Computing Solar Eclipses — Research"
+SITE_TITLE = "Computing Eclipses, Occultations and Transits"
 
 # Canonicals, social cards and the sitemap use the publication URL. Navigation
 # stays relative so the same output also opens from file://.
-BASE_URL = "https://sankara.net/astro/solar-eclipses/"
+BASE_URL = "https://sankara.net/astro/eclipses/"
 HOME_FILENAME = "computing.html"
 # Versioned filename. Cloudflare serves images with max-age=604800, so a card
 # changed in place keeps its stale bytes in front of the scrapers for a week.
 # Renaming is the one invalidation that needs no API credentials; bump the
 # suffix whenever the card is recomposed.
-SOCIAL_IMAGE = "img/social-card-v2.jpg"
+SOCIAL_IMAGE = "img/social-card-v3.jpg"
 SOCIAL_IMAGE_ALT = (
     "Totality: the solar corona around the black disc of the Moon, with pink "
     "prominences at the limb."

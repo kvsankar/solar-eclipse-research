@@ -7,7 +7,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: sankara-net-solar-eclipses
+  group: sankara-net-eclipses
   cancel-in-progress: false
 
 jobs:
@@ -16,8 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: sankara-net-production
     env:
-      REMOTE_PATH: /var/www/sankara.net/astro/solar-eclipses/
-      PUBLIC_URL: https://sankara.net/astro/solar-eclipses/computing.html
+      REMOTE_PATH: /var/www/sankara.net/astro/eclipses/
+      PUBLIC_URL: https://sankara.net/astro/eclipses/computing.html
 
     steps:
       - name: Checkout
@@ -39,7 +39,7 @@ jobs:
 
       - name: Verify deployment payload
         run: |
-          test "$REMOTE_PATH" = "/var/www/sankara.net/astro/solar-eclipses/"
+          test "$REMOTE_PATH" = "/var/www/sankara.net/astro/eclipses/"
           test -f site/computing.html
           test -f site/sitemap.xml
           test -f site/assets/site.css
@@ -70,7 +70,7 @@ jobs:
         run: |
           curl --fail --silent --show-error --retry 5 --retry-delay 3 \
             "$PUBLIC_URL" |
-            grep -q "Computing Solar Eclipses"
+            grep -q "Computing Eclipses, Occultations and Transits"
 
       - name: Cleanup SSH key
         if: always()

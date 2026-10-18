@@ -22,12 +22,13 @@ from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / "content" / "img" / "totality-1999-viatour.jpg"
-TARGET = ROOT / "content" / "img" / "social-card-v2.jpg"
+TARGET = ROOT / "content" / "img" / "social-card-v3.jpg"
 
 WIDTH, HEIGHT = 1200, 630
 MARGIN = 28           # black kept above and below the corona
 CREDIT = "Luc Viatour / lucnix.be \u00b7 CC BY-SA 3.0"
-CAPTION = "Computing Solar Eclipses"
+# The site name, set on two lines so it fits the black column beside the corona.
+CAPTION = ("Computing Eclipses,", "Occultations and Transits")
 
 # Deterministic output: same input, same bytes, on any machine that has one of
 # these fonts. The bitmap fallback keeps the build working where none is
@@ -81,11 +82,15 @@ def main() -> int:
     title_font = load_font(46)
     for points in range(46, 23, -2):
         title_font = load_font(points)
-        if draw.textlength(CAPTION, font=title_font) <= usable:
+        if max(draw.textlength(line, font=title_font) for line in CAPTION) <= usable:
             break
 
-    draw.text((left, HEIGHT // 2 - 30), CAPTION, font=title_font,
-              fill=(242, 238, 230), anchor="ls")
+    leading = round(points * 1.2)
+    baseline = HEIGHT // 2 - 30 - leading * (len(CAPTION) - 1)
+    for line in CAPTION:
+        draw.text((left, baseline), line, font=title_font,
+                  fill=(242, 238, 230), anchor="ls")
+        baseline += leading
     draw.text((left, HEIGHT // 2 + 8), "sankara.net", font=credit_font,
               fill=(166, 158, 146), anchor="ls")
     draw.text((WIDTH - MARGIN - 14, HEIGHT - 34), CREDIT, font=credit_font,

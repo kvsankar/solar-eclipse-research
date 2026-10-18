@@ -40,10 +40,10 @@ from pathlib import Path
 # are asserted before anything connects: a deploy that has drifted off its own
 # subtree should fail here rather than on the server, where --delete would
 # already be loose in a tree this repo does not own.
-REMOTE_PATH = "/var/www/sankara.net/astro/solar-eclipses/"
-PUBLIC_URL = "https://sankara.net/astro/solar-eclipses/computing.html"
-SMOKE_STRING = "Computing Solar Eclipses"
-SURFACE = "astro-solar-eclipses"
+REMOTE_PATH = "/var/www/sankara.net/astro/eclipses/"
+PUBLIC_URL = "https://sankara.net/astro/eclipses/computing.html"
+SMOKE_STRING = "Computing Eclipses, Occultations and Transits"
+SURFACE = "astro-eclipses"
 
 ROOT = Path(__file__).resolve().parent.parent
 SITE = ROOT / "site"
@@ -196,7 +196,7 @@ def build() -> None:
 
 def verify_payload() -> None:
     log("verifying payload")
-    if REMOTE_PATH != "/var/www/sankara.net/astro/solar-eclipses/":
+    if REMOTE_PATH != "/var/www/sankara.net/astro/eclipses/":
         raise DeployError("The remote path guard has been altered.")
     for name in REQUIRED:
         if not (SITE / name).is_file():

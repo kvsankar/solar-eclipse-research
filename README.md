@@ -1,6 +1,6 @@
 # eclipse-research: computing solar eclipse products
 
-**[Read the research site](https://sankara.net/astro/solar-eclipses/computing.html)**
+**[Read the research site](https://sankara.net/astro/eclipses/computing.html)**
 
 ![Totality: the solar corona around the black disc of the Moon, with pink prominences at the limb.](content/img/totality-1999-viatour.jpg)
 
@@ -41,7 +41,7 @@ python tools/jargon_check.py       # terms used before they are explained
 python -m unittest discover -s tools -p test_seo.py  # search metadata regression checks
 python -m unittest discover -s tools -p 'test_*.py'  # numerical and source contracts
 python tools/check_seo.py          # verify rendered metadata and sitemap
-python tools/make_og_image.py      # recompose content/img/social-card-v2.jpg (needs Pillow)
+python tools/make_og_image.py      # recompose content/img/social-card-v3.jpg (needs Pillow)
 ```
 
 Requires **pandoc** on PATH (3.x) and Python 3.10+. No pip or npm dependencies
@@ -57,7 +57,7 @@ not lengthen every navigation entry. The description also appears on the
 parent page's card.
 
 The home page's canonical URL is
-`https://sankara.net/astro/solar-eclipses/computing.html`. The build emits
+`https://sankara.net/astro/eclipses/computing.html`. The build emits
 `computing.html` alongside the identical offline entry `index.html`. Both
 identify `computing.html` as canonical. All other pages retain their existing
 URLs. Internal home links use the relative `computing.html` path, which also
@@ -66,7 +66,7 @@ the home-page aliases. It carries no modification dates because the content
 dates are not a record of every page change.
 
 After publishing, submit
-`https://sankara.net/astro/solar-eclipses/sitemap.xml` in Google Search Console
+`https://sankara.net/astro/eclipses/sitemap.xml` in Google Search Console
 and request inspection of `computing.html`. Compare impressions, clicks and
 positions for queries containing calculation, algorithm and computation.
 The sitemap can also be listed in the domain's root `robots.txt`, which is
@@ -84,7 +84,7 @@ Every page carries Open Graph and Twitter card tags, so a shared link previews
 as a card. These tags, canonical links and sitemap entries use absolute URLs.
 `BASE_URL` in `tools/build.py` says where the tree is published. Navigation
 uses relative links for offline reading. One image serves the whole site —
-`content/img/social-card-v2.jpg`, composed by `tools/make_og_image.py` from the
+`content/img/social-card-v3.jpg`, composed by `tools/make_og_image.py` from the
 totality photograph. The credit is drawn into the image because a card is
 shown without the page around it, and the licence asks for the credit beside
 the image.
@@ -97,7 +97,7 @@ The manual **Deploy to Sankara.net** workflow builds the site and publishes the
 owned subtree to:
 
 ```text
-https://sankara.net/astro/solar-eclipses/computing.html
+https://sankara.net/astro/eclipses/computing.html
 ```
 
 The workflow copies the built home page to `computing.html` and deploys the

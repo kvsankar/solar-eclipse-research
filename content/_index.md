@@ -3,7 +3,7 @@ title: Computing Eclipses, Occultations and Transits
 description: Solar eclipse calculation algorithms: formulas, Besselian elements, contact times and lunar limb data, extended to lunar eclipses, occultations and transits.
 status: working
 updated: 2026-10-17
-seo_title: Solar Eclipse Calculation: Algorithms, Data and Accuracy
+seo_title: Eclipse, Occultation and Transit Calculation Algorithms
 ---
 
 ![Everything this site computes starts from the geometry behind this
