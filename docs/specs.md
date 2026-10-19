@@ -51,6 +51,12 @@ by the Sun (then its phase shapes the hidden outline).
   transit are the hidden case.
 - **PRI-5** It ends by pointing to the worked example, the glossary, the
   research groups and the reports.
+- **PRI-7** The same section explains the site's name. The site uses the
+  Supplement's two broad terms: an eclipse is the darkened case, and an
+  occultation is the hidden case. A transit is an occultation in which the
+  nearer body looks smaller than the source. The section also says that the
+  Supplement's own section heading names all three: eclipses, occultations
+  and transits.
 - **PRI-6** The solar walkthrough is titled "Worked example: a solar eclipse".
   It is the Primer's second page. It ends with a section that says, for a
   lunar eclipse, an occultation and a transit, which of its steps change and
@@ -154,6 +160,21 @@ observer sees. They share one module, so they cannot disagree.
   depth of the solar eclipse material.
 - **HOME-5** The home page's table of research notes is grouped by research
   group and links every topic.
+- **HOME-6** The home page's introduction links to the primer's section on
+  terminology, which explains the site's name.
+
+## SEO: search metadata
+
+- **SEO-1** Every page has its own search title and description, and no two
+  pages share either.
+- **SEO-2** The home page's search title names eclipses, occultations and
+  transits, and its description names transits.
+- **SEO-3** The search title of every page in the transits topic names
+  transits.
+- **SEO-4** The home page carries schema.org `WebSite` structured data with
+  the site name, the alternate name "Computing Eclipses, Occultations and
+  Transits", the home page address and the description. No other page
+  carries it.
 
 ## S3D: 3D guided scenes
 

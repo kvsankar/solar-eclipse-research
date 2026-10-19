@@ -26,7 +26,8 @@ it, that body goes dark for everyone: a lunar eclipse or the eclipse of a
 planet's satellite. This site sets out how each event is computed, with the
 formulas, constants, datasets and validation evidence. Solar eclipses are
 covered in most depth. The [primer](05-primer/how-eclipses-occultations-and-transits-are-computed.md)
-explains the two cases with pictures and animations.
+explains the two cases with pictures and animations, and
+[how they are named](05-primer/how-eclipses-occultations-and-transits-are-computed.md#how-the-explanatory-supplement-names-them).
 
 The [solar eclipse pipeline](20-reports/pipeline-design.md) gives the
 implementation stages, and

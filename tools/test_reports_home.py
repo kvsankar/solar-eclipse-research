@@ -113,6 +113,12 @@ class HomeTest(unittest.TestCase):
         self.assertIn("solar eclipses", intro.lower())
         self.assertIn("most depth", intro)
 
+    def test_home_6_intro_links_terminology(self):
+        after_img = self.body.split("{.hero}", 1)[1]
+        intro = " ".join(next(p for p in re.split(r"\n\s*\n", after_img) if p.strip()).split())
+        self.assertIn("(05-primer/how-eclipses-occultations-and-transits-are-computed.md"
+                      "#how-the-explanatory-supplement-names-them)", intro)
+
     def test_home_4_summary(self):
         summary = self.body.split("::: summary", 1)[1].split(":::", 1)[0]
         bullets = re.findall(r"^- \*\*([^*]+)\*\*", summary, flags=re.M)

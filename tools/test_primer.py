@@ -111,6 +111,12 @@ class GeneralPrimerTest(unittest.TestCase):
             self.assertIn(f"**{term}**", names)
         self.assertIn("[@prim-es1992-terms]", names)
 
+    def test_pri_7_terminology_explains_the_site_name(self):
+        names = " ".join(self.secs["How the Explanatory Supplement names them"].split())
+        self.assertIn("Computing Eclipses and Occultations", names)
+        self.assertIn("a transit is an occultation", names.lower())
+        self.assertIn("Eclipses, Occultations, and Transits", names)
+
     def test_pri_5_ends_with_the_way_on(self):
         last = list(self.secs)[-1]
         self.assertEqual(last, "Where to go next")

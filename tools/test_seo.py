@@ -3,6 +3,8 @@
 Run with: uv run --no-project python -m unittest discover -s tools -p test_seo.py
 """
 
+import json
+import re
 import tempfile
 import unittest
 from pathlib import Path
@@ -54,6 +56,29 @@ class SearchMetadataTests(unittest.TestCase):
         title = build.page_head_title(self.root).lower()
         for term in ("eclipse", "occultation", "transit", "calculation", "algorithms"):
             self.assertIn(term, title)
+
+    def test_seo_2_home_names_transits(self):
+        self.assertIn("transit", build.page_head_title(self.root).lower())
+        self.assertIn("transits", self.root.description.lower())
+
+    def test_seo_3_transit_pages_name_transits(self):
+        pages = [n for n in self.nodes if "14-transits" in n.rel.as_posix()]
+        self.assertGreaterEqual(len(pages), 4)
+        for node in pages:
+            self.assertIn("transit", node.meta["seo_title"].lower(), node.rel)
+
+    def test_seo_4_website_structured_data_on_home_only(self):
+        blocks = re.findall(r'<script type="application/ld\+json">(.*?)</script>',
+                            build.render_social(self.root), flags=re.S)
+        self.assertEqual(len(blocks), 1)
+        data = json.loads(blocks[0])
+        self.assertEqual(data["@context"], "https://schema.org")
+        self.assertEqual(data["@type"], "WebSite")
+        self.assertEqual(data["name"], build.SITE_TITLE)
+        self.assertIn("Computing Eclipses, Occultations and Transits", data["alternateName"])
+        self.assertEqual(data["url"], build.public_url(self.root))
+        self.assertEqual(data["description"], self.root.description)
+        self.assertNotIn("application/ld+json", build.render_social(self.nodes[-1]))
 
     def test_social_and_document_titles_use_the_same_page_metadata(self):
         node = self.nodes[-1]

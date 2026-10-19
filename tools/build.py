@@ -44,6 +44,9 @@ TEMPLATES = ROOT / "templates"
 STATIC = TEMPLATES / "static"
 
 SITE_TITLE = "Computing Eclipses and Occultations"
+# The earlier name, kept as an alternate so searches for transits and links
+# that still use it find the site.
+SITE_ALTERNATE_NAMES = ["Computing Eclipses, Occultations and Transits"]
 
 # Canonicals, social cards and the sitemap use the publication URL. Navigation
 # stays relative so the same output also opens from file://.
@@ -903,7 +906,25 @@ def render_social(node: Node) -> str:
     ]
     out += [f'<meta name="{k}" content="{html.escape(v)}">' for k, v in twitter]
     out.append(f'<link rel="canonical" href="{html.escape(url)}">')
+    if node.parent is None:
+        out.append(render_website_data(url, description))
     return "\n".join(out)
+
+
+def render_website_data(url: str, description: str) -> str:
+    """schema.org WebSite data for the home page, so search engines know the
+    site's name and its alternate names."""
+    data = {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": SITE_TITLE,
+        "alternateName": SITE_ALTERNATE_NAMES,
+        "url": url,
+        "description": description,
+        "inLanguage": "en",
+    }
+    text = json.dumps(data, ensure_ascii=False, indent=1).replace("</", "<\\/")
+    return f'<script type="application/ld+json">{text}</script>'
 
 
 def asset_version(name: str) -> str:

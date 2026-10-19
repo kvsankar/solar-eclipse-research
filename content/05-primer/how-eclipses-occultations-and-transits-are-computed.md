@@ -180,6 +180,14 @@ occultation and its transit are the hidden case, told apart only by which
 body looks larger. A solar eclipse is an occultation of the Sun, seen from
 inside the Moon's shadow.
 
+The name of this site, "Computing Eclipses and Occultations", uses the two
+broad terms. An eclipse is the darkened case, and an occultation is the
+hidden case. A transit is an occultation in which the nearer body looks
+smaller than the body behind it, so the site name does not list it apart.
+The Supplement's own section heading names all three, "Eclipses,
+Occultations, and Transits", because it keeps the traditional names
+[@prim-es1992-terms].
+
 ## Where to go next
 
 - The [worked example](worked-example-solar-eclipse.md) follows one solar

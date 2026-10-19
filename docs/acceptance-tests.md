@@ -11,6 +11,7 @@ server, with caching off, by `python tools/check_browser.py`.
 | AT-PRI-3 | PRI-3 | `test_primer.py`: the page names umbra, penumbra and antumbra with total, partial and annular, and names the cylinder of a point source. |
 | AT-PRI-4 | PRI-4 | `test_primer.py`: the page cites the 1992 Explanatory Supplement next to the four terms. |
 | AT-PRI-5 | PRI-5 | `test_primer.py`: the last section links to the worked example, the glossary, the research notes and the reports. |
+| AT-PRI-7 | PRI-7 | `test_primer.py`: the terminology section names the site, says that a transit is an occultation, and quotes the Supplement's section heading. |
 | AT-PRI-6 | PRI-6 | `test_primer.py`: the worked example has that title and order 2, and its last section names a lunar eclipse, an occultation and a transit with a link for each. |
 | AT-FIG-1 | FIG-1 | `test_primer.py`: the primer embeds the three case diagrams, the shadow-shape figure and the five example diagrams, each with a provenance row and no gallery figure; each case diagram is the first figure in its case section; each example sits in its case's section; and every case and example diagram's visible text has a role label and a name label for every body. |
 | AT-FIG-2 | FIG-2 | `test_primer.py`: each primer figure's SVG contains the word "Schematic" in its visible text. |
@@ -34,4 +35,9 @@ server, with caching off, by `python tools/check_browser.py`.
 | AT-HOME-2 | HOME-2 | `test_reports_home.py`: running `tools/make_collage.py` twice gives identical bytes equal to the committed collage. |
 | AT-HOME-3 | HOME-3 | `test_reports_home.py`: the first paragraph after the image mentions shadows and who stands in them, and says solar eclipses are covered in most depth. |
 | AT-HOME-4 | HOME-4 | `test_reports_home.py`: the summary has bullets that start with each case, hidden and darkened, and one about solar eclipses. |
+| AT-HOME-6 | HOME-6 | `test_reports_home.py`: the introduction links to the terminology section of the primer page. |
+| AT-SEO-1 | SEO-1 | `test_seo.py`: every page has an explicit search title and description, each unique. |
+| AT-SEO-2 | SEO-2 | `test_seo.py`: the home page's head title names eclipse, occultation and transit, and its description names transits. |
+| AT-SEO-3 | SEO-3 | `test_seo.py`: every page under `14-transits` has "transit" in its search title. |
+| AT-SEO-4 | SEO-4 | `test_seo.py`: the rendered home page has one `application/ld+json` block of type `WebSite` with the name, the alternate name, the canonical home address and the description; a deep page has none. |
 | AT-HOME-5 | HOME-5 | `test_reports_home.py`: the research table has a heading per group and links every topic `_index.md`. |
