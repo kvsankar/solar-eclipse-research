@@ -12,8 +12,9 @@ f = Figure(
           "middle. The umbra narrows behind the body to a point and opens "
           "out again beyond it as the antumbra. The wider penumbra spreads "
           "around both. Three observers sit in the umbra, the penumbra and "
-          "the antumbra, each linked to a small inset of the source disc: "
-          "wholly covered, partly covered, and covered except for a ring. "
+          "the antumbra. A framed panel below shows what each one sees of the "
+          "source disc: wholly covered, partly covered, and covered except "
+          "for a ring. "
           "Bottom: parallel lines from a star at the far left pass a body "
           "and leave a straight band behind it, the cylinder, with an "
           "observer in it for whom the star is hidden."),
@@ -65,9 +66,14 @@ f.text(600, cy + 4, "antumbra", anchor="middle", cls="label")
 f.text(560, cy - inner(560) + 18, "penumbra", anchor="middle", cls="label")
 
 
+# What each observer sees, in a framed panel between the two halves (FIG-9).
+PX, PY, PW, PH = 20, 248, 640, 96
+f.rect(PX, PY, PW, PH, cls="panel", rx=6)
+f.text(PX + 14, PY + 22, "What the observer sees", cls="label")
+
+
 def observer(x, y, kind, label, ix, iy):
     f.circle(x, y, 4, cls="accent-fill")
-    f.line(x, y + 5, ix, iy - 18, cls="accent thin dotted")
     f.circle(ix, iy, 15, cls="sun-fill")        # the source as seen
     if kind == "total":
         f.circle(ix, iy, 17, cls="sun-fill")
@@ -76,15 +82,15 @@ def observer(x, y, kind, label, ix, iy):
         f.circle(ix, iy, 10.5, cls="silhouette-fill")
     elif kind == "partial":
         f.circle(ix + 12, iy - 6, 15, cls="silhouette-fill")
-    f.text(ix, iy + 32, label, anchor="middle", cls="label")
+    f.text(ix, iy + 34, label, anchor="middle", cls="label-dim")
 
 
-observer(vx - 22, cy, "total", "umbra: total", 330, 280)
-observer(500, cy + 40, "partial", "penumbra: partial", 470, 280)
-observer(620, cy + 10, "annular", "antumbra: annular", 610, 280)
+observer(vx - 22, cy, "total", "in the umbra: total", 270, 290)
+observer(500, cy + 40, "partial", "in the penumbra: partial", 430, 290)
+observer(620, cy + 10, "annular", "in the antumbra: annular", 590, 290)
 
 # ---- bottom: point source --------------------------------------------------
-f.line(20, 335, 660, 335, cls="rule thin dashed")
+f.line(20, 352, 660, 352, cls="rule thin dashed")
 by = 398
 for dy in (-22, -8, 8, 22):
     f.line(26, by + dy, 250, by + dy, cls="accent thin", marker="arrow")

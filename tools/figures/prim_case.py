@@ -10,12 +10,26 @@ from figlib import Figure
 
 W, H = 680, 250
 AXIS = 112
+PANEL_W = 190      # width added for a "What the observer sees" panel (FIG-9)
 
 
-def new(title: str, desc: str) -> Figure:
-    f = Figure(width=W, height=H, title=title, desc=desc)
-    f.text(W - 10, H - 8, "Schematic, not to scale", anchor="end", cls="label-dim")
+def new(title: str, desc: str, panel: bool = False) -> Figure:
+    width = W + PANEL_W if panel else W
+    f = Figure(width=width, height=H, title=title, desc=desc)
+    f.text(width - 10, H - 8, "Schematic, not to scale", anchor="end", cls="label-dim")
     return f
+
+
+def view_panel(f: Figure) -> tuple[float, float]:
+    """The framed panel to the right of the main drawing (FIG-9). The ground
+    rectangle ends the main drawing at its usual width, so a body that runs
+    off the edge, such as the Earth, stops there. Returns the centre of the
+    view."""
+    f.rect(W, 0, PANEL_W, H, cls="panel-ground")
+    x, y, w, h = W + 14, 22, PANEL_W - 24, 186
+    f.rect(x, y, w, h, cls="panel", rx=6)
+    f.text(x + w / 2, y + 20, "What the observer sees", anchor="middle", cls="label")
+    return x + w / 2, y + h / 2 + 8
 
 
 def labels(f: Figure, x: float, y: float, role: str, name: str, extra: str = "",

@@ -37,7 +37,8 @@ class NoCache(http.server.SimpleHTTPRequestHandler):
 
 SCENES = {
     "hidden-cases": ["solar-eclipse", "annular-solar-eclipse", "venus-transit",
-                     "star-occultation", "asteroid-occultation"],
+                     "star-occultation", "asteroid-occultation", "artemis-eclipse",
+                     "phobos-transit"],
     "darkened-cases": ["lunar-eclipse", "satellite-eclipse", "shadow-transit"],
 }
 STEPS = (0, 50, 100)
@@ -104,6 +105,23 @@ def check_3d(url: str) -> list[str]:
             if buttons.count() != len(events):
                 problems.append(f"{scene}: {buttons.count()} event buttons, want {len(events)}")
                 continue
+
+            # AT-S3D-14: a framed view panel, outside the canvas, that changes.
+            sees = viewer.locator(".fig3d-sees")
+            if sees.count() != 1:
+                problems.append(f"{scene}: {sees.count()} view panels")
+            else:
+                if sees.locator("figcaption").inner_text().strip() != "What the observer sees":
+                    problems.append(f"{scene}: view panel title")
+                if sees.locator("canvas").count():
+                    problems.append(f"{scene}: view panel is inside the 3D picture")
+                set_slider(viewer, 10)
+                page.wait_for_timeout(120)
+                before = sees.locator(".fig3d-sees-art").inner_html()
+                set_slider(viewer, 50)
+                page.wait_for_timeout(120)
+                if sees.locator(".fig3d-sees-art").inner_html() == before or "<svg" not in before:
+                    problems.append(f"{scene}: view panel did not change with the slider")
 
             # AT-S3D-6: the status line is announced.
             readout = viewer.locator(".fig3d-readout")

@@ -55,6 +55,15 @@ A [?transit] is the same with a body far too small to cover the source.
 Venus's umbra closes long before it reaches the Earth, so the observer stands
 in its antumbra and sees a dot cross the Sun [@tr-es1961].
 
+The observer need not stand on the Earth. On 2026 April 6 the Artemis II crew
+watched the Moon hide the Sun from the Orion spacecraft, close behind the
+Moon. From there the Moon looked huge and hardly moved, so the Sun stayed
+hidden for 54 minutes [@prim-nasa-artemis2-eclipse] [@prim-nasa-artemis2-science].
+On Mars, the Perseverance rover filmed Phobos crossing the Sun on 2022
+April 2. Phobos is too small to cover the Sun, so the rover stood in its
+antumbra, and the crossing took a little over 40 seconds
+[@prim-jpl-perseverance-phobos].
+
 ![The observer stands in Venus's antumbra and sees a small dark dot on the Sun: a transit of Venus.](img/example-venus-transit.svg)
 
 The hidden source can also be a body that the Sun lights rather than one

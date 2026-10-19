@@ -25,7 +25,9 @@
   /* For each event: the source (radius Rs; a point source has none), the
      blocking body (radius Rb, distance D from the source), and the observer
      or darkened body (distance d behind the blocking body, radius Rr when it
-     is a body). The moving body travels from y = -B to y = +B. */
+     is a body). The moving body travels from y = -B to y = +B. In the
+     hidden case the observer stands on a world, or rides in a craft, of
+     radius Rw named by world (the Earth unless stated). */
   var EVENTS = {
     "solar-eclipse": {
       label: "Solar eclipse", case: "hidden", source: "disc",
@@ -52,6 +54,23 @@
       names: ["a star", "an asteroid", "on the Earth"], possessive: "the asteroid's",
       Rb: 0.25, D: 12, d: 4, Rr: 1.3, B: 0.4, moving: "Blocking body"
     },
+    // The Artemis II crew watched from the Orion spacecraft, close behind the
+    // Moon, where the Moon looks far larger than the Sun. The spacecraft's
+    // own motion carried them through the shadow.
+    "artemis-eclipse": {
+      label: "Solar eclipse from Artemis II", case: "hidden", source: "disc",
+      names: ["the Sun", "the Moon", "in the Orion spacecraft"], possessive: "the Moon's",
+      Rs: 2.5, Rb: 0.6, D: 12, d: 1.0, Rr: 0.14, B: 1.2, moving: "Observer",
+      world: "the Orion spacecraft"
+    },
+    // Phobos is too small to cover the Sun seen from Mars: the observer
+    // stands in its antumbra.
+    "phobos-transit": {
+      label: "Phobos from Mars", case: "hidden", source: "disc",
+      names: ["the Sun", "Phobos", "on Mars"], possessive: "Phobos's",
+      Rs: 2.5, Rb: 0.2, D: 12, d: 1.2, Rr: 1.0, B: 0.6, moving: "Blocking body",
+      world: "Mars"
+    },
     "lunar-eclipse": {
       label: "Lunar eclipse", case: "darkened", source: "disc",
       names: ["the Sun", "the Earth", "the Moon"], possessive: "the Earth's",
@@ -72,7 +91,8 @@
   var SCENES = {
     "hidden-cases": {
       events: ["solar-eclipse", "annular-solar-eclipse", "venus-transit",
-        "star-occultation", "asteroid-occultation"],
+        "star-occultation", "asteroid-occultation", "artemis-eclipse",
+        "phobos-transit"],
       note: "Not to scale: sizes and distances are compressed so every body " +
         "fits in view, but each event's shadow parts come in the real order. " +
         "Pick an event, then move the blocking body across the line from the " +
@@ -166,28 +186,64 @@
       percent(view.covered) + " of the Sun's disc is hidden, so it dims.";
   }
 
+  // Where the Earth is drawn for Jupiter's events: off the shadow, between
+  // the Sun and Jupiter and below the line, at a distance not to scale.
+  var FAR_EARTH = { dx: -5, y: -3.4, radius: 0.8 };
+
+  // Signed angle at p from the direction of a to the direction of b, in the
+  // plane of the scene, where every body lies.
+  function signedAngle(p, a, b) {
+    var aa = Math.atan2(a[1] - p[1], a[0] - p[0]);
+    var bb = Math.atan2(b[1] - p[1], b[0] - p[0]);
+    var d = bb - aa;
+    while (d > Math.PI) d -= 2 * Math.PI;
+    while (d < -Math.PI) d += 2 * Math.PI;
+    return d;
+  }
+
+  function onSurface(centre, radius, toward) {
+    var dir = sub(toward, centre);
+    return sub(centre, scale(dir, -radius / norm(dir)));
+  }
+
   function state(id, t) {
     var e = EVENTS[id];
     if (!e) throw new Error("unknown event: " + id);
     var y = -e.B + 2 * e.B * t;
-    var moveBlocker = e.moving === "Blocking body";
     var src = e.source === "point" ? [-STAR_DISTANCE, 0, 0] : [0, 0, 0];
-    var blk = [e.D, moveBlocker ? y : 0, 0];
-    var rcv = [e.D + e.d, moveBlocker ? 0 : y, 0];
-    var roles = e.case === "hidden"
-      ? ["Light source", "Blocking body", "Observer"]
-      : ["Light source", "Blocking body", "Darkened body"];
-    var bodies = [
-      { role: roles[0], name: e.names[0], position: src, radius: e.source === "point" ? 0 : e.Rs },
-      { role: roles[1], name: e.names[1], position: blk, radius: e.Rb },
-      { role: roles[2], name: e.names[2], position: rcv, radius: e.case === "hidden" ? 0 : e.Rr }
-    ];
+    var blk = [e.D, e.moving === "Blocking body" ? y : 0, 0];
+    var rcv = [e.D + e.d, e.moving === "Blocking body" ? 0 : y, 0];
+    var bodies, world;
+
+    if (e.case === "hidden") {
+      // The observer stands on the near side of their world, facing the
+      // blocking body along the line from the source.
+      world = { name: e.world || "the Earth", centre: [rcv[0] + e.Rr, rcv[1], 0], radius: e.Rr };
+      bodies = [
+        { role: "Light source", name: e.names[0], position: src, radius: e.source === "point" ? 0 : e.Rs },
+        { role: "Blocking body", name: e.names[1], position: blk, radius: e.Rb },
+        { role: "Observer", name: e.names[2], position: rcv, radius: 0 }
+      ];
+    } else {
+      // Someone on the Earth watches. For a lunar eclipse the Earth is the
+      // blocking body and they stand on its night side, facing the Moon.
+      var watched = id === "shadow-transit" ? rcv : blk;
+      world = e.Rb && id === "lunar-eclipse"
+        ? { name: "the Earth", centre: blk, radius: e.Rb }
+        : { name: "the Earth", centre: [e.D + FAR_EARTH.dx, FAR_EARTH.y, 0], radius: FAR_EARTH.radius };
+      var obs = id === "lunar-eclipse"
+        ? [blk[0] + e.Rb, 0, 0]
+        : onSurface(world.centre, world.radius, watched);
+      bodies = [
+        { role: "Light source", name: e.names[0], position: src, radius: e.Rs },
+        { role: "Blocking body", name: e.names[1], position: blk, radius: e.Rb },
+        { role: "Darkened body", name: e.names[2], position: rcv, radius: e.Rr },
+        { role: "Observer", name: "on the Earth", position: obs, radius: 0 }
+      ];
+    }
     var out = {
       event: id, label: e.label, case: e.case, source: e.source,
-      moving: e.moving, bodies: bodies, ground: null,
-      // The observer stands on a world of radius Rr whose centre is behind
-      // them, so the drawing can show the ground they stand on.
-      world: e.case === "hidden" ? { centre: [e.D + e.d + e.Rr, 0, 0], radius: e.Rr } : null,
+      moving: e.moving, bodies: bodies, ground: null, world: world,
       umbraLength: e.source === "disc" ? G.umbraLength(e.Rs, e.Rb, e.D) : null
     };
 
@@ -202,6 +258,9 @@
       var hidden = behind > 0 && G.pointHidden(s, ro);
       out.part = hidden ? "hidden" : "outside";
       out.view = { hidden: hidden };
+      // The star lies along -x from everywhere.
+      out.sees = { kind: "star", blockerRadius: ro,
+        offset: signedAngle(rcv, [rcv[0] - 1, rcv[1], 0], blk) };
       out.text = hidden
         ? "The observer is in " + e.possessive + " shadow in starlight: the star is hidden."
         : "The observer is outside " + e.possessive + " shadow in starlight: the star is visible.";
@@ -210,6 +269,7 @@
 
     if (id === "shadow-transit") {
       var g = groundPoint(src, blk, rcv, e.Rr);
+      out.sees = { kind: "planet", name: e.names[2], spot: g ? (g[1] - rcv[1]) / e.Rr : null };
       if (!g) {
         out.part = "outside";
         out.view = { kind: "none", covered: 0 };
@@ -230,7 +290,18 @@
     var c = circumstances(e, src, blk, rcv);
     out.part = c.part;
     out.view = c.view;
-    out.text = e.case === "hidden" ? hiddenText(e, c.part, c.view) : darkenedText(e, c.part, c.view);
+    if (e.case === "hidden") {
+      out.sees = { kind: "disc",
+        sourceRadius: Math.asin(e.Rs / norm(sub(src, rcv))),
+        blockerRadius: Math.asin(e.Rb / norm(sub(blk, rcv))),
+        offset: signedAngle(rcv, src, blk) };
+      out.text = hiddenText(e, c.part, c.view);
+    } else {
+      out.sees = { kind: "body", name: e.names[2],
+        dimmed: c.part === "umbra" ? 1 : c.view.covered,
+        tint: id === "lunar-eclipse" ? "copper" : "dark" };
+      out.text = darkenedText(e, c.part, c.view);
+    }
     return out;
   }
 

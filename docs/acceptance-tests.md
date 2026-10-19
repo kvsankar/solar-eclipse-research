@@ -20,6 +20,7 @@ server, with caching off, by `python tools/check_browser.py`.
 | AT-FIG-5 | FIG-5 | `check_browser.py`: pressing a play button leaves the lightbox closed. |
 | AT-FIG-7 | FIG-7 | `test_primer.py`: `site.css` defines `--fig-sun` and `--fig-silhouette` in every theme block, with `sun-fill` and `silhouette-fill` classes; no primer figure script fills the Sun with `accent-fill`, and none uses `sky-fill`. |
 | AT-FIG-8 | FIG-1 | `test_primer.py`: in the solar eclipse and Venus transit diagrams the observer's marker lies inside the drawn umbra or antumbra polygon at least 4 units from its edges, and the solar inset draws a silhouette covering the whole Sun. |
+| AT-FIG-9 | FIG-9 | `test_primer.py`: the solar eclipse, Venus transit and shadow-shape figures each have a rectangle of class `panel` containing the text "What the observer sees" and every view of the source; no body of the main drawing and no line end from the drawing lies inside the panel. |
 | AT-FIG-6 | FIG-6 | Review: the primer figure scripts import only `figlib`. |
 | AT-GEO-1 | GEO-1 | `tools/js/geometry.test.js`: Sun and Moon at mean distances give the umbral cone length and penumbral radius from the corpus formulas, and a point beyond the vertex reports the antumbra. |
 | AT-GEO-2 | GEO-2 | `geometry.test.js`: points on, inside and outside each boundary classify correctly. |
@@ -38,6 +39,8 @@ server, with caching off, by `python tools/check_browser.py`.
 | AT-S3D-9 | S3D-9 | `scenes.test.js`: each scene's note contains "not to scale". |
 | AT-S3D-10 | S3D-10 | `check_browser.py`: in light and dark themes the Sun's material colour equals `--fig-sun`, and switching the theme with a scene open changes it. |
 | AT-S3D-11 | S3D-11 | `check_browser.py`: focusing an event button and pressing Enter selects it and sets `aria-pressed="true"` on it only; the arrow keys move the slider. |
+| AT-S3D-13 | S3D-13 | `scenes.js` tests: every state has a world for the observer (name, centre, radius) and the observer lies on its surface; darkened states include an observer on the Earth, on the Earth's surface. The drawing is checked by review of headless renders of every event. |
+| AT-S3D-14 | S3D-14 | `scenes.test.js`: the view data agree with the state (apparent radii and separation for a disc source, the hidden flag for a star, the dimming for a darkened body, the shadow's place on Jupiter). `check_browser.py`: the open scene has a framed panel titled "What the observer sees" outside the canvas, and its drawing changes when the slider moves. |
 | AT-S3D-12 | S3D-12 | `check_browser.py`: opening both scenes and selecting every event at three slider positions logs no console error and no failed request. |
 | AT-REP-1 | REP-1 | `test_reports_home.py`: the executive summary has a section for each case, hidden and darkened, before the first heading that names solar eclipses. |
 | AT-REP-2 | REP-2 | `test_reports_home.py`: the two titles, and an opening paragraph that names solar eclipses and links `other-events.md`. |

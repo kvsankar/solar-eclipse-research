@@ -575,6 +575,8 @@ html[data-theme="dark"] {
 .figsvg .accent-fill { fill: var(--fig-accent); stroke: none; }
 .figsvg .accent-2-fill { fill: var(--fig-accent-2); stroke: none; }
 .figsvg .sun-fill { fill: var(--fig-sun); stroke: var(--fig-accent); stroke-width: 0.8; }
+.figsvg .panel { fill: var(--bg); stroke: var(--fig-line); stroke-width: 1; }
+.figsvg .panel-ground { fill: var(--bg); stroke: none; }
 .figsvg .silhouette-fill { fill: var(--fig-silhouette); stroke: var(--fig-dim); stroke-width: 0.6; }
 .figsvg .dashed { stroke-dasharray: 5 4; }
 .figsvg .dotted { stroke-dasharray: 1.5 3; }
@@ -710,6 +712,20 @@ html[data-theme="dark"] {
   margin: 9px 0 0; font-size: 13px; line-height: 1.55; color: var(--text-dim);
   min-height: 2.9em;
 }
+/* What the observer sees: a framed panel beside the line of text, apart
+   from the 3D picture. */
+.fig3d-seesrow {
+  display: flex; gap: 14px; align-items: flex-start; margin-top: 9px;
+}
+.fig3d-seesrow .fig3d-readout { margin-top: 0; flex: 1 1 auto; }
+.doc figure.fig3d-sees, .fig3d-sees {
+  flex: 0 0 auto; width: 176px; max-width: none; margin: 0; padding: 6px 8px 8px;
+  border: 1px solid var(--fig-line); border-radius: 6px; background: var(--bg);
+}
+.fig3d-sees figcaption {
+  font-size: 12px; color: var(--text-dim); margin-bottom: 4px;
+}
+.fig3d-sees-art svg { display: block; width: 160px; height: 112px; overflow: hidden; }
 
 /* ---- figure lightbox ---- */
 :root { --lb-scrim: rgba(26, 23, 19, 0.78); }

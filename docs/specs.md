@@ -77,9 +77,9 @@ by the Sun (then its phase shapes the hidden outline).
      satellite hidden by its planet and a star hidden by an asteroid
      (hidden); the eclipse of a satellite and a shadow transit (darkened).
      Wherever an observer stands in a shadow, the observer's marker sits
-     clearly inside the stated part of it, and an inset of what they see
-     matches that part: a total eclipse in the umbra, a dot on the Sun in
-     the antumbra.
+     clearly inside the stated part of it, and the picture of what they
+     see matches that part: a total eclipse in the umbra, a dot on the Sun
+     in the antumbra.
 - **FIG-2** Every primer figure says on its face that it is a schematic and
   not to scale. Its still frame carries its whole point with no interaction.
 - **FIG-3** Three primer figures are animated: the Moon's shadow crossing the
@@ -96,6 +96,11 @@ by the Sun (then its phase shapes the hidden outline).
   token, so it reads as bright in both themes. No figure draws the Sun in
   the dark accent colour. A body seen against the Sun is drawn as a dark
   silhouette, also a theme token, so it reads as dark in both themes.
+- **FIG-9** What an observer sees is drawn in a framed panel titled "What
+  the observer sees", set apart from the main drawing: beside it in the
+  example diagrams, and in a row between the two halves of the
+  shadow-shape figure. No line runs from the drawing into the panel, and
+  no body of the main drawing lies inside it.
 - **FIG-6** The schematic figures are drawn at build time by scripts in
   `tools/figures/`. They illustrate the geometry and do not compute
   positions, so they do not use the geometry module.
@@ -195,15 +200,18 @@ slider, Animate, Reset and Back.
 - **S3D-3** Each scene has a variant row labelled "Event" that lists the
   events of its case:
   - hidden: solar eclipse, annular solar eclipse, transit of Venus, lunar
-    occultation of a star, occultation of a star by an asteroid;
+    occultation of a star, occultation of a star by an asteroid, the solar
+    eclipse the Artemis II crew saw from the Orion spacecraft, and Phobos
+    crossing the Sun seen from Mars;
   - darkened: lunar eclipse, eclipse of a satellite (Io in Jupiter's
     shadow), shadow transit (Io's shadow on Jupiter).
 - **S3D-4** Every body carries two labels, its role and its name, as in the
   2D figures: light source, blocking body, observer, and for the darkened
-  case the darkened body.
+  case the darkened body and an observer on the Earth.
 - **S3D-5** The slider and Animate move the event along its path. In the
   hidden case the blocking body moves across the line from the observer to
-  the source. In the darkened case the darkened body moves through the
+  the source, except for Artemis II, where the spacecraft carries the
+  observer behind the Moon. In the darkened case the darkened body moves through the
   shadow, or for a shadow transit, the shadow moves across the planet.
 - **S3D-6** A line of text under the scene states, in plain words, where the
   observer or the darkened body is (outside the shadow, in the penumbra, the
@@ -216,6 +224,9 @@ slider, Animate, Reset and Back.
   - solar eclipse: outside, penumbra, umbra, penumbra, outside;
   - annular solar eclipse: outside, penumbra, antumbra, penumbra, outside;
   - transit of Venus: outside, penumbra, antumbra, penumbra, outside;
+  - solar eclipse from Artemis II: outside, penumbra, umbra, penumbra,
+    outside;
+  - Phobos from Mars: outside, penumbra, antumbra, penumbra, outside;
   - lunar occultation of a star and occultation by an asteroid: outside,
     hidden, outside, with no penumbra;
   - lunar eclipse: outside, penumbra, umbra, penumbra, outside;
@@ -236,6 +247,18 @@ slider, Animate, Reset and Back.
   silhouette colour. An open scene follows a theme change.
 - **S3D-11** The event buttons and the slider work from the keyboard. The
   pressed event is marked for assistive technology.
+- **S3D-13** Every scene shows, the whole time, the world or craft the
+  observer stands on or rides in: the Earth, the Orion spacecraft or Mars.
+  In the darkened case an observer stands on the Earth: on its night side
+  for a lunar eclipse, and on an Earth drawn off the shadow, at a distance
+  not to scale, for Jupiter's events. No observer floats in space.
+- **S3D-14** A framed panel titled "What the observer sees" sits beside the
+  status line, set apart from the 3D picture. It draws the observer's view
+  from the same state: in the hidden case the source (a disc, or a star as
+  a point) and the blocking body's disc at their apparent sizes and
+  separation; in the darkened case the darkened body as seen from the
+  Earth, dimmed by the shadow, and for a shadow transit Jupiter's disc with
+  the shadow on it. It changes as the slider moves.
 - **S3D-12** Opening each scene and stepping through every event writes no
   error to the browser console and makes no failed request.
 

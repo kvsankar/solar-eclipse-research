@@ -3,7 +3,7 @@
 observer's view of the Sun, so the observer stands in Venus's antumbra and
 sees a dot on the Sun. Schematic."""
 
-from prim_case import AXIS, labels, new, sun
+from prim_case import AXIS, labels, new, sun, view_panel
 
 f = new(
     "Hidden: the observer stands in Venus's antumbra and sees a dot on the Sun",
@@ -11,8 +11,9 @@ f = new(
      "body, small. Its dark umbra closes to a point a short way behind it, "
      "and beyond that point the antumbra opens out towards the Earth on the "
      "right. An observer on the Earth, labelled observer, stands in the "
-     "antumbra. An inset shows what the observer sees: a small dark dot on "
-     "the Sun's disc."),
+     "antumbra. A framed panel on the right shows what the observer sees: "
+     "a small dark dot on the Sun's disc."),
+    panel=True,
 )
 y = AXIS
 sx, sr = 80, 44
@@ -34,11 +35,11 @@ f.circle(ecx, y, er, cls="body")
 f.circle(xs + 1, y, 3.5, cls="accent-2-fill")
 f.text((vertex + ex) / 2, y + 4, "antumbra", anchor="middle", cls="label-dim")
 
-ix, iy = 610, 30
-f.circle(ix, iy, 18, cls="sun-fill")
-f.circle(ix + 6, iy - 3, 2.6, cls="silhouette-fill")
-f.line(xs + 1, y - 6, ix - 8, iy + 18, cls="accent-2 thin dotted")
-f.text(ix - 26, iy + 4, "what they see", anchor="end", cls="label-dim")
+# What the observer sees: a dot on the Sun, in its own panel.
+ix, iy = view_panel(f)
+f.circle(ix, iy, 40, cls="sun-fill")
+f.circle(ix + 13, iy - 7, 5.5, cls="silhouette-fill")
+f.text(ix, iy + 62, "Venus, a dot on the Sun", anchor="middle", cls="label-dim")
 
 labels(f, sx, y + sr + 26, "Light source", "the Sun")
 labels(f, vx, y + 36, "Blocking body", "Venus")

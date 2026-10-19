@@ -216,6 +216,32 @@ class PrimerFigureTest(unittest.TestCase):
                             for sx, sy, r1 in suns for cx, cy, r2 in sils),
                         "the inset's silhouette covers the whole Sun")
 
+    def test_fig_9_views_in_a_separate_framed_panel(self):
+        views = {"example-solar-eclipse.svg": 1, "example-venus-transit.svg": 1, "shadow-shape.svg": 3}
+        num = r'([-\d.]+)'
+        for name, n_views in views.items():
+            svg = (IMG / name).read_text(encoding="utf-8")
+            panel = re.search(rf'<rect x="{num}" y="{num}" width="{num}" height="{num}"[^>]*class="panel"', svg)
+            self.assertIsNotNone(panel, f"{name}: no panel")
+            px, py, pw, ph = map(float, panel.groups())
+
+            def inside(x, y):
+                return px <= x <= px + pw and py <= y <= py + ph
+
+            title = [m for m in re.finditer(rf'<text x="{num}" y="{num}"[^>]*>What the observer sees</text>', svg)]
+            self.assertEqual(len(title), 1, f"{name}: panel title")
+            self.assertTrue(inside(float(title[0].group(1)), float(title[0].group(2))), f"{name}: title in panel")
+            suns = [(float(x), float(y)) for x, y in
+                    re.findall(rf'<circle cx="{num}" cy="{num}" r="[\d.]+" class="sun-fill"', svg)]
+            in_panel = {s for s in suns if inside(*s)}
+            self.assertGreaterEqual(len(in_panel), n_views, f"{name}: views of the source in the panel")
+            self.assertEqual(len(suns) - len([s for s in suns if inside(*s)]) >= 1, True, f"{name}: main Sun outside")
+            for x, y in re.findall(rf'<circle cx="{num}" cy="{num}" r="[\d.]+" class="(?:body|accent-fill|accent-2-fill)"', svg):
+                self.assertFalse(inside(float(x), float(y)), f"{name}: a body of the drawing in the panel")
+            for x1, y1, x2, y2 in re.findall(rf'<line x1="{num}" y1="{num}" x2="{num}" y2="{num}"', svg):
+                a, b = inside(float(x1), float(y1)), inside(float(x2), float(y2))
+                self.assertEqual(a, b, f"{name}: a line runs into the panel")
+
     def test_fig_2_each_figure_says_schematic(self):
         for name in STATIC + ANIMATED:
             svg = (IMG / name).read_text(encoding="utf-8")

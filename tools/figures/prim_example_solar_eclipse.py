@@ -4,7 +4,7 @@ the Moon's umbra, so the Moon hides the whole Sun. Schematic."""
 
 import math
 
-from prim_case import AXIS, labels, new, sun
+from prim_case import AXIS, labels, new, sun, view_panel
 
 f = new(
     "Hidden: the observer stands in the Moon's umbra and the Sun is hidden",
@@ -12,9 +12,10 @@ f = new(
      "blocking body. Behind the Moon a pale penumbra spreads out and a darker "
      "umbra narrows towards the Earth on the right, where both fall on the "
      "Earth's surface. An observer, labelled observer, stands inside the "
-     "umbra on the Earth. An inset above shows what the observer sees: a "
-     "total eclipse, the Moon's dark disc covering the Sun with a thin "
-     "bright ring around it."),
+     "umbra on the Earth. A framed panel on the right shows what the "
+     "observer sees: a total eclipse, the Moon's dark disc covering the Sun "
+     "with a thin bright ring around it."),
+    panel=True,
 )
 y = AXIS
 sx, sr = 80, 42
@@ -41,14 +42,12 @@ f.polygon([(xs - 1, y - umb + 1), (xs + 5, y - umb + 2), (xs + 5, y + umb - 2), 
 ox, oy = xs + 1, y
 f.circle(ox, oy, 3.5, cls="accent-2-fill")
 
-# What the observer sees: totality.
-ix, iy = 590, 34
-f.circle(ix, iy, 22, cls="accent thin dotted")
-f.circle(ix, iy, 17, cls="sun-fill")
-f.circle(ix, iy, 15, cls="sun-fill")
-f.circle(ix, iy, 15, cls="silhouette-fill")
-f.line(ox, oy - 6, ix - 10, iy + 20, cls="accent-2 thin dotted")
-f.text(ix - 28, iy + 4, "what they see: totality", anchor="end", cls="label-dim")
+# What the observer sees: totality, in its own panel.
+ix, iy = view_panel(f)
+f.circle(ix, iy, 34, cls="sun-fill")
+f.circle(ix, iy, 30, cls="sun-fill")
+f.circle(ix, iy, 30, cls="silhouette-fill")
+f.text(ix, iy + 62, "totality", anchor="middle", cls="label-dim")
 
 labels(f, sx, y + sr + 26, "Light source", "the Sun")
 labels(f, mx, y + mr + 26, "Blocking body", "the Moon")

@@ -10,11 +10,11 @@ const G = require(path.join(STATIC, "geometry.js"));
 const S = require(path.join(STATIC, "scenes.js"));
 
 const HIDDEN = ["solar-eclipse", "annular-solar-eclipse", "venus-transit",
-  "star-occultation", "asteroid-occultation"];
+  "star-occultation", "asteroid-occultation", "artemis-eclipse", "phobos-transit"];
 const DARKENED = ["lunar-eclipse", "satellite-eclipse", "shadow-transit"];
 const ROLES = {
   hidden: ["Light source", "Blocking body", "Observer"],
-  darkened: ["Light source", "Blocking body", "Darkened body"],
+  darkened: ["Light source", "Blocking body", "Darkened body", "Observer"],
 };
 const SAMPLES = 201;
 
@@ -62,7 +62,8 @@ test("AT-S3D-5 the stated body moves, monotonically along its path", () => {
   const expectMoving = {
     "solar-eclipse": "Blocking body", "annular-solar-eclipse": "Blocking body",
     "venus-transit": "Blocking body", "star-occultation": "Blocking body",
-    "asteroid-occultation": "Blocking body", "lunar-eclipse": "Darkened body",
+    "asteroid-occultation": "Blocking body", "artemis-eclipse": "Observer",
+    "phobos-transit": "Blocking body", "lunar-eclipse": "Darkened body",
     "satellite-eclipse": "Darkened body", "shadow-transit": "Blocking body",
   };
   for (const id of HIDDEN.concat(DARKENED)) {
@@ -114,6 +115,8 @@ test("AT-S3D-7 each event passes through the real event's shadow parts", () => {
     "venus-transit": ["outside", "penumbra", "antumbra", "penumbra", "outside"],
     "star-occultation": ["outside", "hidden", "outside"],
     "asteroid-occultation": ["outside", "hidden", "outside"],
+    "artemis-eclipse": ["outside", "penumbra", "umbra", "penumbra", "outside"],
+    "phobos-transit": ["outside", "penumbra", "antumbra", "penumbra", "outside"],
     "lunar-eclipse": ["outside", "penumbra", "umbra", "penumbra", "outside"],
     "satellite-eclipse": ["outside", "penumbra", "umbra", "penumbra", "outside"],
     "shadow-transit": ["outside", "umbra", "outside"],
@@ -133,7 +136,7 @@ test("AT-S3D-7 each event passes through the real event's shadow parts", () => {
 test("AT-S3D-8 parts and views equal the geometry module's answers", () => {
   for (const id of HIDDEN.concat(DARKENED)) {
     for (const st of sample(id)) {
-      const [src, blk, rcv] = st.bodies;
+      const [src, blk, rcv] = st.bodies;   // the third is the observer or the darkened body
       // The point whose circumstances are reported: the observer, the
       // darkened body's centre, or the ground point of a shadow transit.
       const p = st.ground || rcv.position;
@@ -176,4 +179,61 @@ test("AT-S3D-9 each scene's note says it is not to scale", () => {
   for (const name of ["hidden-cases", "darkened-cases"]) {
     assert.match(S.scenes[name].note, /not to scale/i, name);
   }
+});
+
+test("AT-S3D-13 the observer always stands on a world or rides in a craft", () => {
+  const worlds = {
+    "solar-eclipse": "the Earth", "annular-solar-eclipse": "the Earth", "venus-transit": "the Earth",
+    "star-occultation": "the Earth", "asteroid-occultation": "the Earth",
+    "artemis-eclipse": "the Orion spacecraft", "phobos-transit": "Mars",
+    "lunar-eclipse": "the Earth", "satellite-eclipse": "the Earth", "shadow-transit": "the Earth",
+  };
+  for (const id of HIDDEN.concat(DARKENED)) {
+    for (const st of sample(id)) {
+      const obs = st.bodies.find((b) => b.role === "Observer");
+      assert.ok(obs, `${id} has an observer`);
+      assert.ok(st.world, `${id} has a world`);
+      assert.equal(st.world.name, worlds[id], id);
+      const gap = Math.abs(norm(sub(obs.position, st.world.centre)) - st.world.radius);
+      assert.ok(gap < 1e-9, `${id}: observer on the surface of ${st.world.name} (${gap})`);
+    }
+  }
+  // A lunar eclipse is watched from the Earth's night side: the observer
+  // faces away from the Sun.
+  const lunar = S.state("lunar-eclipse", 0.5);
+  const obs = lunar.bodies.find((b) => b.role === "Observer").position;
+  assert.ok(obs[0] > lunar.world.centre[0], "night side");
+});
+
+test("AT-S3D-14 the view panel's data agree with the state", () => {
+  for (const id of HIDDEN.concat(DARKENED)) {
+    for (const st of sample(id)) {
+      const v = st.sees;
+      assert.ok(v, id);
+      if (st.case === "hidden" && st.source === "disc") {
+        assert.equal(v.kind, "disc", id);
+        const sep = Math.abs(v.offset);
+        assert.equal(G.discView(v.sourceRadius, v.blockerRadius, sep).kind, st.view.kind, `${id} view`);
+      } else if (st.case === "hidden") {
+        assert.equal(v.kind, "star", id);
+        // At exact contact the star sits on the limb, and two exact formulas
+        // for the same angle differ in the last bit; either answer is right.
+        if (Math.abs(Math.abs(v.offset) - v.blockerRadius) > 1e-9) {
+          assert.equal(Math.abs(v.offset) < v.blockerRadius, st.part === "hidden", `${id} star`);
+        }
+      } else if (id === "shadow-transit") {
+        assert.equal(v.kind, "planet", id);
+        assert.equal(v.spot === null, st.ground === null, id);
+        if (v.spot !== null) assert.ok(v.spot >= -1 && v.spot <= 1, id);
+      } else {
+        assert.equal(v.kind, "body", id);
+        const want = st.part === "umbra" ? 1 : st.view.covered;
+        assert.ok(Math.abs(v.dimmed - want) < 1e-12, `${id} dimmed`);
+      }
+    }
+  }
+  // The blocking body's apparent offset changes sign as it crosses.
+  const first = S.state("solar-eclipse", 0).sees.offset;
+  const last = S.state("solar-eclipse", 1).sees.offset;
+  assert.ok(first * last < 0, "the Moon crosses from one side of the Sun to the other");
 });

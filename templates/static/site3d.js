@@ -1174,9 +1174,11 @@
         anchors.push(at);
         return at;
       }
-      var texts = { roles: ["", "", ""], names: ["", "", ""] };
+      // Up to four bodies carry labels: the source, the blocking body, the
+      // observer or darkened body, and in the darkened case the observer.
+      var texts = { roles: ["", "", "", ""], names: ["", "", "", ""] };
       var roleAt = [], nameAt = [];
-      for (var i = 0; i < 3; i++) {
+      for (var i = 0; i < 4; i++) {
         (function (k) {
           roleAt.push(tag(function () { return texts.roles[k]; }));
           nameAt.push(tag(function () { return texts.names[k]; }));
@@ -1220,15 +1222,20 @@
         meshes.blk = sphere(e.Rb, lit(e.case === "hidden" ? p.dim : p.fill));
         gBodies.add(meshes.blk);
 
-        if (e.case === "hidden") {
-          // The world the observer stands on, and the observer on it.
-          meshes.world = sphere(e.Rr, lit(p.fill), 48);
-          meshes.world.position.copy(v3(st.world.centre));
-          gBodies.add(meshes.world);
-          meshes.obs = sphere(0.12 / k, basic(p.accent2), 16);
-          meshes.obs.position.copy(v3(st.bodies[2].position));
-          gBodies.add(meshes.obs);
-        } else {
+        /* The world the observer stands on, or the craft they ride in, is
+           always drawn (S3D-13). For a lunar eclipse it is the Earth, the
+           blocking body, which is drawn already. */
+        meshes.world = null;
+        if (st.world.name === "the Orion spacecraft") {
+          meshes.world = craft(st.world.radius, lit(p.fill));
+        } else if (id !== "lunar-eclipse") {
+          meshes.world = sphere(st.world.radius, lit(p.fill), 48);
+        }
+        if (meshes.world) gBodies.add(meshes.world);
+        meshes.obs = sphere(0.1 / k, basic(p.accent2), 16);
+        gBodies.add(meshes.obs);
+        meshes.rcv = null;
+        if (e.case === "darkened") {
           meshes.rcv = sphere(e.Rr, new THREE.MeshLambertMaterial({ color: p.fill }), 40);
           gBodies.add(meshes.rcv);
           meshes.ground = sphere(0.13 / k, basic(p.silhouette), 16);
@@ -1240,21 +1247,42 @@
         var top = S.state(id, 1).bodies.filter(function (b) { return b.role === st.moving; })[0];
         gLines.add(polyline([v3(mover.position), v3(top.position)], lineMat(p.line, true)));
 
-        st.bodies.forEach(function (b, n) {
-          texts.roles[n] = b.role;
-          texts.names[n] = e.case === "darkened" && id === "shadow-transit" && n === 2
-            ? "Jupiter's cloud tops" : b.name;
-        });
+        for (var n = 0; n < 4; n++) {
+          var b = st.bodies[n];
+          texts.roles[n] = b ? b.role : "";
+          texts.names[n] = !b ? ""
+            : id === "shadow-transit" && n === 2 ? "Jupiter's cloud tops" : b.name;
+        }
         update(0);
       }
 
-      var sight = null;
+      /* The Orion spacecraft, drawn as a capsule on its service module,
+         nose toward the Moon. size is the radius the state gives it. */
+      function craft(size, mat) {
+        var g = new THREE.Group();
+        var capsule = new THREE.Mesh(new THREE.ConeGeometry(size * 0.9, size * 1.2, 24), mat);
+        capsule.rotation.z = Math.PI / 2;
+        capsule.position.x = -size * 0.2;
+        var module = new THREE.Mesh(
+          new THREE.CylinderGeometry(size * 0.75, size * 0.75, size * 1.4, 24), mat);
+        module.rotation.z = Math.PI / 2;
+        module.position.x = size * 1.1;
+        g.add(capsule);
+        g.add(module);
+        return g;
+      }
+
+      var sight = null, last = null;
       function update(t) {
         var st = S.state(cur, t);
+        last = st;
         var p = palette();
         var src = st.bodies[0], blk = st.bodies[1], rcv = st.bodies[2];
+        var obsBody = st.bodies.filter(function (b) { return b.role === "Observer"; })[0];
         meshes.blk.position.copy(v3(blk.position));
         if (meshes.rcv) meshes.rcv.position.copy(v3(rcv.position));
+        if (meshes.world) meshes.world.position.copy(v3(st.world.centre));
+        meshes.obs.position.copy(v3(obsBody.position));
 
         // The shadow, rebuilt for the current axis.
         clear(gShadow);
@@ -1286,6 +1314,13 @@
           sight = polyline([v3(rcv.position), to], lineMat(p.accent2, true));
           gLines.add(sight);
           meshes.obs.material = basic(st.part === "outside" ? p.accent2 : p.accent);
+        } else {
+          // Someone on the Earth watching the darkened body.
+          sight = polyline([v3(obsBody.position), v3(rcv.position)], lineMat(p.accent2, true));
+          gLines.add(sight);
+        }
+        if (st.case === "hidden") {
+          // The observer's marker is set above.
         } else if (cur === "shadow-transit") {
           meshes.ground.visible = !!st.ground;
           if (st.ground) meshes.ground.position.copy(v3(st.ground));
@@ -1302,13 +1337,18 @@
            the blocking body are labelled above; the observer or darkened
            body below, where it does not crowd the blocking body's labels. */
         st.bodies.forEach(function (b, n) {
+          var low = null;
           if (n === 2) {
-            var low = st.case === "hidden"
+            low = st.case === "hidden"
               ? [st.world.centre[0], st.world.centre[1] - st.world.radius, 0]
               : [b.position[0], b.position[1] - b.radius, 0];
+          } else if (n === 3) {
+            low = [st.world.centre[0], st.world.centre[1] - st.world.radius, 0];
+          }
+          if (low) {
             var under = toWorld(low);
             roleAt[n].copy(under).add(new THREE.Vector3(0, -0.12, 0));
-            nameAt[n].copy(under).add(new THREE.Vector3(0, -0.40, 0));
+            nameAt[n].copy(under).add(new THREE.Vector3(0, -0.46, 0));
             return;
           }
           var at = n === 0 && e.source === "point" ? [STAR_X, 0.15 / k, 0]
@@ -1337,10 +1377,42 @@
         },
         onProgress: function (t) { return update(t); },
         swatch: function () { return meshes.src.material.color.getHexString(); },
+        view: function () { return viewSvg(last); },
         note: def.note
       };
     };
   }
+  /* What the observer sees, as a small SVG drawn from the state (S3D-14).
+     Theme classes from the 2D figures colour it, so it follows the theme
+     without a palette. The source is drawn at a fixed size and the blocking
+     body at its true size relative to it; the panel clips what overflows. */
+  function viewSvg(st) {
+    if (!st || !st.sees) return "";
+    var v = st.sees, W = 160, H = 112, cx = W / 2, cy = H / 2, out = [];
+    function circle(x, y, r, cls, extra) {
+      out.push('<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="' +
+        Math.max(0.6, r).toFixed(1) + '" class="' + cls + '"' + (extra || "") + "/>");
+    }
+    if (v.kind === "disc") {
+      var R = 26, px = R / v.sourceRadius;
+      circle(cx, cy, R, "sun-fill");
+      circle(cx + v.offset * px, cy, v.blockerRadius * px, "silhouette-fill");
+    } else if (v.kind === "star") {
+      var Rb = 30, sx = Rb / v.blockerRadius;
+      circle(cx - v.offset * sx, cy, 3, "sun-fill");
+      circle(cx, cy, Rb, "silhouette-fill");
+    } else if (v.kind === "body") {
+      circle(cx, cy, 30, "body");
+      circle(cx, cy, 30, v.tint === "copper" ? "accent-fill" : "silhouette-fill",
+        ' fill-opacity="' + (0.85 * v.dimmed).toFixed(3) + '"');
+    } else if (v.kind === "planet") {
+      circle(cx, cy, 40, "body");
+      if (v.spot !== null) circle(cx + v.spot * 40, cy, 4, "silhouette-fill");
+    }
+    return '<svg class="figsvg" viewBox="0 0 ' + W + " " + H + '" aria-hidden="true">' +
+      out.join("") + "</svg>";
+  }
+
   SCENES["hidden-cases"] = caseScene("hidden-cases");
   SCENES["darkened-cases"] = caseScene("darkened-cases");
 
@@ -1548,12 +1620,30 @@
        show a quantity crossing a threshold; only words can say which side it
        is on now, and without that a reader is left guessing what they are
        looking at. */
-    var readout = null;
+    var readout = null, seesArt = null;
     if (built.onProgress) {
       readout = document.createElement("p");
       readout.className = "fig3d-readout";
       readout.setAttribute("aria-live", "polite");
-      viewer.appendChild(readout);
+      if (built.view) {
+        /* What the observer sees sits in its own framed panel beside the
+           line of text, apart from the 3D picture (S3D-14). */
+        var seesRow = document.createElement("div");
+        seesRow.className = "fig3d-seesrow";
+        var sees = document.createElement("figure");
+        sees.className = "fig3d-sees";
+        var cap = document.createElement("figcaption");
+        cap.textContent = "What the observer sees";
+        seesArt = document.createElement("div");
+        seesArt.className = "fig3d-sees-art";
+        sees.appendChild(cap);
+        sees.appendChild(seesArt);
+        seesRow.appendChild(sees);
+        seesRow.appendChild(readout);
+        viewer.appendChild(seesRow);
+      } else {
+        viewer.appendChild(readout);
+      }
     }
 
     var tags = (built.labels || []).map(function (l) {
@@ -1598,7 +1688,7 @@
       if (isFull()) {
         // Give the canvas whatever the controls do not need.
         h = Math.max(200, viewer.clientHeight - panel.offsetHeight -
-          hint.offsetHeight - (readout ? readout.offsetHeight : 0) - 40);
+          hint.offsetHeight - (readout ? (readout.parentNode === viewer ? readout : readout.parentNode).offsetHeight : 0) - 40);
       } else {
         h = Math.round(w * 9 / 16);
       }
@@ -1676,6 +1766,10 @@
         var said = built.onProgress(explode);
         if (readout && said != null && said !== readout.textContent) {
           readout.textContent = said;
+        }
+        if (seesArt) {
+          var art = built.view();
+          if (art !== seesArt.innerHTML) seesArt.innerHTML = art;
         }
       }
       built.layers.forEach(function (l) {
