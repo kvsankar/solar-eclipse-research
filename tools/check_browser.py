@@ -135,6 +135,44 @@ def check_3d(url: str) -> list[str]:
                 if "corona-fill" in sees.locator(".fig3d-sees-art").inner_html():
                     problems.append("3D view panel: a corona in a partial phase")
 
+            # AT-S3D-15: subtle labels on callout lines, clear of the bodies.
+            for n in range(buttons.count()):
+                buttons.nth(n).click()
+                set_slider(viewer, 50)
+                page.wait_for_timeout(200)
+                report = viewer.evaluate("""v => {
+                    const stage = v.querySelector('.fig3d-stage');
+                    const sr = stage.getBoundingClientRect();
+                    const discs = JSON.parse(stage.getAttribute('data-discs') || '[]');
+                    const tags = [...v.querySelectorAll('.fig3d-tag')].filter(t => t.style.display !== 'none');
+                    const boxes = tags.map(t => { const r = t.getBoundingClientRect();
+                        return {text: t.textContent, l: r.left - sr.left, r: r.right - sr.left,
+                                t: r.top - sr.top, b: r.bottom - sr.top,
+                                bg: getComputedStyle(t).backgroundColor,
+                                border: getComputedStyle(t).borderTopWidth}; });
+                    const lines = v.querySelectorAll('.fig3d-callouts line').length;
+                    return {boxes, discs, lines};
+                }""")
+                boxes, discs = report["boxes"], report["discs"]
+                label = f"{scene}/{events[n]}"
+                texts = " ".join(b["text"] for b in boxes)
+                if "Light source" not in texts or "Blocking body" not in texts:
+                    problems.append(f"{label}: source or blocking body label missing ({texts})")
+                if report["lines"] < len(boxes):
+                    problems.append(f"{label}: {len(boxes)} labels but {report['lines']} callout lines")
+                for b in boxes:
+                    if b["bg"] not in ("rgba(0, 0, 0, 0)", "transparent") or b["border"] not in ("0px", ""):
+                        problems.append(f"{label}: label '{b['text']}' has a box")
+                    for d in discs:
+                        nx = min(max(d["x"], b["l"]), b["r"])
+                        ny = min(max(d["y"], b["t"]), b["b"])
+                        if (nx - d["x"]) ** 2 + (ny - d["y"]) ** 2 < d["r"] ** 2:
+                            problems.append(f"{label}: label '{b['text']}' covers a body")
+                for i, a in enumerate(boxes):
+                    for c in boxes[i + 1:]:
+                        if not (a["r"] <= c["l"] or c["r"] <= a["l"] or a["b"] <= c["t"] or c["b"] <= a["t"]):
+                            problems.append(f"{label}: labels '{a['text']}' and '{c['text']}' overlap")
+
             # AT-S3D-6: the status line is announced.
             readout = viewer.locator(".fig3d-readout")
             if readout.get_attribute("aria-live") != "polite":

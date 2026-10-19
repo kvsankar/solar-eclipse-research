@@ -656,6 +656,17 @@ html[data-theme="dark"] {
   width: 3px; height: 3px; margin-left: -1px; border-radius: 50%;
   background: var(--fig-dim);
 }
+/* Callout labels (S3D-15): plain small text, the role over the name, set
+   off the body and joined to it by a thin line drawn in .fig3d-callouts. */
+.fig3d-tag.fig3d-callout {
+  transform: none; padding: 0; border: 0; border-radius: 0; background: none;
+  font-size: 10.5px; line-height: 1.3; white-space: pre; color: var(--fig-dim);
+  text-shadow: 0 0 3px var(--bg), 0 0 3px var(--bg);
+}
+.fig3d-tag.fig3d-callout::first-line { color: var(--fig-ink); }
+.fig3d-tag.fig3d-callout::before, .fig3d-tag.fig3d-callout::after { content: none; }
+.fig3d-callouts { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.fig3d-callouts line { stroke: var(--fig-dim); stroke-width: 0.8; opacity: 0.8; }
 
 .fig3d-note {
   margin: 8px 0 0; font-size: 12px; line-height: 1.5;

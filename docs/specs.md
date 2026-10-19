@@ -256,6 +256,11 @@ slider, Animate, Reset and Back.
   In the darkened case an observer stands on the Earth: on its night side
   for a lunar eclipse, and on an Earth drawn off the shadow, at a distance
   not to scale, for Jupiter's events. No observer floats in space.
+- **S3D-15** The labels are subtle: plain text in small type with no box,
+  the role above the name in muted type. Each label stands away from its
+  body and is joined to it by a thin callout line. A label is placed where
+  it covers no body and no other label; when no such place is free, it is
+  left out rather than drawn over a body.
 - **S3D-14** A framed panel titled "What the observer sees" sits beside the
   status line, set apart from the 3D picture. It draws the observer's view
   from the same state: in the hidden case the source (a disc, or a star as

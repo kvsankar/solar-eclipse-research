@@ -1165,23 +1165,24 @@
         return m;
       }
 
-      // Label anchors are kept and moved, never replaced: the viewer reads
-      // them on every frame.
-      var anchors = [];
-      function tag(text) {
-        var at = new THREE.Vector3();
-        labels.push({ at: at, text: text, layer: "bodies" });
-        anchors.push(at);
-        return at;
-      }
-      // Up to four bodies carry labels: the source, the blocking body, the
-      // observer or darkened body, and in the darkened case the observer.
+      /* Up to four bodies carry a callout label (S3D-15): the source, the
+         blocking body, the observer or darkened body, and in the darkened
+         case the observer. Each label is the role over the name; the
+         viewer places it off the body on a thin line. Anchors are kept and
+         moved, never replaced, because the viewer reads them every frame. */
       var texts = { roles: ["", "", "", ""], names: ["", "", "", ""] };
-      var roleAt = [], nameAt = [];
+      var anchorAt = [], anchorR = [0, 0, 0, 0];
+      var PREFER = [["upleft", "up"], ["up", "upright"], ["downleft", "down", "downright"],
+        ["downleft", "down", "left"]];
       for (var i = 0; i < 4; i++) {
         (function (k) {
-          roleAt.push(tag(function () { return texts.roles[k]; }));
-          nameAt.push(tag(function () { return texts.names[k]; }));
+          var at = new THREE.Vector3();
+          anchorAt.push(at);
+          labels.push({
+            at: at, layer: "bodies", callout: true, dirs: PREFER[k],
+            text: function () { return texts.roles[k] ? texts.roles[k] + "\n" + texts.names[k] : ""; },
+            body: function () { return { at: at, r: anchorR[k] }; }
+          });
         })(i);
       }
 
@@ -1272,7 +1273,35 @@
         return g;
       }
 
-      var sight = null, last = null;
+      var sight = null, last = null, lastBodies = null;
+
+      /* Every body as a disc, for the viewer to keep labels off them: the
+         source, the blocking body, the darkened body, the observer's world
+         and the observer's marker. */
+      function discs() {
+        var st = lastBodies, out = [];
+        if (!st) return out;
+        st.bodies.forEach(function (b, n) {
+          var centre = n === 0 && e.source === "point" ? [STAR_X, 0, 0] : b.position;
+          var r = b.role === "Observer" ? 0.1 / k : n === 0 && e.source === "point" ? 0.18 / k : b.radius;
+          out.push({ at: toWorld(centre), r: r * k });
+        });
+        if (meshes.world) out.push({ at: toWorld(st.world.centre), r: st.world.radius * k });
+        /* The shadow, as a row of discs along its axis at the penumbra's
+           radius. Labels keep off it; a callout line may cross it. */
+        var src = st.bodies[0].position, blk = st.bodies[1].position;
+        var axis = e.source === "point" ? [1, 0, 0]
+          : [blk[0] - src[0], blk[1] - src[1], blk[2] - src[2]];
+        var len = Math.sqrt(axis[0] * axis[0] + axis[1] * axis[1] + axis[2] * axis[2]);
+        var reach = e.d + 2 * e.Rr, D = e.source === "point" ? 0 : len;
+        for (var i = 0; i <= 8; i++) {
+          var x = reach * i / 8;
+          var rr = e.source === "point" ? e.Rb : G.shadowRadii(e.Rs, e.Rb, D, x).penumbra;
+          out.push({ soft: true, r: rr * k, at: toWorld([
+            blk[0] + axis[0] / len * x, blk[1] + axis[1] / len * x, blk[2] + axis[2] / len * x]) });
+        }
+        return out;
+      }
       function update(t) {
         var st = S.state(cur, t);
         last = st;
@@ -1333,30 +1362,17 @@
           meshes.rcv.material.color.copy(tint);
         }
 
-        /* Two labels for each body, the role above the name. The source and
-           the blocking body are labelled above; the observer or darkened
-           body below, where it does not crowd the blocking body's labels. */
-        st.bodies.forEach(function (b, n) {
-          var low = null;
-          if (n === 2) {
-            low = st.case === "hidden"
-              ? [st.world.centre[0], st.world.centre[1] - st.world.radius, 0]
-              : [b.position[0], b.position[1] - b.radius, 0];
-          } else if (n === 3) {
-            low = [st.world.centre[0], st.world.centre[1] - st.world.radius, 0];
-          }
-          if (low) {
-            var under = toWorld(low);
-            roleAt[n].copy(under).add(new THREE.Vector3(0, -0.12, 0));
-            nameAt[n].copy(under).add(new THREE.Vector3(0, -0.46, 0));
-            return;
-          }
-          var at = n === 0 && e.source === "point" ? [STAR_X, 0.15 / k, 0]
-            : [b.position[0], b.position[1] + (b.radius || 0.15 / k), b.position[2]];
-          var base = toWorld(at);
-          nameAt[n].copy(base).add(new THREE.Vector3(0, 0.18, 0));
-          roleAt[n].copy(base).add(new THREE.Vector3(0, 0.46, 0));
-        });
+        // Each label's anchor is its body's centre and radius in world units.
+        // An observer is labelled at their marker, and a star at its point.
+        for (var n = 0; n < 4; n++) {
+          var b = st.bodies[n];
+          if (!b) { anchorR[n] = 0; continue; }
+          var centre = n === 0 && e.source === "point" ? [STAR_X, 0, 0] : b.position;
+          anchorAt[n].copy(toWorld(centre));
+          anchorR[n] = b.role === "Observer" ? 0.1
+            : n === 0 && e.source === "point" ? 0.18 : b.radius * k;
+        }
+        lastBodies = st;
         return st.text;
       }
 
@@ -1378,6 +1394,7 @@
         onProgress: function (t) { return update(t); },
         swatch: function () { return meshes.src.material.color.getHexString(); },
         view: function () { return viewSvg(last, "corona-3d-" + sceneName); },
+        discs: discs,
         note: def.note
       };
     };
@@ -1661,11 +1678,21 @@
 
     var tags = (built.labels || []).map(function (l) {
       var el = document.createElement("span");
-      el.className = "fig3d-tag";
+      el.className = l.callout ? "fig3d-tag fig3d-callout" : "fig3d-tag";
       el.textContent = typeof l.text === "function" ? l.text() : l.text;
       layerEl.appendChild(el);
-      return { el: el, at: l.at, layer: l.layer, text: l.text, w: 0, h: 0 };
+      return { el: el, at: l.at, layer: l.layer, text: l.text, w: 0, h: 0,
+        callout: !!l.callout, body: l.body, dirs: l.dirs };
     });
+    /* Callout labels stand off their body on a thin line (S3D-15). The
+       lines live in one SVG over the canvas, redrawn with the labels. */
+    var calloutSvg = null;
+    if (tags.some(function (t) { return t.callout; })) {
+      calloutSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      calloutSvg.setAttribute("class", "fig3d-callouts");
+      calloutSvg.setAttribute("aria-hidden", "true");
+      layerEl.insertBefore(calloutSvg, layerEl.firstChild);
+    }
     function measureOne(t) {
       var shown = t.el.style.display;
       t.el.style.display = "block";
@@ -1818,6 +1845,73 @@
          already placed. A label that covers the drawing is worse than a
          label that is not there, and the reader can switch the rest off. */
       var placed = [];
+
+      /* Each body as a disc on screen: its projected centre and the
+         projected length of its radius across the view. */
+      var right = new THREE.Vector3(1, 0, 0).applyQuaternion(camera.quaternion);
+      function onScreen(at, r) {
+        var c = at.clone().project(camera);
+        var e = at.clone().add(right.clone().multiplyScalar(r)).project(camera);
+        var x = (c.x * 0.5 + 0.5) * w, y = (-c.y * 0.5 + 0.5) * h;
+        var ex = (e.x * 0.5 + 0.5) * w, ey = (-e.y * 0.5 + 0.5) * h;
+        return { x: x, y: y, r: Math.max(2, Math.sqrt((ex - x) * (ex - x) + (ey - y) * (ey - y))), z: c.z };
+      }
+      var discs = built.discs ? built.discs().map(function (d) {
+        var o = onScreen(d.at, d.r); o.soft = !!d.soft; return o;
+      }) : [];
+      // The bodies alone, for the browser check that labels cover none.
+      stage.setAttribute("data-discs", JSON.stringify(discs.filter(function (d) { return !d.soft; }).map(function (d) {
+        return { x: +d.x.toFixed(1), y: +d.y.toFixed(1), r: +d.r.toFixed(1) };
+      })));
+      var callLines = [];
+      var GAP = 16;
+      var DIRS = {
+        up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0],
+        upleft: [-0.7, -0.7], upright: [0.7, -0.7], downleft: [-0.7, 0.7], downright: [0.7, 0.7]
+      };
+      function boxHitsDisc(box, d) {
+        var nx = Math.min(Math.max(d.x, box.l), box.r);
+        var ny = Math.min(Math.max(d.y, box.t), box.b);
+        return (nx - d.x) * (nx - d.x) + (ny - d.y) * (ny - d.y) < d.r * d.r;
+      }
+      function segmentHitsDisc(a, b, d) {
+        var dx = b[0] - a[0], dy = b[1] - a[1];
+        var len2 = dx * dx + dy * dy || 1;
+        var s = Math.max(0, Math.min(1, ((d.x - a[0]) * dx + (d.y - a[1]) * dy) / len2));
+        var qx = a[0] + s * dx - d.x, qy = a[1] + s * dy - d.y;
+        return qx * qx + qy * qy < d.r * d.r;
+      }
+      function placeCallout(t) {
+        var b = t.body();
+        var c = onScreen(b.at, b.r);
+        if (c.z >= 1) return null;
+        var tries = t.dirs.concat(["up", "down", "upright", "downright", "upleft", "downleft", "right", "left"]);
+        for (var i = 0; i < tries.length; i++) {
+          for (var far = 0; far < 8; far++) {
+            var u = DIRS[tries[i]];
+            var reach = c.r + GAP + far * 20;
+            var px = c.x + u[0] * reach, py = c.y + u[1] * reach;
+            var l = u[0] > 0.3 ? px : u[0] < -0.3 ? px - t.w : px - t.w / 2;
+            var tp = u[1] > 0.3 ? py : u[1] < -0.3 ? py - t.h : py - t.h / 2;
+            var box = { l: l, r: l + t.w, t: tp, b: tp + t.h };
+            if (box.l < 2 || box.t < 2 || box.r > w - 2 || box.b > h - 2) continue;
+            if (placed.some(function (q) {
+              return !(box.r <= q.l || box.l >= q.r || box.b <= q.t || box.t >= q.b);
+            })) continue;
+            if (discs.some(function (d) { return boxHitsDisc(box, d); })) continue;
+            var from = [c.x + u[0] * c.r, c.y + u[1] * c.r];
+            // The line must not cross another body on its way to the label.
+            if (discs.some(function (d) {
+              if (d.soft) return false;
+              if (Math.abs(d.x - c.x) < 0.5 && Math.abs(d.y - c.y) < 0.5) return false;
+              return segmentHitsDisc(from, [px, py], d);
+            })) continue;
+            return { box: box, from: from, to: [px, py] };
+          }
+        }
+        return null;
+      }
+
       tags.forEach(function (t) {
         var l = byId[t.layer];
         if (!showLabels || (l && !l.on)) { t.el.style.display = "none"; return; }
@@ -1825,6 +1919,16 @@
           var txt = t.text();
           if (!txt) { t.el.style.display = "none"; return; }
           if (txt !== t.el.textContent) { t.el.textContent = txt; measureOne(t); }
+        }
+        if (t.callout) {
+          var spot = placeCallout(t);
+          if (!spot) { t.el.style.display = "none"; return; }
+          placed.push(spot.box);
+          callLines.push(spot);
+          t.el.style.display = "block";
+          t.el.style.left = spot.box.l.toFixed(1) + "px";
+          t.el.style.top = spot.box.t.toFixed(1) + "px";
+          return;
         }
         var world = t.at.clone();
         if (l) world.add(l.group.position);
@@ -1852,6 +1956,13 @@
         t.el.style.left = lx.toFixed(1) + "px";
         t.el.style.top = ly.toFixed(1) + "px";
       });
+      if (calloutSvg) {
+        calloutSvg.setAttribute("viewBox", "0 0 " + w + " " + h);
+        calloutSvg.innerHTML = callLines.map(function (c) {
+          return '<line x1="' + c.from[0].toFixed(1) + '" y1="' + c.from[1].toFixed(1) +
+            '" x2="' + c.to[0].toFixed(1) + '" y2="' + c.to[1].toFixed(1) + '"/>';
+        }).join("");
+      }
     }
     draw();
 
