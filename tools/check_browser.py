@@ -123,6 +123,18 @@ def check_3d(url: str) -> list[str]:
                 if sees.locator(".fig3d-sees-art").inner_html() == before or "<svg" not in before:
                     problems.append(f"{scene}: view panel did not change with the slider")
 
+            # AT-FIG-10: a corona at totality, none in a partial phase.
+            if scene == "hidden-cases":
+                buttons.nth(0).click()
+                set_slider(viewer, 50)
+                page.wait_for_timeout(150)
+                if "corona-fill" not in sees.locator(".fig3d-sees-art").inner_html():
+                    problems.append("3D view panel: no corona at totality")
+                set_slider(viewer, 30)
+                page.wait_for_timeout(150)
+                if "corona-fill" in sees.locator(".fig3d-sees-art").inner_html():
+                    problems.append("3D view panel: a corona in a partial phase")
+
             # AT-S3D-6: the status line is announced.
             readout = viewer.locator(".fig3d-readout")
             if readout.get_attribute("aria-live") != "polite":

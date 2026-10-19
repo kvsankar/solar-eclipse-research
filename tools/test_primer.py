@@ -216,6 +216,24 @@ class PrimerFigureTest(unittest.TestCase):
                             for sx, sy, r1 in suns for cx, cy, r2 in sils),
                         "the inset's silhouette covers the whole Sun")
 
+    def test_fig_10_totality_has_a_corona_not_a_ring(self):
+        num = r'([-\d.]+)'
+        for name in ("example-solar-eclipse.svg", "shadow-shape.svg"):
+            svg = (IMG / name).read_text(encoding="utf-8")
+            coronas = re.findall(rf'<circle cx="{num}" cy="{num}" r="{num}" class="corona-fill" fill="url\(#[\w-]+\)"', svg)
+            self.assertEqual(len(coronas), 1, f"{name}: one corona, at the total view")
+            cx, cy, rc = coronas[0]
+            sils = [float(r) for x, y, r in re.findall(rf'<circle cx="{num}" cy="{num}" r="{num}" class="silhouette-fill"', svg)
+                    if (x, y) == (cx, cy)]
+            self.assertTrue(sils, f"{name}: a dark disc at the corona's centre")
+            self.assertGreater(float(rc), max(sils), f"{name}: corona larger than the disc")
+            suns = [float(r) for x, y, r in re.findall(rf'<circle cx="{num}" cy="{num}" r="{num}" class="sun-fill"', svg)
+                    if (x, y) == (cx, cy)]
+            self.assertFalse([r for r in suns if r > max(sils)], f"{name}: a bright ring around totality")
+            self.assertIn('<radialGradient id=', svg)
+        css = (ROOT / "templates" / "static" / "site.css").read_text(encoding="utf-8")
+        self.assertEqual(css.count("--fig-corona:"), css.count("--fig-sun:"))
+
     def test_fig_9_views_in_a_separate_framed_panel(self):
         views = {"example-solar-eclipse.svg": 1, "example-venus-transit.svg": 1, "shadow-shape.svg": 3}
         num = r'([-\d.]+)'

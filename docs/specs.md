@@ -96,6 +96,10 @@ by the Sun (then its phase shapes the hidden outline).
   token, so it reads as bright in both themes. No figure draws the Sun in
   the dark accent colour. A body seen against the Sun is drawn as a dark
   silhouette, also a theme token, so it reads as dark in both themes.
+- **FIG-10** Totality is drawn as the dark disc with a faint, diffuse
+  corona that fades outwards, in a theme token colour. No bright ring of
+  the Sun is drawn around the disc at totality, because a ring reads as an
+  annular eclipse. This holds in the 2D figures and in the 3D view panel.
 - **FIG-9** What an observer sees is drawn in a framed panel titled "What
   the observer sees", set apart from the main drawing: beside it in the
   example diagrams, and in a row between the two halves of the

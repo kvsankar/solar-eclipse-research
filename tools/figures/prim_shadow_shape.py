@@ -4,6 +4,7 @@ penumbra and antumbra and what an observer in each sees, beside the cylinder a
 point source casts (spec FIG-1, item 2). Schematic only."""
 
 from figlib import Figure
+from prim_corona import corona
 
 f = Figure(
     width=680, height=480,
@@ -13,8 +14,8 @@ f = Figure(
           "out again beyond it as the antumbra. The wider penumbra spreads "
           "around both. Three observers sit in the umbra, the penumbra and "
           "the antumbra. A framed panel below shows what each one sees of the "
-          "source disc: wholly covered, partly covered, and covered except "
-          "for a ring. "
+          "source disc: wholly covered with a faint corona around it, partly "
+          "covered, and covered except for a ring. "
           "Bottom: parallel lines from a star at the far left pass a body "
           "and leave a straight band behind it, the cylinder, with an "
           "observer in it for whom the star is hidden."),
@@ -76,7 +77,7 @@ def observer(x, y, kind, label, ix, iy):
     f.circle(x, y, 4, cls="accent-fill")
     f.circle(ix, iy, 15, cls="sun-fill")        # the source as seen
     if kind == "total":
-        f.circle(ix, iy, 17, cls="sun-fill")
+        corona(f, ix, iy, 15, "corona-shadow-shape")
         f.circle(ix, iy, 15, cls="silhouette-fill")
     elif kind == "annular":
         f.circle(ix, iy, 10.5, cls="silhouette-fill")

@@ -5,6 +5,7 @@ the Moon's umbra, so the Moon hides the whole Sun. Schematic."""
 import math
 
 from prim_case import AXIS, labels, new, sun, view_panel
+from prim_corona import corona
 
 f = new(
     "Hidden: the observer stands in the Moon's umbra and the Sun is hidden",
@@ -14,7 +15,7 @@ f = new(
      "Earth's surface. An observer, labelled observer, stands inside the "
      "umbra on the Earth. A framed panel on the right shows what the "
      "observer sees: a total eclipse, the Moon's dark disc covering the Sun "
-     "with a thin bright ring around it."),
+     "with a faint corona fading outwards around it."),
     panel=True,
 )
 y = AXIS
@@ -44,7 +45,7 @@ f.circle(ox, oy, 3.5, cls="accent-2-fill")
 
 # What the observer sees: totality, in its own panel.
 ix, iy = view_panel(f)
-f.circle(ix, iy, 34, cls="sun-fill")
+corona(f, ix, iy, 30, "corona-example-solar")
 f.circle(ix, iy, 30, cls="sun-fill")
 f.circle(ix, iy, 30, cls="silhouette-fill")
 f.text(ix, iy + 62, "totality", anchor="middle", cls="label-dim")

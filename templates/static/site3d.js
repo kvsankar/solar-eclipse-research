@@ -1377,7 +1377,7 @@
         },
         onProgress: function (t) { return update(t); },
         swatch: function () { return meshes.src.material.color.getHexString(); },
-        view: function () { return viewSvg(last); },
+        view: function () { return viewSvg(last, "corona-3d-" + sceneName); },
         note: def.note
       };
     };
@@ -1386,7 +1386,7 @@
      Theme classes from the 2D figures colour it, so it follows the theme
      without a palette. The source is drawn at a fixed size and the blocking
      body at its true size relative to it; the panel clips what overflows. */
-  function viewSvg(st) {
+  function viewSvg(st, gid) {
     if (!st || !st.sees) return "";
     var v = st.sees, W = 160, H = 112, cx = W / 2, cy = H / 2, out = [];
     function circle(x, y, r, cls, extra) {
@@ -1395,6 +1395,19 @@
     }
     if (v.kind === "disc") {
       var R = 26, px = R / v.sourceRadius;
+      /* At totality the Sun is wholly behind the disc and only a faint
+         corona shows around it (FIG-10). A bright ring would read as an
+         annular eclipse. */
+      if (st.view.kind === "total") {
+        out.push('<defs><radialGradient id="' + gid + '">' +
+          '<stop offset="0" class="corona-stop" stop-opacity="0"/>' +
+          '<stop offset="0.5" class="corona-stop" stop-opacity="0.75"/>' +
+          '<stop offset="0.62" class="corona-stop" stop-opacity="0.45"/>' +
+          '<stop offset="0.8" class="corona-stop" stop-opacity="0.15"/>' +
+          '<stop offset="1" class="corona-stop" stop-opacity="0"/>' +
+          "</radialGradient></defs>");
+        circle(cx, cy, 2 * R, "corona-fill", ' fill="url(#' + gid + ')"');
+      }
       circle(cx, cy, R, "sun-fill");
       circle(cx + v.offset * px, cy, v.blockerRadius * px, "silhouette-fill");
     } else if (v.kind === "star") {
