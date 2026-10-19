@@ -1867,7 +1867,11 @@
       var GAP = 16;
       var DIRS = {
         up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0],
-        upleft: [-0.7, -0.7], upright: [0.7, -0.7], downleft: [-0.7, 0.7], downright: [0.7, 0.7]
+        upleft: [-0.7, -0.7], upright: [0.7, -0.7], downleft: [-0.7, 0.7], downright: [0.7, 0.7],
+        // The eight in between, for crowded scenes.
+        upupleft: [-0.38, -0.92], upupright: [0.38, -0.92], downdownleft: [-0.38, 0.92],
+        downdownright: [0.38, 0.92], leftup: [-0.92, -0.38], rightup: [0.92, -0.38],
+        leftdown: [-0.92, 0.38], rightdown: [0.92, 0.38]
       };
       function boxHitsDisc(box, d) {
         var nx = Math.min(Math.max(d.x, box.l), box.r);
@@ -1881,13 +1885,40 @@
         var qx = a[0] + s * dx - d.x, qy = a[1] + s * dy - d.y;
         return qx * qx + qy * qy < d.r * d.r;
       }
+      function segmentsCross(a1, a2, b1, b2) {
+        function orient(p, q, r) {
+          return (q[0] - p[0]) * (r[1] - p[1]) - (q[1] - p[1]) * (r[0] - p[0]);
+        }
+        return orient(a1, a2, b1) * orient(a1, a2, b2) < 0 &&
+          orient(b1, b2, a1) * orient(b1, b2, a2) < 0;
+      }
+      // A line keeps 4 px clear of a label, so rounding in the measured
+      // label size cannot put it through the drawn text.
+      function segmentInBox(a, b, box) {
+        for (var k = 1; k < 40; k++) {
+          var x = a[0] + (b[0] - a[0]) * k / 40, y = a[1] + (b[1] - a[1]) * k / 40;
+          if (x > box.l - 4 && x < box.r + 4 && y > box.t - 4 && y < box.b + 4) return true;
+        }
+        return false;
+      }
+      /* Lines should not cross each other or run through a label. Try every
+         place under that rule first, and drop it only when nothing fits. */
+      function tangles(from, to, box) {
+        return callLines.some(function (c) {
+          return segmentsCross(from, to, c.from, c.to) || segmentInBox(c.from, c.to, box);
+        }) || placed.some(function (q) { return segmentInBox(from, to, q); });
+      }
       function placeCallout(t) {
+        return placeCalloutWith(t, true) || placeCalloutWith(t, false);
+      }
+      function placeCalloutWith(t, strict) {
         var b = t.body();
         var c = onScreen(b.at, b.r);
         if (c.z >= 1) return null;
-        var tries = t.dirs.concat(["up", "down", "upright", "downright", "upleft", "downleft", "right", "left"]);
+        var tries = t.dirs.concat(["up", "down", "upright", "downright", "upleft", "downleft", "right", "left",
+          "upupleft", "upupright", "downdownleft", "downdownright", "leftup", "rightup", "leftdown", "rightdown"]);
         for (var i = 0; i < tries.length; i++) {
-          for (var far = 0; far < 8; far++) {
+          for (var far = 0; far < 12; far++) {
             var u = DIRS[tries[i]];
             var reach = c.r + GAP + far * 20;
             var px = c.x + u[0] * reach, py = c.y + u[1] * reach;
@@ -1906,6 +1937,7 @@
               if (Math.abs(d.x - c.x) < 0.5 && Math.abs(d.y - c.y) < 0.5) return false;
               return segmentHitsDisc(from, [px, py], d);
             })) continue;
+            if (strict && tangles(from, [px, py], box)) continue;
             return { box: box, from: from, to: [px, py] };
           }
         }

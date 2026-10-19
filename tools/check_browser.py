@@ -150,8 +150,9 @@ def check_3d(url: str) -> list[str]:
                                 t: r.top - sr.top, b: r.bottom - sr.top,
                                 bg: getComputedStyle(t).backgroundColor,
                                 border: getComputedStyle(t).borderTopWidth}; });
-                    const lines = v.querySelectorAll('.fig3d-callouts line').length;
-                    return {boxes, discs, lines};
+                    const segs = [...v.querySelectorAll('.fig3d-callouts line')].map(l =>
+                        ['x1', 'y1', 'x2', 'y2'].map(k => +l.getAttribute(k)));
+                    return {boxes, discs, lines: segs.length, segs};
                 }""")
                 boxes, discs = report["boxes"], report["discs"]
                 label = f"{scene}/{events[n]}"
@@ -168,6 +169,33 @@ def check_3d(url: str) -> list[str]:
                         ny = min(max(d["y"], b["t"]), b["b"])
                         if (nx - d["x"]) ** 2 + (ny - d["y"]) ** 2 < d["r"] ** 2:
                             problems.append(f"{label}: label '{b['text']}' covers a body")
+                segs = report["segs"]
+
+                def cross(p, q):
+                    def orient(a, b, c):
+                        return (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0])
+                    a1, a2, b1, b2 = p[:2], p[2:], q[:2], q[2:]
+                    return (orient(a1, a2, b1) * orient(a1, a2, b2) < 0 and
+                            orient(b1, b2, a1) * orient(b1, b2, a2) < 0)
+
+                for i, sa in enumerate(segs):
+                    for sb in segs[i + 1:]:
+                        if cross(sa, sb):
+                            problems.append(f"{label}: two callout lines cross")
+
+                def through(seg, b):
+                    # Sample the segment and test whether it enters the box.
+                    for k in range(1, 20):
+                        x = seg[0] + (seg[2] - seg[0]) * k / 20
+                        y = seg[1] + (seg[3] - seg[1]) * k / 20
+                        if b["l"] + 1 < x < b["r"] - 1 and b["t"] + 1 < y < b["b"] - 1:
+                            return True
+                    return False
+
+                for sa in segs:
+                    for b in boxes:
+                        if through(sa, b):
+                            problems.append(f"{label}: a callout line runs through '{b['text']}'")
                 for i, a in enumerate(boxes):
                     for c in boxes[i + 1:]:
                         if not (a["r"] <= c["l"] or c["r"] <= a["l"] or a["b"] <= c["t"] or c["b"] <= a["t"]):

@@ -260,7 +260,9 @@ slider, Animate, Reset and Back.
   the role above the name in muted type. Each label stands away from its
   body and is joined to it by a thin callout line. A label is placed where
   it covers no body and no other label; when no such place is free, it is
-  left out rather than drawn over a body.
+  left out rather than drawn over a body. Callout lines do not cross each
+  other or run through another label wherever a placement without that
+  exists.
 - **S3D-14** A framed panel titled "What the observer sees" sits beside the
   status line, set apart from the 3D picture. It draws the observer's view
   from the same state: in the hidden case the source (a disc, or a star as
