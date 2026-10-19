@@ -23,8 +23,8 @@ jobs:
       - name: Check numerical and metadata contracts
         run: python -m unittest discover -s tools -p 'test_*.py'
 
-      - name: Check the geometry module
-        run: node --test tools/js/geometry.test.js
+      - name: Check the geometry module and the 3D scene states
+        run: node --test tools/js/geometry.test.js tools/js/scenes.test.js
 
       - name: Check research fragments and note structure
         run: |

@@ -117,6 +117,16 @@ class GeneralPrimerTest(unittest.TestCase):
         self.assertIn("a transit is an occultation", names.lower())
         self.assertIn("Eclipses, Occultations, and Transits", names)
 
+    def test_s3d_1_case_diagrams_offer_3d_scenes(self):
+        for svg, scene in (("case-hidden.svg", "hidden-cases"), ("case-darkened.svg", "darkened-cases")):
+            self.assertIn(f'(img/{svg}){{.fig3d scene="{scene}"}}', self.text)
+        import build  # the page as the build renders it, wrappers included
+        node = next(n for n in build.walk(build.build_tree()) if n.src == GENERAL)
+        _, body = build.pandoc_render(build.strip_leading_h1(node.body_md, node.title), False)
+        body = build.inline_svgs(build.rewrite_links(body), node)
+        for scene in ("hidden-cases", "darkened-cases"):
+            self.assertEqual(body.count(f'<div class="fig3d-host" data-scene="{scene}">'), 1, scene)
+
     def test_pri_5_ends_with_the_way_on(self):
         last = list(self.secs)[-1]
         self.assertEqual(last, "Where to go next")

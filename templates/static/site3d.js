@@ -28,6 +28,20 @@
   var here = document.currentScript && document.currentScript.src;
   if (!here) return;
   var THREE_URL = here.replace(/site3d\.js(\?.*)?$/, "vendor/three.min.js");
+  /* The guided scenes take their positions from two plain modules, loaded
+     with three.js and only when a reader asks for one of those scenes. The
+     page passes each module's content version, so a cached copy never pairs
+     with a newer viewer. */
+  var me = document.currentScript;
+  function moduleUrl(file, key) {
+    var v = me.getAttribute(key);
+    return here.replace(/site3d\.js(\?.*)?$/, file) + (v ? "?v=" + v : "");
+  }
+  var MODULES = [
+    { url: moduleUrl("geometry.js", "data-geometry-v"), global: "EclipseGeometry" },
+    { url: moduleUrl("scenes.js", "data-scenes-v"), global: "EclipseScenes" }
+  ];
+  var NEEDS_MODULES = { "hidden-cases": true, "darkened-cases": true };
 
   // ------------------------------------------------------------ feasibility
   function webglAvailable() {
@@ -69,6 +83,28 @@
     return pending;
   }
 
+  var modulesPending = null;
+  function loadModules() {
+    if (modulesPending) return modulesPending;
+    // In order: the scenes module reads the geometry module when it loads.
+    modulesPending = MODULES.reduce(function (chain, m) {
+      return chain.then(function () {
+        if (window[m.global]) return null;
+        return new Promise(function (resolve, reject) {
+          var s = document.createElement("script");
+          s.src = m.url;
+          s.onload = function () {
+            if (window[m.global]) resolve();
+            else reject(new Error(m.url + " loaded but exported nothing"));
+          };
+          s.onerror = function () { reject(new Error(m.url + " could not be loaded")); };
+          document.head.appendChild(s);
+        });
+      });
+    }, Promise.resolve());
+    return modulesPending;
+  }
+
   // --------------------------------------------------------------- palette
   /* Colours come from the same custom properties the SVGs use, read at run
      time, so a 3D figure matches the reader's theme. */
@@ -84,6 +120,8 @@
       accent: v("--fig-accent", "#8a5a2b"),
       accent2: v("--fig-accent-2", "#2d6a5a"),
       fill: v("--fig-fill", "#ece5da"),
+      sun: v("--fig-sun", "#f6d58a"),
+      silhouette: v("--fig-silhouette", "#2c2925"),
       bg: v("--bg", "#fbfaf8")
     };
   }
@@ -1043,6 +1081,269 @@
     };
   };
 
+  /* The guided scenes of the primer's two cases (spec S3D). One drawing
+     serves both: the reader picks an event, and the slider carries it along
+     its path. Every position, shadow part and view comes from
+     EclipseScenes.state(), which the Node tests check against the geometry
+     module; this code only draws that state.
+
+     Scene units are those of scenes.js: the source at the origin, the shadow
+     along +x and motion along +y. The drawing group is scaled and shifted so
+     each event fills the view, so the labels, which live in world space,
+     go through the same transform. */
+  function caseScene(sceneName) {
+    return function (THREE, root, pal) {
+      var S = window.EclipseScenes, G = window.EclipseGeometry;
+      var def = S.scenes[sceneName];
+      var SPAN = 7.2;             // world units the widest event fills
+      var STAR_X = -2.5;          // where a point source is drawn
+      var layers = [], labels = [];
+      var w = new THREE.Group();
+      root.add(w);
+
+      function layer(id, label, order) {
+        var g = new THREE.Group();
+        w.add(g);
+        layers.push({ id: id, label: label, group: g, order: order,
+          explode: new THREE.Vector3(), on: true });
+        return g;
+      }
+      var gBodies = layer("bodies", "Bodies", 0);
+      var gShadow = layer("shadow", "Shadow", 0);
+      var gLines = layer("lines", "Line of sight and path", 0);
+
+      w.add(new THREE.AmbientLight(0xffffff, 0.35));
+      var sunLight = new THREE.PointLight(0xffffff, 0.9);
+      w.add(sunLight);
+
+      var MAT = {};
+      function basic(colour, opacity) {
+        var key = "b" + colour + "|" + (opacity || 1);
+        if (!MAT[key]) {
+          MAT[key] = new THREE.MeshBasicMaterial(opacity ? {
+            color: colour, transparent: true, opacity: opacity,
+            side: THREE.DoubleSide, depthWrite: false } : { color: colour });
+        }
+        return MAT[key];
+      }
+      function lit(colour) {
+        var key = "l" + colour;
+        if (!MAT[key]) MAT[key] = new THREE.MeshLambertMaterial({ color: colour });
+        return MAT[key];
+      }
+      function lineMat(colour, dashed) {
+        var key = "m" + colour + (dashed ? "d" : "");
+        if (!MAT[key]) {
+          MAT[key] = dashed
+            ? new THREE.LineDashedMaterial({ color: colour, dashSize: 0.3, gapSize: 0.2 })
+            : new THREE.LineBasicMaterial({ color: colour });
+        }
+        return MAT[key];
+      }
+      function clear(g) {
+        for (var i = g.children.length - 1; i >= 0; i--) {
+          var c = g.children[i];
+          g.remove(c);
+          if (c.geometry) c.geometry.dispose();
+        }
+      }
+      function v3(p) { return new THREE.Vector3(p[0], p[1], p[2]); }
+      function sphere(r, mat, segs) {
+        return new THREE.Mesh(new THREE.SphereGeometry(r, segs || 40, Math.round((segs || 40) * 0.7)), mat);
+      }
+      function polyline(points, mat) {
+        var l = new THREE.Line(new THREE.BufferGeometry().setFromPoints(points), mat);
+        if (mat.isLineDashedMaterial) l.computeLineDistances();
+        return l;
+      }
+      /* A frustum of a cone from distance a to distance b behind the
+         blocking body, along the unit axis, with radii ra and rb. */
+      function frustum(origin, axis, a, b, ra, rb, mat) {
+        var m = new THREE.Mesh(new THREE.CylinderGeometry(rb, ra, b - a, 48, 1, true), mat);
+        m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), axis);
+        m.position.copy(origin.clone().add(axis.clone().multiplyScalar((a + b) / 2)));
+        return m;
+      }
+
+      // Label anchors are kept and moved, never replaced: the viewer reads
+      // them on every frame.
+      var anchors = [];
+      function tag(text) {
+        var at = new THREE.Vector3();
+        labels.push({ at: at, text: text, layer: "bodies" });
+        anchors.push(at);
+        return at;
+      }
+      var texts = { roles: ["", "", ""], names: ["", "", ""] };
+      var roleAt = [], nameAt = [];
+      for (var i = 0; i < 3; i++) {
+        (function (k) {
+          roleAt.push(tag(function () { return texts.roles[k]; }));
+          nameAt.push(tag(function () { return texts.names[k]; }));
+        })(i);
+      }
+
+      var cur = null, e = null, k = 1, shift = 0, meshes = {};
+      function toWorld(p) {
+        return new THREE.Vector3(p[0] * k + shift, p[1] * k, p[2] * k);
+      }
+
+      function build(id) {
+        cur = id;
+        e = S.events[id];
+        clear(gBodies); clear(gShadow); clear(gLines);
+        var st = S.state(id, 0);
+        var xmin = e.source === "point" ? STAR_X - 0.5 : -e.Rs;
+        var xmax = e.D + e.d + (e.case === "hidden" ? 2 * e.Rr : e.Rr);
+        k = SPAN / (xmax - xmin);
+        shift = -k * (xmin + xmax) / 2;
+        w.scale.setScalar(k);
+        w.position.set(shift, 0, 0);
+        sunLight.position.set(e.source === "point" ? STAR_X : 0, 0, 0);
+        var p = palette();
+
+        // The source: the Sun as a disc, or a star as a point with its
+        // light arriving in parallel lines.
+        if (e.source === "point") {
+          meshes.src = sphere(0.18 / k, basic(p.sun), 16);
+          meshes.src.position.set(STAR_X, 0, 0);
+          gBodies.add(meshes.src);
+          for (var r = -1; r <= 1; r += 2) {
+            gLines.add(polyline([new THREE.Vector3(STAR_X, r * e.Rb, 0),
+              new THREE.Vector3(e.D + e.d + 2 * e.Rr, r * e.Rb, 0)], lineMat(p.line, true)));
+          }
+        } else {
+          meshes.src = sphere(e.Rs, basic(p.sun), 48);
+          gBodies.add(meshes.src);
+        }
+
+        meshes.blk = sphere(e.Rb, lit(e.case === "hidden" ? p.dim : p.fill));
+        gBodies.add(meshes.blk);
+
+        if (e.case === "hidden") {
+          // The world the observer stands on, and the observer on it.
+          meshes.world = sphere(e.Rr, lit(p.fill), 48);
+          meshes.world.position.copy(v3(st.world.centre));
+          gBodies.add(meshes.world);
+          meshes.obs = sphere(0.12 / k, basic(p.accent2), 16);
+          meshes.obs.position.copy(v3(st.bodies[2].position));
+          gBodies.add(meshes.obs);
+        } else {
+          meshes.rcv = sphere(e.Rr, new THREE.MeshLambertMaterial({ color: p.fill }), 40);
+          gBodies.add(meshes.rcv);
+          meshes.ground = sphere(0.13 / k, basic(p.silhouette), 16);
+          gBodies.add(meshes.ground);
+        }
+
+        // The path of the moving body.
+        var mover = st.bodies.filter(function (b) { return b.role === st.moving; })[0];
+        var top = S.state(id, 1).bodies.filter(function (b) { return b.role === st.moving; })[0];
+        gLines.add(polyline([v3(mover.position), v3(top.position)], lineMat(p.line, true)));
+
+        st.bodies.forEach(function (b, n) {
+          texts.roles[n] = b.role;
+          texts.names[n] = e.case === "darkened" && id === "shadow-transit" && n === 2
+            ? "Jupiter's cloud tops" : b.name;
+        });
+        update(0);
+      }
+
+      var sight = null;
+      function update(t) {
+        var st = S.state(cur, t);
+        var p = palette();
+        var src = st.bodies[0], blk = st.bodies[1], rcv = st.bodies[2];
+        meshes.blk.position.copy(v3(blk.position));
+        if (meshes.rcv) meshes.rcv.position.copy(v3(rcv.position));
+
+        // The shadow, rebuilt for the current axis.
+        clear(gShadow);
+        var reach = e.d + 2 * e.Rr;
+        var origin = v3(blk.position);
+        if (e.source === "point") {
+          var ax = new THREE.Vector3(1, 0, 0);
+          gShadow.add(frustum(origin, ax, 0, reach, e.Rb, e.Rb, basic(p.ink, 0.28)));
+        } else {
+          var axis = origin.clone().sub(v3(src.position)).normalize();
+          var D = origin.distanceTo(v3(src.position));
+          var L = G.umbraLength(e.Rs, e.Rb, D);
+          var r0 = G.shadowRadii(e.Rs, e.Rb, D, 0);
+          var r1 = G.shadowRadii(e.Rs, e.Rb, D, reach);
+          gShadow.add(frustum(origin, axis, 0, reach, r0.penumbra, r1.penumbra, basic(p.dim, 0.13)));
+          if (L < reach) {
+            gShadow.add(frustum(origin, axis, 0, L, r0.umbra, 0.0001, basic(p.ink, 0.3)));
+            gShadow.add(frustum(origin, axis, L, reach, 0.0001, r1.umbra, basic(p.accent, 0.16)));
+          } else {
+            gShadow.add(frustum(origin, axis, 0, reach, r0.umbra, r1.umbra, basic(p.ink, 0.3)));
+          }
+        }
+
+        // The observer's line of sight to the source, or the darkened body's
+        // tint by how much sunlight reaches its centre.
+        if (sight) { gLines.remove(sight); sight.geometry.dispose(); sight = null; }
+        if (st.case === "hidden") {
+          var to = e.source === "point" ? new THREE.Vector3(STAR_X, 0, 0) : v3(src.position);
+          sight = polyline([v3(rcv.position), to], lineMat(p.accent2, true));
+          gLines.add(sight);
+          meshes.obs.material = basic(st.part === "outside" ? p.accent2 : p.accent);
+        } else if (cur === "shadow-transit") {
+          meshes.ground.visible = !!st.ground;
+          if (st.ground) meshes.ground.position.copy(v3(st.ground));
+          meshes.rcv.material.color.set(p.fill);
+        } else {
+          meshes.ground.visible = false;
+          var dark = st.part === "umbra" ? 1 : st.view.covered;
+          var tint = new THREE.Color(p.fill).lerp(
+            new THREE.Color(cur === "lunar-eclipse" ? p.accent : p.silhouette), dark);
+          meshes.rcv.material.color.copy(tint);
+        }
+
+        /* Two labels for each body, the role above the name. The source and
+           the blocking body are labelled above; the observer or darkened
+           body below, where it does not crowd the blocking body's labels. */
+        st.bodies.forEach(function (b, n) {
+          if (n === 2) {
+            var low = st.case === "hidden"
+              ? [st.world.centre[0], st.world.centre[1] - st.world.radius, 0]
+              : [b.position[0], b.position[1] - b.radius, 0];
+            var under = toWorld(low);
+            roleAt[n].copy(under).add(new THREE.Vector3(0, -0.12, 0));
+            nameAt[n].copy(under).add(new THREE.Vector3(0, -0.40, 0));
+            return;
+          }
+          var at = n === 0 && e.source === "point" ? [STAR_X, 0.15 / k, 0]
+            : [b.position[0], b.position[1] + (b.radius || 0.15 / k), b.position[2]];
+          var base = toWorld(at);
+          nameAt[n].copy(base).add(new THREE.Vector3(0, 0.18, 0));
+          roleAt[n].copy(base).add(new THREE.Vector3(0, 0.46, 0));
+        });
+        return st.text;
+      }
+
+      build(def.events[0]);
+
+      return {
+        layers: layers,
+        labels: labels,
+        sliderLabel: "Along the path",
+        home: { theta: 0, phi: 1.3, r: 8 },
+        variants: {
+          label: "Event",
+          initial: def.events[0],
+          options: def.events.map(function (id) {
+            return { id: id, label: S.events[id].label };
+          }),
+          select: function (id) { build(id); }
+        },
+        onProgress: function (t) { return update(t); },
+        swatch: function () { return meshes.src.material.color.getHexString(); },
+        note: def.note
+      };
+    };
+  }
+  SCENES["hidden-cases"] = caseScene("hidden-cases");
+  SCENES["darkened-cases"] = caseScene("darkened-cases");
+
   // ------------------------------------------------------------- the viewer
   function activate(host, name, button) {
     var scene, renderer, camera, controls, frame, ro, built, root;
@@ -1251,6 +1552,7 @@
     if (built.onProgress) {
       readout = document.createElement("p");
       readout.className = "fig3d-readout";
+      readout.setAttribute("aria-live", "polite");
       viewer.appendChild(readout);
     }
 
@@ -1380,6 +1682,9 @@
         l.group.position.copy(layerOffset(l));
       });
       renderer.render(scene, camera);
+      // The Sun's drawn colour, for the browser check that it follows the
+      // theme. Read-only; nothing in the page uses it.
+      if (built.swatch) viewer.setAttribute("data-sun", "#" + built.swatch());
 
       var w = stageW || stage.clientWidth, h = stageH || stage.clientHeight;
       var globeOn = byId.globe && byId.globe.on;
@@ -1550,6 +1855,8 @@
       btn.disabled = true;
       btn.textContent = "Loading…";
       loadThree().then(function () {
+        return NEEDS_MODULES[name] ? loadModules() : null;
+      }).then(function () {
         var ok = activate(host, name, btn);
         btn.disabled = false;
         btn.textContent = "View in 3D";

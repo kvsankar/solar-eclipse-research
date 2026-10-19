@@ -35,7 +35,7 @@ source of that light hidden behind the body. This is an [?occultation].
 Someone standing outside the shadow sees nothing happen, so the time depends
 on where the observer stands, and a prediction is a path or a map [@occ-es1961].
 
-![In a lunar occultation of a star the observer stands in the Moon's shadow in starlight, so the star is hidden. Observers outside that band see nothing happen.](img/case-hidden.svg)
+![In a lunar occultation of a star the observer stands in the Moon's shadow in starlight, so the star is hidden. Observers outside that band see nothing happen.](img/case-hidden.svg){.fig3d scene="hidden-cases"}
 
 A star is so far away that its light arrives in parallel lines, so the
 Moon's shadow in starlight is a cylinder exactly as wide as the Moon. It
@@ -88,7 +88,7 @@ apart from the time light takes to reach them, so a prediction is a list of
 times rather than a map of paths. Where the observer stands only decides
 whether the body is above their horizon [@lun-5mcle-tp2009].
 
-![In a lunar eclipse the Earth blocks the sunlight on its way to the Moon, so the Moon goes dark for everyone on the Earth's night side, wherever they stand.](img/case-darkened.svg)
+![In a lunar eclipse the Earth blocks the sunlight on its way to the Moon, so the Moon goes dark for everyone on the Earth's night side, wherever they stand.](img/case-darkened.svg){.fig3d scene="darkened-cases"}
 
 ![Jupiter blocks the sunlight on its way to Io, so Io goes dark for every observer who can see it.](img/example-satellite-eclipse.svg)
 
