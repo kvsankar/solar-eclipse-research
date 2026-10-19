@@ -2,7 +2,7 @@
 """Darkened, third example: Io blocks the sunlight reaching a patch of
 Jupiter's cloud tops, its shadow transit. Schematic."""
 
-from prim_case import AXIS, labels, new, sun
+from prim_case import AXIS, labels, new, observer_on_earth, sun
 
 f = new(
     "Darkened: Io blocks the sunlight reaching Jupiter's cloud tops",
@@ -27,13 +27,13 @@ f.circle(jx, y, jr, cls="body")
 f.circle(jx - jr + 7, y, 6, cls="cone-deep")
 f.circle(jx - jr + 7, y, 6, cls="cone-deep")
 f.circle(jx - jr + 7, y, 6, cls="rule thin")
-ox, oy = 420, 214
-f.circle(ox, oy, 3.5, cls="accent-2-fill")
+ox, oy = 420, 200
+observer_on_earth(f, ox, oy, jx - jr + 5, y + 8)
 f.line(ox + 3, oy - 4, jx - jr + 5, y + 8, cls="accent-2 thin dotted")
 
 labels(f, sx, y + sr + 26, "Light source", "the Sun")
 labels(f, ix, y + ir + 26, "Blocking body", "Io")
 labels(f, jx, 30, "Darkened body", "Jupiter's cloud tops, a patch")
-labels(f, ox - 12, oy - 6, "Observer", "on the Earth", anchor="end")
+labels(f, ox - 46, oy + 12, "Observer", "on the Earth", anchor="end")
 
 f.save(__file__, "../../content/05-primer/img/example-shadow-transit.svg")

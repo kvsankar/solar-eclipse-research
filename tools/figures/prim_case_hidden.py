@@ -25,8 +25,9 @@ for dy in (-12, 0, 12):
     f.line(stx + 10, y + dy, mx - mr - 6, y + dy, cls="accent thin", marker="arrow")
 sun(f, stx, y, 6)
 f.circle(mx, y, mr, cls="body")
-f.path(f"M {ox + 26} {y - 60} A 70 70 0 0 0 {ox + 26} {y + 60}", cls="body")
-f.circle(ox, y, 3.5, cls="accent-2-fill")
+# The Earth runs off the right edge; the observer stands on its near side.
+f.circle(ox + 70, y, 70, cls="body")
+f.circle(ox, y, 3.5, cls="accent-2-fill observer")
 f.line(ox - 5, y, mx + mr + 4, y, cls="accent-2 thin dotted")
 
 labels(f, stx + 14, y + 58, "Light source", "a star", anchor="middle")

@@ -204,7 +204,7 @@ class PrimerFigureTest(unittest.TestCase):
     def test_fig_8_observer_inside_the_stated_shadow(self):
         for name, cls in (("example-solar-eclipse.svg", "cone-deep"), ("example-venus-transit.svg", "cone")):
             svg = (IMG / name).read_text(encoding="utf-8")
-            obs = re.search(r'<circle cx="([-\d.]+)" cy="([-\d.]+)" r="[\d.]+" class="accent-2-fill"', svg)
+            obs = re.search(r'<circle cx="([-\d.]+)" cy="([-\d.]+)" r="[\d.]+" class="accent-2-fill[^"]*"', svg)
             ox, oy = float(obs.group(1)), float(obs.group(2))
             polys = [[tuple(map(float, pt.split(","))) for pt in m.split()]
                      for m in re.findall(rf'<polygon points="([^"]+)" class="{cls}"', svg)]
@@ -215,6 +215,37 @@ class PrimerFigureTest(unittest.TestCase):
         self.assertTrue(any(cx == sx and cy == sy and float(r2) >= float(r1)
                             for sx, sy, r1 in suns for cx, cy, r2 in sils),
                         "the inset's silhouette covers the whole Sun")
+
+    def test_fig_11_no_observer_floats(self):
+        num = r'([-\d.]+)'
+        for path in sorted(IMG.glob("*.svg")):
+            svg = path.read_text(encoding="utf-8")
+            bodies = [tuple(map(float, b)) for b in
+                      re.findall(rf'<circle cx="{num}" cy="{num}" r="{num}" class="body"', svg)]
+            markers = re.findall(rf'<circle cx="{num}" cy="{num}" r="{num}" class="[^"]*\bobserver\b[^"]*"', svg)
+            # The Io orbit's observer is a direction arrow; the lunar eclipse
+            # animation is drawn as the observer's own view.
+            if ">Observer<" in svg and path.name not in ("anim-io-orbit.svg", "anim-lunar-eclipse.svg"):
+                self.assertTrue(markers, f"{path.name}: an observer is labelled but has no marker")
+            for x, y, r in markers:
+                x, y, r = float(x), float(y), float(r)
+                grounded = any(((x - bx) ** 2 + (y - by) ** 2) ** 0.5 <= br + r + 1
+                               for bx, by, br in bodies)
+                self.assertTrue(grounded, f"{path.name}: the observer at ({x}, {y}) floats")
+
+    def test_fig_12_io_animation_view_panel(self):
+        svg = (IMG / "anim-io-orbit.svg").read_text(encoding="utf-8")
+        panel = re.search(r'<rect x="([-\d.]+)" y="([-\d.]+)" width="([-\d.]+)" height="([-\d.]+)"[^>]*class="panel"', svg)
+        self.assertIsNotNone(panel)
+        self.assertIn(">What the observer sees</text>", svg)
+        dur = re.search(r'<animateMotion[^>]*dur="([^"]+)"', svg).group(1)
+        anims = re.findall(r'<animate [^>]*>', svg)
+        self.assertGreaterEqual(len(anims), 4, "Io, its dark side and the shadow are animated")
+        for a in anims:
+            self.assertIn(f'dur="{dur}"', a)
+            self.assertIn('begin="indefinite"', a)
+        for name in ("transit", "shadow transit", "occultation", "eclipse"):
+            self.assertRegex(svg, rf'<text [^>]*class="view-event[^"]*"[^>]*>{name}</text>')
 
     def test_fig_10_totality_has_a_corona_not_a_ring(self):
         num = r'([-\d.]+)'

@@ -100,6 +100,17 @@ by the Sun (then its phase shapes the hidden outline).
   corona that fades outwards, in a theme token colour. No bright ring of
   the Sun is drawn around the disc at totality, because a ring reads as an
   annular eclipse. This holds in the 2D figures and in the 3D view panel.
+- **FIG-11** No observer floats in space. In every 2D figure an observer's
+  marker sits on a drawn world: on its edge, or inside its disc where the
+  world is seen face-on. Two kinds of figure have no marker: one whose
+  observer is off the drawing and shown by a direction arrow, such as the
+  Io orbit animation, whose view panel shows what they see; and one drawn
+  as the observer's own view, such as the lunar eclipse animation.
+- **FIG-12** The Io orbit animation has a framed "What the observer sees"
+  panel that moves in step with the orbit. It shows Jupiter as seen from
+  the Earth, with Io beside it, crossing in front of it (transit), its
+  shadow on the cloud tops (shadow transit), hidden behind it
+  (occultation) and dark in its shadow (eclipse), and names the event.
 - **FIG-9** What an observer sees is drawn in a framed panel titled "What
   the observer sees", set apart from the main drawing: beside it in the
   example diagrams, and in a row between the two halves of the

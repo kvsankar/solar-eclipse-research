@@ -26,7 +26,7 @@ f.circle(mx, y, mr, cls="body")
 f.circle(mx, y, mr, cls="cone-deep")
 
 ox, oy = ex + er - 4, y - 10
-f.circle(ox, oy, 3.5, cls="accent-2-fill")
+f.circle(ox, oy, 3.5, cls="accent-2-fill observer")
 f.line(ox + 4, oy, mx - mr - 3, y - 3, cls="accent-2 thin dotted")
 f.line(ox, oy - 4, 400, 52, cls="rule thin dotted")
 

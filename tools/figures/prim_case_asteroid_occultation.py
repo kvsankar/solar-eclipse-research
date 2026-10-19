@@ -26,7 +26,7 @@ f.circle(ex, y, er, cls="body")
 f.rect(ax, y - ar, ex + er - ax, 2 * ar, cls="cone-deep")
 sun(f, stx, y, 6)
 f.circle(ax, y, ar, cls="body")
-f.circle(ex - 20, y, 3.5, cls="accent-2-fill")
+f.circle(ex - 20, y, 3.5, cls="accent-2-fill observer")
 f.text(ex, y + er + 18, "the Earth", anchor="middle", cls="label-dim")
 f.text(ex, y + er + 32, "outside the band: nothing happens", anchor="middle", cls="label-dim")
 

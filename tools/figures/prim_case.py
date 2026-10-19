@@ -43,3 +43,14 @@ def labels(f: Figure, x: float, y: float, role: str, name: str, extra: str = "",
 
 def sun(f: Figure, x: float, y: float, r: float) -> None:
     f.circle(x, y, r, cls="sun-fill")
+
+
+def observer_on_earth(f: Figure, ox: float, oy: float, tx: float, ty: float,
+                      r: float = 20) -> None:
+    """An observer at (ox, oy) standing on the Earth, looking towards (tx, ty)
+    (spec FIG-11). The Earth is drawn behind them, on the far side from what
+    they watch, so the marker sits on its edge and never floats."""
+    dx, dy = ox - tx, oy - ty
+    d = (dx * dx + dy * dy) ** 0.5
+    f.circle(ox + dx / d * r, oy + dy / d * r, r, cls="body")
+    f.circle(ox, oy, 3.5, cls="accent-2-fill observer")

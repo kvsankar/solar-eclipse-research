@@ -2,7 +2,7 @@
 """Darkened, second example: Jupiter blocks the sunlight reaching Io, which
 goes dark for every observer who can see it. Schematic."""
 
-from prim_case import AXIS, labels, new, sun
+from prim_case import AXIS, labels, new, observer_on_earth, sun
 
 f = new(
     "Darkened: Jupiter blocks the sunlight reaching Io",
@@ -23,8 +23,8 @@ sun(f, sx, y, sr)
 f.circle(jx, y, jr, cls="body")
 f.circle(ix, y, ir, cls="body")
 f.circle(ix, y, ir, cls="cone-deep")
-ox, oy = 600, 210
-f.circle(ox, oy, 3.5, cls="accent-2-fill")
+ox, oy = 585, 190
+observer_on_earth(f, ox, oy, ix, y + ir)
 f.line(ox - 3, oy - 4, ix + 4, y + ir + 2, cls="accent-2 thin dotted")
 
 labels(f, sx, y + sr + 26, "Light source", "the Sun")

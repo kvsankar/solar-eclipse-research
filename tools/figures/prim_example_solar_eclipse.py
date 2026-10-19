@@ -41,7 +41,7 @@ f.circle(ecx, y, er, cls="body")
 f.polygon([(xs - 1, y - umb + 1), (xs + 5, y - umb + 2), (xs + 5, y + umb - 2), (xs - 1, y + umb - 1)],
           cls="cone-deep")
 ox, oy = xs + 1, y
-f.circle(ox, oy, 3.5, cls="accent-2-fill")
+f.circle(ox, oy, 3.5, cls="accent-2-fill observer")
 
 # What the observer sees: totality, in its own panel.
 ix, iy = view_panel(f)

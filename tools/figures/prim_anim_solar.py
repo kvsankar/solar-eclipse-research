@@ -42,7 +42,7 @@ f.raw(
     f'</g></g>'
 )
 f.circle(ex, ey, er, cls="rule")
-f.circle(ex, ey, 3.5, cls="accent-2-fill")
+f.circle(ex, ey, 3.5, cls="accent-2-fill observer")
 f.text(ex, ey + er + 22, "The Moon's shadow crossing the Earth", anchor="middle", cls="label")
 f.text(ex + 8, ey - 18, "Observer", cls="label")
 f.text(ex + 8, ey - 4, "on the Earth", cls="label-dim")

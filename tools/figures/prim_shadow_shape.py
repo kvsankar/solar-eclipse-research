@@ -73,8 +73,15 @@ f.rect(PX, PY, PW, PH, cls="panel", rx=6)
 f.text(PX + 14, PY + 22, "What the observer sees", cls="label")
 
 
+def on_world(x, y):
+    """A small world behind an observer at (x, y), so they stand on it
+    (spec FIG-11). The light comes from the left, so they face left."""
+    f.circle(x + 8, y, 8, cls="body")
+    f.circle(x, y, 4, cls="accent-fill observer")
+
+
 def observer(x, y, kind, label, ix, iy):
-    f.circle(x, y, 4, cls="accent-fill")
+    on_world(x, y)
     f.circle(ix, iy, 15, cls="sun-fill")        # the source as seen
     if kind == "total":
         corona(f, ix, iy, 15, "corona-shadow-shape")
@@ -106,7 +113,7 @@ f.text(20, by + 58, "a star: a point at infinity, so its light arrives in parall
 f.text(bx, by - br - 24, "Blocking body", anchor="middle", cls="label")
 f.text(bx, by - br - 9, "the Moon", anchor="middle", cls="label-dim")
 f.text(470, by - 26, "cylinder: no penumbra", anchor="middle", cls="label")
-f.circle(610, by, 4, cls="accent-fill")
+on_world(610, by)
 f.text(610, by + 36, "Observer", anchor="middle", cls="label")
 f.text(610, by + 50, "the star is hidden", anchor="middle", cls="label-dim")
 

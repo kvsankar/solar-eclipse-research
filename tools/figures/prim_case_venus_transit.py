@@ -32,7 +32,7 @@ f.polyline([(vx, y + vr), (vertex, y), (ex, y + 26)], cls="rule thin")
 sun(f, sx, y, sr)
 f.circle(vx, y, vr, cls="body")
 f.circle(ecx, y, er, cls="body")
-f.circle(xs + 1, y, 3.5, cls="accent-2-fill")
+f.circle(xs + 1, y, 3.5, cls="accent-2-fill observer")
 f.text((vertex + ex) / 2, y + 4, "antumbra", anchor="middle", cls="label-dim")
 
 # What the observer sees: a dot on the Sun, in its own panel.
