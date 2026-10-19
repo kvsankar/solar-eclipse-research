@@ -27,6 +27,18 @@ server, with caching off, by `python tools/check_browser.py`.
 | AT-GEO-4 | GEO-4 | `geometry.test.js`: separations just inside and outside the radius. |
 | AT-GEO-5 | GEO-5 | `geometry.test.js`: a constructed straight-line pass gives the contact times found by stepping, and a miss gives none. |
 | AT-GEO-6 | GEO-6 | `geometry.test.js` loads the module with Node's `require`; `check_browser.py` loads a page that uses it from a `file://` URL. |
+| AT-S3D-1 | S3D-1 | `test_primer.py`: the hidden and darkened case diagrams carry `{.fig3d scene="hidden-cases"}` and `{.fig3d scene="darkened-cases"}`, and the built page wraps each in a `fig3d-host` with that scene. `check_browser.py`: each host shows "View in 3D", opens a canvas, and "Back to diagram" restores the SVG. |
+| AT-S3D-2 | S3D-2 | `check_browser.py`: with reduced motion, and at a 400 px wide window, the primer shows no "View in 3D" button; before the button is pressed, no request for `three.min.js` is made. |
+| AT-S3D-3 | S3D-3 | `tools/js/scenes.test.js`: each scene lists exactly its events, in that order. `check_browser.py`: the open scene's variant row is labelled "Event" and has one button per event. |
+| AT-S3D-4 | S3D-4 | `scenes.test.js`: every event's state names each body with a role and a name, and the roles are those listed. |
+| AT-S3D-5 | S3D-5 | `scenes.test.js`: across the slider, the moving body is the one stated for the event, and its position changes monotonically along its path. |
+| AT-S3D-6 | S3D-6 | `scenes.test.js`: the status text for sampled states names the shadow part and the view, with a percentage for a partial disc view and "hidden" or "visible" for a star. `check_browser.py`: the status line has `aria-live="polite"` and changes when the slider moves. |
+| AT-S3D-7 | S3D-7 | `scenes.test.js`: sampling each event at 201 slider positions and collapsing repeats gives exactly the stated sequence; the shadow transit's ground point moves from one limb to the other. |
+| AT-S3D-8 | S3D-8 | `scenes.test.js`: for sampled states, the shadow part and view equal what `geometry.js` returns for the same positions and radii. `check_browser.py`: the page that opens a scene loads `geometry.js` from a `file://` URL as well as over HTTP (completes AT-GEO-6). |
+| AT-S3D-9 | S3D-9 | `scenes.test.js`: each scene's note contains "not to scale". |
+| AT-S3D-10 | S3D-10 | `check_browser.py`: in light and dark themes the Sun's material colour equals `--fig-sun`, and switching the theme with a scene open changes it. |
+| AT-S3D-11 | S3D-11 | `check_browser.py`: focusing an event button and pressing Enter selects it and sets `aria-pressed="true"` on it only; the arrow keys move the slider. |
+| AT-S3D-12 | S3D-12 | `check_browser.py`: opening both scenes and selecting every event at three slider positions logs no console error and no failed request. |
 | AT-REP-1 | REP-1 | `test_reports_home.py`: the executive summary has a section for each case, hidden and darkened, before the first heading that names solar eclipses. |
 | AT-REP-2 | REP-2 | `test_reports_home.py`: the two titles, and an opening paragraph that names solar eclipses and links `other-events.md`. |
 | AT-REP-3 | REP-3 | `test_reports_home.py`: titles and `order` values give the stated sequence. |

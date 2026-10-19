@@ -178,11 +178,66 @@ observer sees. They share one module, so they cannot disagree.
 
 ## S3D: 3D guided scenes
 
-Status: outline. This section is completed before the scenes are built.
+The 3D scenes show each event as bodies in space, one event at a time. The
+reader picks an event and moves it along its path; the scene and a line of
+text say what happens. They use the site's existing 3D viewer, which already
+offers a "View in 3D" button on a 2D figure, layer chips, a variant row, a
+slider, Animate, Reset and Back.
 
-- **S3D-1** One 3D viewer offers a scene for each case, chosen from chips.
-- **S3D-2** The viewer's existing gates and controls apply unchanged.
-- **S3D-3** Scenes take positions and shadows from the geometry module.
+- **S3D-1** On the primer page, the lead diagram of each case section offers
+  a 3D view: the hidden case diagram opens the scene `hidden-cases`, and the
+  darkened case diagram opens the scene `darkened-cases`. The 2D diagram
+  stays the figure, and the reader can go back to it.
+- **S3D-2** The viewer's gates and controls apply unchanged. There is no 3D
+  offer without WebGL, when the reader asks for reduced motion, below a
+  480 px wide window, or when three.js does not load. three.js loads only
+  when the reader asks for a 3D view.
+- **S3D-3** Each scene has a variant row labelled "Event" that lists the
+  events of its case:
+  - hidden: solar eclipse, annular solar eclipse, transit of Venus, lunar
+    occultation of a star, occultation of a star by an asteroid;
+  - darkened: lunar eclipse, eclipse of a satellite (Io in Jupiter's
+    shadow), shadow transit (Io's shadow on Jupiter).
+- **S3D-4** Every body carries two labels, its role and its name, as in the
+  2D figures: light source, blocking body, observer, and for the darkened
+  case the darkened body.
+- **S3D-5** The slider and Animate move the event along its path. In the
+  hidden case the blocking body moves across the line from the observer to
+  the source. In the darkened case the darkened body moves through the
+  shadow, or for a shadow transit, the shadow moves across the planet.
+- **S3D-6** A line of text under the scene states, in plain words, where the
+  observer or the darkened body is (outside the shadow, in the penumbra, the
+  umbra or the antumbra) and what that means: for a disc source, no eclipse,
+  partial, total or annular with the percentage of the source's area that
+  is covered; for a point source, whether the star is hidden. Screen
+  readers announce the line when it changes.
+- **S3D-7** Along the full slider, each event passes through the same
+  sequence of shadow parts as the real event:
+  - solar eclipse: outside, penumbra, umbra, penumbra, outside;
+  - annular solar eclipse: outside, penumbra, antumbra, penumbra, outside;
+  - transit of Venus: outside, penumbra, antumbra, penumbra, outside;
+  - lunar occultation of a star and occultation by an asteroid: outside,
+    hidden, outside, with no penumbra;
+  - lunar eclipse: outside, penumbra, umbra, penumbra, outside;
+  - eclipse of a satellite: outside, penumbra, umbra, penumbra, outside;
+  - shadow transit: the point of Jupiter under the shadow moves from one
+    limb to the other.
+- **S3D-8** Positions, shadow radii, shadow parts and the observer's view
+  come from the geometry module (GEO-1 to GEO-4). A pure function computes
+  the state of an event at a slider position: the positions, the shadow
+  radii, the shadow part and the view. The scene only draws that state, and
+  the function runs under Node, where its tests run.
+- **S3D-9** The scenes are not to scale. Sizes and distances are compressed
+  so that every body fits in view, but the ratios that decide the event are
+  kept: each event's shadow parts come in the order of S3D-7. Each scene's
+  note says so.
+- **S3D-10** Colours come from the theme tokens used by the 2D figures: the
+  Sun is the light Sun colour, and a body seen against the Sun is the
+  silhouette colour. An open scene follows a theme change.
+- **S3D-11** The event buttons and the slider work from the keyboard. The
+  pressed event is marked for assistive technology.
+- **S3D-12** Opening each scene and stepping through every event writes no
+  error to the browser console and makes no failed request.
 
 ## SBX: the explorer
 
