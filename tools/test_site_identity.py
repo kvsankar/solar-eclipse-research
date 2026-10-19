@@ -11,7 +11,7 @@ WORKFLOW = (ROOT / ".github" / "workflows" / "deploy-hetzner.yml").read_text(enc
 
 PUBLIC_BASE = "https://sankara.net/astro/eclipses/"
 REMOTE_PATH = "/var/www/sankara.net/astro/eclipses/"
-SITE_NAME = "Computing Eclipses, Occultations and Transits"
+SITE_NAME = "Computing Eclipses and Occultations"
 
 
 class SiteIdentityTest(unittest.TestCase):
@@ -32,9 +32,11 @@ class SiteIdentityTest(unittest.TestCase):
         self.assertEqual(build.SITE_TITLE, SITE_NAME)
         self.assertEqual(deploy.SMOKE_STRING, SITE_NAME)
         self.assertIn(f'grep -q "{SITE_NAME}"', WORKFLOW)
+        home = (ROOT / "content" / "_index.md").read_text(encoding="utf-8")
+        self.assertIn(f"\ntitle: {SITE_NAME}\n", home)
 
     def test_social_card_is_the_redrawn_one(self):
-        self.assertEqual(build.SOCIAL_IMAGE, "img/social-card-v3.jpg")
+        self.assertEqual(build.SOCIAL_IMAGE, "img/social-card-v4.jpg")
         self.assertTrue((ROOT / "content" / build.SOCIAL_IMAGE).is_file())
 
 

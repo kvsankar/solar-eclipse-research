@@ -70,7 +70,7 @@ jobs:
         run: |
           curl --fail --silent --show-error --retry 5 --retry-delay 3 \
             "$PUBLIC_URL" |
-            grep -q "Computing Eclipses, Occultations and Transits"
+            grep -q "Computing Eclipses and Occultations"
 
       - name: Cleanup SSH key
         if: always()

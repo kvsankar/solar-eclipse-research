@@ -43,7 +43,7 @@ python -m unittest discover -s tools -p 'test_*.py'  # numerical and source cont
 python tools/check_seo.py          # verify rendered metadata and sitemap
 node --test tools/js/geometry.test.js   # the shared geometry module (spec GEO)
 python tools/check_browser.py      # headless checks of animated figures (needs Playwright)
-python tools/make_og_image.py      # recompose content/img/social-card-v3.jpg (needs Pillow)
+python tools/make_og_image.py      # recompose content/img/social-card-v4.jpg (needs Pillow)
 ```
 
 Requires **pandoc** on PATH (3.x) and Python 3.10+. No pip or npm dependencies
@@ -86,7 +86,7 @@ Every page carries Open Graph and Twitter card tags, so a shared link previews
 as a card. These tags, canonical links and sitemap entries use absolute URLs.
 `BASE_URL` in `tools/build.py` says where the tree is published. Navigation
 uses relative links for offline reading. One image serves the whole site —
-`content/img/social-card-v3.jpg`, composed by `tools/make_og_image.py` from the
+`content/img/social-card-v4.jpg`, composed by `tools/make_og_image.py` from the
 totality photograph. The credit is drawn into the image because a card is
 shown without the page around it, and the licence asks for the credit beside
 the image.

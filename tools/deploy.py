@@ -42,7 +42,7 @@ from pathlib import Path
 # already be loose in a tree this repo does not own.
 REMOTE_PATH = "/var/www/sankara.net/astro/eclipses/"
 PUBLIC_URL = "https://sankara.net/astro/eclipses/computing.html"
-SMOKE_STRING = "Computing Eclipses, Occultations and Transits"
+SMOKE_STRING = "Computing Eclipses and Occultations"
 SURFACE = "astro-eclipses"
 
 ROOT = Path(__file__).resolve().parent.parent

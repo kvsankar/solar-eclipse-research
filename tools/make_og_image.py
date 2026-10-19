@@ -22,13 +22,13 @@ from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / "content" / "img" / "totality-1999-viatour.jpg"
-TARGET = ROOT / "content" / "img" / "social-card-v3.jpg"
+TARGET = ROOT / "content" / "img" / "social-card-v4.jpg"
 
 WIDTH, HEIGHT = 1200, 630
 MARGIN = 28           # black kept above and below the corona
 CREDIT = "Luc Viatour / lucnix.be \u00b7 CC BY-SA 3.0"
 # The site name, set on two lines so it fits the black column beside the corona.
-CAPTION = ("Computing Eclipses,", "Occultations and Transits")
+CAPTION = ("Computing Eclipses", "and Occultations")
 
 # Deterministic output: same input, same bytes, on any machine that has one of
 # these fonts. The bitmap fallback keeps the build working where none is
