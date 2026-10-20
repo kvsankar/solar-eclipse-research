@@ -40,7 +40,7 @@ IOTA no longer defends the radius variations these campaigns reported. Dunham's 
 
 ### Quaglia et al., flash spectrum at the southern limit
 
-Site: [WGS84](https://en.wikipedia.org/wiki/World_Geodetic_System) $117^{\circ} 13' 09.8''$ W, $43^{\circ} 57' 10.9''$ N, 711 m, just south of Vale, Oregon, a few hundred metres inside the southern limit [@val-quaglia-2021]. A Canon EOS 6D with a 235 lines/mm grating recorded the [?flash-spectrum] at 23.976 frames per second. Light curves of the last and first beads were matched by [?light-curve-matching] to simulations that integrate the limb-darkening function over the exposed photosphere, using [DE430](../../10-shared/08-lunar-and-solar-model/ephemerides.md) positions, the IAU 2006 Earth orientation model with measured EOP, and [LOLA](https://lola.gsfc.nasa.gov/) topography in the DE421 mean-Earth frame [@val-quaglia-2021]. The result is
+Site: [WGS84](https://en.wikipedia.org/wiki/World_Geodetic_System) $117^{\circ} 13' 09.8''$ W, $43^{\circ} 57' 10.9''$ N, 711 m, just south of Vale, Oregon, a few hundred metres inside the southern limit [@val-quaglia-2021]. A Canon EOS 6D with a 235 lines/mm grating recorded the [?flash-spectrum] at 23.976 frames per second. Light curves of the last and first beads were matched by [?light-curve-matching] to simulations that integrate the limb-darkening function over the exposed photosphere, using [DE430](../../10-shared/08-lunar-and-solar-model/ephemerides.md) positions, the IAU 2006 Earth orientation model with measured EOP, and [LOLA](https://pds-geosciences.wustl.edu/missions/lro/lola.htm) topography in the DE421 mean-Earth frame [@val-quaglia-2021]. The result is
 
 $$s_0 = 959.95'' \pm 0.05''$$
 

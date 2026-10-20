@@ -193,7 +193,6 @@ CANONICAL_SITES = {
     "svs.gsfc.nasa.gov": "NASA SVS",
     "science.nasa.gov": "NASA",
     "www.nasa.gov": "NASA",
-    "lola.gsfc.nasa.gov": "NASA",
     "lunar.gsfc.nasa.gov": "NASA",
     "ssd.jpl.nasa.gov": "JPL",
     "naif.jpl.nasa.gov": "NAIF",

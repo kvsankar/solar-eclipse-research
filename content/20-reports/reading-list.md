@@ -60,7 +60,7 @@ Solar eclipses are covered in most depth, so this group is the largest.
 | 9 | Haberreiter, Schmutz and Kosovichev 2008, ApJ 675:L53 [@sun-haberreiter-2008] | peer-reviewed | Why the inflection-point radius exceeds the seismic radius by 0.33 Mm, the basis of the IAU nominal value | arXiv 0711.2392 |
 | 10 | Prša and colleagues 2016, AJ 152:41 [@sun-prsa-2016] | peer-reviewed | What the IAU 2015 nominal radius is and is not | The reason not to use astropy's constant |
 | 11 | Fiala, Dunham and Sofia 1994 [@limb-fiala-dunham-sofia-1994] | peer-reviewed | The [IOTA](https://occultations.org/) edge method for solar radius from beads, results 1715 to 1987 | |
-| 12 | Guhl and Tegtmeier 2018 and Guhl 2023, Journal for Occultation Astronomy [@val-guhl-tegtmeier-2018] [@val-guhl-2023] | trade | Per-bead residual tables for 2017 and 2023 with Occult, [LOLA](https://lola.gsfc.nasa.gov/) and [Kaguya](https://en.wikipedia.org/wiki/SELENE) | The bead-level validation cases |
+| 12 | Guhl and Tegtmeier 2018 and Guhl 2023, Journal for Occultation Astronomy [@val-guhl-tegtmeier-2018] [@val-guhl-2023] | trade | Per-bead residual tables for 2017 and 2023 with Occult, [LOLA](https://pds-geosciences.wustl.edu/missions/lro/lola.htm) and [Kaguya](https://en.wikipedia.org/wiki/SELENE) | The bead-level validation cases |
 | 13 | Rozelot and Kosovichev 2026, arXiv 2605.23794 [@sun-rozelot-kosovichev-2026] | preprint | A review comparing canonical, nominal, seismic and eclipse radii | |
 
 ### Code, in reading order

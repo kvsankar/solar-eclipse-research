@@ -180,7 +180,7 @@ When each is used:
 | Swiss Ephemeris `swecl.c` and `sweph.h` [@bes-swisseph-swecl] [@bes-swisseph-header] | Working C for both the fundamental-plane geometry and the direct topocentric method, with every constant visible. |
 | Miller, celestialprogramming.com [@bes-celestialprogramming-gen] | The five-sample least-squares fit written out. |
 | NASA element pages and CSV [@bes-nasa-2024-elements] [@bes-nasa-csv] | The target format and numbers to validate against. |
-| Quaglia et al. 2021 [@bes-quaglia-2021] | The refereed description of a fully topocentric, limb-based alternative with IAU 2006 Earth orientation, DE430 and [LOLA](https://lola.gsfc.nasa.gov/)/[Kaguya](https://en.wikipedia.org/wiki/SELENE) elevation models. |
+| Quaglia et al. 2021 [@bes-quaglia-2021] | The refereed description of a fully topocentric, limb-based alternative with IAU 2006 Earth orientation, DE430 and [LOLA](https://pds-geosciences.wustl.edu/missions/lro/lola.htm)/[Kaguya](https://en.wikipedia.org/wiki/SELENE) elevation models. |
 | Skyfield discussion 801 [@bes-skyfield-801] | The maintainer's statement that Skyfield does not project the shadow. |
 
 ## What a developer should do

@@ -101,7 +101,7 @@ The path-limit, duration and local-circumstance outputs of the pipeline acquire 
 
 ## Open questions
 
-- Obtain Quaglia et al.'s Figure 2 data (duration and limit distance versus radius every 0.01 arcseconds) or reproduce it with the [LOLA](https://lola.gsfc.nasa.gov/) limb to confirm the 5 s per 0.1 arcsecond slope at 1.2 km from a limit [@sun-quaglia-2021].
+- Obtain Quaglia et al.'s Figure 2 data (duration and limit distance versus radius every 0.01 arcseconds) or reproduce it with the [LOLA](https://pds-geosciences.wustl.edu/missions/lro/lola.htm) limb to confirm the 5 s per 0.1 arcsecond slope at 1.2 km from a limit [@sun-quaglia-2021].
 - Obtain Irwin's 2024 Google Earth KML with the ± 1σ limit lines to measure the band width he published [@sun-iota-dunham-2024].
 - Obtain Wright and Young's raster code or its equivalent to test whether the limb-test formulation and the Besselian formulation give the same limit shift per 0.1 arcseconds [@sun-wright-young-2024].
 - Obtain a published table of C1 and C4 sensitivity to the solar radius. None was located, and the figures above are derived from the limb-speed argument.

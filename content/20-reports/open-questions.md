@@ -24,7 +24,7 @@ questions are ranked by how much a different answer would move the design.
    S15.2020.** The current ΔT sigmas by year, to replace the 2004 rule in the
    [error budget](error-budget.md) [@val-morrison-2021].
 
-2. **Smith and colleagues 2010 and Barker and colleagues 2016.** The [LOLA](https://lola.gsfc.nasa.gov/)
+2. **Smith and colleagues 2010 and Barker and colleagues 2016.** The [LOLA](https://pds-geosciences.wustl.edu/missions/lro/lola.htm)
    centre-of-figure vector and the SLDEM2015 mean radius are secondary
    values, reported secondhand and unconfirmed against the primary
    publications [@limb-smith-2010-lola] [@limb-barker-2016-sldem].
