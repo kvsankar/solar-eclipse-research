@@ -4,7 +4,7 @@ description: The main findings on eclipses, occultations and transits, and in mo
 order: 1
 status: working
 updated: 2026-10-18
-seo_title: Solar Eclipse Calculation: Research Findings for Developers
+seo_title: Eclipse, Occultation and Transit Calculation: Research Findings
 ---
 
 ::: summary

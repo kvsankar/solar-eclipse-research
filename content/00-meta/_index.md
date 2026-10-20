@@ -3,7 +3,7 @@ title: Meta
 description: The scope, evidence grades and source policy behind this guide to eclipse, occultation and transit calculation methods, formulas, datasets and software.
 order: 0
 updated: 2026-10-17
-seo_title: Solar Eclipse Research: Scope and Source Policy
+seo_title: Eclipse and Occultation Research: Scope and Source Policy
 ---
 
 What the site treats as evidence, how sources are graded, and which open

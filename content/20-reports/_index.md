@@ -3,7 +3,7 @@ title: Reports
 description: Research findings on eclipses, occultations and transits, a solar eclipse pipeline and error budget, its extension to other events, a reading list and the outstanding questions for developers.
 order: 20
 updated: 2026-10-18
-seo_title: Solar Eclipse Calculation Guide: Findings and Pipeline
+seo_title: Eclipse and Occultation Calculation: Findings and Pipelines
 ---
 
 Six pages, written to be read in order and to stand without the raw notes.

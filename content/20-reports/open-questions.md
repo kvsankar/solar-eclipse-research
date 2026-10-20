@@ -1,10 +1,10 @@
 ---
 title: Open questions
-description: Outstanding eclipse calculation questions, each tied to the paper, dataset or code needed to resolve it and its effect on the conclusions.
+description: Outstanding eclipse, occultation and transit calculation questions, each tied to the paper, dataset or code needed to resolve it and its effect on the conclusions.
 order: 6
 status: working
 updated: 2026-10-18
-seo_title: Open Questions in Solar Eclipse Algorithms and Modelling
+seo_title: Open Questions in Eclipse, Occultation and Transit Algorithms
 ---
 
 ::: summary

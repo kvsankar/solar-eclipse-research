@@ -8,7 +8,7 @@ seo_title: Eclipse, Occultation and Transit Research: Scope and Coverage
 ---
 
 ::: summary
-- **The question is how eclipse computational products are computed well enough to build one**, from the list of eclipses in a period, through world maps of the path, to the second at which totality begins for one observer standing on one hillside.
+- **The question is how eclipse, occultation and transit predictions are computed well enough to build a calculator.** Solar eclipses are covered in most depth, down to the second at which totality begins for one observer on one hillside. The other events are covered by what each adds to the solar pipeline.
 - **The reference standard is NASA SVS's 2024 work**, published as Wright and Young 2024: a lunar limb from [LRO](https://en.wikipedia.org/wiki/Lunar_Reconnaissance_Orbiter) and SELENE topography, terrain under every observer, and a JPL ephemeris, traced through to the shape of the umbra on the ground.
 - **All seventeen topics are covered.** Each rests on primary documents and public code, is recorded in raw notes with graded citations, and is carried into the reports.
 - **The gaps are named artefacts**: the SVS code, [Occult](../10-raw/10-shared/09-software-and-repos/commercial-and-institutional-tools.md)'s help file, [Meeus](https://en.wikipedia.org/wiki/Jean_Meeus)'s *Elements*, the 2013 Supplement's eclipse chapter, and the unpublished 2024 edge reductions.
@@ -28,6 +28,13 @@ unpredictable rotation of the Earth.
 The subject is **what a developer needs to know to compute every one of
 these products**, and to know how good the result is, organised by product
 from coarse to fine.
+
+The same question is then asked of the other events that one shadow geometry
+covers: lunar eclipses, occultations by the Moon, planets and minor bodies,
+transits of Mercury and Venus, and the phenomena of the satellites of Jupiter
+and Saturn. Each has its own topic below, and the
+[extension report](../20-reports/other-events.md) sets out what each one adds
+to the solar pipeline.
 
 ## The seventeen topics
 
