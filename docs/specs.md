@@ -369,6 +369,42 @@ slider, Animate, Reset and Back.
 - **S3D-12** Opening each scene and stepping through every event writes no
   error to the browser console and makes no failed request.
 
+## MAP: the topic map
+
+A radial mind map of the whole site, built from the contents tree and the
+links between pages. It answers "what is here and what connects to what"
+before a reader opens a page.
+
+- **MAP-1** A Meta page, "Topic map", draws every topic of the site as one
+  node of one picture. A topic is a research-notes folder of pages, or a
+  page of the meta, primer or reports sections. The home page is at the
+  centre and the sections and research groups are on the rings between, as
+  in a radial mind map. The map page itself is not a node.
+- **MAP-2** Every node is a link that opens its page: a topic its folder's
+  index or its page, and a section its index. The links work with no script.
+- **MAP-3** Two topics are joined by a curve when a page in one links to a
+  page in the other. A curve's thickness grows with the number of such
+  links, and its tooltip names both topics and the count. The build counts
+  the links from the Markdown, so a new link appears at the next build.
+  Curves are bundled along the tree (hierarchical edge bundling), so links
+  between two research groups run together.
+- **MAP-4** Once the map has more than forty curves, curves of fewer than
+  three links are hidden, and a slider shows curves from one link upwards. Pointing at or focusing a topic lights its
+  own curves, whatever the slider says, and the topics at their other ends,
+  and dims the rest. Moving away restores the map.
+- **MAP-8** Clicking a topic, or pressing Enter on it, keeps it lit after the
+  pointer or focus moves away, and marks it. Clicking it again opens its
+  page, as does a click asking for a new tab. Esc, a click on empty map or
+  a click on another topic changes or clears the kept topic.
+- **MAP-5** Under the map, a table lists every topic with its section, its
+  pages as links, and the topics it is joined to with their counts. It is
+  the map's text equivalent.
+- **MAP-6** The build draws the map as inline SVG in the site's figure
+  colours, so it follows the theme, opens from `file://` and builds to the
+  same bytes every time. Every node is reachable by keyboard. At phone width
+  the map keeps a legible size and scrolls sideways.
+- **MAP-7** The home page links to the topic map.
+
 ## SBX: the explorer
 
 Status: outline. This section is completed before the explorer is built.

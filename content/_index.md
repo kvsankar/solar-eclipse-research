@@ -34,7 +34,9 @@ implementation stages, and
 [extending the pipeline to other events](20-reports/other-events.md) sets out
 what each other event adds. The
 [software comparison](10-raw/10-shared/09-software-and-repos/_index.md) covers
-published calculators and open-source libraries.
+published calculators and open-source libraries. The
+[topic map](00-meta/topic-map.md) draws every topic and the links between
+them.
 
 [Research and website source on GitHub](https://github.com/kvsankar/solar-eclipse-research).
 

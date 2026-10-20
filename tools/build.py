@@ -38,6 +38,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from topic_map import MARKER as TOPICMAP_MARKER, render_topic_map
+
 ROOT = Path(__file__).resolve().parent.parent
 CONTENT = ROOT / "content"
 OUT = ROOT / "site"
@@ -1207,6 +1209,8 @@ def render_page(node: Node, root: Node, template: str, refs: dict, missing: set,
     body = wrap_display_math(body)
     body = inline_svgs(body, node)
     body = name_rasters(body, node)
+    if TOPICMAP_MARKER in body:
+        body = body.replace(TOPICMAP_MARKER, render_topic_map(root, node))
     if "<!--GLOSSARY-->" in body:
         body = body.replace("<!--GLOSSARY-->", render_glossary_list(terms))
     if records is not None:

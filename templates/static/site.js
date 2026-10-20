@@ -883,3 +883,83 @@
     window.addEventListener("resize", function () { check(cap, btn); });
   });
 })();
+
+/* Topic map (spec MAP-4): pointing at or focusing a topic lights its curves
+   and the topics at their other ends, and dims the rest. Clicking a topic
+   keeps it lit (MAP-8) until Esc, a click on empty map, or a click on
+   another topic; clicking the kept topic again opens its page. Without the
+   script the map is still a picture of links, so nothing depends on this. */
+(function () {
+  "use strict";
+  var svg = document.querySelector("svg.tm");
+  if (!svg) return;
+  var curves = svg.querySelectorAll(".tm-links path");
+  var topics = svg.querySelectorAll(".tm-topic");
+  var kept = null;
+  function show(id) {
+    var near = {};
+    near[id] = true;
+    curves.forEach(function (p) {
+      var ends = p.getAttribute("data-ends").split(" ");
+      var on = ends.indexOf(id) >= 0;
+      p.classList.toggle("on", on);
+      if (on) { near[ends[0]] = true; near[ends[1]] = true; }
+    });
+    topics.forEach(function (t) { t.classList.toggle("on", !!near[t.id]); });
+    svg.classList.add("tm-focus");
+  }
+  function clear() {
+    svg.classList.remove("tm-focus");
+    curves.forEach(function (p) { p.classList.remove("on"); });
+    topics.forEach(function (t) { t.classList.remove("on"); });
+  }
+  // Back to the kept topic, if there is one, when the pointer or focus leaves.
+  function rest() {
+    if (kept) show(kept); else clear();
+  }
+  function keep(id) {
+    kept = id;
+    topics.forEach(function (t) {
+      t.classList.toggle("tm-kept", t.id === id);
+      if (t.id === id) t.setAttribute("aria-current", "true");
+      else t.removeAttribute("aria-current");
+    });
+    rest();
+  }
+  // The threshold: curves carrying fewer links than the slider are hidden,
+  // except a lit topic's own.
+  var range = document.getElementById("tm-min");
+  if (range) {
+    var shown = range.parentNode.querySelector("output");
+    var apply = function () {
+      var min = +range.value;
+      shown.textContent = range.value;
+      curves.forEach(function (p) {
+        p.classList.toggle("tm-off", +p.getAttribute("data-w") < min);
+      });
+    };
+    range.addEventListener("input", apply);
+    range.parentNode.hidden = false;
+    apply();
+  }
+  topics.forEach(function (t) {
+    t.addEventListener("mouseenter", function () { show(t.id); });
+    t.addEventListener("focus", function () { show(t.id); });
+    t.addEventListener("mouseleave", rest);
+    t.addEventListener("blur", rest);
+    // The first click keeps the topic lit; a click on the kept topic, or a
+    // click asking for a new tab or window, opens the page as usual.
+    t.addEventListener("click", function (e) {
+      if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey || e.button !== 0) return;
+      if (kept === t.id) return;
+      e.preventDefault();
+      keep(t.id);
+    });
+  });
+  svg.addEventListener("click", function (e) {
+    if (!e.target.closest(".tm-topic")) keep(null);
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && kept) keep(null);
+  });
+})();

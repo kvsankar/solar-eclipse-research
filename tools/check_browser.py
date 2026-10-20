@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Headless browser checks AT-FIG-4, AT-FIG-5 and the AT-S3D checks (docs/acceptance-tests.md).
+"""Headless browser checks AT-FIG-4, AT-FIG-5, AT-MAP-4 and the AT-S3D checks (docs/acceptance-tests.md).
 
     python tools/check_browser.py
 
@@ -543,6 +543,92 @@ def check_zoom(base: str) -> list[str]:
     return problems
 
 
+MAP_PAGE = "00-meta/topic-map.html"
+
+
+def check_topic_map(base: str) -> list[str]:
+    """AT-MAP-4, AT-MAP-8 and the browser half of AT-MAP-6 for the topic map."""
+    problems: list[str] = []
+    shown_js = ("ps => ps.filter(p => getComputedStyle(p).display != 'none').length")
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page(viewport={"width": 1280, "height": 900})
+        errors = []
+        page.on("console", lambda m: errors.append(m.text) if m.type == "error" else None)
+        page.goto(base + MAP_PAGE, wait_until="load")
+        total = page.locator(".tm-links path").count()
+        shown = page.eval_on_selector_all(".tm-links path", shown_js)
+        if not 0 < shown < total:
+            problems.append(f"topic map: {shown} of {total} curves shown at the default threshold")
+        page.locator("#tm-min").fill("1")
+        page.locator("#tm-min").dispatch_event("input")
+        if page.eval_on_selector_all(".tm-links path", shown_js) != total:
+            problems.append("topic map: the slider at 1 does not show every curve")
+
+        # Point at the topic at one end of the first curve.
+        ends = page.locator(".tm-links path").first.get_attribute("data-ends").split()
+        own = page.eval_on_selector_all(
+            ".tm-links path", "(ps, id) => ps.filter(p => p.dataset.ends.split(' ').includes(id)).length",
+            ends[0])
+        page.hover(f"#{ends[0]} circle")
+        page.wait_for_timeout(300)
+        if not page.eval_on_selector("svg.tm", "s => s.classList.contains('tm-focus')"):
+            problems.append("topic map: pointing at a topic does not light it")
+        if page.locator(".tm-links path.on").count() != own:
+            problems.append("topic map: the lit curves are not exactly the topic's own")
+        dim = page.eval_on_selector_all(
+            ".tm-topic:not(.on)", "ts => ts.map(t => +getComputedStyle(t).opacity)")
+        if not dim or max(dim) >= 0.5:
+            problems.append("topic map: topics off the lit curves are not dimmed")
+        page.mouse.move(2, 2)
+        page.wait_for_timeout(300)
+        if page.eval_on_selector("svg.tm", "s => s.classList.contains('tm-focus')"):
+            problems.append("topic map: moving away does not restore the map")
+
+        # AT-MAP-8: a click keeps the topic lit; Esc clears it.
+        page.click(f"#{ends[0]} circle")
+        page.mouse.move(2, 2)
+        page.wait_for_timeout(300)
+        if not page.url.endswith(MAP_PAGE):
+            problems.append("topic map: the first click on a topic left the page")
+        if page.locator(".tm-links path.on").count() != own:
+            problems.append("topic map: a clicked topic does not stay lit")
+        page.keyboard.press("Escape")
+        page.wait_for_timeout(300)
+        if page.eval_on_selector("svg.tm", "s => s.classList.contains('tm-focus')"):
+            problems.append("topic map: Esc does not clear the kept topic")
+
+        # By keyboard: focus lights the topic, Enter keeps it, Enter again opens it.
+        page.focus(f"#{ends[1]}")
+        if not page.eval_on_selector("svg.tm", "s => s.classList.contains('tm-focus')"):
+            problems.append("topic map: focusing a topic does not light it")
+        href = page.get_attribute(f"#{ends[1]}", "href")
+        page.keyboard.press("Enter")
+        page.wait_for_timeout(300)
+        if page.get_attribute(f"#{ends[1]}", "aria-current") != "true":
+            problems.append("topic map: Enter on a topic does not keep it")
+        try:
+            with page.expect_navigation(timeout=5000):
+                page.keyboard.press("Enter")
+        except Exception:
+            pass
+        if not page.url.endswith(href.replace("../", "")):
+            problems.append(f"topic map: Enter on a topic opened {page.url}, not {href}")
+        if errors:
+            problems.append(f"topic map: console errors {errors}")
+        page.close()
+
+        # At phone width the map keeps its size and scrolls sideways.
+        page = browser.new_page(viewport={"width": 390, "height": 800})
+        page.goto(base + MAP_PAGE, wait_until="load")
+        box = page.eval_on_selector(".topicmap", "d => [d.scrollWidth, d.clientWidth, d.querySelector('svg').getBoundingClientRect().width]")
+        if box[2] < 560 or box[0] <= box[1]:
+            problems.append(f"topic map: at phone width the map is {box[2]} px wide and does not scroll")
+        page.close()
+        browser.close()
+    return problems
+
+
 def main() -> int:
     handler = functools.partial(NoCache, directory=str(SITE))
     server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
@@ -610,6 +696,7 @@ def main() -> int:
 
     problems += check_3d(url)
     problems += check_zoom(url.rsplit(PAGE, 1)[0])
+    problems += check_topic_map(url.rsplit(PAGE, 1)[0])
 
     server.shutdown()
     for p_ in problems:

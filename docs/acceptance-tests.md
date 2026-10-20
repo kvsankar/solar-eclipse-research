@@ -78,3 +78,11 @@ server, with caching off, by `python tools/check_browser.py`.
 | AT-LNK-7 | LNK-7 | `test_links.py`: on sample text, `autolink.plan` adds no link inside a heading, a multi-line image caption, a quotation, code, maths, a citation, a glossary marker or an existing link. |
 | AT-LNK-8 | LNK-8 | `test_links.py`: on rendered pages every `<a>` with an `http` or `https` address carries `target="_blank"` and `noopener`, and no relative or `#` link carries a target. |
 | AT-HOME-5 | HOME-5 | `test_reports_home.py`: the research table has a heading per group and links every topic `_index.md`. |
+| AT-MAP-1 | MAP-1 | `test_topic_map.py`: the Meta page carries the map marker and renders one map; its topics are exactly the research-notes folders of pages and the pages of the meta, primer and reports sections, less the map page, each drawn once. |
+| AT-MAP-2 | MAP-2 | `test_topic_map.py`: every node is an `<a>` whose address, relative to the map page, is a page of the build. |
+| AT-MAP-3 | MAP-3 | `test_topic_map.py`: an independent recount of the links between topics in the Markdown equals the map's curves and their counts, and a curve's width rises with its count. |
+| AT-MAP-4 | MAP-4 | `check_browser.py`: some but not all curves show at first, and all at slider value 1; pointing at a topic lights exactly its curves and dims the other topics, and moving away restores the map; focusing a topic lights it, and Enter opens its page. |
+| AT-MAP-8 | MAP-8 | `check_browser.py`: clicking a topic does not leave the page and keeps its curves lit after the pointer moves away; Esc clears it; Enter on a focused topic keeps it, and Enter again opens its page. |
+| AT-MAP-5 | MAP-5 | `test_topic_map.py`: the table has one row per topic and links every page of each topic. |
+| AT-MAP-6 | MAP-6 | `test_topic_map.py`: two renders give the same bytes; the SVG carries no colour literal; `site.css` colours the map from `--fig-*` properties. `check_browser.py`: at 390 px the map is at least 560 px wide and scrolls. |
+| AT-MAP-7 | MAP-7 | `test_topic_map.py`: the home page links `00-meta/topic-map.md`. |

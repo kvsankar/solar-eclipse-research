@@ -1037,3 +1037,47 @@ body.lb-open { overflow: hidden; }
   .search { order: 3; flex: 1 0 100%; margin-left: 0; }
   .search-panel { left: 0; width: 100%; }
 }
+
+/* ---- topic map (spec MAP) ---- */
+.topicmap { margin: 18px 0 26px; overflow-x: auto; }
+.topicmap svg.tm {
+  display: block; width: 100%; min-width: 560px; height: auto;
+  font-family: inherit; font-size: 19px;
+}
+@media (min-width: 1180px) {
+  .doc .topicmap { width: min(1080px, calc(100vw - 340px)); }
+}
+.tm-tree path, .tm-leader { fill: none; stroke: var(--fig-line); stroke-width: 1.2; }
+.tm-links path {
+  fill: none; stroke: var(--fig-accent-2); stroke-opacity: 0.4;
+  stroke-linecap: round; transition: stroke-opacity 0.15s;
+}
+.tm-links path.tm-off { display: none; }
+.tm.tm-focus .tm-links path.tm-off.on { display: inline; }
+.tm-ctl { font-size: 13.5px; color: var(--text-dim); display: flex; align-items: center; gap: 8px; }
+.tm-ctl[hidden] { display: none; }
+.tm-ctl input { accent-color: var(--accent); }
+.tm-node circle { fill: var(--fig-fill); stroke: var(--fig-ink); stroke-width: 1.4; }
+.tm-root circle, .tm-section circle { fill: var(--fig-fill-2); stroke: var(--fig-dim); }
+.tm-node text {
+  fill: var(--fig-ink);
+  paint-order: stroke; stroke: var(--bg); stroke-width: 4px; stroke-linejoin: round;
+}
+.tm-section text, .tm-root text { fill: var(--fig-dim); font-size: 16px; font-style: italic; }
+.tm-node:hover text, .tm-node:focus text { fill: var(--link); text-decoration: underline; }
+.tm-node:focus { outline: none; }
+.tm-node:focus-visible circle { stroke: var(--fig-accent); stroke-width: 3; }
+.tm-node { transition: opacity 0.15s; }
+.tm.tm-focus .tm-links path { stroke-opacity: 0.06; }
+.tm.tm-focus .tm-links path.on { stroke-opacity: 0.95; stroke: var(--fig-accent); }
+.tm.tm-focus .tm-topic { opacity: 0.3; }
+.tm.tm-focus .tm-topic.on { opacity: 1; }
+.tm.tm-focus .tm-topic.on circle { fill: var(--fig-accent); }
+.tm-topic.tm-kept circle { stroke: var(--fig-accent); stroke-width: 4; }
+.tm-hint { color: var(--text-faint); }
+.doc table.tm-table { display: table; width: 100%; }
+.tm-table td { vertical-align: top; }
+.tm-table .tm-sec { color: var(--text-faint); font-size: 12.5px; }
+@media (prefers-reduced-motion: reduce) {
+  .tm-links path, .tm-node { transition: none; }
+}
