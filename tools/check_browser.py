@@ -291,6 +291,125 @@ def check_3d(url: str) -> list[str]:
     return problems
 
 
+SUBTLE_JS = """els => els.filter(e => e.offsetParent !== null).map(e => {
+    const c = getComputedStyle(e), r = e.getBoundingClientRect();
+    return {text: (e.getAttribute('aria-label') || e.textContent).trim().slice(0, 30),
+            bg: c.backgroundColor, border: c.borderTopWidth,
+            w: Math.round(r.width), h: Math.round(r.height)};
+})"""
+
+
+def subtle_problems(where: str, buttons: list) -> list[str]:
+    out = []
+    for b in buttons:
+        if b["bg"] not in ("rgba(0, 0, 0, 0)", "transparent") or b["border"] != "0px":
+            out.append(f"{where}: button '{b['text']}' is not subtle (bg {b['bg']}, border {b['border']})")
+        if b["w"] < 24 or b["h"] < 24:
+            out.append(f"{where}: button '{b['text']}' is {b['w']}x{b['h']} px, under 24 px")
+    return out
+
+
+def check_zoom(base: str) -> list[str]:
+    """AT-FIG-13, -14 and -15, and AT-S3D-16."""
+    problems: list[str] = []
+    url = base + PAGE
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True, args=GL_ARGS)
+        page = browser.new_page(viewport={"width": 1280, "height": 900})
+        errors = []
+        page.on("console", lambda m: errors.append(m.text) if m.type == "error" else None)
+
+        # AT-FIG-13: every picture on every page sits in a zoom button.
+        for html in sorted(SITE.rglob("*.html")):
+            rel = html.relative_to(SITE).as_posix()
+            page.goto(base + rel, wait_until="load")
+            loose = page.evaluate("""() => [...document.querySelectorAll('main img, main svg.figsvg')]
+                .filter(e => !e.closest('.figzoom') && !e.closest('.fig3d-viewer')).length""")
+            if loose:
+                problems.append(f"{rel}: {loose} pictures without a zoom view")
+
+        page.goto(url, wait_until="networkidle")
+        zooms = page.locator("button.figzoom")
+        hidden_icons = page.evaluate("""() => [...document.querySelectorAll('button.figzoom')]
+            .filter(b => +getComputedStyle(b, '::after').opacity < 0.4).length""")
+        if hidden_icons:
+            problems.append(f"{hidden_icons} zoom icons are hidden until hover")
+        zooms.first.click()
+        box = page.locator(".lb")
+        if not box.is_visible():
+            problems.append("the zoom view did not open")
+        else:
+            label = box.locator(".lb-zoom")
+            before = label.inner_text()
+            box.locator('[data-act="in"]').click()
+            if label.inner_text() == before:
+                problems.append("zoom in did not change the scale")
+            box.locator('[data-act="out"]').click()
+            box.locator('[data-act="reset"]').click()
+            if label.inner_text() != before:
+                problems.append("reset did not return to the fitted scale")
+            problems += subtle_problems("zoom view", box.locator("button").evaluate_all(SUBTLE_JS))
+            box.locator('[data-act="close"]').click()
+            if box.is_visible():
+                problems.append("close did not close the zoom view")
+
+        # AT-FIG-14: an animation plays in the zoom view.
+        anim = page.locator(".anim-host button.figzoom").first
+        anim.click()
+        play = box.locator('[data-act="play"]')
+        if play.count() != 1:
+            problems.append("the zoom view of an animation has no play button")
+        else:
+            play.click()
+            page.wait_for_timeout(200)
+            started = box.evaluate("""b => [...b.querySelectorAll('animate,animateTransform,animateMotion')]
+                .every(a => { try { a.getStartTime(); return true } catch (e) { return false } })""")
+            if not started:
+                problems.append("play in the zoom view did not start the animation")
+        box.locator('[data-act="close"]').click()
+
+        # AT-FIG-15: the buttons on the page are subtle.
+        problems += subtle_problems("page", page.locator(".anim-play, .fig3d-open").evaluate_all(SUBTLE_JS))
+
+        # AT-S3D-16: maximize the 3D viewer, use it, and return.
+        host = page.locator('.fig3d-host[data-scene="hidden-cases"]')
+        host.locator("button.fig3d-open").click()
+        viewer = host.locator(".fig3d-viewer")
+        viewer.locator("canvas").wait_for(timeout=15000)
+        problems += subtle_problems("3D viewer", viewer.locator("button").evaluate_all(SUBTLE_JS))
+        mx = viewer.locator(".fig3d-stage button.fig3d-max")
+        if mx.count() != 1:
+            problems.append("the 3D viewer has no maximize button in its picture")
+        else:
+            inline = viewer.locator(".fig3d-stage").bounding_box()["width"]
+            mx.click()
+            page.wait_for_timeout(500)
+            wide = viewer.locator(".fig3d-stage").bounding_box()["width"]
+            if wide < 0.9 * 1280:
+                problems.append(f"maximized, the 3D picture is {wide:.0f} px wide")
+            before = viewer.locator(".fig3d-readout").inner_text()
+            set_slider(viewer, 50)
+            page.wait_for_timeout(200)
+            if viewer.locator(".fig3d-readout").inner_text() == before:
+                problems.append("maximized, the slider did not change the status line")
+            page.keyboard.press("Escape")
+            page.wait_for_timeout(500)
+            back = viewer.locator(".fig3d-stage").bounding_box()["width"]
+            if abs(back - inline) > 2:
+                problems.append(f"after Escape the 3D picture is {back:.0f} px wide, was {inline:.0f}")
+            mx.click()
+            page.wait_for_timeout(400)
+            mx.click()
+            page.wait_for_timeout(400)
+            again = viewer.locator(".fig3d-stage").bounding_box()["width"]
+            if abs(again - inline) > 2:
+                problems.append("the maximize button did not return the viewer to the page")
+        if errors:
+            problems.append(f"zoom and maximize: console errors: {errors}")
+        browser.close()
+    return problems
+
+
 def main() -> int:
     handler = functools.partial(NoCache, directory=str(SITE))
     server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
@@ -357,6 +476,7 @@ def main() -> int:
         browser.close()
 
     problems += check_3d(url)
+    problems += check_zoom(url.rsplit(PAGE, 1)[0])
 
     server.shutdown()
     for p_ in problems:

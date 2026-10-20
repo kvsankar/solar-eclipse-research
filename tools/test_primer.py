@@ -249,7 +249,7 @@ class PrimerFigureTest(unittest.TestCase):
 
     def test_fig_10_totality_has_a_corona_not_a_ring(self):
         num = r'([-\d.]+)'
-        for name in ("example-solar-eclipse.svg", "shadow-shape.svg"):
+        for name in ("example-solar-eclipse.svg", "shadow-shape.svg", "anim-solar-eclipse.svg"):
             svg = (IMG / name).read_text(encoding="utf-8")
             coronas = re.findall(rf'<circle cx="{num}" cy="{num}" r="{num}" class="corona-fill" fill="url\(#[\w-]+\)"', svg)
             self.assertEqual(len(coronas), 1, f"{name}: one corona, at the total view")

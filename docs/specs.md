@@ -111,6 +111,18 @@ by the Sun (then its phase shapes the hidden outline).
   the Earth, with Io beside it, crossing in front of it (transit), its
   shadow on the cloud tops (shadow transit), hidden behind it
   (occultation) and dark in its shadow (eclipse), and names the event.
+- **FIG-13** Every picture on every page, diagram, photograph or
+  animation, opens in a zoom view that fills the window, with zoom in,
+  zoom out, reset and close, and with drag and pinch to pan and zoom. Each
+  picture shows a small maximize icon in its corner at all times, not only
+  on hover, so the zoom view can be found on a touch screen.
+- **FIG-14** An animated picture can be played and paused in the zoom view
+  as well as on the page.
+- **FIG-15** Every control on a picture, in the zoom view and in the 3D
+  viewer is subtle: an icon or a short word in muted colour, with no fill
+  and no border until it is hovered or focused, and a target at least
+  24 px square. A pressed control is marked by its text colour and an
+  underline, not by a filled shape.
 - **FIG-9** What an observer sees is drawn in a framed panel titled "What
   the observer sees", set apart from the main drawing: beside it in the
   example diagrams, and in a row between the two halves of the
@@ -274,6 +286,11 @@ slider, Animate, Reset and Back.
   left out rather than drawn over a body. Callout lines do not cross each
   other or run through another label wherever a placement without that
   exists.
+- **S3D-16** The 3D viewer has a maximize icon in the corner of the
+  picture. It makes the viewer fill the screen, with the browser's full
+  screen mode where the browser has one and by filling the window where
+  it does not. The picture resizes to fill the space, every control keeps
+  working, and the icon or Escape returns the viewer to the page.
 - **S3D-14** A framed panel titled "What the observer sees" sits beside the
   status line, set apart from the 3D picture. It draws the observer's view
   from the same state: in the hidden case the source (a disc, or a star as

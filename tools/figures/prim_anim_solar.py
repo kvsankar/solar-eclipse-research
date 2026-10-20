@@ -6,6 +6,7 @@ observer and the Sun covered. The SMIL elements wait for a play event
 Schematic only."""
 
 from figlib import Figure, n
+from prim_corona import STOPS
 
 DUR = "10s"
 f = Figure(
@@ -48,7 +49,16 @@ f.text(ex + 8, ey - 18, "Observer", cls="label")
 f.text(ex + 8, ey - 4, "on the Earth", cls="label-dim")
 
 sx, sy = 510, 140
-f.circle(sx, sy, SUN + 14, cls="accent thin dotted")
+# The corona shows only at totality, while the Moon covers the whole Sun
+# (spec FIG-10): the Moon's offset is within MOON - SUN of the Sun's centre
+# for this fraction of the run either side of the middle.
+half = (MOON - SUN) / (2 * TRAVEL * K * (1 + 0.2 ** 2) ** 0.5)
+t1, t2 = 0.5 - half, 0.5 + half
+stops = "".join(f'<stop offset="{o}" class="corona-stop" stop-opacity="{a}"/>' for o, a in STOPS)
+f.raw(f'<defs><radialGradient id="corona-anim-solar">{stops}</radialGradient></defs>')
+f.raw(f'<circle cx="{sx}" cy="{sy}" r="{2 * MOON}" class="corona-fill" fill="url(#corona-anim-solar)">'
+      f'<animate attributeName="opacity" values="0;1;0" keyTimes="0;{n(t1)};{n(t2)}" calcMode="discrete" '
+      f'dur="{DUR}" begin="indefinite" repeatCount="indefinite"/></circle>')
 f.circle(sx, sy, SUN, cls="sun-fill")
 f.raw(
     f'<g clip-path="url(#sky)"><circle cx="{sx}" cy="{sy}" r="{MOON}" class="silhouette-fill">'

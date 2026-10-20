@@ -601,32 +601,32 @@ html[data-theme="dark"] {
    The SVG is the figure. These styles apply only once the script has decided
    the runtime can show a 3D view, so nothing here is visible by default. */
 .fig3d-host { position: relative; }
-.fig3d-open {
-  display: inline-block; margin-top: 8px;
-  font: inherit; font-size: 12px; line-height: 1;
-  padding: 6px 11px; cursor: pointer;
-  color: var(--text-dim); background: var(--surface);
-  border: 1px solid var(--line); border-radius: 999px;
+/* Controls on pictures (spec FIG-15): a short word or an icon in muted
+   colour, no fill and no border; hover and focus darken the text, and a
+   pressed control is underlined. Every target is at least 24 px. */
+.fig3d-open, .anim-play, .fig3d-btn, .fig3d-max {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 26px; min-width: 26px; padding: 4px 6px;
+  font: inherit; font-size: 12px; line-height: 1; cursor: pointer;
+  color: var(--text-faint); background: transparent;
+  border: 0; border-radius: 4px;
 }
-/* A `display` here would beat the user agent's `[hidden] { display: none }`,
+.fig3d-open, .anim-play { margin-top: 6px; margin-left: -6px; }
+/* The `display` above would beat the user agent's `[hidden] { display: none }`,
    so `hidden` has to be restated. Without it the button stayed clickable once
    the viewer was open and a second press built a second viewer. */
 .fig3d-open[hidden] { display: none; }
-.fig3d-open:hover { background: var(--surface-2); border-color: var(--line-strong); }
-.fig3d-open:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.fig3d-open:hover, .anim-play:hover, .fig3d-btn:hover, .fig3d-max:hover {
+  color: var(--text); text-decoration: underline; text-underline-offset: 3px;
+}
+.fig3d-open:focus-visible, .anim-play:focus-visible, .fig3d-btn:focus-visible,
+.fig3d-max:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
 .fig3d-host.is3d > .figzoom { display: none; }
 
 /* ---- animated figures ----
    The button exists only when the script added it (spec FIG-4). */
-.anim-play {
-  display: inline-block; margin-top: 8px;
-  font: inherit; font-size: 12px; line-height: 1;
-  padding: 6px 11px; cursor: pointer;
-  color: var(--text-dim); background: var(--surface);
-  border: 1px solid var(--line); border-radius: 999px;
-}
-.anim-play:hover { background: var(--surface-2); border-color: var(--line-strong); }
-.anim-play:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
 
 .fig3d-stage {
   position: relative; width: 100%; margin-top: 4px;
@@ -705,13 +705,20 @@ html[data-theme="dark"] {
 }
 .fig3d-viewer:fullscreen .fig3d-stage { flex: 1 1 auto; }
 .fig3d-viewer:fullscreen .fig3d-note { display: none; }
-.fig3d-btn {
-  font: inherit; font-size: 12px; line-height: 1; padding: 6px 11px;
-  cursor: pointer; color: var(--text-dim); background: var(--surface);
-  border: 1px solid var(--line); border-radius: 999px;
+/* The maximize icon sits in the picture's top right corner (S3D-16). */
+.fig3d-max {
+  position: absolute; top: 6px; right: 6px; z-index: 2;
+  font-size: 15px; color: var(--text-faint);
 }
-.fig3d-btn:hover { background: var(--surface-2); border-color: var(--line-strong); }
-.fig3d-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+/* Where the browser has no full screen mode, the viewer fills the window. */
+.fig3d-viewer.fig3d-maxed {
+  position: fixed; inset: 0; z-index: 90; overflow: auto;
+  background: var(--bg); padding: 14px 18px;
+  display: flex; flex-direction: column;
+}
+.fig3d-viewer.fig3d-maxed .fig3d-stage { flex: 1 1 auto; }
+.fig3d-viewer.fig3d-maxed .fig3d-note { display: none; }
+body.fig3d-max-open { overflow: hidden; }
 
 /* Cases a scene can switch between, and the line it writes about the case. */
 .fig3d-variants {
@@ -719,9 +726,8 @@ html[data-theme="dark"] {
   gap: 6px; margin-bottom: 9px;
 }
 .fig3d-vlabel { font-size: 12px; color: var(--text-faint); margin-right: 2px; }
-.fig3d-variant[aria-pressed="true"] {
-  color: var(--text); background: var(--surface-2);
-  border-color: var(--line-strong); font-weight: 600;
+.fig3d-variant[aria-pressed="true"], .fig3d-btn[aria-pressed="true"] {
+  color: var(--text); text-decoration: underline; text-underline-offset: 3px;
 }
 .fig3d-readout {
   margin: 9px 0 0; font-size: 13px; line-height: 1.55; color: var(--text-dim);
@@ -757,14 +763,16 @@ html[data-theme="dark"] { --lb-scrim: rgba(0, 0, 0, 0.85); }
   border-radius: 6px;
 }
 .figzoom:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+/* The maximize icon shows at all times, faintly, so the zoom view can be
+   found on a touch screen too (FIG-13). It sits just above the picture's
+   top right corner, so it never covers a label drawn in that corner. */
 .figzoom::after {
-  content: "\2922"; position: absolute; top: 6px; right: 6px;
-  font-size: 13px; line-height: 1; padding: 4px 5px; border-radius: 4px;
-  color: var(--text-faint); background: var(--surface);
-  border: 1px solid var(--line);
-  opacity: 0; transition: opacity 0.12s ease;
+  content: "\2922"; position: absolute; top: -26px; right: -4px;
+  font-size: 14px; line-height: 1; padding: 5px 6px; border-radius: 4px;
+  color: var(--text-faint); background: transparent; border: 0;
+  opacity: 0.55; transition: opacity 0.12s ease;
 }
-.figzoom:hover::after, .figzoom:focus-visible::after { opacity: 1; }
+.figzoom:hover::after, .figzoom:focus-visible::after { opacity: 1; color: var(--text); }
 
 .lb {
   position: fixed; inset: 0; z-index: 100;
@@ -804,13 +812,14 @@ body.lb-open { overflow: hidden; }
   border-radius: 999px;
 }
 .lb-btn {
-  min-width: 34px; height: 30px; padding: 0 10px;
+  min-width: 30px; height: 30px; padding: 0 8px;
   font: inherit; font-size: 14px; line-height: 1;
-  color: var(--text); background: transparent;
-  border: 1px solid transparent; border-radius: 999px; cursor: pointer;
+  color: var(--text-dim); background: transparent;
+  border: 0; border-radius: 4px; cursor: pointer;
 }
 .lb-btn.lb-word { font-size: 12.5px; }
-.lb-btn:hover { background: var(--surface-2); border-color: var(--line); }
+.lb-btn[hidden] { display: none; }
+.lb-btn:hover { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
 .lb-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 .lb-zoom {
   min-width: 52px; text-align: center;

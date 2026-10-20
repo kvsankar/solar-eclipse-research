@@ -1461,6 +1461,13 @@
     stage.className = "fig3d-stage";
     var canvas = document.createElement("canvas");
     stage.appendChild(canvas);
+    /* Maximize (spec S3D-16): a faint icon in the picture's corner. */
+    var maxBtn = document.createElement("button");
+    maxBtn.type = "button";
+    maxBtn.className = "fig3d-max";
+    stage.appendChild(maxBtn);
+    // A press on the icon must not start an orbit drag on the stage.
+    maxBtn.addEventListener("pointerdown", function (e) { e.stopPropagation(); });
     var layerEl = document.createElement("div");
     layerEl.className = "fig3d-labels";
     stage.appendChild(layerEl);
@@ -1576,7 +1583,6 @@
       '<input type="range" min="0" max="100" value="0" step="1"></label>' +
       '<button type="button" class="fig3d-btn" data-act="anim">Animate</button>' +
       '<button type="button" class="fig3d-btn" data-act="focus" hidden></button>' +
-      '<button type="button" class="fig3d-btn" data-act="full" hidden>Full screen</button>' +
       '<button type="button" class="fig3d-btn" data-act="reset">Reset</button>' +
       '<button type="button" class="fig3d-btn" data-act="back">Back to diagram</button>';
     panel.appendChild(row);
@@ -1716,7 +1722,9 @@
     viewer.appendChild(hint);
     viewer.appendChild(panel);
 
-    function isFull() { return document.fullscreenElement === viewer; }
+    function isFull() {
+      return document.fullscreenElement === viewer || viewer.classList.contains("fig3d-maxed");
+    }
 
     // Read once per resize rather than once per frame: the label pass writes
     // styles, so reading a layout property in the loop forces a reflow.
@@ -1746,16 +1754,47 @@
       invalidate();
     }
 
-    if (document.fullscreenEnabled) {
-      row.querySelector('[data-act="full"]').hidden = false;
-    }
     var fsTimer = null;
+    function showMax() {
+      var on = isFull();
+      maxBtn.textContent = on ? "\u2921" : "\u2922";
+      maxBtn.setAttribute("aria-label", on ? "Restore to the page" : "Maximize");
+      maxBtn.title = on ? "Restore (Esc)" : "Maximize";
+      maxBtn.setAttribute("aria-pressed", on ? "true" : "false");
+    }
     var onFsChange = function () {
-      var b = row.querySelector('[data-act="full"]');
-      if (b) b.textContent = isFull() ? "Exit full screen" : "Full screen";
+      showMax();
       fsTimer = setTimeout(size, 60);
     };
     document.addEventListener("fullscreenchange", onFsChange);
+    /* The browser's full screen mode where it has one; otherwise the viewer
+       fills the window, which also works where full screen is refused. */
+    function fillWindow(on) {
+      viewer.classList.toggle("fig3d-maxed", on);
+      document.body.classList.toggle("fig3d-max-open", on);
+      onFsChange();
+    }
+    function toggleMax() {
+      if (document.fullscreenElement === viewer) {
+        document.exitFullscreen();
+      } else if (viewer.classList.contains("fig3d-maxed")) {
+        fillWindow(false);
+      } else if (document.fullscreenEnabled && viewer.requestFullscreen) {
+        viewer.requestFullscreen().catch(function () { fillWindow(true); });
+      } else {
+        fillWindow(true);
+      }
+    }
+    maxBtn.addEventListener("click", toggleMax);
+    // Browsers leave full screen on Escape themselves; this covers the
+    // window-filling mode and any browser that passes the key through.
+    var onKey = function (e) {
+      if (e.key !== "Escape" || !isFull()) return;
+      if (document.fullscreenElement === viewer) document.exitFullscreen();
+      else fillWindow(false);
+    };
+    document.addEventListener("keydown", onKey);
+    showMax();
 
     controls = Orbit(camera, stage, 5.2, THREE, built.home, invalidate);
     size();
@@ -2023,6 +2062,9 @@
       if (ro) ro.disconnect(); else window.removeEventListener("resize", size);
       if (fsTimer) clearTimeout(fsTimer);
       document.removeEventListener("fullscreenchange", onFsChange);
+      document.removeEventListener("keydown", onKey);
+      if (document.fullscreenElement === viewer && document.exitFullscreen) document.exitFullscreen();
+      document.body.classList.remove("fig3d-max-open");
       if (themeObserver) themeObserver.disconnect();
       if (schemeQuery) {
         if (schemeQuery.removeEventListener) {
@@ -2060,14 +2102,6 @@
         invalidate();
       } else if (act === "focus") {
         controls.aim(built.focus.at, built.focus.radius);
-      } else if (act === "full") {
-        if (isFull()) {
-          if (document.exitFullscreen) document.exitFullscreen();
-        } else if (viewer.requestFullscreen) {
-          viewer.requestFullscreen().catch(function () {
-            // Refused, for instance without a user gesture: stay inline.
-          });
-        }
       } else if (act === "reset") {
         stopAnim();
         explode = 0;

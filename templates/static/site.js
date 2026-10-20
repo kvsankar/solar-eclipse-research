@@ -262,6 +262,7 @@
       '<button type="button" class="lb-btn" data-act="out" aria-label="Zoom out">−</button>' +
       '<span class="lb-zoom" aria-live="polite">100%</span>' +
       '<button type="button" class="lb-btn" data-act="in" aria-label="Zoom in">+</button>' +
+      '<button type="button" class="lb-btn lb-word" data-act="play" hidden>Play</button>' +
       '<button type="button" class="lb-btn lb-word" data-act="reset">Reset</button>' +
       '<button type="button" class="lb-btn lb-word" data-act="close">Close</button>' +
       "</div>";
@@ -279,6 +280,7 @@
       if (b.dataset.act === "in") zoomAt(c[0], c[1], 1.3);
       else if (b.dataset.act === "out") zoomAt(c[0], c[1], 1 / 1.3);
       else if (b.dataset.act === "reset") fit();
+      else if (b.dataset.act === "play") togglePlay();
       else close();
     });
 
@@ -375,6 +377,33 @@
     window.addEventListener("resize", function () { if (!box.hidden) fit(); });
   }
 
+  /* An animated figure plays in the zoom view too (spec FIG-14). The copy
+     has its own SMIL clock, so it starts from its still frame here whatever
+     the page's copy is doing. Nothing is offered under reduced motion. */
+  var anims = [], started = false, playing = false;
+  function showPlay() {
+    var b = box.querySelector('[data-act="play"]');
+    b.hidden = !anims.length;
+    b.textContent = playing ? "Pause" : "Play";
+    b.setAttribute("aria-pressed", playing ? "true" : "false");
+  }
+  function togglePlay() {
+    var svg = canvas.querySelector("svg");
+    if (!svg || !anims.length) return;
+    if (!started) {
+      anims.forEach(function (a) { if (a.beginElement) a.beginElement(); });
+      svg.unpauseAnimations();
+      started = playing = true;
+    } else if (playing) {
+      svg.pauseAnimations();
+      playing = false;
+    } else {
+      svg.unpauseAnimations();
+      playing = true;
+    }
+    showPlay();
+  }
+
   // ------------------------------------------------------------ open, close
   function open(item, trigger) {
     ensureBox();
@@ -392,6 +421,15 @@
     var cap = item.fig.querySelector("figcaption");
     capEl.innerHTML = cap ? cap.innerHTML : "";
     capEl.hidden = !cap;
+
+    var copy = canvas.querySelector("svg");
+    var still = window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    anims = copy && typeof copy.pauseAnimations === "function" && !still
+      ? Array.prototype.slice.call(copy.querySelectorAll("animate, animateTransform, animateMotion, set"))
+      : [];
+    started = playing = false;
+    showPlay();
 
     box.hidden = false;
     document.body.classList.add("lb-open");
