@@ -263,7 +263,8 @@
       '<div class="lb-stage"><div class="lb-canvas"></div></div>' +
       '<button type="button" class="lb-nav lb-next" data-act="next" aria-label="Next picture">\u203a</button>' +
       "</div>" +
-      '<p class="lb-cap"></p>' +
+      '<div class="lb-text"><p class="lb-title"></p><div class="lb-cap"></div>' +
+      '<button type="button" class="lb-more" hidden>Read more</button></div>' +
       '<div class="lb-bar">' +
       '<button type="button" class="lb-btn" data-act="out" aria-label="Zoom out">−</button>' +
       '<span class="lb-zoom" aria-live="polite">100%</span>' +
@@ -271,6 +272,7 @@
       '<span class="lb-count" aria-live="polite"></span>' +
       '<button type="button" class="lb-btn lb-word" data-act="play" hidden>Play</button>' +
       '<button type="button" class="lb-btn lb-word" data-act="reset">Reset</button>' +
+      '<a class="lb-btn lb-word lb-page" href="#">Show on page</a>' +
       '<button type="button" class="lb-btn lb-word" data-act="close">Close</button>' +
       "</div>";
     document.body.appendChild(box);
@@ -279,6 +281,29 @@
     canvas = box.querySelector(".lb-canvas");
     zoomLabel = box.querySelector(".lb-zoom");
     capEl = box.querySelector(".lb-cap");
+
+    /* A long caption shows its first lines; Read more shows the rest
+       (spec FIG-19). */
+    var more = box.querySelector(".lb-more");
+    more.addEventListener("click", function () {
+      var open = capEl.classList.toggle("open");
+      more.textContent = open ? "Show less" : "Read more";
+    });
+
+    /* Show on page (spec FIG-20): from the figure index it follows the
+       link to the picture's page; on the picture's own page it closes the
+       viewer and scrolls to the picture. */
+    box.querySelector(".lb-page").addEventListener("click", function (e) {
+      var href = this.getAttribute("href") || "";
+      if (href.charAt(0) !== "#") return;
+      e.preventDefault();
+      var target = media[current] && media[current].el;
+      close();
+      if (target) {
+        target.scrollIntoView({ block: "center" });
+        if (history.replaceState) history.replaceState(null, "", href);
+      }
+    });
 
     /* Previous and next step through the page's pictures in page order
        (spec FIG-17). A press must not start a drag or close the viewer. */
@@ -460,12 +485,28 @@
     canvas.style.width = natW + "px";
     canvas.style.height = natH + "px";
 
-    // A picture with no caption, as in a table, shows its accessible name.
+    // The caption: the figure's own, or a table row's caption cell, as in
+    // the figure index, or else the picture's accessible name.
     var cap = item.fig.querySelector("figcaption");
+    var row = item.fig.closest(".figrow");
+    var rowCap = row && row.querySelector(".figcap");
     var name = item.el.getAttribute("aria-label") || item.el.getAttribute("alt") || "";
     if (cap) capEl.innerHTML = cap.innerHTML;
+    else if (rowCap) capEl.innerHTML = rowCap.innerHTML;
     else capEl.textContent = name;
-    capEl.hidden = !cap && !name;
+    capEl.hidden = !cap && !rowCap && !name;
+    capEl.classList.remove("open");
+    var title = item.el.getAttribute("data-figtitle") || "";
+    var titleEl = box.querySelector(".lb-title");
+    titleEl.textContent = title;
+    titleEl.hidden = !title;
+    // The copy must not repeat the page's anchor id.
+    var copyTop = canvas.firstElementChild;
+    if (copyTop && copyTop.id) copyTop.removeAttribute("id");
+    var pageLink = box.querySelector(".lb-page");
+    var where = item.el.getAttribute("data-figpage") || (item.el.id ? "#" + item.el.id : "");
+    pageLink.setAttribute("href", where || "#");
+    pageLink.hidden = !where;
 
     var copy = canvas.querySelector("svg");
     var still = window.matchMedia &&
@@ -479,6 +520,9 @@
     showNav();
     box.hidden = false;
     document.body.classList.add("lb-open");
+    var moreBtn = box.querySelector(".lb-more");
+    moreBtn.textContent = "Read more";
+    moreBtn.hidden = capEl.hidden || capEl.scrollHeight <= capEl.clientHeight + 1;
     fit();
     if (!stepping) box.querySelector('[data-act="close"]').focus();
   }
@@ -798,4 +842,27 @@
     });
   })();
 
+})();
+
+/* Read more in the figure index (spec FIG-19): a long caption shows its
+   first lines, and the link shows the rest. The link appears only where the
+   caption is cut, which is known only once the page has laid out. */
+(function () {
+  "use strict";
+  var caps = document.querySelectorAll(".figcap.clamp");
+  if (!caps.length) return;
+  function check(cap, btn) {
+    btn.hidden = !cap.classList.contains("open") && cap.scrollHeight <= cap.clientHeight + 1;
+  }
+  caps.forEach(function (cap) {
+    var btn = cap.nextElementSibling;
+    if (!btn || !btn.classList.contains("figmore")) return;
+    btn.addEventListener("click", function () {
+      var open = cap.classList.toggle("open");
+      btn.textContent = open ? "Show less" : "Read more";
+    });
+    check(cap, btn);
+    window.addEventListener("load", function () { check(cap, btn); });
+    window.addEventListener("resize", function () { check(cap, btn); });
+  });
 })();

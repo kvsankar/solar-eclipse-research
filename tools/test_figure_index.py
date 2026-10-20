@@ -42,6 +42,28 @@ class FigureIndexTest(unittest.TestCase):
         self.assertEqual(kinds["05-primer/img/case-hidden.svg"], "diagram")
         self.assertEqual(kinds["img/collage-v1.jpg"], "photograph")
 
+    def test_every_picture_has_a_short_unique_title(self):
+        # AT-FIG-18, in the fragments and in the merged file.
+        files = [ROOT / "images.tsv"] + sorted(CONTENT.rglob("images.tsv"))
+        for f in files:
+            for row in f.read_text(encoding="utf-8").splitlines():
+                if not row.strip() or row.startswith("#"):
+                    continue
+                cols = row.split("\t")
+                self.assertEqual(len(cols), 6, f"{f.name}: {cols[0]} has no title column")
+                words = cols[5].split()
+                self.assertTrue(1 <= len(words) <= 6, f"{cols[0]}: title '{cols[5]}'")
+        titles = [r["title"] for r in self.shown + self.build_only]
+        self.assertEqual(len(titles), len(set(titles)), "titles repeat")
+        self.assertTrue(all(titles))
+
+    def test_rows_carry_the_whole_caption(self):
+        # AT-FIG-19: the words past the twentieth are there too.
+        row = next(r for r in self.shown if r["path"] == "05-primer/img/example-solar-eclipse.svg")
+        text = re.sub(r"<[^>]+>", " ", row["caption_html"])
+        self.assertGreater(len(text.split()), 20)
+        self.assertIn("are one event", text)  # the closing words, past the twentieth
+
     def test_page_and_rendered_table(self):
         self.assertIn("<!--FIGURES-->", INDEX.read_text(encoding="utf-8"))
         node = next(n for n in build.walk(self.root) if n.src == INDEX)

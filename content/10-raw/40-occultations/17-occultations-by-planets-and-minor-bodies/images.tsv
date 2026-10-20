@@ -1,2 +1,2 @@
-# path	kind	licence	source	note
-10-raw/40-occultations/17-occultations-by-planets-and-minor-bodies/img/shadow-path-and-chords.svg	own	own work	tools/figures/mb_shadow_path.py	Schematic in two panels: the shadow band of width D with central line and 1-sigma lines on the fundamental plane, and positive chords, a miss, a fitted ellipse and the centre offset. Illustrative widths, not an event.
+# path	kind	licence	source	note	title
+10-raw/40-occultations/17-occultations-by-planets-and-minor-bodies/img/shadow-path-and-chords.svg	own	own work	tools/figures/mb_shadow_path.py	Schematic in two panels: the shadow band of width D with central line and 1-sigma lines on the fundamental plane, and positive chords, a miss, a fitted ellipse and the centre offset. Illustrative widths, not an event.	Occultation shadow path and chords

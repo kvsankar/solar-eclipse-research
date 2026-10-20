@@ -139,6 +139,21 @@ by the Sun (then its phase shapes the hidden outline).
   in the zoom view's bar shows the position, such as "12 / 43". There is
   no previous control on the first picture and no next control on the
   last. Closing the zoom view returns focus to the picture last shown.
+- **FIG-18** Every picture has a short title of at most six words, unique
+  on the site, recorded in the sixth column of its `images.tsv` row. The
+  build refuses a picture without one. The zoom view shows the title above
+  the caption, and the figure index shows it at the top of each row.
+- **FIG-19** A long caption shows its first lines, two in the zoom view and
+  three in the figure index, with a subtle "Read more" link that shows the
+  whole text and then reads "Show less". A caption that fits has no link.
+  The figure index carries each picture's whole caption, formatted as on
+  its page.
+- **FIG-20** The zoom view has a subtle "Show on page" link to the place
+  where the picture appears, like a media browser's "show in chat". From
+  the figure index it opens the picture's page at the picture; on the
+  picture's own page it closes the zoom view and scrolls to the picture.
+  Every picture has a stable anchor on its page, `#fig-` followed by its
+  file name without the extension.
 - **FIG-9** What an observer sees is drawn in a framed panel titled "What
   the observer sees", set apart from the main drawing: beside it in the
   example diagrams, and in a row between the two halves of the

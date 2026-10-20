@@ -358,8 +358,52 @@ def load_images() -> dict[str, list[str]]:
             continue
         if parts[0] in rows:
             DATA_ERRORS.append(f"images.tsv line {lineno}: duplicate path '{parts[0]}'")
+        if len(parts) < 6 or not parts[5]:
+            DATA_ERRORS.append(f"images.tsv line {lineno}: '{parts[0]}' has no title (spec FIG-18)")
         rows[parts[0]] = parts
     return rows
+
+
+_IMAGE_ROWS: dict | None = None
+
+
+def figure_attrs(target: Path, img_attrs: str) -> str:
+    """Attributes that name a picture in its page (FIG-18, FIG-20): a stable
+    anchor, its path, its short title, and, from the figure index, the page
+    that "Show on page" leads to."""
+    global _IMAGE_ROWS
+    if _IMAGE_ROWS is None:
+        _IMAGE_ROWS = {k: v for k, v in load_images().items()}
+    try:
+        rel = target.resolve().relative_to(CONTENT.resolve()).as_posix()
+    except ValueError:
+        return ""
+    title = figure_title(_IMAGE_ROWS.get(rel, []))
+    out = (f'id="fig-{html.escape(target.stem, quote=True)}" data-figpath="{html.escape(rel, quote=True)}"'
+           f' data-figtitle="{html.escape(title, quote=True)}"')
+    page = re.search(r'data-figpage="([^"]*)"', img_attrs)
+    if page:
+        out += f' data-figpage="{page.group(1)}"'
+    return out
+
+
+RASTER_RE = re.compile(r'<img src="([^"]+\.(?:jpe?g|png|gif|webp))"([^>]*?)/?>', re.I)
+
+
+def name_rasters(body: str, node: "Node") -> str:
+    """Give each photograph the same anchor, path and title as a drawing."""
+    base = node.src.parent if node.src else (CONTENT / node.rel)
+
+    def repl(m: re.Match) -> str:
+        src = m.group(1)
+        if re.match(r"^(https?:|/)", src):
+            return m.group(0)
+        extra = figure_attrs(base / src, m.group(2))
+        if not extra or "id=" in m.group(2):
+            return m.group(0)
+        attrs = re.sub(r'\s*data-figpage="[^"]*"', "", m.group(2))
+        return f'<img src="{src}" {extra}{attrs}>'
+    return RASTER_RE.sub(repl, body)
 
 
 def check_images(images: dict[str, list[str]]) -> int:
@@ -381,10 +425,22 @@ FIG_MD_RE = re.compile(r"!\[((?:[^\[\]]|\[[^\]]*\])*)\]\(([^)\s]+)\)(\{[^}]*\})?
 CAPTION_WORDS = 20
 
 
+def caption_markdown(caption: str) -> str:
+    """A caption with its citations removed and its glossary markers turned
+    into the plain term, as it reads on its page without the explainers."""
+    terms = load_glossary()
+
+    def term(m: re.Match) -> str:
+        entry = terms.get(m.group(1))
+        return m.group(2) or (entry[0] if entry else m.group(1))
+    text = re.sub(r"\s*\[@[^\]]+\]", "", caption)
+    return GLOSS_RE.sub(term, text)
+
+
 def caption_words(caption: str) -> str:
     """The first words of a caption as plain text, without citations,
     glossary markers or link targets."""
-    text = re.sub(r"\[@[^\]]+\]|\[\?[\w-]+\]", "", caption)
+    text = caption_markdown(caption)
     text = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", text)
     text = re.sub(r"[*_`]", "", text)
     words = text.split()
@@ -421,14 +477,24 @@ def figure_index(root: "Node") -> tuple[list[dict], list[dict]]:
             seen.add(rel)
             shown.append({
                 "path": rel, "kind": figure_kind(target), "caption": caption_words(caption),
+                "caption_html": pandoc_render(caption_markdown(caption), False)[1],
+                "title": figure_title(images[rel]),
                 "page": node.src.relative_to(CONTENT).as_posix(), "page_title": node.title,
+                "page_url": node.url_from_root,
                 "three_d": "fig3d" in attrs, "provenance": images[rel],
             })
     build_only = [{
         "path": rel, "kind": figure_kind(CONTENT / rel), "caption": caption_words(row[4] if len(row) > 4 else ""),
+        "caption_html": f"<p>{html.escape(row[4] if len(row) > 4 else '')}</p>",
+        "title": figure_title(row),
         "page": None, "page_title": "", "three_d": False, "provenance": row,
     } for rel, row in sorted(images.items()) if rel not in seen]
     return shown, build_only
+
+
+def figure_title(row: list[str]) -> str:
+    """The picture's short title, the sixth column of images.tsv (FIG-18)."""
+    return row[5] if len(row) > 5 else ""
 
 
 def render_figure_index(shown: list[dict], build_only: list[dict], node: "Node") -> str:
@@ -456,10 +522,16 @@ def render_figure_index(shown: list[dict], build_only: list[dict], node: "Node")
                 href = os.path.relpath(CONTENT / r["page"], base).replace(os.sep, "/")
                 facts.append(f'<a href="{href}">{html.escape(r["page_title"])}</a>')
             facts.append(provenance(r["provenance"]))
+            # Where "Show on page" leads from here (FIG-20).
+            anchor = "fig-" + Path(r["path"]).stem
+            page = (' data-figpage="' + rel_root(node.depth) + r["page_url"]
+                    + "#" + anchor + '"') if with_page else ""
             out.append(
                 '<tr class="figrow">'
-                f'<td class="figcell"><figure><img src="{src}" alt="{alt}"{cls}></figure></td>'
-                f'<td><p class="figcap">{html.escape(r["caption"])}</p>'
+                f'<td class="figcell"><figure><img src="{src}" alt="{alt}"{cls}{page}></figure></td>'
+                f'<td><p class="figtitle">{html.escape(r["title"])}</p>'
+                f'<div class="figcap clamp">{r["caption_html"]}</div>'
+                '<button type="button" class="figmore" hidden>Read more</button>'
                 f'<p class="figfacts">{" &middot; ".join(facts)}</p></td></tr>')
         out.append("</tbody></table>")
         return "".join(out)
@@ -524,6 +596,9 @@ def inline_svgs(body: str, node: "Node") -> str:
             # a screen reader reads "Moon&#39;s" aloud.
             label = f'<svg aria-label="{html.escape(html.unescape(alt.group(1)), quote=True)}"'
             markup = SVG_OPEN_RE.sub(lambda _m: label, markup, count=1)
+        named = figure_attrs(target, attrs)
+        if named:
+            markup = SVG_OPEN_RE.sub(lambda _m: "<svg " + named, markup, count=1)
 
         # An image marked {.fig3d scene="name"} keeps its SVG as the figure a
         # reader always gets. The wrapper carries the scene name so the script
@@ -1048,6 +1123,7 @@ def render_page(node: Node, root: Node, template: str, refs: dict, missing: set,
     body = rewrite_links(body)
     body = wrap_display_math(body)
     body = inline_svgs(body, node)
+    body = name_rasters(body, node)
     if "<!--GLOSSARY-->" in body:
         body = body.replace("<!--GLOSSARY-->", render_glossary_list(terms))
     if records is not None:

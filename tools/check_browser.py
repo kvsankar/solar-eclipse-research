@@ -388,6 +388,81 @@ def check_zoom(base: str) -> list[str]:
             problems.append("closing did not focus the picture last shown")
         page.goto(url, wait_until="networkidle")
 
+        # AT-FIG-18 and AT-FIG-19: titles, and Read more where a caption is cut.
+        for where in ("05-primer/how-eclipses-occultations-and-transits-are-computed.html",
+                      "00-meta/figure-index.html"):
+            page.goto(base + where, wait_until="networkidle")
+            zooms = page.locator("button.figzoom")
+            for i in range(min(zooms.count(), 6)):
+                want = zooms.nth(i).evaluate("b => (b.querySelector('[data-figtitle]') || {}).dataset?.figtitle || ''")
+                zooms.nth(i).click()
+                lb = page.locator(".lb")
+                got = lb.locator(".lb-title").inner_text().strip()
+                if not want or got != want:
+                    problems.append(f"{where} picture {i + 1}: zoom title '{got}', want '{want}'")
+                cut = lb.locator(".lb-cap").evaluate("c => c.scrollHeight > c.clientHeight + 1")
+                more = lb.locator(".lb-more")
+                if cut != more.is_visible():
+                    problems.append(f"{where} picture {i + 1}: caption cut {cut}, Read more shown {more.is_visible()}")
+                if cut:
+                    more.click()
+                    full = lb.locator(".lb-cap").evaluate("c => c.scrollHeight <= c.clientHeight + 1")
+                    if not full or more.inner_text().strip() != "Show less":
+                        problems.append(f"{where} picture {i + 1}: Read more did not show the whole caption")
+                    more.click()
+                    if more.inner_text().strip() != "Read more":
+                        problems.append(f"{where} picture {i + 1}: Show less did not cut the caption again")
+                lb.locator('[data-act="close"]').click()
+        page.goto(base + "00-meta/figure-index.html", wait_until="networkidle")
+        rows = page.locator("tr.figrow")
+        for i in range(rows.count()):
+            row = rows.nth(i)
+            if not row.locator(".figtitle").inner_text().strip():
+                problems.append(f"index row {i + 1}: no title")
+            cut = row.locator(".figcap").evaluate("c => c.scrollHeight > c.clientHeight + 1")
+            if cut != row.locator(".figmore").is_visible():
+                problems.append(f"index row {i + 1}: caption cut {cut}, Read more shown")
+        long_row = rows.filter(has=page.locator(".figmore:visible")).first
+        if long_row.count():
+            long_row.locator(".figmore").click()
+            if long_row.locator(".figcap").evaluate("c => c.scrollHeight > c.clientHeight + 1"):
+                problems.append("index: Read more did not show the whole caption")
+        page.goto(url, wait_until="networkidle")
+
+        # AT-FIG-20: Show on page, from the index and on the picture's own page.
+        page.goto(base + "00-meta/figure-index.html", wait_until="networkidle")
+        target = page.locator('tr.figrow:has([data-figpath="05-primer/img/example-solar-eclipse.svg"]) button.figzoom')
+        if target.count() != 1:
+            problems.append("index: no row for the solar eclipse example")
+        else:
+            target.click()
+            link = page.locator(".lb .lb-page")
+            href = link.get_attribute("href") or ""
+            if link.inner_text().strip() != "Show on page" or not href.endswith(
+                    "how-eclipses-occultations-and-transits-are-computed.html#fig-example-solar-eclipse"):
+                problems.append(f"index: Show on page link is '{link.inner_text()}' to '{href}'")
+            link.click()
+            page.wait_for_load_state("networkidle")
+            page.wait_for_timeout(400)
+            shown = page.evaluate("""() => { const e = document.getElementById('fig-example-solar-eclipse');
+                if (!e) return false; const r = e.getBoundingClientRect();
+                return r.bottom > 0 && r.top < innerHeight; }""")
+            if not shown:
+                problems.append(f"Show on page did not open the page at the picture ({page.url})")
+        page.goto(url, wait_until="networkidle")
+        no_id = page.evaluate("""() => [...document.querySelectorAll('main svg.figsvg, main figure img')]
+            .filter(e => !(e.id || '').startsWith('fig-')).length""")
+        if no_id:
+            problems.append(f"primer: {no_id} pictures without a fig- anchor")
+        late = page.locator("button.figzoom").nth(8)
+        late.click()
+        page.locator(".lb .lb-page").click()
+        page.wait_for_timeout(400)
+        inview = late.evaluate("b => { const r = b.getBoundingClientRect(); return r.bottom > 0 && r.top < innerHeight; }")
+        if page.locator(".lb").is_visible() or not inview:
+            problems.append("on its own page, Show on page did not close the zoom view at the picture")
+        page.goto(url, wait_until="networkidle")
+
         # AT-FIG-14: an animation plays in the zoom view.
         anim = page.locator(".anim-host button.figzoom").first
         anim.click()
