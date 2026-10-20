@@ -520,7 +520,9 @@ def inline_svgs(body: str, node: "Node") -> str:
             # A function replacement, not a string: a caption may contain a
             # backslash (LaTeX in a caption is normal here), and re.sub would
             # read it as an escape in a replacement template.
-            label = f'<svg aria-label="{html.escape(alt.group(1), quote=True)}"'
+            # The alt text arrives escaped from pandoc: unescape it first, or
+            # a screen reader reads "Moon&#39;s" aloud.
+            label = f'<svg aria-label="{html.escape(html.unescape(alt.group(1)), quote=True)}"'
             markup = SVG_OPEN_RE.sub(lambda _m: label, markup, count=1)
 
         # An image marked {.fig3d scene="name"} keeps its SVG as the figure a

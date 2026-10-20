@@ -256,12 +256,19 @@
     box.setAttribute("aria-label", "Figure viewer");
     box.hidden = true;
     box.innerHTML =
+      // Previous and next sit beside the picture, on the scrim, where they
+      // show in both themes; over a light picture they would vanish.
+      '<div class="lb-row">' +
+      '<button type="button" class="lb-nav lb-prev" data-act="prev" aria-label="Previous picture">\u2039</button>' +
       '<div class="lb-stage"><div class="lb-canvas"></div></div>' +
+      '<button type="button" class="lb-nav lb-next" data-act="next" aria-label="Next picture">\u203a</button>' +
+      "</div>" +
       '<p class="lb-cap"></p>' +
       '<div class="lb-bar">' +
       '<button type="button" class="lb-btn" data-act="out" aria-label="Zoom out">−</button>' +
       '<span class="lb-zoom" aria-live="polite">100%</span>' +
       '<button type="button" class="lb-btn" data-act="in" aria-label="Zoom in">+</button>' +
+      '<span class="lb-count" aria-live="polite"></span>' +
       '<button type="button" class="lb-btn lb-word" data-act="play" hidden>Play</button>' +
       '<button type="button" class="lb-btn lb-word" data-act="reset">Reset</button>' +
       '<button type="button" class="lb-btn lb-word" data-act="close">Close</button>' +
@@ -272,6 +279,16 @@
     canvas = box.querySelector(".lb-canvas");
     zoomLabel = box.querySelector(".lb-zoom");
     capEl = box.querySelector(".lb-cap");
+
+    /* Previous and next step through the page's pictures in page order
+       (spec FIG-17). A press must not start a drag or close the viewer. */
+    box.querySelectorAll(".lb-nav").forEach(function (b) {
+      b.addEventListener("pointerdown", function (e) { e.stopPropagation(); });
+      b.addEventListener("click", function (e) {
+        e.stopPropagation();
+        stepBy(b.dataset.act === "next" ? 1 : -1);
+      });
+    });
 
     box.querySelector(".lb-bar").addEventListener("click", function (e) {
       var b = e.target.closest("[data-act]");
@@ -348,12 +365,14 @@
 
     // A click on the empty stage closes, but not at the end of a drag.
     stage.addEventListener("click", function (e) {
-      if (!moved && !e.target.closest(".lb-canvas")) close();
+      if (!moved && !e.target.closest(".lb-canvas") && !e.target.closest(".lb-nav")) close();
     });
 
     box.addEventListener("keydown", function (e) {
       var c = stageCentre();
       if (e.key === "Escape") { e.preventDefault(); close(); }
+      else if (e.key === "PageDown") { e.preventDefault(); stepBy(1); }
+      else if (e.key === "PageUp") { e.preventDefault(); stepBy(-1); }
       else if (e.key === "+" || e.key === "=") { e.preventDefault(); zoomAt(c[0], c[1], 1.3); }
       else if (e.key === "-" || e.key === "_") { e.preventDefault(); zoomAt(c[0], c[1], 1 / 1.3); }
       else if (e.key === "0") { e.preventDefault(); fit(); }
@@ -367,7 +386,8 @@
         apply();
       } else if (e.key === "Tab") {
         // Keep focus inside the dialog.
-        var f = box.querySelectorAll("button");
+        var f = Array.prototype.filter.call(box.querySelectorAll("button"),
+          function (b) { return !b.hidden; });
         var first = f[0], last = f[f.length - 1];
         if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
         else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
@@ -405,10 +425,32 @@
   }
 
   // ------------------------------------------------------------ open, close
-  function open(item, trigger) {
+  var current = -1;
+  function stepBy(by) {
+    var next = current + by;
+    if (next < 0 || next >= media.length) return;
+    open(media[next], media[next].btn, true);
+  }
+  function showNav() {
+    var prev = box.querySelector(".lb-prev"), next = box.querySelector(".lb-next");
+    // A control that hides while it has focus would drop focus out of the
+    // viewer, and the keys would stop working; hand it to the other one.
+    // Read the focus first: hiding an element can blur it at once.
+    var had = document.activeElement;
+    prev.hidden = current <= 0;
+    next.hidden = current >= media.length - 1;
+    var keep = !next.hidden ? next : !prev.hidden ? prev : box.querySelector('[data-act="close"]');
+    if ((had === prev && prev.hidden) || (had === next && next.hidden)) keep.focus();
+    var c = box.querySelector(".lb-count");
+    c.hidden = media.length < 2;
+    c.textContent = (current + 1) + " / " + media.length;
+  }
+
+  function open(item, trigger, stepping) {
     ensureBox();
     opener = trigger;
-    lastFocus = document.activeElement;
+    if (!stepping) lastFocus = document.activeElement;
+    current = media.indexOf(item);
     canvas.innerHTML = "";
     cloneInto(canvas, item.el);
 
@@ -418,9 +460,12 @@
     canvas.style.width = natW + "px";
     canvas.style.height = natH + "px";
 
+    // A picture with no caption, as in a table, shows its accessible name.
     var cap = item.fig.querySelector("figcaption");
-    capEl.innerHTML = cap ? cap.innerHTML : "";
-    capEl.hidden = !cap;
+    var name = item.el.getAttribute("aria-label") || item.el.getAttribute("alt") || "";
+    if (cap) capEl.innerHTML = cap.innerHTML;
+    else capEl.textContent = name;
+    capEl.hidden = !cap && !name;
 
     var copy = canvas.querySelector("svg");
     var still = window.matchMedia &&
@@ -431,10 +476,11 @@
     started = playing = false;
     showPlay();
 
+    showNav();
     box.hidden = false;
     document.body.classList.add("lb-open");
     fit();
-    box.querySelector('[data-act="close"]').focus();
+    if (!stepping) box.querySelector('[data-act="close"]').focus();
   }
 
   function close() {
@@ -458,6 +504,7 @@
     btn.title = "Click to enlarge";
     item.el.parentNode.insertBefore(btn, item.el);
     btn.appendChild(item.el);
+    item.btn = btn;
     btn.addEventListener("click", function () { open(item, btn); });
   });
   /* ------------------------------------------------------- animations ---

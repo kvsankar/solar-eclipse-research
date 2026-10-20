@@ -353,6 +353,41 @@ def check_zoom(base: str) -> list[str]:
             if box.is_visible():
                 problems.append("close did not close the zoom view")
 
+        # AT-FIG-17: step through the figure index in the zoom view.
+        page.goto(base + "00-meta/figure-index.html", wait_until="networkidle")
+        total = page.locator("button.figzoom").count()
+        page.locator("button.figzoom").first.click()
+        box = page.locator(".lb")
+        count = box.locator(".lb-count")
+        prev, nxt = box.locator('[data-act="prev"]'), box.locator('[data-act="next"]')
+        if count.inner_text().strip() != f"1 / {total}":
+            problems.append(f"zoom view counter reads '{count.inner_text()}', want '1 / {total}'")
+        if prev.is_visible() or not nxt.is_visible():
+            problems.append("first picture: want a next control and no previous control")
+        problems += subtle_problems("zoom view nav", box.locator(".lb-nav").evaluate_all(SUBTLE_JS))
+        first_cap = box.locator(".lb-cap").inner_text()
+        nxt.click()
+        if count.inner_text().strip() != f"2 / {total}" or box.locator(".lb-cap").inner_text() == first_cap:
+            problems.append("next did not show the second picture")
+        prev.click()
+        if count.inner_text().strip() != f"1 / {total}":
+            problems.append("previous did not return to the first picture")
+        page.keyboard.press("PageDown")
+        if count.inner_text().strip() != f"2 / {total}":
+            problems.append("PageDown did not move to the next picture")
+        page.keyboard.press("PageUp")
+        if count.inner_text().strip() != f"1 / {total}":
+            problems.append("PageUp did not move to the previous picture")
+        for _ in range(total - 1):
+            page.keyboard.press("PageDown")
+        if count.inner_text().strip() != f"{total} / {total}" or nxt.is_visible():
+            problems.append("last picture: want the counter at the end and no next control")
+        box.locator('[data-act="close"]').click()
+        focused = page.evaluate("document.activeElement === [...document.querySelectorAll('button.figzoom')].pop()")
+        if not focused:
+            problems.append("closing did not focus the picture last shown")
+        page.goto(url, wait_until="networkidle")
+
         # AT-FIG-14: an animation plays in the zoom view.
         anim = page.locator(".anim-host button.figzoom").first
         anim.click()

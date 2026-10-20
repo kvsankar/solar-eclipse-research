@@ -133,6 +133,12 @@ by the Sun (then its phase shapes the hidden outline).
   listed in a second table. The build generates both tables from the
   pages and `images.tsv`, so a new picture appears without editing the
   index.
+- **FIG-17** The zoom view steps through the page's pictures in page order:
+  subtle previous and next controls, a faint ‹ and › at the left and
+  right edges of the picture, and the keys PageUp and PageDown. A counter
+  in the zoom view's bar shows the position, such as "12 / 43". There is
+  no previous control on the first picture and no next control on the
+  last. Closing the zoom view returns focus to the picture last shown.
 - **FIG-9** What an observer sees is drawn in a framed panel titled "What
   the observer sees", set apart from the main drawing: beside it in the
   example diagrams, and in a row between the two halves of the

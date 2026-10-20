@@ -117,6 +117,15 @@ class GeneralPrimerTest(unittest.TestCase):
         self.assertIn("a transit is an occultation", names.lower())
         self.assertIn("Eclipses, Occultations, and Transits", names)
 
+    def test_inlined_figure_name_is_escaped_once(self):
+        # Pandoc writes the alt text already escaped; the inlined SVG's
+        # accessible name must read "Moon's", not "Moon&#39;s".
+        import build
+        node = next(n for n in build.walk(build.build_tree()) if n.src == GENERAL)
+        out = build.inline_svgs('<img src="img/case-hidden.svg" alt="the Moon&#39;s shadow &amp; a star">', node)
+        label = re.search(r'aria-label="([^"]*)"', out).group(1)
+        self.assertEqual(html.unescape(label), "the Moon's shadow & a star")
+
     def test_s3d_1_case_diagrams_offer_3d_scenes(self):
         for svg, scene in (("case-hidden.svg", "hidden-cases"), ("case-darkened.svg", "darkened-cases")):
             self.assertIn(f'(img/{svg}){{.fig3d scene="{scene}"}}', self.text)
