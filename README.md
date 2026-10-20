@@ -310,3 +310,17 @@ under punctuation. Use Unicode there instead, as in `l₁ and l₂`.
 
 Same input bytes produce the same output bytes: no build timestamps, sorted
 traversal, fixed pandoc flags.
+
+## Licence
+
+© 2026 Sankaranarayanan Viswanathan.
+
+| Part | Licence |
+|---|---|
+| Text and the author's own figures (`content/`, the TSV ledgers, the rendered site) | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), see [LICENSE-CONTENT](LICENSE-CONTENT) |
+| Code (`tools/`, `templates/`) | [MIT](LICENSE) |
+| Third-party images | Each keeps its own licence, recorded in its `images.tsv` row and credited beside the image |
+| `templates/static/vendor/three.min.js` | MIT, in `three.LICENSE.md` beside it |
+
+To reuse the text or figures, credit "Sankaranarayanan Viswanathan,
+eclipse-research, https://sankara.net/astro/eclipses/computing.html, CC BY 4.0".

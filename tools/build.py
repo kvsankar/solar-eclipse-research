@@ -64,7 +64,12 @@ SOCIAL_IMAGE_ALT = (
 )
 SOURCE_NOTE = (
     '<a href="https://github.com/kvsankar/solar-eclipse-research">'
-    'Research and website source on GitHub</a>.'
+    'Research and website source on GitHub</a>. '
+    '\u00a9 2026 Sankaranarayanan Viswanathan. Text and figures '
+    '<a href="https://creativecommons.org/licenses/by/4.0/" rel="license">'
+    'CC BY 4.0</a>, code '
+    '<a href="https://github.com/kvsankar/solar-eclipse-research/blob/main/LICENSE">'
+    'MIT</a>; third-party images as credited.'
 )
 
 PANDOC_FROM = (
