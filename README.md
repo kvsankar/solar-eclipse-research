@@ -41,8 +41,8 @@ python tools/jargon_check.py       # terms used before they are explained
 python -m unittest discover -s tools -p test_seo.py  # search metadata regression checks
 python -m unittest discover -s tools -p 'test_*.py'  # numerical and source contracts
 python tools/check_seo.py          # verify rendered metadata and sitemap
-node --test tools/js/geometry.test.js   # the shared geometry module (spec GEO)
-python tools/check_browser.py      # headless checks of animated figures (needs Playwright)
+node --test tools/js/geometry.test.js tools/js/scenes.test.js   # geometry (spec GEO) and 3D scene states (S3D)
+python tools/check_browser.py      # headless checks of figures and scenes (needs Playwright; about 5 minutes)
 python tools/make_og_image.py      # recompose content/img/social-card-v4.jpg (needs Pillow)
 ```
 
@@ -110,6 +110,17 @@ Deployment credentials live in the `sankara-net-production` GitHub environment.
 mirrors the workflow step for step — same build, same payload checks, same
 guarded remote path, same rsync flags, same post-deploy check — so a local run
 and an Actions run put the same bytes in the same place.
+
+To start the workflow from the command line, then watch the run it starts:
+
+```bash
+gh workflow run deploy-hetzner.yml --ref main
+```
+
+When GitHub Actions is degraded, queued runs later replay older commits in
+order; the last queued run deploys the newest commit. Pages request assets by
+`?v=<hash>` URLs because Cloudflare caches un-versioned ones, so check a live
+asset by the versioned URL the page uses.
 
 ```bash
 python tools/deploy.py --dry-run     # build, verify, show what would transfer
@@ -185,7 +196,7 @@ each inlined figure so two figures on one page cannot collide.
 Every image under `content/` needs a provenance row or the build fails:
 
 ```
-path <TAB> kind <TAB> licence <TAB> source <TAB> note
+path <TAB> kind <TAB> licence <TAB> source <TAB> note <TAB> title
 ```
 
 `kind` is `own` or `third-party`. An `own` figure names its generating script;
@@ -193,6 +204,14 @@ a third-party image names its licence and the page that states it. Rows live
 in per-folder `images.tsv` fragments and are merged to the root `images.tsv`
 by `tools/merge_refs.py`, so several people can add figures at once. An image
 with no provenance is the same defect as an uncited claim.
+
+The sixth column, `title`, is required (spec FIG-18): `merge_refs.py` and the
+build refuse a picture without one. The zoom view shows it over the caption,
+and every picture gets an anchor `#fig-<file stem>` carrying `data-figpath`
+and `data-figtitle` (FIG-20). `content/00-meta/figure-index.md` holds a
+`<!--FIGURES-->` marker that the build (`figure_index`,
+`render_figure_index` in `tools/build.py`) fills with every picture on the
+site, from the pages and `images.tsv` (FIG-16).
 
 Captions state the finding, not the subject. A figure is either a schematic,
 which says so on its face, or a data figure whose numbers already appear in
@@ -217,7 +236,10 @@ always possible.
 
 Scenes live in the `SCENES` registry in `templates/static/site3d.js` and draw
 in Earth equatorial radii, so a scene built from published Besselian elements
-uses the numbers the tables print. Scene colours are read from the same
+uses the numbers the tables print. The guided event scenes (spec S3D) keep
+their state in `templates/static/scenes.js`, a pure module that computes each
+event from `geometry.js` and is tested by `tools/js/scenes.test.js`;
+`site3d.js` only draws what it returns. Scene colours are read from the same
 `--fig-*` custom properties the SVGs use, so 3D follows the theme.
 
 A scene returns **layers**, not a single blob. Each layer has an id, a label,

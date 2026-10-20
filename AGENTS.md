@@ -266,6 +266,14 @@ Read `tools/figures/fundamental_plane.py` as the worked example, and
   octal escape `\21` followed by `90`, and a stray control byte lands in the
   stylesheet. Prefer literal characters, with `@charset "utf-8";` at the top
   of the CSS, over numeric escapes.
+- `python -m unittest tools/test_x.py` by file path fails; run
+  `python -m unittest discover -s tools -p 'test_*.py'` as CI does.
+- Hiding the focused control drops focus out of a dialog. Read
+  `document.activeElement` before hiding, and move focus first. Watch for a
+  `var` in a handler shadowing a function of the same name (a `var step`
+  once hid `step()`).
+- Headless WebGL needs Chromium flags `--use-gl=angle
+  --use-angle=swiftshader --enable-unsafe-swiftshader`.
 - `[@slug]` and `[?slug]` in prose examples must sit inside code spans or the
   build resolves them.
 - pandoc math: use `$...$` for inline and `$$...$$` for display. Escape a
