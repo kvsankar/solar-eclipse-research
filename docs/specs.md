@@ -135,10 +135,14 @@ by the Sun (then its phase shapes the hidden outline).
   index.
 - **FIG-17** The zoom view steps through the page's pictures in page order:
   subtle previous and next controls, a faint ‹ and › at the left and
-  right edges of the picture, and the keys PageUp and PageDown. A counter
-  in the zoom view's bar shows the position, such as "12 / 43". There is
-  no previous control on the first picture and no next control on the
-  last. Closing the zoom view returns focus to the picture last shown.
+  right edges of the picture and again either side of the counter in the
+  zoom view's bar, and the keys PageUp and PageDown. The counter shows the
+  position, such as "12 / 43". There is no previous control on the first
+  picture and no next control on the last; a hidden control keeps its
+  space, so neither the picture nor the bar shifts. Closing the zoom view
+  returns focus to the picture last shown.
+- **FIG-21** The zoom view has a faint close control, ✕, at its top right
+  corner, where readers expect it, as well as Close in the bar.
 - **FIG-18** Every picture has a short title of at most six words, unique
   on the site, recorded in the sixth column of its `images.tsv` row. The
   build refuses a picture without one. The zoom view shows the title above

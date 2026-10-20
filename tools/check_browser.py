@@ -359,11 +359,13 @@ def check_zoom(base: str) -> list[str]:
         page.locator("button.figzoom").first.click()
         box = page.locator(".lb")
         count = box.locator(".lb-count")
-        prev, nxt = box.locator('[data-act="prev"]'), box.locator('[data-act="next"]')
+        prev, nxt = box.locator('.lb-row [data-act="prev"]'), box.locator('.lb-row [data-act="next"]')
+        bprev, bnxt = box.locator('.lb-bar [data-act="bar-prev"]'), box.locator('.lb-bar [data-act="bar-next"]')
         if count.inner_text().strip() != f"1 / {total}":
             problems.append(f"zoom view counter reads '{count.inner_text()}', want '1 / {total}'")
-        if prev.is_visible() or not nxt.is_visible():
-            problems.append("first picture: want a next control and no previous control")
+        if prev.is_visible() or not nxt.is_visible() or bprev.is_visible() or not bnxt.is_visible():
+            problems.append("first picture: want next controls and no previous controls, beside and in the bar")
+        bar_x = box.locator(".lb-count").bounding_box()["x"]
         problems += subtle_problems("zoom view nav", box.locator(".lb-nav").evaluate_all(SUBTLE_JS))
         first_cap = box.locator(".lb-cap").inner_text()
         nxt.click()
@@ -372,6 +374,15 @@ def check_zoom(base: str) -> list[str]:
         prev.click()
         if count.inner_text().strip() != f"1 / {total}":
             problems.append("previous did not return to the first picture")
+        bnxt.click()
+        if count.inner_text().strip() != f"2 / {total}":
+            problems.append("the bar's next did not move to the second picture")
+        if abs(box.locator(".lb-count").bounding_box()["x"] - bar_x) > 1:
+            problems.append("the bar shifted when its previous control appeared")
+        bprev.click()
+        if count.inner_text().strip() != f"1 / {total}":
+            problems.append("the bar's previous did not return to the first picture")
+        problems += subtle_problems("zoom view bar nav", box.locator(".lb-bar .lb-step").evaluate_all(SUBTLE_JS))
         page.keyboard.press("PageDown")
         if count.inner_text().strip() != f"2 / {total}":
             problems.append("PageDown did not move to the next picture")
@@ -380,9 +391,21 @@ def check_zoom(base: str) -> list[str]:
             problems.append("PageUp did not move to the previous picture")
         for _ in range(total - 1):
             page.keyboard.press("PageDown")
-        if count.inner_text().strip() != f"{total} / {total}" or nxt.is_visible():
-            problems.append("last picture: want the counter at the end and no next control")
-        box.locator('[data-act="close"]').click()
+        if count.inner_text().strip() != f"{total} / {total}" or nxt.is_visible() or bnxt.is_visible():
+            problems.append("last picture: want the counter at the end and no next controls")
+        # AT-FIG-21: the top right close.
+        x = box.locator(".lb-x")
+        if x.count() != 1:
+            problems.append("the zoom view has no top right close")
+        else:
+            r = x.bounding_box()
+            vw = page.evaluate("innerWidth")
+            if r["y"] > 72 or vw - (r["x"] + r["width"]) > 72:
+                problems.append(f"the top close is not at the top right ({r})")
+            problems += subtle_problems("zoom view top close", x.evaluate_all(SUBTLE_JS))
+            x.click()
+            if box.is_visible():
+                problems.append("the top close did not close the zoom view")
         focused = page.evaluate("document.activeElement === [...document.querySelectorAll('button.figzoom')].pop()")
         if not focused:
             problems.append("closing did not focus the picture last shown")

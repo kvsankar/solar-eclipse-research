@@ -886,6 +886,19 @@ body.lb-open { overflow: hidden; }
   border-radius: 6px; cursor: pointer; opacity: 0.7;
 }
 .lb-nav[hidden] { display: block; visibility: hidden; }
+/* The bar's ‹ › either side of the counter; a hidden one keeps its space. */
+.lb-btn.lb-step { min-width: 28px; padding: 0 4px; font-size: 18px; }
+.lb-btn.lb-step[hidden] { display: inline-block; visibility: hidden; }
+/* The close at the top right (spec FIG-21), faint on the scrim. */
+.lb-x {
+  position: absolute; top: 10px; right: 12px; z-index: 3;
+  width: 36px; height: 36px; padding: 0;
+  font: inherit; font-size: 20px; line-height: 1;
+  color: var(--lb-on-scrim); background: transparent; border: 0;
+  border-radius: 6px; cursor: pointer; opacity: 0.7;
+}
+.lb-x:hover, .lb-x:focus-visible { opacity: 1; }
+.lb-x:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 .lb-nav:hover, .lb-nav:focus-visible { opacity: 1; }
 .lb-nav:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 

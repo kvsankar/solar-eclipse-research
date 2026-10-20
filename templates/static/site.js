@@ -256,6 +256,8 @@
     box.setAttribute("aria-label", "Figure viewer");
     box.hidden = true;
     box.innerHTML =
+      // A close at the top right, where readers look for it (spec FIG-21).
+      '<button type="button" class="lb-x" aria-label="Close">✕</button>' +
       // Previous and next sit beside the picture, on the scrim, where they
       // show in both themes; over a light picture they would vanish.
       '<div class="lb-row">' +
@@ -269,7 +271,11 @@
       '<button type="button" class="lb-btn" data-act="out" aria-label="Zoom out">−</button>' +
       '<span class="lb-zoom" aria-live="polite">100%</span>' +
       '<button type="button" class="lb-btn" data-act="in" aria-label="Zoom in">+</button>' +
+      // Previous and next again beside the counter, so the bar alone holds
+      // every control the hand needs (spec FIG-17).
+      '<button type="button" class="lb-btn lb-step" data-act="bar-prev" aria-label="Previous picture">‹</button>' +
       '<span class="lb-count" aria-live="polite"></span>' +
+      '<button type="button" class="lb-btn lb-step" data-act="bar-next" aria-label="Next picture">›</button>' +
       '<button type="button" class="lb-btn lb-word" data-act="play" hidden>Play</button>' +
       '<button type="button" class="lb-btn lb-word" data-act="reset">Reset</button>' +
       '<a class="lb-btn lb-word lb-page" href="#">Show on page</a>' +
@@ -323,8 +329,11 @@
       else if (b.dataset.act === "out") zoomAt(c[0], c[1], 1 / 1.3);
       else if (b.dataset.act === "reset") fit();
       else if (b.dataset.act === "play") togglePlay();
+      else if (b.dataset.act === "bar-prev") stepBy(-1);
+      else if (b.dataset.act === "bar-next") stepBy(1);
       else close();
     });
+    box.querySelector(".lb-x").addEventListener("click", close);
 
     stage.addEventListener("wheel", function (e) {
       e.preventDefault();
@@ -457,17 +466,25 @@
     open(media[next], media[next].btn, true);
   }
   function showNav() {
-    var prev = box.querySelector(".lb-prev"), next = box.querySelector(".lb-next");
+    // Each pair: beside the picture, and in the bar.
+    var pairs = [
+      [box.querySelector(".lb-prev"), box.querySelector(".lb-next")],
+      [box.querySelector('[data-act="bar-prev"]'), box.querySelector('[data-act="bar-next"]')]
+    ];
     // A control that hides while it has focus would drop focus out of the
-    // viewer, and the keys would stop working; hand it to the other one.
-    // Read the focus first: hiding an element can blur it at once.
+    // viewer, and the keys would stop working; hand it to the other one of
+    // its pair. Read the focus first: hiding an element can blur it at once.
     var had = document.activeElement;
-    prev.hidden = current <= 0;
-    next.hidden = current >= media.length - 1;
-    var keep = !next.hidden ? next : !prev.hidden ? prev : box.querySelector('[data-act="close"]');
-    if ((had === prev && prev.hidden) || (had === next && next.hidden)) keep.focus();
+    pairs.forEach(function (pair) {
+      var prev = pair[0], next = pair[1];
+      prev.hidden = current <= 0;
+      next.hidden = current >= media.length - 1;
+      var keep = !next.hidden ? next : !prev.hidden ? prev : box.querySelector('[data-act="close"]');
+      if ((had === prev && prev.hidden) || (had === next && next.hidden)) keep.focus();
+    });
     var c = box.querySelector(".lb-count");
     c.hidden = media.length < 2;
+    pairs[1].forEach(function (b) { if (media.length < 2) b.hidden = true; });
     c.textContent = (current + 1) + " / " + media.length;
   }
 
