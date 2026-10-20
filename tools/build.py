@@ -31,6 +31,7 @@ import argparse
 import hashlib
 import html
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -373,6 +374,100 @@ def check_images(images: dict[str, list[str]]) -> int:
     for path in sorted(set(images) - on_disk):
         DATA_ERRORS.append(f"images.tsv lists '{path}', which does not exist")
     return len(on_disk)
+
+
+# A Markdown image: the caption may hold one level of brackets, as in a link.
+FIG_MD_RE = re.compile(r"!\[((?:[^\[\]]|\[[^\]]*\])*)\]\(([^)\s]+)\)(\{[^}]*\})?", re.S)
+CAPTION_WORDS = 20
+
+
+def caption_words(caption: str) -> str:
+    """The first words of a caption as plain text, without citations,
+    glossary markers or link targets."""
+    text = re.sub(r"\[@[^\]]+\]|\[\?[\w-]+\]", "", caption)
+    text = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", text)
+    text = re.sub(r"[*_`]", "", text)
+    words = text.split()
+    if len(words) <= CAPTION_WORDS:
+        return " ".join(words)
+    return " ".join(words[:CAPTION_WORDS]) + "\u2026"
+
+
+def figure_kind(path: Path) -> str:
+    if path.suffix.lower() != ".svg":
+        return "photograph"
+    return "animation" if "<animate" in path.read_text(encoding="utf-8") else "diagram"
+
+
+def figure_index(root: "Node") -> tuple[list[dict], list[dict]]:
+    """Every picture on the site (spec FIG-16): those shown on a page, in
+    page order, and those only the build uses, such as the social card."""
+    images = load_images()
+    shown, seen = [], set()
+    for node in walk(root):
+        if not node.src or not node.body_md:
+            continue
+        for m in FIG_MD_RE.finditer(node.body_md):
+            caption, src, attrs = m.group(1), m.group(2), m.group(3) or ""
+            if re.match(r"^(https?:|/)", src):
+                continue
+            target = (node.src.parent / src).resolve()
+            try:
+                rel = target.relative_to(CONTENT.resolve()).as_posix()
+            except ValueError:
+                continue
+            if rel not in images or rel in seen:
+                continue
+            seen.add(rel)
+            shown.append({
+                "path": rel, "kind": figure_kind(target), "caption": caption_words(caption),
+                "page": node.src.relative_to(CONTENT).as_posix(), "page_title": node.title,
+                "three_d": "fig3d" in attrs, "provenance": images[rel],
+            })
+    build_only = [{
+        "path": rel, "kind": figure_kind(CONTENT / rel), "caption": caption_words(row[4] if len(row) > 4 else ""),
+        "page": None, "page_title": "", "three_d": False, "provenance": row,
+    } for rel, row in sorted(images.items()) if rel not in seen]
+    return shown, build_only
+
+
+def render_figure_index(shown: list[dict], build_only: list[dict], node: "Node") -> str:
+    """The two tables of the figure index, as HTML with <img> tags that the
+    page's normal pass then inlines, so each picture draws as on its page."""
+    base = node.src.parent
+
+    def provenance(row: list[str]) -> str:
+        if row[1] == "own":
+            return f"Drawn here, <code>{html.escape(row[3])}</code>"
+        # The licence's first sentence; "4.0" has a point but no space after it.
+        licence = row[2].split(". ")[0].rstrip(".")
+        return f"Third-party, {html.escape(licence)}. <a href=\"{html.escape(row[3])}\">Source</a>"
+
+    # Two columns, so the table fits the text column: the picture, and its
+    # caption over one line of kind, page and provenance.
+    def table(rows: list[dict], with_page: bool) -> str:
+        out = ['<table class="figindex"><thead><tr><th>Picture</th><th>Details</th></tr></thead><tbody>']
+        for r in rows:
+            src = os.path.relpath(CONTENT / r["path"], base).replace(os.sep, "/")
+            cls = ' class="anim"' if r["kind"] == "animation" else ""
+            alt = html.escape(r["caption"], quote=True)
+            facts = [html.escape(r["kind"] + ("; 3D view on its page" if r["three_d"] else ""))]
+            if with_page:
+                href = os.path.relpath(CONTENT / r["page"], base).replace(os.sep, "/")
+                facts.append(f'<a href="{href}">{html.escape(r["page_title"])}</a>')
+            facts.append(provenance(r["provenance"]))
+            out.append(
+                '<tr class="figrow">'
+                f'<td class="figcell"><figure><img src="{src}" alt="{alt}"{cls}></figure></td>'
+                f'<td><p class="figcap">{html.escape(r["caption"])}</p>'
+                f'<p class="figfacts">{" &middot; ".join(facts)}</p></td></tr>')
+        out.append("</tbody></table>")
+        return "".join(out)
+
+    return (table(shown, True) +
+            "<h2 id=\"used-only-by-the-build\">Used only by the build</h2>" +
+            "<p>These pictures appear on no page. The social card shows when a page is shared, "
+            "and the photograph is its source.</p>" + table(build_only, False))
 
 
 MATH_BLOCK_RE = re.compile(r'<math display="block".*?</math>', re.S)
@@ -946,6 +1041,8 @@ def render_page(node: Node, root: Node, template: str, refs: dict, missing: set,
     md = resolve_glossary(md, terms, gloss_missing, gloss_used)
     md, cited = resolve_citations(md, refs, missing)
     toc, body = pandoc_render(md, wants_toc(node))
+    if "<!--FIGURES-->" in body:
+        body = body.replace("<!--FIGURES-->", render_figure_index(*figure_index(root), node))
     body = rewrite_links(body)
     body = wrap_display_math(body)
     body = inline_svgs(body, node)

@@ -198,6 +198,19 @@ main {
 
 .tablewrap, .doc table { display: block; overflow-x: auto; max-width: 100%; }
 .doc table { border-collapse: collapse; font-size: 14px; margin: 18px 0; }
+/* The figure index (spec FIG-16): each row shows the picture at a fixed
+   width beside its details. */
+.doc table.figindex { display: table; width: 100%; }
+.figindex td { vertical-align: top; }
+.figindex .figcell { width: 55%; }
+.figindex .figcell figure { margin: 22px 0 4px; }
+.figindex .figcap { margin: 0 0 6px; }
+.figindex .figfacts { margin: 0; font-size: 12.5px; color: var(--text-dim); }
+@media (max-width: 640px) {
+  .doc table.figindex, .figindex tbody, .figindex tr, .figindex td { display: block; width: auto; }
+  .figindex thead { display: none; }
+  .figindex tr { border-bottom: 1px solid var(--line); padding-bottom: 8px; }
+}
 .doc th, .doc td {
   border: 1px solid var(--line); padding: 7px 11px; text-align: left; vertical-align: top;
 }

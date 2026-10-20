@@ -123,6 +123,16 @@ by the Sun (then its phase shapes the hidden outline).
   and no border until it is hovered or focused, and a target at least
   24 px square. A pressed control is marked by its text colour and an
   underline, not by a filled shape.
+- **FIG-16** A "Figure index" page under Meta lists every picture on the
+  site in one table, one row per picture: the picture itself, drawn as on
+  its page (theme colours, Play for an animation, the zoom view), the
+  first words of its caption, its kind (diagram, animation or
+  photograph), a link to the page it appears on, and its provenance (drawn
+  here or third-party, with the licence of a third-party picture).
+  Pictures that only the build uses, such as the social preview card, are
+  listed in a second table. The build generates both tables from the
+  pages and `images.tsv`, so a new picture appears without editing the
+  index.
 - **FIG-9** What an observer sees is drawn in a framed panel titled "What
   the observer sees", set apart from the main drawing: beside it in the
   example diagrams, and in a row between the two halves of the
