@@ -38,6 +38,8 @@ python tools/fix_math.py           # rewrite TeX that pandoc's math parser rejec
 python tools/normalise_prose.py    # house-style spelling and notation, outside quotations and code
 python tools/prose_check.py        # prose tics and long sentences
 python tools/jargon_check.py       # terms used before they are explained
+python tools/autolink.py           # first mentions that links.tsv would link (--apply adds them)
+python tools/link_check.py         # relative links, anchors, hosts, link floors (--report, --online)
 python -m unittest discover -s tools -p test_seo.py  # search metadata regression checks
 python -m unittest discover -s tools -p 'test_*.py'  # numerical and source contracts
 python tools/check_seo.py          # verify rendered metadata and sitemap
@@ -312,8 +314,13 @@ build.
 Terms live in per-folder `terms.tsv` fragments, merged into `glossary.tsv`:
 
 ```
-slug <TAB> label <TAB> definition
+slug <TAB> label <TAB> definition <TAB> optional canonical url
 ```
+
+The fourth column, when present, names the term's canonical page outside the
+site, on a host in `CANONICAL_SITES` in `tools/build.py` (spec LNK-1, LNK-5).
+The explainer panel and the A to Z listing end with "Read on Wikipedia" or the
+site's own name, and the build refuses any other host.
 
 Mark a term with `[?slug]`, or `[?slug|custom wording]`. The build renders an
 inline term with a panel that opens on hover, tap, click or keyboard focus. A
@@ -327,6 +334,27 @@ than transliterating them: `$\zeta_1 = \sqrt{1 - \xi^2 - \eta_1^2}$`, never
 `zeta1 = sqrt(1 - xi^2 - eta1^2)`. Keep glossary **labels** free of `$`,
 because the A to Z listing sorts on the label and a leading `$` would sort it
 under punctuation. Use Unicode there instead, as in `l₁ and l₂`.
+
+## Links
+
+Relative `.md` links are rewritten to `.html` by the build. First-mention
+links are kept dense by `tools/autolink.py`, driven by `links.tsv` at the
+root: one row per pattern, a Python regular expression matched on word
+boundaries, and a target that is a page relative to `content/` or a canonical
+URL. It links each target once per page at its first prose mention, never
+inside headings, captions, quotations, code, maths, citations, glossary
+markers or links, and never a page to itself. It reports by default and
+writes only with `--apply`, so read its proposals before applying them.
+
+The build opens every link that leaves the site in a new tab, adding
+`target="_blank"` and `rel="noopener"` to each `<a>` with an `http` or
+`https` address (spec LNK-8). Links within the site keep the reader's tab.
+
+`tools/link_check.py` fails on a relative link to a missing file, an anchor
+missing from the built page, an `http:` link, a research-note link to a host
+outside `CANONICAL_SITES`, and a research note below the floors of five site
+pages and three canonical pages. `tools/test_links.py` runs it, so CI does
+too. `--online` fetches every external URL once and needs network access.
 
 ## Determinism
 

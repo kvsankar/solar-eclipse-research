@@ -19,10 +19,10 @@ Solar eclipses are the deepest part of this corpus:
   classification.
 - [Global circumstances](03-global-circumstances/_index.md): paths, limits
   and maps.
-- [Local circumstances](04-local-circumstances/_index.md): contact times,
+- [Local circumstances](04-local-circumstances/_index.md): [contact times](04-local-circumstances/contact-times-and-magnitude.md),
   magnitude and obscuration at one site.
 - [Lunar limb profile](05-lunar-limb/_index.md): the Moon's mountains and
-  valleys, and Baily's beads.
+  valleys, and [Baily's beads](05-lunar-limb/bailys-beads.md).
 - [Solar radius](06-solar-radius/_index.md): the values in use and what each
   costs.
 - [Validation and error budget](10-validation/_index.md): observed against

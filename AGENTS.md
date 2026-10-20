@@ -59,6 +59,8 @@ python tools/build.py --serve     # build, then localhost:8000
 python tools/prose_check.py       # flag prose tics and long sentences
 python tools/jargon_check.py      # terms used before they are explained
 python tools/merge_refs.py        # merge content/**/refs.tsv into references.tsv
+python tools/autolink.py          # first mentions links.tsv would link; --apply adds them
+python tools/link_check.py        # broken links, hosts and link floors; --report, --online
 ```
 
 Requires pandoc 3.x on PATH and Python 3.10+. No pip dependencies.
@@ -138,7 +140,8 @@ with the topic's short prefix (given in your brief) so slugs never collide
 across topics, for example `limb-watts-1963`. The note field says what the
 source is good for and whether you read the artefact or only a summary of it.
 
-`terms.tsv` rows: `slug<TAB>label<TAB>definition`. A definition may carry
+`terms.tsv` rows: `slug<TAB>label<TAB>definition<TAB>url`, the last column
+optional and holding the term's canonical page (see [Linking](#linking)). A definition may carry
 `$...$` maths, which the build renders to MathML, so write a formula as LaTeX
 rather than transliterating it into ASCII. Keep the label free of `$`, since
 the A to Z listing sorts on it; use Unicode symbols there, as in `l₁ and l₂`. Propose the jargon a
@@ -233,7 +236,50 @@ Read `tools/figures/fundamental_plane.py` as the worked example, and
   stated.
 - **No commentary on the analysis itself.** Not "interestingly", not "it is
   worth noting", not "this is important".
-- Link between notes with relative `.md` paths.
+- Link between notes with relative `.md` paths, and link densely: see
+  [Linking](#linking).
+
+## Linking
+
+A reader who meets a subject should be one click from the page of this site
+that treats it in depth and from the reference page that defines it. Linking
+is specified as LNK in `docs/specs.md`; the rules in short:
+
+1. **Link the first mention on each page, once.** The first prose mention of
+   a subject another page treats in depth links to that page. The first
+   mention of a named mission, instrument, dataset, institution, program,
+   person, body or dated eclipse links to its canonical page. Later mentions
+   on the same page stay plain, and a page never links to itself.
+2. **Canonical means the reference work or the owner.** A Wikipedia article,
+   or the page of the agency, mission or project that owns the thing: NASA,
+   JPL and NAIF, IERS, IMCCE, IOTA, the program's own site. Never a blog, a
+   mirror or a news story. The hosts are listed in `CANONICAL_SITES` in
+   `tools/build.py`. Add a host there before linking it.
+3. **A link is reading, not evidence.** It never replaces a `[@slug]`
+   citation, and a source the note relies on goes in `refs.tsv` even when
+   its name is also linked.
+4. **Give a glossary term its canonical page** in the fourth column of
+   `terms.tsv` whenever one exists. The explainer then ends with "Read on
+   Wikipedia".
+5. **Never link inside** a heading, an image caption, a quotation, code,
+   maths, a citation, a glossary marker or another link.
+6. **Floors.** Every research note links at least five other pages of the
+   site and three canonical pages outside it, counting its glossary terms.
+7. **External links open a new tab, internal links the same tab.** The build
+   adds `target="_blank"` and `rel="noopener"` to every link that leaves the
+   site, so write plain Markdown links and never add a target by hand.
+
+The mechanics: `links.tsv` maps a pattern to a target. After writing a note,
+add a row for each new subject or named thing it introduces, run
+`python tools/autolink.py` to see what it would link, read each proposal in
+its sentence, then run it with `--apply`. A mapped phrase can mean something
+else in a given sentence, as "grazes" does in "the axis grazes the
+ellipsoid", so tighten the pattern rather than accept a wrong link.
+`python tools/link_check.py` checks every relative link and anchor, the
+hosts and the floors; `--report` prints each page's counts, and `--online`
+fetches every external URL once, which needs a workstation with network
+access. Link by hand where a sentence needs a specific section, as
+`[the central line](path-and-limits.md#central-line)`.
 
 ## Research method that works
 

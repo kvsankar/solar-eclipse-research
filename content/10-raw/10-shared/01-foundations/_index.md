@@ -10,18 +10,18 @@ seo_title: Besselian Eclipse Calculation: Elements and Geometry
 
 ::: summary
 - **Eight numbers describe the shadow.** $x, y, d, \mu, l_1, l_2$ vary with time and $\tan f_1, \tan f_2$ are held constant for the eclipse. Everything a global or local product computes follows from them and their rates [@bes-es1961] [@bes-nasa-beselm].
-- **Two lunar radius ratios, never one.** $k = 0.272281$ for all umbral and antumbral contacts, and for penumbral contacts 0.2724880 in the Five Millennium Canon and the NASA pages derived from it, 0.2725076 in the NASA bulletins and on EclipseWise [@bes-nasa-radius] [@bes-nasa-2024-elements].
-- **The μ convention controls the ΔT correction.** NASA ephemeris-meridian μ requires a downstream shift of 15.041 arcseconds per second of ΔT. A μ generated using actual UT1 sidereal time already contains that correction [@bes-nasa-jsex-source] [@bes-es1961] [@bes-lasteclipse].
+- **Two lunar radius ratios, never one.** $k = 0.272281$ for all umbral and antumbral contacts, and for penumbral contacts 0.2724880 in the [Five Millennium Canon](../../20-solar-eclipses-and-transits/02-catalogs/canons-and-data-products.md) and the NASA pages derived from it, 0.2725076 in the NASA bulletins and on EclipseWise [@bes-nasa-radius] [@bes-nasa-2024-elements].
+- **The μ convention controls the [ΔT](../07-earth-and-time/delta-t-and-earth-rotation.md) correction.** NASA ephemeris-meridian μ requires a downstream shift of 15.041 arcseconds per second of ΔT. A μ generated using actual UT1 sidereal time already contains that correction [@bes-nasa-jsex-source] [@bes-es1961] [@bes-lasteclipse].
 - **The solar semidiameter is a parameter, not a constant.** Every published prediction uses Auwers' $s_0 = 959.63$ arcseconds at 1 au, while eclipse observations give about 959.95 arcseconds [@bes-quaglia-2021].
-- **No open library generates elements from a JPL ephemeris as a documented, validated function.** Skyfield does not project the shadow, and the Swiss Ephemeris computes the geometry live without ever exposing $x, y, l_1, l_2$ [@bes-skyfield-801] [@bes-swisseph-swecl].
+- **No open library generates elements from a JPL ephemeris as a documented, validated function.** [Skyfield](https://rhodesmill.org/skyfield/) does not project the shadow, and the [Swiss Ephemeris](https://www.astro.com/swisseph/) computes the geometry live without ever exposing $x, y, l_1, l_2$ [@bes-skyfield-801] [@bes-swisseph-swecl].
 :::
 
 ## What this topic covers
 
-The geometric core of every solar eclipse computation: Bessel's fundamental
+The geometric core of every solar eclipse computation: [Bessel](https://en.wikipedia.org/wiki/Friedrich_Wilhelm_Bessel)'s fundamental
 plane and its sign conventions, the eight tabulated elements that describe the
 Moon's shadow in that plane, the constants and time scale built into them, the
-polynomial form in which NASA and Meeus publish them, and the ordered equations
+polynomial form in which NASA and [Meeus](https://en.wikipedia.org/wiki/Jean_Meeus) publish them, and the ordered equations
 that turn geocentric apparent places of the Sun and Moon into a table of
 elements. It also covers when to abandon the elements and compute topocentric
 circumstances directly from the ephemeris.
@@ -33,7 +33,7 @@ circumstances directly from the ephemeris.
   the polynomial form NASA publishes.
 - [From ephemeris to elements](ephemeris-to-elements.md): the ordered list of
   equations a developer needs, what the almanacs and open-source codes do about
-  frames, light-time and aberration, and the polynomial fit.
+  frames, [light-time](../07-earth-and-time/refraction-light-time-and-frames.md) and aberration, and the polynomial fit.
 
 ## What this topic changes for the pipeline
 

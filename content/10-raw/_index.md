@@ -12,7 +12,7 @@ Working notes, one topic per folder, grouped by kind of event:
 [lunar eclipses](30-lunar-eclipses/_index.md),
 [occultations](40-occultations/_index.md) and
 [planetary satellites](50-planetary-satellites/_index.md). Each note ends with **what this changes**
-for the pipeline design, saying so explicitly when the answer is nothing, and
+for the [pipeline design](../20-reports/pipeline-design.md), saying so explicitly when the answer is nothing, and
 then the questions it could not close, naming the paper, dataset or line of
 code to obtain rather than the subject to think about further.
 

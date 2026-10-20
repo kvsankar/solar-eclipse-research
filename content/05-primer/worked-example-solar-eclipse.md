@@ -9,7 +9,7 @@ seo_title: How to Calculate a Solar Eclipse: Methods and Formulas
 
 ::: summary
 - **A solar eclipse is a shadow problem.** The Moon casts two cones, the [?umbra] and the [?penumbra], and the computation asks where and when each cone touches the Earth.
-- **Bessel's method describes a smooth shadow on one plane** through the Earth's centre, the [?fundamental-plane], using the [?besselian-elements]. Direct topocentric calculations are another route to local contacts. Terrain and limb tests require additional inputs [@bes-es1961] [@bes-quaglia-2021] [@svs-wright-young-2024].
+- **[Bessel](https://en.wikipedia.org/wiki/Friedrich_Wilhelm_Bessel)'s method describes a smooth shadow on one plane** through the Earth's centre, the [?fundamental-plane], using the [?besselian-elements]. Direct topocentric calculations are another route to local contacts. Terrain and limb tests require additional inputs [@bes-es1961] [@bes-quaglia-2021] [@svs-wright-young-2024].
 - **The elements carry the constants.** The Sun's radius, the Moon's radius and the choice of ephemeris all enter here, so two tables of elements for the same eclipse can differ.
 - **The Earth rotates under the shadow**, and how far it has rotated depends on [?delta-t], the one input that cannot be computed in advance.
 - **The Moon is not round and the Sun has no edge.** Those two facts, not the orbits, set the limit of what any prediction can promise at the edge of the path.
@@ -63,7 +63,7 @@ a one-dimensional root-find for the limits, both given in full in the
 [global circumstances](../10-raw/20-solar-eclipses-and-transits/03-global-circumstances/_index.md) notes
 [@glob-es1961].
 
-The duration of totality at a point on the central line is the umbral
+The duration of totality at a point on the [central line](../10-raw/20-solar-eclipses-and-transits/03-global-circumstances/path-and-limits.md) is the umbral
 diameter divided by the speed of the shadow relative to the ground. The shadow
 moves at about a kilometre a second, so a 100 km umbra gives about two minutes
 [@glob-es1992].
@@ -71,7 +71,7 @@ moves at about a kilometre a second, so a 100 km umbra gives about two minutes
 ## From the plane to one place
 
 For a single observer the question is reversed: project the observer onto
-the fundamental plane, and ask when the distance from the observer's projected
+the [fundamental plane](../10-raw/10-shared/01-foundations/besselian-elements.md), and ask when the distance from the observer's projected
 position to the shadow centre equals the shadow radius. That gives first and
 fourth contact for the penumbra and second and third contact for the umbra.
 The [?eclipse-magnitude] is the fraction of the Sun's diameter covered at
@@ -98,7 +98,7 @@ At the scale of an eclipse edge the Moon's silhouette departs from a circle by
 up to about 3 arcseconds, which is 6 km of lunar mountain and valley. A valley
 on the trailing edge lets sunlight through a few seconds longer; a mountain
 cuts it off early. Those are [?bailys-beads]. Laser altimeters on the SELENE
-and Lunar Reconnaissance Orbiter missions have mapped the Moon to a few metres,
+and [Lunar Reconnaissance Orbiter](https://en.wikipedia.org/wiki/Lunar_Reconnaissance_Orbiter) missions have mapped the Moon to a few metres,
 so the [?limb-profile] seen from any place at any instant can be built from a
 digital elevation model. Applying it moves second and third contact by 2 to
 3 s anywhere in the path and by tens of seconds near the edge, and turns the
@@ -123,14 +123,14 @@ observer's distance from that limit
 
 ## Where the products come from
 
-Fred Espenak's tables on the NASA eclipse site and EclipseWise are computed
+Fred [Espenak](https://en.wikipedia.org/wiki/Fred_Espenak)'s tables on the NASA eclipse site and EclipseWise are computed
 from the elements with a round Moon and observers at sea level, and Espenak
 states that the limb moves the limits by 1 to 3 km. Xavier Jubier's
 interactive maps add limb corrections at a clicked point. NASA's Scientific
-Visualization Studio, in Ernie Wright's work for 2017, 2023 and 2024, puts
+Visualization Studio, in [Ernie Wright](../10-raw/20-solar-eclipses-and-transits/11-svs-wright/wright-2024-paper.md)'s work for 2017, 2023 and 2024, puts
 every map pixel at its true height and tests it against the true limb, and provides
 reference map products for comparison. Dave Herald's
-Occult is the
+[Occult](../10-raw/10-shared/09-software-and-repos/commercial-and-institutional-tools.md) is the
 occultation community's tool for beads. Other surveyed apps use several computational methods and input datasets
 [@svs-espenak-2024-path] [@svs-wright-young-2024] [@sw-occult4].
 
@@ -152,7 +152,7 @@ some of them change.
   [Lunar eclipses](../10-raw/30-lunar-eclipses/_index.md).
 - **An occultation of a star** keeps every step but changes the source. The
   star is a point at infinity, so the two cones become one cylinder of the
-  Moon's radius and there is no penumbra. The limb profile matters even more
+  Moon's radius and there is no penumbra. The [limb profile](../10-raw/20-solar-eclipses-and-transits/05-lunar-limb/limb-profile-methods.md) matters even more
   near the limits, where the star grazes the Moon's edge [@occ-es1961]. See
   [Lunar occultations](../10-raw/40-occultations/13-lunar-occultations/_index.md).
 - **A transit of Mercury or Venus** keeps every step with the planet in place

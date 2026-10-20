@@ -9,9 +9,9 @@ tags: [saturn, satellites, tass, dourneau, sat441, noe, meeus, rings]
 ---
 
 ::: summary
-- **Four generations of theory place Saturn's main satellites.** They are Dourneau's elements of 1987 to 1993, Harper and Taylor 1993, TASS 1.6 and 1.7 of Vienne and Duriez, and the numerical ephemerides NOE of IMCCE and SAT441 of JPL [@sats-dourneau-1993] [@sats-harper-taylor-1993] [@sats-vienne-duriez-1995] [@sats-arlot-2012-phesat09] [@sats-naif-sat441-cmt].
-- **Their accuracy differs by an order of magnitude.** Dourneau estimated 350 to 500 km for Enceladus to Titan and 2500 km for Hyperion. Against the 2009 mutual events, TASS 1.7 left 48.5 milliarcseconds of right-ascension residual against 16.4 for Lainey's NOE solution and 17.3 for JPL SAT351 [@sats-dourneau-1993] [@sats-arlot-2012-phesat09].
-- **Meeus chapter 46 is Dourneau's elements in a compact form.** Its Mimas, Enceladus, Tethys and Dione constants and the equator node and inclination 168.8112 and 28.0817 degrees match Dourneau's published values [@sats-soniakeys-saturnmoons] [@sats-harper-taylor-1993] [@sats-dourneau-1993].
+- **Four generations of theory place Saturn's main satellites.** They are Dourneau's elements of 1987 to 1993, Harper and Taylor 1993, TASS 1.6 and 1.7 of Vienne and Duriez, and the numerical ephemerides NOE of [IMCCE](https://www.imcce.fr/) and SAT441 of JPL [@sats-dourneau-1993] [@sats-harper-taylor-1993] [@sats-vienne-duriez-1995] [@sats-arlot-2012-phesat09] [@sats-naif-sat441-cmt].
+- **Their accuracy differs by an order of magnitude.** Dourneau estimated 350 to 500 km for Enceladus to [Titan](https://en.wikipedia.org/wiki/Titan_(moon)) and 2500 km for Hyperion. Against the 2009 [mutual events](../15-jupiter-satellites/mutual-events.md), TASS 1.7 left 48.5 milliarcseconds of right-ascension residual against 16.4 for Lainey's NOE solution and 17.3 for JPL SAT351 [@sats-dourneau-1993] [@sats-arlot-2012-phesat09].
+- **[Meeus](https://en.wikipedia.org/wiki/Jean_Meeus) chapter 46 is Dourneau's elements in a compact form.** Its Mimas, Enceladus, Tethys and Dione constants and the equator node and inclination 168.8112 and 28.0817 degrees match Dourneau's published values [@sats-soniakeys-saturnmoons] [@sats-harper-taylor-1993] [@sats-dourneau-1993].
 - **Meeus chapter 45 gives the ring aspect in six numbers.** They are B, B′, ΔU, P and the full major and minor axes a and b of the outer ring edge, with $a = 375.35''/\Delta$ and $b = a\sin|B|$. The radius of the edge is $a/2$. Four fixed fractions of a give the inner edges [@sats-soniakeys-saturnring].
 - **Saturn is not a sphere.** Its 1 bar equatorial and polar radii are 60,268 and 54,364 km, a flattening of 0.09796. A gravity file may quote 60,330 km or 60,000 km as a reference radius. That is a different quantity [@sats-nssdc-saturn] [@sats-naif-pck00011] [@sats-naif-sat441-cmt] [@sats-harper-taylor-1993].
 - **Meeus's ring fractions are older than the Voyager and Cassini radii.** At 1 au they put the inner edge of ring A at 119,795 km, against 122,340 km in NASA's ring fact sheet, a 2 per cent difference [@sats-soniakeys-saturnring] [@sats-nssdc-rings].
@@ -47,7 +47,7 @@ By 2008 TASS had "a drift reaching about 100 km", and Arlot and Thuillot judged 
 
 ### IMCCE numerical ephemerides (NOE, 2011 onward)
 
-The IMCCE ephemeris NOE-6-2011-MAIN, a [?noe] solution, "was produced from the numerical integration of the orbital motion of the eight main Saturnian moons" with mutual perturbations, Saturn's gravity field to order six, solar and Jovian perturbations and tides [@sats-arlot-2012-phesat09]. It was fitted to astrometry from 1886 to 2009, including the 2009 mutual events. Its internal accuracy is "a few hundreds of meters". Its expected accuracy over the whole period is "about 600 km for the six innermost moons, and 1,800 km for Hyperion and Iapetus" [@sats-arlot-2012-phesat09]. It is published in SPICE format [@sats-arlot-2012-phesat09].
+The IMCCE ephemeris NOE-6-2011-MAIN, a [?noe] solution, "was produced from the numerical integration of the orbital motion of the eight main Saturnian moons" with mutual perturbations, Saturn's gravity field to order six, solar and Jovian perturbations and tides [@sats-arlot-2012-phesat09]. It was fitted to astrometry from 1886 to 2009, including the 2009 mutual events. Its internal accuracy is "a few hundreds of meters". Its expected accuracy over the whole period is "about 600 km for the six innermost moons, and 1,800 km for Hyperion and Iapetus" [@sats-arlot-2012-phesat09]. It is published in [SPICE](https://naif.jpl.nasa.gov/naif/) format [@sats-arlot-2012-phesat09].
 
 The same integration underlies Lainey's tidal studies. The 2012 fit found Saturn's tidal ratio $k_2/Q = (2.3 \pm 0.7)\times 10^{-4}$ [@sats-lainey-2012]. The 2017 fit added Cassini astrometry and gave $k_2 = 0.390 \pm 0.024$ [@sats-lainey-2017]. The 2020 fit found Titan receding at 11.3 ± 2.0 cm per year [@sats-lainey-2020]. These tidal terms matter for a developer only as a reason: an ephemeris without them drifts over centuries.
 
@@ -55,7 +55,7 @@ NOE stands for "Numerical Orbit and Ephemerides". It is an N-body code that was 
 
 ### JPL SAT ephemerides (SAT351 to SAT441)
 
-JPL delivers numbered [?sats-sat-ephemeris] files as SPICE [?spk-kernel|SPK kernels]. The current main-satellite file is SAT441, and JPL's table cites Jacobson (2022), "The Orbits of the Main Saturnian Satellites, the Saturnian System Gravity Field, and the Orientation of Saturn's Pole" for it [@sats-jpl-sat-ephem-table] [@sats-jacobson-2022]. The NAIF copy `sat441.bsp` was created 2022-01-29 from SAT441.24. It covers Mimas to Phoebe, Helene, Telesto, Calypso, Methone, Polydeuces and Saturn itself from 1749 December 29 to 2250 January 5 [@sats-naif-sat441-cmt]. It is consistent with the planetary ephemeris DE440, uses the model SATORBINT, and states a Chebyshev interpolation error of 7.5 m [@sats-naif-sat441-cmt] [@moon-park-2021]. The small inner satellites such as Janus and Epimetheus are in the separate file SAT415 [@sats-naif-sat415-cmt] [@sats-jpl-sat-ephem-table].
+JPL delivers numbered [?sats-sat-ephemeris] files as SPICE [?spk-kernel|SPK kernels]. The current main-satellite file is SAT441, and JPL's table cites Jacobson (2022), "The Orbits of the Main Saturnian Satellites, the Saturnian System Gravity Field, and the Orientation of Saturn's Pole" for it [@sats-jpl-sat-ephem-table] [@sats-jacobson-2022]. The NAIF copy `sat441.bsp` was created 2022-01-29 from SAT441.24. It covers Mimas to Phoebe, Helene, Telesto, Calypso, Methone, Polydeuces and Saturn itself from 1749 December 29 to 2250 January 5 [@sats-naif-sat441-cmt]. It is consistent with the planetary ephemeris [DE440](../../10-shared/08-lunar-and-solar-model/ephemerides.md), uses the model SATORBINT, and states a Chebyshev interpolation error of 7.5 m [@sats-naif-sat441-cmt] [@moon-park-2021]. The small inner satellites such as Janus and Epimetheus are in the separate file SAT415 [@sats-naif-sat415-cmt] [@sats-jpl-sat-ephem-table].
 
 Each satellite SPK "provides the state ... of the named satellites relative to the barycenter of that planetary system", and the planet is carried "as a satellite of its own barycenter" [@sats-naif-sat-readme]. A program must therefore subtract Saturn's own state, body 699, to get a saturnicentric vector. Using the barycentre, body 6, puts every satellite off by Saturn's reflex motion.
 
@@ -67,7 +67,7 @@ The 2009 mutual events give the only common yardstick in this topic. For the 23 
 |---|---|---|
 | TASS 1.7 (Vienne and Duriez) | 48.5 | 21.7 |
 | Lainey and collaborators (NOE) | 16.4 | 20.7 |
-| JPL SAT351 through Horizons | 17.3 | 21.6 |
+| JPL SAT351 through [Horizons](https://ssd.jpl.nasa.gov/horizons/) | 17.3 | 21.6 |
 
 One [?milliarcsecond|milliarcsecond] at Saturn is about 6 km, since Arlot and Thuillot equate 0.001 to 0.01 arcseconds with 6 to 60 km [@sats-arlot-thuillot-2008]. Direct ground-based astrometry reaches "0.1 arcsec at best, which corresponds to 600 km" [@sats-arlot-thuillot-2008]. The 1980 mutual events already reached post-fit residuals of 80 km, "approx. 0.01″ in astrometric accuracy" [@sats-rpx-dps-letter].
 
@@ -75,7 +75,7 @@ One [?milliarcsecond|milliarcsecond] at Saturn is about 6 km, since Arlot and Th
 
 Meeus's *Astronomical Algorithms*, second edition, chapter 46, computes apparent positions of Mimas to Iapetus [@earth-meeus-aa]. The formulas below are quoted from the MIT-licensed Go transcription by Sonia Keys, not from the book. Its test reproduces the book's Example 46.a [@sats-soniakeys-saturnmoons]. A JavaScript port carries the same constants [@sats-astronomia-saturn].
 
-**The theory behind it.** The chapter's constants are Dourneau's. Mimas's mean longitude $127.64^{\circ} + 381.994497^{\circ}\,t_1$ with $t_1$ counted from JD 2411093.0, its eccentricity 0.01905, and the Mimas-Tethys libration epoch 1866.39 all appear in Dourneau's element table [@sats-soniakeys-saturnmoons] [@sats-dourneau-1993]. The equator node $168.8112^{\circ}$ and inclination $28.0817^{\circ}$ are the values Harper and Taylor attribute to Dourneau [@sats-harper-taylor-1993]. The positions therefore carry Dourneau's accuracy of hundreds of kilometres, not TASS's or SAT441's.
+**The theory behind it.** The chapter's constants are Dourneau's. Mimas's mean longitude $127.64^{\circ} + 381.994497^{\circ}\,t_1$ with $t_1$ counted from JD 2411093.0, its eccentricity 0.01905, and the Mimas-Tethys [libration](../../10-shared/08-lunar-and-solar-model/lunar-figure-and-libration.md) epoch 1866.39 all appear in Dourneau's element table [@sats-soniakeys-saturnmoons] [@sats-dourneau-1993]. The equator node $168.8112^{\circ}$ and inclination $28.0817^{\circ}$ are the values Harper and Taylor attribute to Dourneau [@sats-harper-taylor-1993]. The positions therefore carry Dourneau's accuracy of hundreds of kilometres, not TASS's or SAT441's.
 
 **Time arguments.** With JDE the Julian Ephemeris Day at the [?light-time]-corrected instant:
 
@@ -129,7 +129,7 @@ $$
 X' \leftarrow X' + \frac{|Z'|}{K_j}\sqrt{1 - \left(\frac{X'}{r_j}\right)^2}, \qquad W = \frac{\Delta}{\Delta + Z'/2475}, \qquad X = X'W, \quad Y = Y'W,
 $$
 
-with $K_j$ = 20947, 23715, 26382, 29876, 35313, 53800, 59222, 91820 for Mimas to Iapetus and $\Delta$ the Earth-Saturn distance in au. The factor $W$ is perspective. Since $Z'$ is in Saturn radii and $\Delta$ in au, the constant 2475 implies a unit radius of 149,597,870.7 / 2475 ≈ 60,444 km. The $K_j$ term is a differential light-time correction. A satellite nearer or farther than Saturn's centre by $Z'$ radii is seen as it was $Z'R/c$ earlier or later, and in that time it moves $v Z'R/c$ along its orbit. This gives $K = c/v$. With the chapter's own orbital radii, the 60,444 km unit and periods from the mean motions, $c/v$ is 20,946 for Mimas and 53,794 for Titan, against the tabulated 20,947 and 53,800. This check is arithmetic on the transcribed constants. The book's own explanation of $K_j$ is not quoted here.
+with $K_j$ = 20947, 23715, 26382, 29876, 35313, 53800, 59222, 91820 for Mimas to Iapetus and $\Delta$ the Earth-Saturn distance in au. The factor $W$ is perspective. Since $Z'$ is in Saturn radii and $\Delta$ in au, the constant 2475 implies a unit radius of 149,597,870.7 / 2475 ≈ 60,444 km. The $K_j$ term is a differential [light-time](../../10-shared/07-earth-and-time/refraction-light-time-and-frames.md) correction. A satellite nearer or farther than Saturn's centre by $Z'$ radii is seen as it was $Z'R/c$ earlier or later, and in that time it moves $v Z'R/c$ along its orbit. This gives $K = c/v$. With the chapter's own orbital radii, the 60,444 km unit and periods from the mean motions, $c/v$ is 20,946 for Mimas and 53,794 for Titan, against the tabulated 20,947 and 53,800. This check is arithmetic on the transcribed constants. The book's own explanation of $K_j$ is not quoted here.
 
 **Light time.** Saturn's geocentric distance is iterated twice with $\tau = 0.0057755183\,\Delta$ days. The satellite theory is evaluated at the retarded instant $\mathrm{JDE} - \tau$ [@sats-soniakeys-saturnmoons]. Meeus's planetary positions come from VSOP87 [@sats-soniakeys-saturnmoons].
 
@@ -226,14 +226,14 @@ The ring plane is not fixed. Solar torques make it precess. The 1993 occultation
 | Program or service | Saturn's main satellites | Source read |
 |---|---|---|
 | Meeus ch. 46 ports (soniakeys Go, astronomia JS) | Dourneau's elements, simplified | [@sats-soniakeys-saturnmoons] [@sats-astronomia-saturn] |
-| Stellarium | TASS 1.7, as a C rearrangement by J. Gajdosik | [@sats-stellarium-tass17] [@sats-stellarium-ephemwrapper] |
+| [Stellarium](https://stellarium.org/) | TASS 1.7, as a C rearrangement by J. Gajdosik | [@sats-stellarium-tass17] [@sats-stellarium-ephemwrapper] |
 | Cartes du Ciel (Skychart) | TASS, translated from Xplanet's libmoons, and Zadunaisky elements for Phoebe | [@sats-skychart-plansat] |
 | IMCCE Miriade (ephemcc) | INPOP19 planets with LTE-NOE satellites | [@sats-miriade-ephemcc-output] |
 | IMCCE and Sternberg Astronomical Institute (SAI) MULTI-SAT | Choice of Lainey 2015, Lainey 2011, TASS, Dourneau, Harper and Taylor | [@sats-multisat-saturn] |
 | JPL Horizons | SAT441 for Mimas to Iapetus, SAT415 for small inner moons | [@sats-jpl-sat-ephem-table] [@sw-horizons-manual] |
 | SPICE (NAIF generic kernels) | `sat441.bsp`, `sat415.bsp` with DE440 | [@sats-naif-sat441-cmt] [@sats-naif-sat415-cmt] |
 
-Stellarium's rearrangement changes the independent variable to $T = \mathrm{JD} - 2444240$ for all satellites. It also precomputes constant terms and merges terms of equal frequency [@sats-stellarium-tass17]. Cartes du Ciel states that its satellite code is a Pascal rewrite of Xplanet's libmoons, so that Cartes du Ciel and Xplanet draw satellites in the same places [@sats-skychart-plansat]. The Astronomical Almanac's satellite section has been printed from compact series. A 1995 Royal Greenwich Observatory abstract describes moving it to the Chapront and Vu mixed-function form [@sats-taylor-yallop]. No primary source in this corpus states which ephemeris feeds the current Almanac's Saturn pages.
+Stellarium's rearrangement changes the independent variable to $T = \mathrm{JD} - 2444240$ for all satellites. It also precomputes constant terms and merges terms of equal frequency [@sats-stellarium-tass17]. Cartes du Ciel states that its satellite code is a Pascal rewrite of Xplanet's libmoons, so that Cartes du Ciel and Xplanet draw satellites in the same places [@sats-skychart-plansat]. The [Astronomical Almanac](https://en.wikipedia.org/wiki/Astronomical_Almanac)'s satellite section has been printed from compact series. A 1995 Royal Greenwich Observatory abstract describes moving it to the Chapront and Vu mixed-function form [@sats-taylor-yallop]. No primary source in this corpus states which ephemeris feeds the current Almanac's Saturn pages.
 
 ## Sources compared
 

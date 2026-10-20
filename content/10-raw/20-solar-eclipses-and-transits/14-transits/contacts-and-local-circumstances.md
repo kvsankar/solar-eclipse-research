@@ -9,12 +9,12 @@ tags: [transits, contacts, local-circumstances, solar-radius, delta-t, parallax]
 ---
 
 ::: summary
-- **Contacts come from one quadratic.** With relative position $(u, v)$ and motion $(u', v')$, a contact at radius $L$ occurs at $t = L\cos\psi/n - (uu' + vv')/n^2$, with $\sin\psi = (uv' - u'v)/(nL)$ and $\cos\psi$ negative for ingress. The 1961 Explanatory Supplement and Chauvenet give the same solution [@tr-es1961] [@bes-chauvenet-1863].
+- **Contacts come from one quadratic.** With relative position $(u, v)$ and motion $(u', v')$, a contact at radius $L$ occurs at $t = L\cos\psi/n - (uu' + vv')/n^2$, with $\sin\psi = (uv' - u'v)/(nL)$ and $\cos\psi$ negative for ingress. The 1961 Explanatory Supplement and [Chauvenet](https://en.wikipedia.org/wiki/William_Chauvenet) give the same solution [@tr-es1961] [@bes-chauvenet-1863].
 - **A local contact time is a geocentric time plus a three-constant correction.** The almanac form is $T = T_0 + a\,\rho\sin\phi' + b\,\rho\cos\phi'\cos(c + \lambda)$. The yearbook of the Institute of Applied Astronomy of the Russian Academy of Sciences (IAA RAS) prints $a$, $b$, $c$ for each contact, and the 1961 Supplement derives them with ΔT inside the cosine [@tr-iaa-2019] [@tr-es1961].
 - **Parallax moves Venus contacts by up to about 7 minutes and Mercury contacts by up to about 2 minutes.** Using geocentric times for a site can be wrong by up to 10 minutes for Venus and 3 minutes for Mercury [@tr-nasa-oh2012] [@tr-ew-tm2019] [@tr-nasa-visibility].
 - **The solar radius moves every contact.** At the four modern transits one arcsecond of contact radius moves a geocentric interior contact by 10 to 21 seconds of time. The 0.32 arcsecond gap between 959.63 and 959.95 arcseconds is worth 3.3 s per contact in 2019 and 6.5 s in 2004. These values are computed here from the Supplement's solution with the published elements [@tr-es1961] [@tr-eso-eis-b1] [@tr-ew-tm2016] [@tr-ew-tm2019] [@tr-jubier-mtc-js] [@tr-jubier-vtc-js].
-- **Planet radii are not standard.** Meeus prefers 8.41 arcseconds for Venus in transit work because 8.34 refers to the crust. Swiss Ephemeris and the Institut de mécanique céleste et de calcul des éphémérides (IMCCE) use the solid-body value, and Jubier uses 8.3442 arcseconds [@cat-meeus-1991-aa] [@tr-swisseph-swevents] [@tr-eso-eis-b1] [@tr-jubier-vtc-js].
-- **Published 2004 Venus contacts differ by 4 to 5 seconds between Espenak and IMCCE.** The pattern, exterior contacts outward and interior contacts inward, matches a Venus semidiameter of 8.41 against 8.34 arcseconds to within half a second. Espenak and IAA agree to 1.5 seconds for Mercury in 2016 and to 1 second in 2019 [@tr-nasa-oh2004] [@tr-eso-eis-b1] [@tr-ew-tm2016] [@tr-iaa-2016] [@tr-ew-tm2019] [@tr-iaa-2019].
+- **Planet radii are not standard.** [Meeus](https://en.wikipedia.org/wiki/Jean_Meeus) prefers 8.41 arcseconds for Venus in transit work because 8.34 refers to the crust. [Swiss Ephemeris](https://www.astro.com/swisseph/) and the Institut de mécanique céleste et de calcul des éphémérides ([IMCCE](https://www.imcce.fr/)) use the solid-body value, and Jubier uses 8.3442 arcseconds [@cat-meeus-1991-aa] [@tr-swisseph-swevents] [@tr-eso-eis-b1] [@tr-jubier-vtc-js].
+- **Published 2004 Venus contacts differ by 4 to 5 seconds between [Espenak](https://en.wikipedia.org/wiki/Fred_Espenak) and IMCCE.** The pattern, exterior contacts outward and interior contacts inward, matches a Venus semidiameter of 8.41 against 8.34 arcseconds to within half a second. Espenak and IAA agree to 1.5 seconds for Mercury in 2016 and to 1 second in 2019 [@tr-nasa-oh2004] [@tr-eso-eis-b1] [@tr-ew-tm2016] [@tr-iaa-2016] [@tr-ew-tm2019] [@tr-iaa-2019].
 - **ΔT and the longitude convention are where predictions go wrong silently.** The IAA formulas take longitude east-positive. The 1961 Supplement and Jubier's code take it west-positive and add $1.002738\,\Delta T$ to it [@tr-iaa-2016] [@tr-es1961] [@tr-jubier-mtc-js].
 :::
 
@@ -54,7 +54,7 @@ var SM = ((Xa * Ypa) - (Ya * Xpa)) / (n * L);
 Tau = -(((Xa * Xpa) + (Ya * Ypa)) / n2) - ((L / n) * Math.sqrt(1 - (SM * SM)));   // ingress
 ```
 
-with `ss` and `sp` the apparent semidiameters from 959.62 and 3.3558 arcseconds at 1 au, iterated until $|\tau| < 10^{-6}$ hours [@tr-jubier-mtc-js]. Stellarium's `localTransit` evaluates the eclipse form `dt = (L * cfi / sqrt(udot*udot + vdot*vdot)) - (u*udot + v*vdot)/n2` on its geocentric elements [@tr-stellarium-transits].
+with `ss` and `sp` the apparent semidiameters from 959.62 and 3.3558 arcseconds at 1 au, iterated until $|\tau| < 10^{-6}$ hours [@tr-jubier-mtc-js]. [Stellarium](https://stellarium.org/)'s `localTransit` evaluates the eclipse form `dt = (L * cfi / sqrt(udot*udot + vdot*vdot)) - (u*udot + v*vdot)/n2` on its geocentric elements [@tr-stellarium-transits].
 
 ### Least separation and greatest transit
 
@@ -80,7 +80,7 @@ where $V$ is the angle between the north point of the solar limb and the point n
 
 ### The rigorous form in the 1961 Supplement
 
-At a point on the Earth the heliocentric quantities change by small parallactic terms. The Supplement writes $u_1 = u + q$, $v_1 = v + p$, $L_1 = L + w$ and quotes Newcomb's expressions [@tr-es1961]:
+At a point on the Earth the heliocentric quantities change by small parallactic terms. The Supplement writes $u_1 = u + q$, $v_1 = v + p$, $L_1 = L + w$ and quotes [Newcomb](https://en.wikipedia.org/wiki/Simon_Newcomb)'s expressions [@tr-es1961]:
 
 $$
 q = \pi_\odot(\rho\sin\phi'\cos\varepsilon - \rho\cos\phi'\sin\varepsilon\sin\tau_\mathrm{h})
@@ -124,7 +124,7 @@ $$
 T' = T + \frac{\pi - \pi'}{n\cos\psi}\left[\rho\sin\phi'\sin D + \rho\cos\phi'\cos D\cos(\theta - \omega)\right],\qquad \theta = \mu - A ,
 $$
 
-with $\omega$ the west longitude and $\mu$ the sidereal time at the first meridian, so that $T' = T + B\rho\sin\phi' + C\rho\cos\phi'\cos(\theta - \omega)$ with constants $B$ and $C$ for each contact [@bes-chauvenet-1863]. For egress of the 1861 November 11 transit of Mercury he obtains, in Washington mean time,
+with $\omega$ the west longitude and $\mu$ the sidereal time at the first meridian, so that $T' = T + B\rho\sin\phi' + C\rho\cos\phi'\cos(\theta - \omega)$ with constants $B$ and $C$ for each contact [@bes-chauvenet-1863]. For egress of the 1861 November 11 [transit of Mercury](_index.md) he obtains, in Washington mean time,
 
 $$
 T' = 16^{h}\,12^{m}\,23^{s}.8 + 48^{s}.10\,\rho\sin\phi' + 26^{s}.23\,\rho\cos\phi'\cos(303^{\circ}\,20'.6 - \omega)
@@ -161,7 +161,7 @@ with geographic latitude $\phi$ reproduces all four values of IMCCE's Paris exam
 
 ### The size of the parallax effect
 
-For Venus, "the horizontal parallax of Venus (~30 arc-sec) introduces a topocentric correction of up to ±7 minutes with respect to the geocentric contact times" [@tr-nasa-venus0412]. For Mercury in 2019 local times "may differ from the geocentric times by up to 2 minutes" [@tr-ew-tm2019], and in 2006 by up to a minute [@tr-nasa-oh2006]. Espenak's catalogue visibility method, which uses geocentric times, can be wrong "up to 3 minutes for Mercury and up to 10 minutes for Venus" [@tr-nasa-visibility]. These are the amounts the reduction formulas recover. They are also the signal that Halley and Delisle exploited, treated in [Observations, the black drop and the solar radius](observations-black-drop-and-solar-radius.md).
+For Venus, "the horizontal parallax of Venus (~30 arc-sec) introduces a topocentric correction of up to ±7 minutes with respect to the geocentric contact times" [@tr-nasa-venus0412]. For Mercury in 2019 local times "may differ from the geocentric times by up to 2 minutes" [@tr-ew-tm2019], and in 2006 by up to a minute [@tr-nasa-oh2006]. Espenak's catalogue visibility method, which uses geocentric times, can be wrong "up to 3 minutes for Mercury and up to 10 minutes for Venus" [@tr-nasa-visibility]. These are the amounts the reduction formulas recover. They are also the signal that [Halley](https://en.wikipedia.org/wiki/Edmond_Halley) and [Delisle](https://en.wikipedia.org/wiki/Joseph-Nicolas_Delisle) exploited, treated in [Observations, the black drop and the solar radius](observations-black-drop-and-solar-radius.md).
 
 ### Northern and southern limits on the ground
 

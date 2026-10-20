@@ -10,10 +10,10 @@ seo_title: Solar Eclipse Catalogues: NASA Canons and Data Tables
 
 ::: summary
 - **NASA GSFC is the machine-readable reference.** One ASCII catalogue of 11,898 rows and one CSV of Besselian polynomial elements for the same eclipses, both derived from the Five Millennium Canon with VSOP87D and ELP-2000/82, are downloadable without registration and reproducible with the credit line "Eclipse Predictions by Fred Espenak, NASA's GSFC" [@cat-nasa-5mkse-ascii] [@cat-nasa-besselian-csv] [@cat-gmiller-besselian].
-- **IMCCE has its own six-millennium canon.** 14,155 solar eclipses from $-2999$ to $+3000$ computed with ELP2000, VSOP82, Chebyshev ephemerides SLP98, Stephenson 1984 for TT−UT, $k = 0.2725076$ and a solar semidiameter of 15′59.63″ at 1 au [@cat-imcce-theories] [@cat-imcce-parametres] [@cat-imcce-resultats].
-- **EclipseWise extends the count to 14,261.** Espenak's later six-millennium catalogue lists 5,042 partial, 4,761 annular, 3,820 total and 638 hybrid eclipses. Van Gent reports it was computed from JPL DE406 [@cat-eclipsewise-catalog] [@cat-vangent-tables].
-- **Two surveyed mainstream libraries enumerate solar eclipses.** Astronomy Engine and the Swiss Ephemeris. Skyfield has lunar eclipses only, libnova has no eclipse header at all, and no astropy eclipse finder was found [@cat-astronomy-engine] [@cat-swisseph-doc] [@cat-skyfield-almanac] [@cat-libnova-headers].
-- **The older canons set the numbering and the baselines.** Oppolzer 1887 covers 8,000 solar eclipses from $-1207$ to $+2161$ with hand-computed circular-arc paths. Mucke and Meeus 1983 covers 10,774 eclipses from $-2003$ to $+2526$ with Besselian elements. Meeus 1989 gives elements for 570 eclipses from 1951 to 2200 [@cat-espenak-meeus-2009-catalog] [@cat-meeus-1989-elements].
+- **[IMCCE](https://www.imcce.fr/) has its own six-millennium canon.** 14,155 solar eclipses from $-2999$ to $+3000$ computed with ELP2000, VSOP82, Chebyshev ephemerides SLP98, Stephenson 1984 for TT−UT, $k = 0.2725076$ and a solar semidiameter of 15′59.63″ at 1 au [@cat-imcce-theories] [@cat-imcce-parametres] [@cat-imcce-resultats].
+- **EclipseWise extends the count to 14,261.** [Espenak](https://en.wikipedia.org/wiki/Fred_Espenak)'s later six-millennium catalogue lists 5,042 partial, 4,761 annular, 3,820 total and 638 hybrid eclipses. Van Gent reports it was computed from JPL DE406 [@cat-eclipsewise-catalog] [@cat-vangent-tables].
+- **Two surveyed mainstream libraries enumerate solar eclipses.** Astronomy Engine and the [Swiss Ephemeris](https://www.astro.com/swisseph/). [Skyfield](https://rhodesmill.org/skyfield/) has [lunar eclipses](../../30-lunar-eclipses/_index.md) only, libnova has no eclipse header at all, and no astropy eclipse finder was found [@cat-astronomy-engine] [@cat-swisseph-doc] [@cat-skyfield-almanac] [@cat-libnova-headers].
+- **The older canons set the numbering and the baselines.** Oppolzer 1887 covers 8,000 solar eclipses from $-1207$ to $+2161$ with hand-computed circular-arc paths. Mucke and [Meeus](https://en.wikipedia.org/wiki/Jean_Meeus) 1983 covers 10,774 eclipses from $-2003$ to $+2526$ with [Besselian elements](../../10-shared/01-foundations/besselian-elements.md). Meeus 1989 gives elements for 570 eclipses from 1951 to 2200 [@cat-espenak-meeus-2009-catalog] [@cat-meeus-1989-elements].
 :::
 
 **The question.** Where should a developer obtain a trustworthy list of eclipses with their elements, what does each product state about its ephemeris, $\Delta T$ model and lunar radius, which code can regenerate such a list, and what are the older canons that the modern ones cite? Method and type rules are in [Enumerating eclipses](enumerating-eclipses.md) and [Types and classification](types-and-classification.md).
@@ -24,7 +24,7 @@ The site publishes the Five Millennium Canon (NASA/TP-2006-214141) and the revis
 
 **Publications.** The canon text is `5MCSE/5MCSE-Text11.pdf` (the `Text10` link on the publication page returns 404) with twelve map PDFs of 19.5 to 21.8 MB each. The catalogue is `5MCSE/TP2009-214174.pdf`, 13.2 MB [@cat-nasa-5mcse-page] [@cat-nasa-5mkse-page].
 
-**ASCII catalogue.** `https://eclipse.gsfc.nasa.gov/5MCSE/5MKSEcatalog.txt`, 1.38 MB, 11,908 lines, dated 2008 Oct 07 and headed "NASA Technical Publication NASA/TP-2008-214170". Fixed-width columns: catalogue number, canon plate, calendar date, [?tt|TD] of greatest eclipse, ΔT in seconds, lunation number, Saros number, type code, QLE, gamma, magnitude, latitude, longitude, Sun altitude, Sun azimuth, path width in km, central duration. Row 1 reads `1 001 -1999 Jun 12 03:14:51 46438 -49456 5 T -n -0.2701 1.0733 6.0N 33.3W 74 344 247 06m37s` [@cat-nasa-5mkse-ascii]. A regular expression over the type field and the numeric columns parses all 11,898 rows. TD, TDT and TT are one scale, printed as TDT or TD in NASA tables and called ET before 1984.
+**ASCII catalogue.** `https://eclipse.gsfc.nasa.gov/5MCSE/5MKSEcatalog.txt`, 1.38 MB, 11,908 lines, dated 2008 Oct 07 and headed "NASA Technical Publication NASA/TP-2008-214170". Fixed-width columns: catalogue number, canon plate, calendar date, [?tt|TD] of greatest eclipse, [ΔT](../../10-shared/07-earth-and-time/delta-t-and-earth-rotation.md) in seconds, lunation number, Saros number, type code, QLE, gamma, magnitude, latitude, longitude, Sun altitude, Sun azimuth, [path width](../03-global-circumstances/path-and-limits.md) in km, central duration. Row 1 reads `1 001 -1999 Jun 12 03:14:51 46438 -49456 5 T -n -0.2701 1.0733 6.0N 33.3W 74 344 247 06m37s` [@cat-nasa-5mkse-ascii]. A regular expression over the type field and the numeric columns parses all 11,898 rows. TD, TDT and TT are one scale, printed as TDT or TD in NASA tables and called ET before 1984.
 
 **Besselian elements CSV.** `https://eclipse.gsfc.nasa.gov/eclipse_besselian_from_mysqldump2.csv`, 5.95 MB, 11,899 lines including the header. Columns: `year, month, day, td_ge, dt, luna_num, saros, eclipse_type, gamma, magnitude, lat_ge, lng_ge, lat_dd_ge, lng_dd_ge, sun_alt, sun_azm, path_width, central_duration, duration_secs, cat_no, canon_plate, julian_date, t0, x0, x1, x2, x3, y0, y1, y2, y3, d0, d1, d2, mu0, mu1, mu2, l10, l11, l12, l20, l21, l22, tan_f1, tan_f2, tmin, tmax, etype, PNS, UNS, NCN, nSer, nSeq, nJLE`. The elements are cubic in $x$ and $y$, quadratic in $d$, $\mu$, $l_1$ and $l_2$, referred to `t0` in TDT hours and valid for `tmin` −3 to `tmax` +3 hours. The last six columns are undocumented on the site [@cat-nasa-besselian-csv]. The publication page links this file next to the ASCII catalogue [@cat-nasa-5mcse-page]. The same data are mirrored as CSV, JSON and JavaScript in a GitHub repository whose README quotes NASA's permission: "Permission is freely granted to reproduce this data when accompanied by an acknowledgment: 'Eclipse Predictions by Fred Espenak, NASA's GSFC'" [@cat-gmiller-besselian].
 
@@ -46,7 +46,7 @@ The live IMCCE service at `ssp.imcce.fr/forms/solar-eclipses` is a JavaScript ap
 
 ## HMNAO
 
-The HMNAO portal at `astro.ukho.gov.uk/eclipse/` is reported secondhand to cover "1501 CE to 2100 CE inclusive, with a total of 2,881 eclipses made up of 1,421 solar and 1,460 lunar eclipses" and that "the mapping information is based on data derived from solar and lunar eclipse software used in the production of The Astronomical Almanac". This is reported secondhand and unconfirmed [@cat-hmnao-portal].
+The [HMNAO](https://en.wikipedia.org/wiki/HM_Nautical_Almanac_Office) portal at `astro.ukho.gov.uk/eclipse/` is reported secondhand to cover "1501 CE to 2100 CE inclusive, with a total of 2,881 eclipses made up of 1,421 solar and 1,460 lunar eclipses" and that "the mapping information is based on data derived from solar and lunar eclipse software used in the production of The Astronomical Almanac". This is reported secondhand and unconfirmed [@cat-hmnao-portal].
 
 ## Xavier Jubier
 
@@ -54,7 +54,7 @@ The Five Millennium Canon database page states: "All the data accessed through t
 
 ## Occult 4
 
-Dave Herald's page lists among Occult's capabilities "Solar and lunar eclipses, transits of Mercury and Venus", states it "has been written in the language C#, and runs in the .NET framework V4.5", and describes installation via `OccultInstaller.zip` with data downloads [@cat-occult4]. That eclipse paths from Occult version 4.2023.11.30 used JPL DE441 is reported on a third-party map page and is not confirmed in Occult's own documentation [@cat-occult4]. Occult's eclipse listing, and its use of a lunar limb profile in eclipse predictions, fall outside the scope of this note.
+Dave Herald's page lists among [Occult](../../10-shared/09-software-and-repos/commercial-and-institutional-tools.md)'s capabilities "Solar and lunar eclipses, transits of Mercury and Venus", states it "has been written in the language C#, and runs in the .NET framework V4.5", and describes installation via `OccultInstaller.zip` with data downloads [@cat-occult4]. That eclipse paths from Occult version 4.2023.11.30 used JPL [DE441](../../10-shared/08-lunar-and-solar-model/ephemerides.md) is reported on a third-party map page and is not confirmed in Occult's own documentation [@cat-occult4]. Occult's eclipse listing, and its use of a lunar [limb profile](../05-lunar-limb/limb-profile-methods.md) in eclipse predictions, fall outside the scope of this note.
 
 ## timeanddate
 
@@ -66,7 +66,7 @@ The full repository inventory and its comparison matrix are in [GitHub
 repositories](../../10-shared/09-software-and-repos/github-repositories.md). This section
 keeps only what each project does about enumeration.
 
-**Astronomy Engine** (MIT, C, C#, JavaScript, Python, Kotlin). `SearchGlobalSolarEclipse` and `NextGlobalSolarEclipse` return kind (partial, annular, total), obscuration, distance of the shadow axis from Earth's centre, and the latitude and longitude of the peak. The kind logic and constants are quoted in [Enumerating eclipses](enumerating-eclipses.md). It uses truncated VSOP87 and claims ±1 arcmin [@cat-astronomy-engine].
+**Astronomy Engine** (MIT, C, C#, JavaScript, Python, Kotlin). `SearchGlobalSolarEclipse` and `NextGlobalSolarEclipse` return kind (partial, annular, total), [obscuration](../04-local-circumstances/contact-times-and-magnitude.md), distance of the shadow axis from Earth's centre, and the latitude and longitude of the peak. The kind logic and constants are quoted in [Enumerating eclipses](enumerating-eclipses.md). It uses truncated VSOP87 and claims ±1 arcmin [@cat-astronomy-engine].
 
 **Swiss Ephemeris** (AGPL or commercial, C with many bindings). `swe_sol_eclipse_when_glob` with type flags, `swe_sol_eclipse_where` and `swe_sol_eclipse_how`. The DE-based or Moshier ephemeris is selected by flag. The type logic is quoted in the two companion notes [@cat-swisseph-doc] [@cat-swisseph-swecl].
 
@@ -76,7 +76,7 @@ keeps only what each project does about enumeration.
 
 **Additional surveyed projects:**
 
-- `erikbern/eclipse-finder` (Python): "Simple Modal script that uses Astropy to find eclipses in the 2020-2030 period" by brute-force separation search. This project adds its own eclipse search on Astropy positions. Its existence alone does not establish the absence of an Astropy search API [@cat-erikbern-eclipse-finder].
+- `erikbern/eclipse-finder` (Python): "Simple Modal script that uses Astropy to find eclipses in the 2020-2030 period" by brute-force separation search. This project adds its own eclipse search on [Astropy](https://www.astropy.org/) positions. Its existence alone does not establish the absence of an Astropy search API [@cat-erikbern-eclipse-finder].
 - `cjwinchester/full-moons-solstices-equinoxes-eclipses` (Python): 23,289 events 1550 to 2649, lunar eclipses from Skyfield with DE440, and "Solar eclipse data comes from NASA's Five Millenium Catalog of Solar Eclipses", output as CSV [@cat-cjwinchester-almanac].
 - `i230010/sedategenerator_v2` (Python): generates a CSV with UT1 and TT datetimes, ΔT and the Besselian polynomial coefficients $x_0..x_3$, $y_0..y_3$, $d_0..d_3$, $l_{10}..l_{13}$, $l_{20}..l_{23}$, $\mu_0..\mu_3$, $\tan f_1$, $\tan f_2$ over a year range with a time step in seconds; no method or validation is documented [@cat-sedategenerator].
 - `RyuuNeko1107/umbra-rs` (Rust): an AI-authored experiment with design documents targeting ±1 to 2 s in greatest-eclipse time and sub-km central lines, explicitly "not ready for use" and not validated against JPL DE [@cat-umbra-rs].
@@ -114,9 +114,9 @@ The catalogue notes that "Without exception, all solar eclipse canons produced d
 | NASA 5MCSE catalogue [@cat-nasa-5mkse-ascii] | $-1999$ to $+3000$ | 11,898 | VSOP87D, ELP-2000/82 | M&S 2004 + polynomials + $c$ | 0.2724880 / 0.272281 | ASCII, CSV of elements |
 | EclipseWise six millennium [@cat-eclipsewise-catalog] | $-2999$ to $+3000$ | 14,261 | DE406 per van Gent, unconfirmed | 2020 polynomials | not stated | HTML tables |
 | IMCCE canon [@cat-imcce-theories] | $-2999$ to $+3000$ | 14,155 | ELP2000, VSOP82, SLP98 | Stephenson 1984 adapted | 0.2725076 | not found |
-| HMNAO portal [@cat-hmnao-portal] | 1501 to 2100 | 1,421 solar | Astronomical Almanac software | not stated | not stated | unknown, site down |
+| HMNAO portal [@cat-hmnao-portal] | 1501 to 2100 | 1,421 solar | [Astronomical Almanac](https://en.wikipedia.org/wiki/Astronomical_Almanac) software | not stated | not stated | unknown, site down |
 | Jubier 5MCSE [@cat-jubier-5mcse] | $-1999$ to $+3000$ | 11,898 | NASA data | NASA model | NASA | kmz, maps |
-| Mucke and Meeus 1983 [@cat-mucke-meeus-1983] | $-2003$ to $+2526$ | 10,774 | Newcomb, Brown ILE | of its day | not stated here | print |
+| Mucke and Meeus 1983 [@cat-mucke-meeus-1983] | $-2003$ to $+2526$ | 10,774 | [Newcomb](https://en.wikipedia.org/wiki/Simon_Newcomb), Brown ILE | of its day | not stated here | print |
 | Oppolzer 1887 [@cat-oppolzer-1887] | $-1207$ to $+2161$ | 8,000 | 19th-century tables | none | not applicable | print, scanned |
 
 ## What a developer should do
@@ -128,7 +128,7 @@ The catalogue notes that "Without exception, all solar eclipse canons produced d
 
 ## What this changes
 
-Nothing in the pipeline design. The NASA files are sufficient as a reference set and no product examined offers a documented improvement over them for enumeration. The data-products stage should add a provenance record, because the only widely mirrored element set carries no statement of its own constants.
+Nothing in the [pipeline design](../../../20-reports/pipeline-design.md). The NASA files are sufficient as a reference set and no product examined offers a documented improvement over them for enumeration. The data-products stage should add a provenance record, because the only widely mirrored element set carries no statement of its own constants.
 
 ## Open questions
 

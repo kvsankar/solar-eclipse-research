@@ -11,7 +11,7 @@ seo_title: Solar Radius in Eclipse Calculation: Values and Effects
 ::: summary
 - **Three values are in circulation.** The canonical 959.63 arcseconds at 1 au of Auwers 1891, the IAU 2015 nominal radius of exactly 695,700 km, which is 959.22 arcseconds, and an eclipse radius near 959.95 arcseconds measured from the edge of totality. They differ because they measure different layers of the Sun [@sun-rozelot-kosovichev-2026] [@sun-quaglia-2021].
 - **Quaglia's flash-spectrum fit is 0.32 arcseconds above the canonical value.** That is about 232 km at 1 au. The result depends on the adopted limb and detection model [@sun-quaglia-2021] [@sun-lamy-2015].
-- **That 0.32 arcseconds moves each path limit inward by 0.6 to 0.9 km on the ground** and costs about 1.6 s of central duration in Quaglia's 2017 fitted-radius example, which is roughly half a second per 0.1 arcseconds [@sun-quaglia-2021] [@sun-iota-dunham-2024].
+- **That 0.32 arcseconds moves each [path limit](../03-global-circumstances/path-and-limits.md) inward by 0.6 to 0.9 km on the ground** and costs about 1.6 s of central duration in Quaglia's 2017 fitted-radius example, which is roughly half a second per 0.1 arcseconds [@sun-quaglia-2021] [@sun-iota-dunham-2024].
 - **Near a path limit the sensitivity is about ten times the central-line figure,** and one second of duration corresponds to about 0.03 arcseconds of radius [@sun-quaglia-2021] [@sun-wright-young-2024].
 - **The recommended presets retain their provenance.** Provide 959.63 arcseconds for conventional-product reproduction and the Quaglia 959.95 ± 0.05 arcsecond fit for its eclipse photospheric model. Publish sensitivity bands with their assumptions [@sun-quaglia-2021] [@sun-wright-young-2024].
 :::
@@ -23,7 +23,7 @@ The Sun has no hard edge, so every eclipse computation must choose a number for 
 ## Notes in this topic
 
 - [Solar radius values and their provenance](solar-radius-values.md): every value, its edge definition, wavelength and uncertainty, and what each predictor uses.
-- [Effect of the radius on eclipse products](effect-on-eclipse-products.md): path width, limits, durations, contact times, grazing zones, and how to expose the radius as a parameter with an uncertainty band.
+- [Effect of the radius on eclipse products](effect-on-eclipse-products.md): path width, limits, durations, [contact times](../04-local-circumstances/contact-times-and-magnitude.md), grazing zones, and how to expose the radius as a parameter with an uncertainty band.
 
 ## What this topic changes for the pipeline
 

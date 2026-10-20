@@ -20,7 +20,7 @@ The topics here keep each planetary system together and label each event by
 its kind.
 
 - [Jupiter's satellites](15-jupiter-satellites/_index.md): the Galilean
-  phenomena, the satellite theories and the mutual events.
+  phenomena, the satellite theories and the [mutual events](15-jupiter-satellites/mutual-events.md).
 - [Saturn and the outer satellites](16-saturn-and-outer-satellites/_index.md):
   ring geometry, satellite phenomena, and mutual events at Saturn, Uranus and
-  Pluto.
+  [Pluto](https://en.wikipedia.org/wiki/Pluto).

@@ -9,12 +9,12 @@ tags: [uranus, pheura07, gust86, pluto, charon, triton, phobos, mutual-events]
 ---
 
 ::: summary
-- **Uranus's satellites have mutual events every 42 years,** at Uranus's equinox. The 2007 season was the first observed. The Institut de mécanique céleste et de calcul des éphémérides (IMCCE) predicted it with two models, GUST86 and LA06, and published both [@sats-arlot-2006-uranus].
+- **Uranus's satellites have [mutual events](../15-jupiter-satellites/mutual-events.md) every 42 years,** at Uranus's equinox. The 2007 season was the first observed. The Institut de mécanique céleste et de calcul des éphémérides ([IMCCE](https://www.imcce.fr/)) predicted it with two models, GUST86 and LA06, and published both [@sats-arlot-2006-uranus].
 - **The models disagreed by up to 500 km, or 0.04 arcseconds.** Mid-times mostly agreed within 5 minutes, but one event differed by 30 minutes, and 11 main events predicted by LA06 did not occur in GUST86 [@sats-arlot-2006-uranus].
 - **The reason was the viewing geometry.** Most earlier observations saw the system nearly pole-on, so the orbital inclinations were poorly fitted. The mutual events constrained them directly [@sats-arlot-2006-uranus].
 - **Observations reached formal uncertainties below 0.01 arcseconds.** The first event, Oberon occulting Umbriel on 2007 May 4, gave a mid-time to 4 s. Eight events seen with telescopes of 0.4 to 10 m showed observed mid-times systematically later than predicted [@sats-hidas-2008] [@sats-christou-2009].
-- **Pluto and Charon eclipsed each other from 1985 to 1990** at 3.2-day intervals. The light curves gave radii, albedo maps and the orbit, and this happens only about once every 124 years [@sats-binzel-1985] [@sats-phemu-note09].
-- **The same software stack covers these systems unevenly.** JPL uses URA182, NEP097, PLU060 and MAR099. Stellarium uses GUST86 and Lainey's MarsSat and has no dedicated Triton or Charon theory. Miriade lists no Charon ephemeris [@sats-jpl-sat-ephem-table] [@sats-stellarium-ephemwrapper] [@sats-miriade-ephemcc-output].
+- **[Pluto](https://en.wikipedia.org/wiki/Pluto) and [Charon](https://en.wikipedia.org/wiki/Charon_(moon)) eclipsed each other from 1985 to 1990** at 3.2-day intervals. The light curves gave radii, albedo maps and the orbit, and this happens only about once every 124 years [@sats-binzel-1985] [@sats-phemu-note09].
+- **The same software stack covers these systems unevenly.** JPL uses URA182, NEP097, PLU060 and MAR099. [Stellarium](https://stellarium.org/) uses GUST86 and Lainey's MarsSat and has no dedicated [Triton](https://en.wikipedia.org/wiki/Triton_(moon)) or Charon theory. Miriade lists no Charon ephemeris [@sats-jpl-sat-ephem-table] [@sats-stellarium-ephemwrapper] [@sats-miriade-ephemcc-output].
 :::
 
 **The question.** Beyond Saturn, which satellite systems produce observable eclipses, occultations and mutual events, how were the classic seasons predicted and observed, and which theories do current programs use for them? The geometry and timing conventions are the same as in [the Saturn phenomena note](saturn-phenomena-and-mutual-events.md). The theory versions for Saturn are in [the theories note](saturn-theories-and-ring-geometry.md).
@@ -89,7 +89,7 @@ The following account of the season is reported secondhand from that technical n
 - **Predictions.** Mulholland and Binzel (1984) computed the first predictions and showed that the events had not begun by early 1983. Tholen (1985) predicted 81 events for 1986, with a largest drop of about 0.15. Tholen and colleagues tabulated 89 events for 1988.
 - **Optics.** Mulholland and Gustafson (1987) suggested diffraction might make the light curves depend on wavelength and aperture. Tholen and Hubbard (1988) showed the effect absent, so simple geometrical optics suffice.
 - **Maps.** Buie, Tholen and Horne (1992) inverted the light curves by maximum entropy onto a 59 by 29 grid for Pluto and Charon and found a bright south polar cap on Pluto [@sats-buie-1992]. Young and Binzel (1993) and Reinsch, Burwitz and Festou (1994) produced independent albedo maps of Pluto's sub-Charon hemisphere. Reinsch and colleagues used 18 transits and 15 eclipses and occultations of Charon from 1982 to 1990.
-- **Radii.** Young and Binzel (1994) examined a discrepancy of about 4 per cent between Pluto's radius from the mutual events and from the 1988 stellar occultation. They attributed it to limb darkening neglected in the event models, which leads to underestimated radii [@sats-young-binzel-1994].
+- **Radii.** Young and Binzel (1994) examined a discrepancy of about 4 per cent between Pluto's radius from the mutual events and from the 1988 [stellar occultation](../../40-occultations/17-occultations-by-planets-and-minor-bodies/prediction-geometry-and-astrometry.md). They attributed it to limb darkening neglected in the event models, which leads to underestimated radii [@sats-young-binzel-1994].
 - **Orbit.** Tholen and Buie (1997) refined Charon's orbit from HST images and found its semi-major axis in good agreement with the values used to derive the radii from the mutual events.
 
 The radii lesson carries over to every mutual-event reduction. The model of the occulting and occulted discs, including limb darkening and albedo pattern, biases the geometry recovered from the light curve. The PHESAT09 reduction addresses the same issue with its scattering-law model [@sats-arlot-2012-phesat09].
@@ -98,13 +98,13 @@ The radii lesson carries over to every mutual-event reduction. The model of the 
 
 ## Mars: Phobos and Deimos
 
-From the surface of Mars, Phobos and Deimos transit the Sun. The Mars Exploration Rovers recorded such events, reported by Bell and colleagues in 2005 [@sats-bell-2005]. No result from that paper is quoted here. IMCCE's campaign pages list no campaign for mutual events of Phobos and Deimos [@sats-imcce-phemu-campaign].
+From the surface of Mars, [Phobos](https://en.wikipedia.org/wiki/Phobos_(moon)) and Deimos transit the Sun. The Mars Exploration Rovers recorded such events, reported by Bell and colleagues in 2005 [@sats-bell-2005]. No result from that paper is quoted here. IMCCE's campaign pages list no campaign for mutual events of Phobos and Deimos [@sats-imcce-phemu-campaign].
 
-Positions come from four different models. JPL assigns MAR099, which covers 1600 to 2600 on DE440 [@sats-jpl-sat-ephem-table] [@sats-naif-aa-summaries]. Stellarium uses Lainey's "Ephemerides of the Martian satellites (adjustement from 1877 to 2005, Version 1.0)" [@sats-stellarium-marssat]. Cartes du Ciel uses Sinclair (1989), A&A 220, 321 [@sats-skychart-plansat]. Miriade labels Phobos "INPOP19 + LTE-SAI" [@sats-miriade-ephemcc-output].
+Positions come from four different models. JPL assigns MAR099, which covers 1600 to 2600 on [DE440](../../10-shared/08-lunar-and-solar-model/ephemerides.md) [@sats-jpl-sat-ephem-table] [@sats-naif-aa-summaries]. Stellarium uses Lainey's "Ephemerides of the Martian satellites (adjustement from 1877 to 2005, Version 1.0)" [@sats-stellarium-marssat]. Cartes du Ciel uses Sinclair (1989), A&A 220, 321 [@sats-skychart-plansat]. Miriade labels Phobos "INPOP19 + LTE-SAI" [@sats-miriade-ephemcc-output].
 
 ## Theories by system and program
 
-| System | JPL (Horizons, SPICE) | IMCCE Miriade | Stellarium | Cartes du Ciel |
+| System | JPL ([Horizons](https://ssd.jpl.nasa.gov/horizons/), [SPICE](https://naif.jpl.nasa.gov/naif/)) | IMCCE Miriade | Stellarium | Cartes du Ciel |
 |---|---|---|---|---|
 | Mars | MAR099 | LTE-SAI | Lainey MarsSat 1.0 | Sinclair 1989 |
 | Saturn | SAT441, SAT415 | LTE-NOE | TASS 1.7 | TASS |
@@ -118,7 +118,7 @@ Sources: [@sats-jpl-sat-ephem-table] [@sats-miriade-ephemcc-output] [@sats-stell
 
 | Source | What it gives that the others do not |
 |---|---|
-| Arlot, Lainey and Thuillot 2006 | The 2007 prediction method, the two-model error estimate, and the eclipse light-time convention |
+| Arlot, Lainey and Thuillot 2006 | The 2007 prediction method, the two-model error estimate, and the eclipse [light-time](../../10-shared/07-earth-and-time/refraction-light-time-and-frames.md) convention |
 | Hidas et al. 2008, Christou et al. 2009 | Observed results of the 2007 season: precision and a systematic lag against predictions |
 | Arlot, Dumas and Sicardy 2008 | An adaptive-optics observation on an 8 m class telescope |
 | Binzel et al. 1985 | The detection of the Pluto-Charon events and the list of quantities they determine |

@@ -18,14 +18,14 @@ seo_title: Validating Solar Eclipse Calculations: Errors and Evidence
 
 ## What this topic covers
 
-This topic asks how far eclipse predictions have actually been shown to be right. It collects the published comparisons of timed contacts and Baily's bead events against predictions, sets the major public predictors side by side and names the input behind each disagreement, and assigns seconds of contact time and metres of path edge to every term in the error of a modern prediction. It ends with reference cases and tolerances a new implementation can be tested against.
+This topic asks how far eclipse predictions have actually been shown to be right. It collects the published comparisons of timed contacts and [Baily's bead](../05-lunar-limb/bailys-beads.md) events against predictions, sets the major public predictors side by side and names the input behind each disagreement, and assigns seconds of contact time and metres of path edge to every term in the error of a modern prediction. It ends with reference cases and tolerances a new implementation can be tested against.
 
 Notes in this topic:
 
-- [Observed versus predicted](observed-vs-predicted.md): the IOTA and IOTA/ES edge campaigns from 1973, the 2017 Vale and Thermopolis results, the 2023 Cape Range results and the 2024 Stephenville experiment, with the measured offsets.
-- [Predictor disagreements](predictor-disagreements.md): the inputs the NASA SVS, Espenak, Jubier, Irwin, USNO, timeanddate, Occult, Stellarium and Photo Ephemeris products state, and how far their edges and durations differ.
-- [Error budget and validation protocol](error-budget-and-validation-protocol.md): the sourced per-term budget, the record of ΔT model validation, and the five-level test protocol with tolerances.
+- [Observed versus predicted](observed-vs-predicted.md): the [IOTA](https://occultations.org/) and IOTA/ES edge campaigns from 1973, the 2017 Vale and Thermopolis results, the 2023 Cape Range results and the 2024 Stephenville experiment, with the measured offsets.
+- [Predictor disagreements](predictor-disagreements.md): the inputs the NASA [SVS](../11-svs-wright/_index.md), [Espenak](https://en.wikipedia.org/wiki/Fred_Espenak), Jubier, Irwin, [USNO](https://en.wikipedia.org/wiki/United_States_Naval_Observatory), timeanddate, [Occult](../../10-shared/09-software-and-repos/commercial-and-institutional-tools.md), [Stellarium](https://stellarium.org/) and Photo Ephemeris products state, and how far their edges and durations differ.
+- [Error budget and validation protocol](error-budget-and-validation-protocol.md): the sourced per-term budget, the record of [ΔT](../../10-shared/07-earth-and-time/delta-t-and-earth-rotation.md) model validation, and the five-level test protocol with tolerances.
 
 ## What this topic changes for the pipeline
 
-The solar radius stops being a constant and becomes a configuration item with a stated uncertainty and two documented modes. Every product carries a per-run error estimate and draws its path limits as a band rather than a line. The five-level protocol becomes an automated test suite, with each reference case's constants pinned beside its tolerance.
+The [solar radius](../06-solar-radius/solar-radius-values.md) stops being a constant and becomes a configuration item with a stated uncertainty and two documented modes. Every product carries a per-run error estimate and draws its [path limits](../03-global-circumstances/path-and-limits.md) as a band rather than a line. The five-level protocol becomes an automated test suite, with each reference case's constants pinned beside its tolerance.

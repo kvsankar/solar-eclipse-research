@@ -9,11 +9,11 @@ seo_title: Solar Eclipse Catalogue Algorithms and Classification
 ---
 
 ::: summary
-- **Meeus's series finds all of them.** Chapter 52 of the 1991 *Astronomical Algorithms* needs no ephemeris, finds all 221 eclipses of 1951 to 2050 and types every one correctly, with a worst error of 1.11 min in the time of greatest eclipse [@cat-meeus-1991-aa] [@cat-nasa-5mkse-ascii].
+- **[Meeus](https://en.wikipedia.org/wiki/Jean_Meeus)'s series finds all of them.** Chapter 52 of the 1991 *Astronomical Algorithms* needs no ephemeris, finds all 221 eclipses of 1951 to 2050 and types every one correctly, with a worst error of 1.11 min in the time of greatest eclipse [@cat-meeus-1991-aa] [@cat-nasa-5mkse-ascii].
 - **The NASA files are the fixture.** One ASCII catalogue of 11,898 rows and one CSV of Besselian polynomial elements for the same eclipses, both from the Five Millennium Canon, are the acceptance test set for any enumerator [@cat-nasa-5mkse-ascii] [@cat-nasa-besselian-csv].
-- **The Five Millennium Catalog uses a pair of lunar radii.** $k = 0.2724880$ for all partial and penumbral contacts and $k = 0.272281$ for all umbral and antumbral ones. The single IAU value 0.2725076, which IMCCE uses, misclassifies beaded annular eclipses as total [@cat-espenak-meeus-2009-catalog] [@cat-imcce-parametres].
-- **Type is decided by the umbral radius at the surface, not on the fundamental plane.** Evaluating it at greatest eclipse and at both ends of the central line is what separates the three hybrid classes and the 94 non-central eclipses of five millennia [@cat-espenak-meeus-2009-catalog] [@cat-swisseph-swecl].
-- **ΔT, not the ephemeris, sets the accuracy floor.** The catalogue's own statement is that the lunar ephemeris stays below map resolution even at $-1999$, while the standard error in ΔT exceeds 265 s before +0001 and after +2300, which is more than a degree of longitude [@cat-espenak-meeus-2006-canon].
+- **The Five Millennium Catalog uses a pair of lunar radii.** $k = 0.2724880$ for all partial and penumbral contacts and $k = 0.272281$ for all umbral and antumbral ones. The single IAU value 0.2725076, which [IMCCE](https://www.imcce.fr/) uses, misclassifies beaded annular eclipses as total [@cat-espenak-meeus-2009-catalog] [@cat-imcce-parametres].
+- **Type is decided by the umbral radius at the surface, not on the [fundamental plane](../../10-shared/01-foundations/besselian-elements.md).** Evaluating it at greatest eclipse and at both ends of the [central line](../03-global-circumstances/path-and-limits.md) is what separates the three hybrid classes and the 94 non-central eclipses of five millennia [@cat-espenak-meeus-2009-catalog] [@cat-swisseph-swecl].
+- **[ΔT](../../10-shared/07-earth-and-time/delta-t-and-earth-rotation.md), not the ephemeris, sets the accuracy floor.** The catalogue's own statement is that the lunar ephemeris stays below map resolution even at $-1999$, while the standard error in ΔT exceeds 265 s before +0001 and after +2300, which is more than a degree of longitude [@cat-espenak-meeus-2006-canon].
 :::
 
 ## What this topic covers
@@ -35,7 +35,7 @@ with its ephemeris, its ΔT model and its lunar radius stated.
   $\gamma$ and $u$ that separate partial, annular, total, hybrid, central and
   non-central eclipses, and the definition of every quantity a catalogue lists.
 - [Canons and data products](canons-and-data-products.md): NASA GSFC, IMCCE,
-  HMNAO, EclipseWise, Jubier, Occult, machine-readable files, open-source
+  [HMNAO](https://en.wikipedia.org/wiki/HM_Nautical_Almanac_Office), EclipseWise, Jubier, [Occult](../../10-shared/09-software-and-repos/commercial-and-institutional-tools.md), machine-readable files, open-source
   enumerators, and the older canons from Oppolzer to Mucke and Meeus.
 
 ## What this topic changes for the pipeline

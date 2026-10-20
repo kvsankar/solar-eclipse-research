@@ -8,7 +8,7 @@ seo_title: Solar Eclipse Prediction Accuracy: Timing and Path Errors
 ---
 
 ::: summary
-- **The sources compared here quantify different error components.** Quaglia and colleagues analyse ephemeris, Earth orientation, topography and solar radius. Espenak describes limb and ΔT effects. Wright and Young specify terrain treatment. Their shifts and bounds are not all independent standard uncertainties [@val-quaglia-2021] [@val-gsfc-2024-google] [@val-wright-young-2024].
+- **The sources compared here quantify different error components.** Quaglia and colleagues analyse ephemeris, Earth orientation, topography and [solar radius](../10-raw/20-solar-eclipses-and-transits/06-solar-radius/solar-radius-values.md). [Espenak](https://en.wikipedia.org/wiki/Fred_Espenak) describes limb and [ΔT](../10-raw/10-shared/07-earth-and-time/delta-t-and-earth-rotation.md) effects. Wright and Young specify terrain treatment. Their shifts and bounds are not all independent standard uncertainties [@val-quaglia-2021] [@val-gsfc-2024-google] [@val-wright-young-2024].
 - **Omitted terrain and limb can move limits by kilometres.** Solar-radius choices move the cited modern limits by hundreds of metres. Other omitted corrections and inconsistent conventions can also exceed 200 m [@val-svs-4517] [@loc-nasa-limb-help] [@sun-quaglia-2021].
 - **Mixed reduction levels and incorrect time conventions can cause much larger errors.** The quoted inconsistent Sun/Moon reduction example reaches 38 km. A 69 s Earth-rotation mistake is about 32 km at the equator [@earth-es1992] [@moon-skyfield-positions].
 - **The cited solar-radius component is about 100 m for ± 0.05 arcseconds.** It is separate from the reported 60 to 130 m inter-implementation spread. Neither is a universal prediction-accuracy floor [@val-quaglia-2021].
@@ -21,7 +21,7 @@ and the accuracy it allows, is in
 
 ## The ranked budget
 
-"Mid-path" is a site near the central line of a 2017-class eclipse with a
+"Mid-path" is a site near the [central line](../10-raw/20-solar-eclipses-and-transits/03-global-circumstances/path-and-limits.md) of a 2017-class eclipse with a
 shadow speed near 1 km/s. "Edge" is within a few hundred metres of a limit.
 Conversions used: 1″ at the Moon's mean distance is 1.86 km on the ground;
 1 s of ΔT is 15.041″ of longitude, 465 m at the equator and 356 m at 40°; the
@@ -33,14 +33,14 @@ arcsecond [@val-5mcse-tp2009] [@moon-espenak-2001-bulletin].
 | 1 | Geometric Sun with apparent Moon | 55 s | 38 km | Everyone avoids it; test for it [@earth-es1992] |
 | 2 | TT used as UT | Contact-time effect depends on geometry; 69 s of rotation is not a uniform contact shift | 32 km at the equator | Everyone avoids it; test for it [@moon-eclipsewise-2024] |
 | 3 | Sphere instead of ellipsoid | tens of s | up to 21 km | Everyone [@earth-es1961] |
-| 4 | Terrain omitted | seconds where the Sun's azimuth lies along the track | $h\cot a$; up to 3 km in the 2017 western states | SVS only, for the path; single-site altitude in Jubier, Occult, Swiss Ephemeris [@val-svs-4517] [@earth-espenak-tp2001] |
+| 4 | Terrain omitted | seconds where the Sun's azimuth lies along the track | $h\cot a$; up to 3 km in the 2017 western states | [SVS](../10-raw/20-solar-eclipses-and-transits/11-svs-wright/_index.md) only, for the path; single-site altitude in Jubier, [Occult](../10-raw/10-shared/09-software-and-repos/commercial-and-institutional-tools.md), [Swiss Ephemeris](https://www.astro.com/swisseph/) [@val-svs-4517] [@earth-espenak-tp2001] |
 | 5 | Lunar limb omitted | 1 to 3 s, up to 15 s in extreme geometry | 1 to 3 km per limit; 33 s of duration at Stephenville 2024 | SVS, Jubier, Occult, Irwin, Photo Ephemeris simulator [@loc-nasa-limb-help] [@val-besselian-maps-accuracy] |
 | 6 | Solar radius convention | 1.8 s of central duration for 959.63 to 960.00 arcseconds in the cited case | About 600 m per limit for 959.63 to 959.95 arcseconds. The Vale comparison for 959.63 to 960.00 arcseconds reduces duration by 19.3 s. Stephenville is a cross-program comparison, not an isolated radius effect | Irwin uses 959.95″, Photo Ephemeris in its bead simulator only; everyone else 959.63″ or 696,000 km [@sun-quaglia-2021] [@sun-wright-young-2024] |
-| 7 | Lunar radius $k$, umbral, if the IAU value is used | about 4 s of duration | 1.4 km per limit | Espenak, Stellarium, Jubier use 0.272281; USNO and Astronomy Engine use a mean radius; the Swiss Ephemeris uses 1738.15 km globally but scales the lunar radius by 0.99916, which is 0.272281, for C2 and C3 [@bes-nasa-radius] [@val-gsfc-sepredictions] |
+| 7 | Lunar radius $k$, umbral, if the IAU value is used | about 4 s of duration | 1.4 km per limit | Espenak, [Stellarium](https://stellarium.org/), Jubier use 0.272281; [USNO](https://en.wikipedia.org/wiki/United_States_Naval_Observatory) and Astronomy Engine use a mean radius; the Swiss Ephemeris uses 1738.15 km globally but scales the lunar radius by 0.99916, which is 0.272281, for C2 and C3 [@bes-nasa-radius] [@val-gsfc-sepredictions] |
 | 8 | ΔT prediction error, realised in 2024 | 1.4 to 2.3 s | 500 to 800 m east-west at 40° | All; the miss depends on when the prediction was frozen [@earth-usno-deltat-data] [@val-eclipsewise-2024-circ] |
-| 9 | Centre of figure against centre of mass, smooth-Moon products | up to 1.4 s | 0.5 to 1 km | Absorbed by any DEM-based profile; not applied by USNO [@moon-jones-2025] [@val-usno-2024] |
-| 10 | Watts-era limb data | 0.5 s | 600 to 750 m systematic at some position angles | Superseded by Kaguya and LOLA [@limb-morrison-appleby-1981] [@val-tp2001-bulletin] |
-| 11 | Geoid against ellipsoid height | under 1 s | $N\cot a$, up to 170 m at a 30° Sun | SVS (EGM96); nobody else documents it [@earth-svs-4515] |
+| 9 | [Centre of figure](../10-raw/10-shared/08-lunar-and-solar-model/lunar-figure-and-libration.md) against centre of mass, smooth-Moon products | up to 1.4 s | 0.5 to 1 km | Absorbed by any DEM-based profile; not applied by USNO [@moon-jones-2025] [@val-usno-2024] |
+| 10 | Watts-era limb data | 0.5 s | 600 to 750 m systematic at some position angles | Superseded by [Kaguya](https://en.wikipedia.org/wiki/SELENE) and [LOLA](https://lola.gsfc.nasa.gov/) [@limb-morrison-appleby-1981] [@val-tp2001-bulletin] |
+| 11 | [Geoid](../10-raw/10-shared/07-earth-and-time/earth-figure-and-terrain.md) against ellipsoid height | under 1 s | $N\cot a$, up to 170 m at a 30° Sun | SVS ([EGM96](https://en.wikipedia.org/wiki/Earth_Gravitational_Model)); nobody else documents it [@earth-svs-4515] |
 | 12 | Implementation spread on identical inputs | 2 to 4 s at Vale 2017 | 0.03″ to 0.07″ of radius, 60 to 130 m | Occult, Solar Eclipse Maestro, Irwin [@val-quaglia-2021] |
 | 13 | Solar radius residual, ± 0.05″ | 0.1 s | 100 m band | Radius component for the cited geometry [@sun-quaglia-2021] |
 | 14 | Limb sampling coarser than 18,000 elements | 0.25 s for 0.2° bins | part of the implementation spread | SVS at 0.02° [@limb-wright-young-2024] [@loc-be-2013-contacts] |
@@ -48,11 +48,11 @@ arcsecond [@val-5mcse-tp2009] [@moon-espenak-2001-bulletin].
 | 16 | Refraction near the horizon | No validated contact-time bound in this corpus | Changes displayed altitude and visibility; anomalous conditions need separate treatment | State the atmospheric and horizon model [@earth-es1992] [@earth-espenak-tp2001] |
 | 17 | Sidereal time inconsistency, mean against apparent | up to 1.1 s | up to 0.5 km | Consistent in every predictor documented [@earth-circ179] |
 | 18 | UT1 against UTC | up to 0.9 s | up to 0.42 km | UT1 printed by Espenak, SVS, Swiss Ephemeris [@earth-iers-bulletin-a] |
-| 19 | Moon light-time omitted | No bound follows from geocentric lunar speed alone | A reception calculation retards the barycentric target. Observer aberration is separate and can partly cancel common orbital motion | Use one consistent reduction chain [@moon-spice-spkezr] [@moon-folkner-2014] |
-| 20 | Ephemeris, DE421 to DE440 | Depends on the projected position difference and radial rate | This pair's displacement is not quantified by the cited Park paper. Its range residuals do not certify a three-dimensional position bound | Pin the releases, epoch and vector comparison [@moon-park-2021] |
+| 19 | Moon [light-time](../10-raw/10-shared/07-earth-and-time/refraction-light-time-and-frames.md) omitted | No bound follows from geocentric lunar speed alone | A reception calculation retards the barycentric target. Observer aberration is separate and can partly cancel common orbital motion | Use one consistent reduction chain [@moon-spice-spkezr] [@moon-folkner-2014] |
+| 20 | Ephemeris, DE421 to [DE440](../10-raw/10-shared/08-lunar-and-solar-model/ephemerides.md) | Depends on the projected position difference and radial rate | This pair's displacement is not quantified by the cited Park paper. Its range residuals do not certify a three-dimensional position bound | Pin the releases, epoch and vector comparison [@moon-park-2021] |
 | 21 | Ephemeris, DE403 to DE421, at 2020 | 0.02 s | 16 m | Irrelevant [@moon-williams-2008] |
 | 22 | ELP-2000/82 truncated as in the Canon | 0.02 s | 10 m | Irrelevant for paths [@moon-espenak-meeus-canon] |
-| 23 | Polar motion | 0 | about 10 m | SPICE kernels include it; nobody documents it [@earth-iers-bulletin-a] |
+| 23 | Polar motion | 0 | about 10 m | [SPICE](https://naif.jpl.nasa.gov/naif/) kernels include it; nobody documents it [@earth-iers-bulletin-a] |
 | 24 | Nutation model, 1980 against 2000A | 0 | under 20 m | Irrelevant [@earth-circ179] |
 | 25 | TT against TDB | 1.7 ms | 2 m | Irrelevant [@earth-circ179] |
 | 26 | Observer position, consumer GPS | none on time | ± 100 m | The observer's problem [@val-tp2001-bulletin] |
@@ -103,7 +103,7 @@ mode for catalogues, for reproducing published tables, and for regression
 tests.
 
 **Edge mode.** LOLA profile at 18,000 elements, terrain with geoid,
-$s_0 = 959.95″ ± 0.05″$, ΔT refreshed to the latest USNO or IERS value. The
+$s_0 = 959.95″ ± 0.05″$, ΔT refreshed to the latest USNO or [IERS](https://www.iers.org/) value. The
 cited comparisons give a radius component near 100 m and implementation
 spread of 60 to 130 m, with 2 to 4 s duration differences at the Vale site.
 These are case-specific scales, not a calibrated combined uncertainty. Dunham's practical margin of 2 km of

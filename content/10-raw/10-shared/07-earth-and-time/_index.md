@@ -9,9 +9,9 @@ seo_title: Earth Models and Time Scales in Eclipse Calculation
 ---
 
 ::: summary
-- **Use WGS 84 and never a sphere.** The three modern ellipsoids differ by 3 m in equatorial radius, but feeding a geodetic latitude into spherical formulas misplaces the observer by up to 21 km [@earth-nga-wgs84] [@earth-es1961].
-- **Terrain moves a path limit by $h \cot A \sin D$**, 577 m per 1000 m of elevation at a 60° Sun and 5.7 km at 10°. NASA SVS evaluates terrain height at each mapped observer, and it measured up to 3 km of umbra shift in 2017 [@earth-espenak-tp2001] [@earth-svs-4517].
-- **ΔT places the shadow on the rotating Earth through μ**, according to the element set's recorded convention, and one second of it moves every longitude by $465\cos\phi$ metres. The 2006 Espenak and Meeus polynomial was 1.4 to 2.3 s high for 2024, which is 0.5 to 0.8 km at latitude 40° [@earth-es1992] [@earth-usno-deltat-data].
+- **Use [WGS 84](https://en.wikipedia.org/wiki/World_Geodetic_System) and never a sphere.** The three modern ellipsoids differ by 3 m in equatorial radius, but feeding a geodetic latitude into spherical formulas misplaces the observer by up to 21 km [@earth-nga-wgs84] [@earth-es1961].
+- **Terrain moves a [path limit](../../20-solar-eclipses-and-transits/03-global-circumstances/path-and-limits.md) by $h \cot A \sin D$**, 577 m per 1000 m of elevation at a 60° Sun and 5.7 km at 10°. NASA [SVS](../../20-solar-eclipses-and-transits/11-svs-wright/_index.md) evaluates terrain height at each mapped observer, and it measured up to 3 km of umbra shift in 2017 [@earth-espenak-tp2001] [@earth-svs-4517].
+- **ΔT places the shadow on the rotating Earth through μ**, according to the element set's recorded convention, and one second of it moves every longitude by $465\cos\phi$ metres. The 2006 [Espenak](https://en.wikipedia.org/wiki/Fred_Espenak) and [Meeus](https://en.wikipedia.org/wiki/Jean_Meeus) polynomial was 1.4 to 2.3 s high for 2024, which is 0.5 to 0.8 km at latitude 40° [@earth-es1992] [@earth-usno-deltat-data].
 - **Nominal geometric contacts omit refraction.** A common one-to-one mapping of both limbs preserves contact and containment. The cited sources do not establish a general physical contact-time correction near the horizon [@earth-espenak-tp2001] [@earth-es1992].
 - **Classical elements use apparent places.** Light-time and observer aberration are separate corrections. A 20.5-arcsecond inconsistency corresponds to about 38 km at lunar distance, rather than a guaranteed shift between two consistent formulations [@earth-es1992] [@earth-spice-abcorr].
 :::
@@ -22,9 +22,9 @@ Three notes on the parts of an eclipse computation that concern the Earth rather
 
 ## Notes in this topic
 
-- [Earth figure and terrain](earth-figure-and-terrain.md): the ellipsoid behind $\rho\sin\phi'$ and $\rho\cos\phi'$, what a sphere costs, how observer height moves the path limits, what NASA SVS did with SRTM for 2017 and 2024, the free elevation datasets, and the geoid question.
-- [ΔT and Earth rotation](delta-t-and-earth-rotation.md): the definition TT − UT1, where it enters the elements, the Morrison and Stephenson and Stephenson, Morrison and Hohenkerk models, the Espenak and Meeus polynomials and their tidal-acceleration correction, IERS and USNO data, prediction uncertainty by lead time, the values each predictor used for 2017 and 2024, leap seconds, polar motion and sidereal time.
-- [Refraction, light-time and frames](refraction-light-time-and-frames.md): the geometric-contact convention and separate atmospheric visibility treatment, the almanac and Stellarium formulas, apparent places and the 38 km aberration trap, TT versus TDB, and the table of every effect with its size and who includes it.
+- [Earth figure and terrain](earth-figure-and-terrain.md): the ellipsoid behind $\rho\sin\phi'$ and $\rho\cos\phi'$, what a sphere costs, how observer height moves the path limits, what NASA SVS did with [SRTM](https://en.wikipedia.org/wiki/Shuttle_Radar_Topography_Mission) for 2017 and 2024, the free elevation datasets, and the geoid question.
+- [ΔT and Earth rotation](delta-t-and-earth-rotation.md): the definition TT − UT1, where it enters the elements, the Morrison and Stephenson and Stephenson, Morrison and Hohenkerk models, the Espenak and Meeus polynomials and their tidal-acceleration correction, [IERS](https://www.iers.org/) and [USNO](https://en.wikipedia.org/wiki/United_States_Naval_Observatory) data, prediction uncertainty by lead time, the values each predictor used for 2017 and 2024, leap seconds, polar motion and sidereal time.
+- [Refraction, light-time and frames](refraction-light-time-and-frames.md): the geometric-contact convention and separate atmospheric visibility treatment, the almanac and [Stellarium](https://stellarium.org/) formulas, apparent places and the 38 km aberration trap, TT versus TDB, and the table of every effect with its size and who includes it.
 
 ## What this topic changes for the pipeline
 

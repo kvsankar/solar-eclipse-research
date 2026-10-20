@@ -9,11 +9,11 @@ tags: [lunar-eclipse, gamma, saros, meeus, besselian-elements, contacts, visibil
 ---
 
 ::: summary
-- **A lunar eclipse is one instant for the whole Earth.** The contacts are geocentric, so a prediction is a list of times plus a map of where the Moon is above the horizon at each contact. There is no path and no local contact time [@lun-es1961] [@lun-es1992].
+- **A [lunar eclipse](_index.md) is one instant for the whole Earth.** The contacts are geocentric, so a prediction is a list of times plus a map of where the Moon is above the horizon at each contact. There is no path and no local contact time [@lun-es1961] [@lun-es1992].
 - **The elements are two coordinates and three radii.** The Explanatory Supplement takes the antisolar point as the axis and computes the Moon's offsets $x$ and $y$ from it in arcseconds. Each contact solves $(x + x't)^2 + (y + y't)^2 = L^2$ for $L_1$, $L_2$ or $L_3$ [@lun-es1961] [@lun-es1992].
 - **Lunar gamma is the Moon's least distance from the shadow axis**, in Earth equatorial radii, positive when the Moon passes north. It is not the solar-eclipse gamma, which measures the Moon's shadow axis from the Earth's centre [@lun-5mcle-tp2009] [@lun-nasa-lecatkey].
-- **Meeus's closed form needs only the full-moon index.** The solar method of chapter 54 changes two coefficients, then $\rho = 1.2848 + u$, $\sigma = 0.7403 - u$, the magnitudes and the semidurations $\tfrac{60}{n}\sqrt{L^2-\gamma^2}$ minutes follow [@cat-meeus-1991-aa] [@cat-soniakeys-meeus-go].
-- **The NASA Five Millennium Canon of Lunar Eclipses (NASA/TP-2009-214172) lists 12,064 eclipses from −1999 to +3000**: 4,378 penumbral, 4,207 partial and 3,479 total, computed with VSOP87, ELP-2000/82, $k = 0.2724880$ and Danjon's enlargement [@lun-5mcle-tp2009].
+- **[Meeus](https://en.wikipedia.org/wiki/Jean_Meeus)'s closed form needs only the full-moon index.** The solar method of chapter 54 changes two coefficients, then $\rho = 1.2848 + u$, $\sigma = 0.7403 - u$, the magnitudes and the semidurations $\tfrac{60}{n}\sqrt{L^2-\gamma^2}$ minutes follow [@cat-meeus-1991-aa] [@cat-soniakeys-meeus-go].
+- **The NASA Five Millennium Canon of Lunar Eclipses (NASA/TP-2009-214172) lists 12,064 eclipses from −1999 to +3000**: 4,378 penumbral, 4,207 partial and 3,479 total, computed with VSOP87, ELP-2000/82, $k = 0.2724880$ and [Danjon](https://en.wikipedia.org/wiki/Andr%C3%A9_Danjon)'s enlargement [@lun-5mcle-tp2009].
 - **ΔT moves only the map.** Greatest eclipse and the contacts are computed in TT. Subtracting ΔT gives UT1 and shifts every visibility curve by 1 degree of longitude per 240 seconds of ΔT [@lun-5mcle-tp2009].
 :::
 
@@ -45,7 +45,7 @@ NASA defines lunar gamma as "the minimum distance from the center of the Moon to
 
 Gamma changes steadily along a Saros series. "For odd numbered series (descending node), gamma increases, while for even numbered series (ascending node), gamma decreases" [@lun-5mcle-tp2009]. The step is larger near aphelion. Saros 129, with eclipses in June and July, steps by 0.0802 to 0.0882 per Saros between 1928 and 2054. Saros 134, in December and January, steps by only −0.0036 to −0.0093 [@lun-5mcle-tp2009]. When the Earth's orbital eccentricity was larger, gamma sometimes reversed for a few eclipses. Saros 13 is the extreme case, and the most recent reversal was on 1648 January 10 in Saros 138 [@lun-5mcle-tp2009].
 
-Stellarium computes gamma from the angular separation $m$ at greatest eclipse in arcseconds as `gamma = m*0.2725076/mSD`, with `mSD` the Moon's semidiameter in arcseconds, and gives it the sign of $y$ [@sw-stellarium-astrocalc]. This converts an angle at the Moon into Earth radii through the [?k-lunar-radius|lunar radius ratio] $k$.
+[Stellarium](https://stellarium.org/) computes gamma from the angular separation $m$ at greatest eclipse in arcseconds as `gamma = m*0.2725076/mSD`, with `mSD` the Moon's semidiameter in arcseconds, and gives it the sign of $y$ [@sw-stellarium-astrocalc]. This converts an angle at the Moon into Earth radii through the [?k-lunar-radius|lunar radius ratio] $k$.
 
 ## Saros, Inex and the other series
 
@@ -67,7 +67,7 @@ The 1961 Supplement gives the occurrence tests on the Moon's latitude $\beta$ at
 - $0^{\circ}53'26'' < |\beta| < 1^{\circ}03'46''$: penumbral eclipse certain, umbral eclipse possible;
 - $|\beta| < 0^{\circ}53'26''$: umbral eclipse certain.
 
-Chauvenet's 1863 limit for an umbral eclipse is 63 arcminutes 53 arcseconds [@bes-chauvenet-1863]. Astronomy Engine prunes any full moon whose ecliptic latitude exceeds 1.8 degrees before searching for the shadow [@sw-astronomy-engine-c].
+[Chauvenet](https://en.wikipedia.org/wiki/William_Chauvenet)'s 1863 limit for an umbral eclipse is 63 arcminutes 53 arcseconds [@bes-chauvenet-1863]. Astronomy Engine prunes any full moon whose ecliptic latitude exceeds 1.8 degrees before searching for the shadow [@sw-astronomy-engine-c].
 
 ## Meeus's closed form
 
@@ -81,7 +81,7 @@ The magnitudes are [@cat-meeus-1991-aa]
 
 $$\text{penumbral} = \frac{1.5573 + u - |\gamma|}{0.5450}, \qquad \text{umbral} = \frac{1.0128 - u - |\gamma|}{0.5450},$$
 
-and "if the magnitude is negative, this indicates that there is no eclipse". The denominator 0.5450 is the Moon's diameter in Earth radii, $2k$. Meeus names three limiting distances P, T and H. This topic writes them $L_\mathrm{par} = 1.0128 - u$ for the partial phase, $L_\mathrm{tot} = 0.4678 - u$ for totality and $L_\mathrm{pen} = 1.5573 + u$ for the penumbral phase, because $P$ is the position angle in the corpus. With $n = 0.5458 + 0.0400\cos M'$, the semiduration of each phase in minutes is $\tfrac{60}{n}\sqrt{L^2 - \gamma^2}$ with the matching $L$ [@cat-meeus-1991-aa]. The Go port computes the same quantities in hours as `math.Sqrt(t*t-γ2) / n` [@cat-soniakeys-meeus-go]. In Meeus's notation $n$ is the Moon's speed relative to the shadow in Earth radii per hour. In the corpus $n$ is also the speed on the fundamental plane in the solar method, so the meaning carries over.
+and "if the magnitude is negative, this indicates that there is no eclipse". The denominator 0.5450 is the Moon's diameter in Earth radii, $2k$. Meeus names three limiting distances P, T and H. This topic writes them $L_\mathrm{par} = 1.0128 - u$ for the partial phase, $L_\mathrm{tot} = 0.4678 - u$ for totality and $L_\mathrm{pen} = 1.5573 + u$ for the penumbral phase, because $P$ is the position angle in the corpus. With $n = 0.5458 + 0.0400\cos M'$, the semiduration of each phase in minutes is $\tfrac{60}{n}\sqrt{L^2 - \gamma^2}$ with the matching $L$ [@cat-meeus-1991-aa]. The Go port computes the same quantities in hours as `math.Sqrt(t*t-γ2) / n` [@cat-soniakeys-meeus-go]. In Meeus's notation $n$ is the Moon's speed relative to the shadow in Earth radii per hour. In the corpus $n$ is also the speed on the [fundamental plane](../10-shared/01-foundations/besselian-elements.md) in the solar method, so the meaning carries over.
 
 These constants include Danjon's enlargement. Meeus states that "instead of the traditional rule consisting of increasing by 1/50 the theoretical radii, we have preferred the method used since 1951 by the Connaissance des Temps", and he gives the constants for the traditional rule [@cat-meeus-1991-aa]. The comparison of the rules is in [Shadow geometry and enlargement](shadow-geometry-and-enlargement.md).
 
@@ -125,7 +125,7 @@ $$\text{magnitude} = \frac{L_i - m}{2 s_m}, \qquad i = 1, 2,$$
 
 with $L_1$ for the penumbral and $L_2$ for the [?lun-umbral-magnitude|umbral magnitude]. The 1992 Supplement states that the magnitude "may be greater than unity, but not negative" [@lun-es1992]. NASA instead prints a negative umbral magnitude for penumbral eclipses, as "a measure of the distance of the Moon's limb to the edge of the umbral shadow in units of the Moon's diameter" [@lun-5mcle-tp2009]. NASA's verbal definition is $M_p = x_p/d_m$, the penetration of the Moon's deepest limb divided by its diameter [@lun-5mcle-tp2009]. Stellarium computes `pMag = (L1 - m) / (2. * mSD)` and `uMag = (L2 - m) / (2. * mSD)` [@sw-stellarium-astrocalc].
 
-The [?position-angle|position angle] of a contact on the Moon's limb is $P = M$ for interior and $P = M + 180^{\circ}$ for exterior contacts, with $\tan M = x/y$ measured eastward from north [@lun-es1992]. The Institut de mécanique céleste et de calcul des éphémérides (IMCCE) quotes an "angle au pôle" counted positive towards the west, which is the opposite sense [@lun-imcce-2023-may].
+The [?position-angle|position angle] of a contact on the Moon's limb is $P = M$ for interior and $P = M + 180^{\circ}$ for exterior contacts, with $\tan M = x/y$ measured eastward from north [@lun-es1992]. The Institut de mécanique céleste et de calcul des éphémérides ([IMCCE](https://www.imcce.fr/)) quotes an "angle au pôle" counted positive towards the west, which is the opposite sense [@lun-imcce-2023-may].
 
 ### Durations
 
@@ -136,7 +136,7 @@ The durations are differences of contacts: penumbral P4 − P1, partial U4 − U
 The Five Millennium Canon of Lunar Eclipses (NASA/TP-2009-214172) gives a diagram and a visibility map for each eclipse. The Five Millennium Catalog of Lunar Eclipses (NASA/TP-2009-214173) lists the same eclipses with additional fields [@lun-5mcle-tp2009] [@lun-5mkle-tp2009]. Their inputs are [@lun-5mcle-tp2009]:
 
 - the Sun from VSOP87 version D, with "the complete set of periodic terms";
-- the Moon from ELP-2000/82, truncated below 0.0005 arcseconds and 1 m, which gives "a mean error ... of about 0.0006 s of time in right ascension, and about 0.006 arcsec in declination" and an error in contact times "of the order of 1/40 s";
+- the Moon from ELP-2000/82, truncated below 0.0005 arcseconds and 1 m, which gives "a mean error ... of about 0.0006 s of time in right ascension, and about 0.006 arcsec in declination" and an error in [contact times](../20-solar-eclipses-and-transits/04-local-circumstances/contact-times-and-magnitude.md) "of the order of 1/40 s";
 - mean arguments from Chapront, Chapront-Touzé and Francou 2002, with a secular acceleration of the Moon of −25.858 arcseconds per century squared;
 - the lunar radius $k = 0.2724880$, "a mean over the Moon's topographic features";
 - the centre-of-figure offset of about 0.5 arcseconds ignored, as "much smaller than the uncertainty in the edges of the penumbral and umbral shadows";
@@ -144,7 +144,7 @@ The Five Millennium Canon of Lunar Eclipses (NASA/TP-2009-214172) gives a diagra
 
 The key page adds that "Jean Meeus" provided "the Besselian elements used in the lunar eclipse predictions", and that ΔT came from Morrison and Stephenson 2004 before the 1950s, from observations for 1955 to 2006, and from extrapolation afterwards [@lun-nasa-lecatkey]. The ASCII file `5MKLEcatalog.txt` is dated 2011 May 23 and has 12,064 data rows in fixed-width columns: catalogue number, date, TD of greatest eclipse, ΔT, lunation number, Saros number, type, QSE, gamma, penumbral and umbral magnitudes, the three durations in minutes, and the latitude and longitude of the [?lun-sublunar-point|sublunar point] at greatest eclipse [@lun-5mkle-ascii]. For the catalogues of the solar side and their file formats, see [Canons and data products](../20-solar-eclipses-and-transits/02-catalogs/canons-and-data-products.md).
 
-EclipseWise publishes newer pages for individual eclipses. The page for 2025 March 14 lists P1 at 03:57:09.4 UT1, U1 05:09:22.6, U2 06:25:57.5, greatest eclipse 06:58:44.5, U3 07:32:01.5, U4 08:48:18.5 and P4 10:00:31.9. It gives penumbral magnitude 2.26146, umbral magnitude 1.18038, gamma 0.34846, ΔT 71.7 seconds, the Jet Propulsion Laboratory (JPL) ephemeris DE430 and the Herald and Sinnott shadow rule, last updated 2022 February 27 [@lun-ew-2025mar14]. The NASA catalogue gives this eclipse at 06:59:56 TD with ΔT 75 seconds, a value extrapolated before 2009 [@lun-nasa-le2001].
+EclipseWise publishes newer pages for individual eclipses. The page for 2025 March 14 lists P1 at 03:57:09.4 UT1, U1 05:09:22.6, U2 06:25:57.5, greatest eclipse 06:58:44.5, U3 07:32:01.5, U4 08:48:18.5 and P4 10:00:31.9. It gives penumbral magnitude 2.26146, umbral magnitude 1.18038, gamma 0.34846, ΔT 71.7 seconds, the Jet Propulsion Laboratory (JPL) ephemeris [DE430](../10-shared/08-lunar-and-solar-model/ephemerides.md) and the Herald and Sinnott shadow rule, last updated 2022 February 27 [@lun-ew-2025mar14]. The NASA catalogue gives this eclipse at 06:59:56 TD with ΔT 75 seconds, a value extrapolated before 2009 [@lun-nasa-le2001].
 
 ## Local circumstances: visibility, not timing
 
@@ -172,7 +172,7 @@ which is −202 seconds at −2000 and −14 seconds at +3000 [@lun-5mcle-tp2009
 
 ## How the open-source programs enumerate
 
-**Skyfield.** `eclipselib.lunar_eclipses()` finds the maxima of the angle between the Earth–Sun and Earth–Moon vectors with a 5-day step. It applies aberration to the Sun and neglects light-time to the Moon, then tests the closest approach against Danjon radii [@sw-skyfield-eclipselib]. It returns the time of greatest eclipse, a code 0, 1 or 2 for penumbral, partial or total, and the closest approach, the radii and both magnitudes. It returns no contact times and no gamma [@sw-skyfield-eclipselib]. The docstring cites section 11.2.3 of the 2013 Explanatory Supplement [@sw-skyfield-eclipselib] [@earth-es2013].
+**[Skyfield](https://rhodesmill.org/skyfield/).** `eclipselib.lunar_eclipses()` finds the maxima of the angle between the Earth–Sun and Earth–Moon vectors with a 5-day step. It applies aberration to the Sun and neglects [light-time](../10-shared/07-earth-and-time/refraction-light-time-and-frames.md) to the Moon, then tests the closest approach against Danjon radii [@sw-skyfield-eclipselib]. It returns the time of greatest eclipse, a code 0, 1 or 2 for penumbral, partial or total, and the closest approach, the radii and both magnitudes. It returns no contact times and no gamma [@sw-skyfield-eclipselib]. The docstring cites section 11.2.3 of the 2013 Explanatory Supplement [@sw-skyfield-eclipselib] [@earth-es2013].
 
 **Stellarium.** The Astronomical Calculations dialog steps through mean full moons from JD 2451550.09765 at 29.530588853 days. It iterates each to the minimum of $m$, computes the magnitudes, gamma and Saros number, and lists P1 to P4 with position angles [@sw-stellarium-astrocalc]. It switches topocentric coordinates off for the computation [@sw-stellarium-astrocalc].
 
@@ -205,6 +205,6 @@ The pipeline's ephemeris and time stages serve lunar eclipses unchanged. The Bes
 ## Open questions
 
 - Obtain the 2013 Explanatory Supplement, chapter 11, to see whether its lunar eclipse section defines elements or a contact method beyond the 1992 text [@earth-es2013].
-- Obtain the NASA Canon's map-generation code, or a statement from Espenak, giving the lunar altitude used for the moonrise and moonset curves [@lun-5mcle-tp2009].
+- Obtain the NASA Canon's map-generation code, or a statement from [Espenak](https://en.wikipedia.org/wiki/Fred_Espenak), giving the lunar altitude used for the moonrise and moonset curves [@lun-5mcle-tp2009].
 - Obtain Meeus and Mucke's *Canon of Lunar Eclipses −2002 to +2526* (1979) to compare its Besselian elements with the 2009 Catalogue [@lun-meeus-mucke-1979].
 - Obtain the EclipseWise *21st Century Canon of Lunar Eclipses* to learn its ΔT model and whether its contact times include the centre-of-figure offset.

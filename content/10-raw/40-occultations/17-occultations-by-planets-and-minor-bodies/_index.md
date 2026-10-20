@@ -9,11 +9,11 @@ tags: [stellar-occultation, asteroid, tno, planets, gaia, sora, occult, mutual-o
 ---
 
 ::: summary
-- **The shadow of a body against a star is a cylinder.** Its width on the fundamental plane equals the body's diameter, and on the ground it widens as the diameter divided by the sine of the star's altitude [@mb-gomes-junior-2022-sora] [@mb-preston-faq].
+- **The shadow of a body against a star is a cylinder.** Its width on the [fundamental plane](../../10-shared/01-foundations/besselian-elements.md) equals the body's diameter, and on the ground it widens as the diameter divided by the sine of the star's altitude [@mb-gomes-junior-2022-sora] [@mb-preston-faq].
 - **Prediction is limited by astrometry, not geometry.** The path's 1-sigma lines sit one cross-track uncertainty outside each edge, and 1 milliarcsecond is 0.7253 km per astronomical unit of distance [@mb-tanga-delbo-2007] [@mb-sora-code].
-- **Gaia changed the error from hundreds of kilometres to fractions of a path width.** Occultation astrometry reduced against Gaia EDR3 fits orbits at about 10 milliarcseconds, against 30 to 50 with older catalogues [@mb-ferreira-2022] [@mb-dunham-rasc-2024-mb].
+- **[Gaia](https://en.wikipedia.org/wiki/Gaia_(spacecraft)) changed the error from hundreds of kilometres to fractions of a [path width](../../20-solar-eclipses-and-transits/03-global-circumstances/path-and-limits.md).** Occultation astrometry reduced against Gaia EDR3 fits orbits at about 10 milliarcseconds, against 30 to 50 with older catalogues [@mb-ferreira-2022] [@mb-dunham-rasc-2024-mb].
 - **Reduction models diffraction, star size and exposure, then fits chords.** The light-curve model of SORA (Stellar Occultation Reduction and Analysis) and Herald's ellipse, circle and shape-model fits are the documented methods [@mb-gomes-junior-2022-sora] [@mb-herald-2020].
-- **The method found rings and atmospheres.** Uranus's rings in 1977, Pluto's atmosphere in 1988, and rings around Chariklo, Haumea and Quaoar [@mb-elliot-1977] [@mb-meza-2019] [@mb-braga-ribas-2014] [@mb-ortiz-2017] [@mb-pereira-2023].
+- **The method found rings and atmospheres.** Uranus's rings in 1977, [Pluto](https://en.wikipedia.org/wiki/Pluto)'s atmosphere in 1988, and rings around Chariklo, Haumea and Quaoar [@mb-elliot-1977] [@mb-meza-2019] [@mb-braga-ribas-2014] [@mb-ortiz-2017] [@mb-pereira-2023].
 - **Planet-planet occultations are eclipse geometry with a planet as the source.** The last was Venus and Jupiter in 1818, and the next is the same pair in 2065 [@mb-gray-mutual] [@mb-bogan-mutual].
 :::
 
@@ -23,9 +23,9 @@ This topic covers occultations of stars by bodies other than the Moon: asteroids
 
 ## Notes in this topic
 
-- [Prediction geometry and astrometry](prediction-geometry-and-astrometry.md): the cylinder shadow on the fundamental plane, the event search, the path and 1-sigma lines, the star and ephemeris error budget, Gaia and occultation astrometry, timing, and the software and services.
+- [Prediction geometry and astrometry](prediction-geometry-and-astrometry.md): the cylinder shadow on the fundamental plane, the event search, the path and 1-sigma lines, the star and ephemeris [error budget](../../../20-reports/error-budget.md), Gaia and occultation astrometry, timing, and the software and services.
 - [Light curves, chords and results](light-curves-chords-and-results.md): the diffraction, star-size and exposure model, sub-exposure timing, chord fitting with ellipses, circles and shape models, and the results for asteroids, TNOs and rings.
-- [Planets, satellites and mutual planetary occultations](planets-satellites-and-mutual-planetary-occultations.md): SPICE-based predictions for the giant planets, Titan and Triton, satellite astrometry from occultations, and the geometry and lists of planet-planet occultations.
+- [Planets, satellites and mutual planetary occultations](planets-satellites-and-mutual-planetary-occultations.md): SPICE-based predictions for the giant planets, [Titan](https://en.wikipedia.org/wiki/Titan_(moon)) and [Triton](https://en.wikipedia.org/wiki/Triton_(moon)), satellite astrometry from occultations, and the geometry and lists of planet-planet occultations.
 
 ## What this topic changes for the pipeline
 

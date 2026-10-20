@@ -69,4 +69,12 @@ server, with caching off, by `python tools/check_browser.py`.
 | AT-SEO-2 | SEO-2 | `test_seo.py`: the home page's head title names eclipse, occultation and transit, and its description names transits. |
 | AT-SEO-3 | SEO-3 | `test_seo.py`: every page under `14-transits` has "transit" in its search title. |
 | AT-SEO-4 | SEO-4 | `test_seo.py`: the rendered home page has one `application/ld+json` block of type `WebSite` with the name, the alternate name, the canonical home address and the description; a deep page has none. |
+| AT-LNK-1 | LNK-1 | `test_links.py`: a term with a fourth column renders a "Read on Wikipedia" link in its panel and in the A to Z glossary, and a term without one renders none; `site.css` opens the panel on `:focus-within`. |
+| AT-LNK-2 | LNK-2 | `test_links.py`: `tools/autolink.py` finds nothing left to add, so every mapped name in `links.tsv` is linked at its first prose mention on every page. |
+| AT-LNK-3 | LNK-3 | `test_links.py`: as AT-LNK-2 for the site's own pages, and no page links to itself. |
+| AT-LNK-4 | LNK-4 | `test_links.py`: `tools/link_check.py` reports no relative link to a missing file and no anchor missing from the built page. |
+| AT-LNK-5 | LNK-5 | `test_links.py`: every external link is https, notes and glossary links use canonical hosts, and a glossary row linking another host is a build error. |
+| AT-LNK-6 | LNK-6 | `test_links.py`: `tools/link_check.py` reports every research note at or above the two floors. |
+| AT-LNK-7 | LNK-7 | `test_links.py`: on sample text, `autolink.plan` adds no link inside a heading, a multi-line image caption, a quotation, code, maths, a citation, a glossary marker or an existing link. |
+| AT-LNK-8 | LNK-8 | `test_links.py`: on rendered pages every `<a>` with an `http` or `https` address carries `target="_blank"` and `noopener`, and no relative or `#` link carries a target. |
 | AT-HOME-5 | HOME-5 | `test_reports_home.py`: the research table has a heading per group and links every topic `_index.md`. |

@@ -243,6 +243,39 @@ observer sees. They share one module, so they cannot disagree.
   Transits", the home page address and the description. No other page
   carries it.
 
+## LNK: links
+
+A reader who meets a subject should be one click from the page of this site
+that treats it in depth, and from the reference page that defines it.
+
+- **LNK-1** A glossary term may name one canonical page outside the site: a
+  Wikipedia article, or the page of the agency or project that owns the
+  thing. It is the optional fourth column of `terms.tsv`. The explainer
+  panel and the A to Z glossary show it as one quiet line, "Read on" and the
+  site's name, such as "Read on Wikipedia". The link stays reachable by
+  keyboard: the panel stays open while focus is inside it.
+- **LNK-2** A page links the first mention in its prose of a named mission,
+  instrument, dataset, institution, program, person, body or dated eclipse
+  that has a canonical page to that page, once per page. Such a link is
+  reading, not evidence: the claim beside it still carries its citation.
+- **LNK-3** A page links the first mention in its prose of a subject that
+  another page of the site treats in depth to that page, once per page. A
+  page never links to itself.
+- **LNK-4** Every relative link goes to a file of the site, and every anchor
+  in one names an element of the built page it goes to.
+- **LNK-5** Every external link uses https. A link in a research note and a
+  glossary term's link go to a host in `CANONICAL_SITES` in
+  `tools/build.py`. The build refuses a glossary link that does not.
+- **LNK-6** Every research note links at least five other pages of the site
+  and at least three canonical pages outside it, counting the glossary
+  terms it marks.
+- **LNK-7** The links of LNK-2 and LNK-3 never fall inside a heading, an
+  image caption, a quotation, code, maths, a citation, a glossary marker or
+  another link.
+- **LNK-8** A link that leaves the site opens in a new browser tab, with
+  `rel="noopener"`. A link within the site, including a citation marker, a
+  glossary panel and the navigation, opens in the same tab.
+
 ## S3D: 3D guided scenes
 
 The 3D scenes show each event as bodies in space, one event at a time. The

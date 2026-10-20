@@ -55,11 +55,11 @@ A [?transit] is the same with a body far too small to cover the source.
 Venus's umbra closes long before it reaches the Earth, so the observer stands
 in its antumbra and sees a dot cross the Sun [@tr-es1961].
 
-The observer need not stand on the Earth. On 2026 April 6 the Artemis II crew
+The observer need not stand on the Earth. On 2026 April 6 the [Artemis II](https://en.wikipedia.org/wiki/Artemis_II) crew
 watched the Moon hide the Sun from the Orion spacecraft, close behind the
 Moon. From there the Moon looked huge and hardly moved, so the Sun stayed
 hidden for 54 minutes [@prim-nasa-artemis2-eclipse] [@prim-nasa-artemis2-science].
-On Mars, the Perseverance rover filmed Phobos crossing the Sun on 2022
+On Mars, the Perseverance rover filmed [Phobos](https://en.wikipedia.org/wiki/Phobos_(moon)) crossing the Sun on 2022
 April 2. Phobos is too small to cover the Sun, so the rover stood in its
 antumbra, and the crossing took a little over 40 seconds
 [@prim-jpl-perseverance-phobos].
@@ -68,7 +68,7 @@ antumbra, and the crossing took a little over 40 seconds
 
 The hidden source can also be a body that the Sun lights rather than one
 that shines. Then its phase shapes the outline that the blocking body hides.
-Chauvenet treats a planet hidden by the Moon this way [@bes-chauvenet-1863].
+[Chauvenet](https://en.wikipedia.org/wiki/William_Chauvenet) treats a planet hidden by the Moon this way [@bes-chauvenet-1863].
 
 ![The Sun lights Io, and the observer stands in Jupiter's shadow in Io's reflected light, so Io is hidden behind Jupiter.](img/example-satellite-occultation.svg)
 
@@ -105,7 +105,7 @@ whether the body is above their horizon [@lun-5mcle-tp2009].
 
 - A **lunar eclipse** is the Moon in the Earth's shadow
   [@lun-5mcle-tp2009].
-- An **eclipse of a satellite** is, for example, Io in Jupiter's shadow
+- An **eclipse of a satellite** is, for example, [Io](https://en.wikipedia.org/wiki/Io_(moon)) in Jupiter's shadow
   [@jup-imcce-phenjupiter-readme].
 - A **shadow transit** is a satellite's shadow falling on its planet's cloud
   tops, a patch of the planet in eclipse [@jup-imcce-phenjupiter-readme].
@@ -207,4 +207,4 @@ Occultations, and Transits", because it keeps the traditional names
   inputs, solar eclipses and transits, lunar eclipses, occultations and
   planetary satellites.
 - The [reports](../20-reports/_index.md) set out the computation pipeline,
-  its error budget and the open questions.
+  its [error budget](../20-reports/error-budget.md) and the open questions.

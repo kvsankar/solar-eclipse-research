@@ -419,6 +419,7 @@ html[data-theme="dark"] .g-unsourced { color: #ef8b78; border-color: #96513f; }
 }
 .gloss:hover .gloss-pop,
 .gloss:focus .gloss-pop,
+.gloss:focus-within .gloss-pop,
 .gloss.open .gloss-pop { display: block; }
 .gloss-pop.flip-right { left: auto; right: 0; }
 .gloss-pop.flip-up { top: auto; bottom: calc(100% + 7px); }
@@ -433,6 +434,10 @@ html[data-theme="dark"] .g-unsourced { color: #ef8b78; border-color: #96513f; }
   margin-bottom: 4px;
 }
 .gloss-d { display: block; color: var(--text-dim); }
+/* The term's canonical page (spec LNK-1): one quiet line under the definition. */
+.gloss-more { display: block; margin-top: 6px; font-size: 12.5px; }
+.gloss-more a { color: var(--gloss-ink, #2d6a5a); }
+.glossary-list .gloss-more { font-size: 13px; }
 /* Definitions carry inline maths, so give radicals and fractions room to sit
    without touching the line above, and stop a long formula widening the panel. */
 .gloss-d, .glossary-list dd { line-height: 1.75; }

@@ -15,5 +15,5 @@ Start here if you have not computed an eclipse before.
 - [Worked example: a solar eclipse](worked-example-solar-eclipse.md) follows
   one prediction from the ephemeris to the second at which totality begins,
   in plain terms, and points into the research notes for the formulas. It
-  ends with what changes for a lunar eclipse, an occultation and a transit.
+  ends with what changes for a [lunar eclipse](../10-raw/30-lunar-eclipses/_index.md), an occultation and a transit.
 - The [glossary](glossary.md) lists every term the site explains inline.

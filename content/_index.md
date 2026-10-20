@@ -38,7 +38,7 @@ published calculators and open-source libraries.
 
 [Research and website source on GitHub](https://github.com/kvsankar/solar-eclipse-research).
 
-Published predictors can disagree at a path limit because they use different
+Published predictors can disagree at a [path limit](10-raw/20-solar-eclipses-and-transits/03-global-circumstances/path-and-limits.md) because they use different
 models and inputs [@val-quaglia-2021] [@val-besselian-maps-accuracy]. This site sets out
 what a developer needs to know to compute every product, from the list of
 eclipses in a century to the second totality begins on one hillside, and to
@@ -55,11 +55,11 @@ and the evidence each one provides.
 ::: summary
 - **Hidden: the observer stands in the shadow.** Occultations, transits and solar eclipses depend on where the observer stands. Their dominant inputs are the lunar limb, the star's and the body's positions, and the solar and planetary radii [@limb-occult-accuracy-2016] [@mb-ferreira-2022] [@tr-eso-eis-b1].
 - **Darkened: another body stands in the shadow.** Lunar and satellite eclipses look the same from everywhere. Their dominant inputs are the enlargement of the Earth's shadow and the satellite ephemeris [@lun-herald-sinnott-2014] [@sats-arlot-2012-phesat09].
-- **Solar eclipses are covered in most depth.** Bessel's method underlies classical eclipse tables and maps. Direct topocentric calculations and raster limb tests provide alternative routes. Predictors differ in their algorithms as well as their constants and data [@bes-es1961] [@bes-quaglia-2021] [@svs-wright-young-2024].
-- **Solar radius, lunar limb and terrain can move a path limit by hundreds of metres to kilometres.** Their effects depend on the geometry and on which corrections the predictor includes [@val-quaglia-2021] [@val-svs-4517].
-- **Wright and Young 2024 describe NASA SVS's terrain-aware raster method.** It uses an 18,000-element lunar limb from LRO and Kaguya (SELENE) topography. The paper is open access, while the surveyed public releases contain data rather than the generating code [@svs-wright-young-2024] [@svs-2024-shapefiles-zip].
+- **Solar eclipses are covered in most depth.** [Bessel](https://en.wikipedia.org/wiki/Friedrich_Wilhelm_Bessel)'s method underlies classical eclipse tables and maps. Direct topocentric calculations and raster limb tests provide alternative routes. Predictors differ in their algorithms as well as their constants and data [@bes-es1961] [@bes-quaglia-2021] [@svs-wright-young-2024].
+- **[Solar radius](10-raw/20-solar-eclipses-and-transits/06-solar-radius/solar-radius-values.md), lunar limb and terrain can move a path limit by hundreds of metres to kilometres.** Their effects depend on the geometry and on which corrections the predictor includes [@val-quaglia-2021] [@val-svs-4517].
+- **Wright and Young 2024 describe NASA SVS's terrain-aware raster method.** It uses an 18,000-element lunar limb from [LRO](https://en.wikipedia.org/wiki/Lunar_Reconnaissance_Orbiter) and [Kaguya](https://en.wikipedia.org/wiki/SELENE) (SELENE) topography. The paper is open access, while the surveyed public releases contain data rather than the generating code [@svs-wright-young-2024] [@svs-2024-shapefiles-zip].
 - **The adopted solar radius remains a modelling choice.** Flash-spectrum and light-curve studies infer values around 959.95 to 960.01 arcseconds. At Stephenville in 2024, predictions of 24.5 s and 12.9 s bracketed the observed 13.7 s. That comparison changes several implementation inputs, so it does not isolate the radius contribution [@sun-quaglia-2021] [@sun-lamy-2015] [@val-besselian-maps-accuracy].
-- **The surveyed open implementations do not derive limb-corrected path limits.** Stellarium and NASA's JavaScript provide smooth-Moon products. The repository survey also includes a LOLA-based bead construction for a single eclipse [@sw-stellarium-sec-cpp] [@sw-nasa-jsex-program-js] [@sw-repo-eclipse-2026-rojas].
+- **The surveyed open implementations do not derive limb-corrected path limits.** [Stellarium](https://stellarium.org/) and NASA's JavaScript provide smooth-Moon products. The repository survey also includes a LOLA-based bead construction for a single eclipse [@sw-stellarium-sec-cpp] [@sw-nasa-jsex-program-js] [@sw-repo-eclipse-2026-rojas].
 :::
 
 ## Start here
@@ -88,9 +88,9 @@ What every event needs: the geometry, the Earth, time, the ephemerides and the s
 
 | Topic | What it settles |
 |---|---|
-| [Foundations](10-raw/10-shared/01-foundations/_index.md) | The eight Besselian elements, the equations from ephemeris to elements, the constants and their provenance |
-| [Earth model and time](10-raw/10-shared/07-earth-and-time/_index.md) | The ellipsoid, terrain and geoid, ΔT models, refraction, frames |
-| [Lunar and solar model](10-raw/10-shared/08-lunar-and-solar-model/_index.md) | The DE ephemerides, centre of mass against figure, $k$, libration |
+| [Foundations](10-raw/10-shared/01-foundations/_index.md) | The eight [Besselian elements](10-raw/10-shared/01-foundations/besselian-elements.md), the equations from ephemeris to elements, the constants and their provenance |
+| [Earth model and time](10-raw/10-shared/07-earth-and-time/_index.md) | The ellipsoid, terrain and [geoid](10-raw/10-shared/07-earth-and-time/earth-figure-and-terrain.md), [ΔT](10-raw/10-shared/07-earth-and-time/delta-t-and-earth-rotation.md) models, refraction, frames |
+| [Lunar and solar model](10-raw/10-shared/08-lunar-and-solar-model/_index.md) | The DE ephemerides, centre of mass against figure, $k$, [libration](10-raw/10-shared/08-lunar-and-solar-model/lunar-figure-and-libration.md) |
 | [Software and repositories](10-raw/10-shared/09-software-and-repos/_index.md) | Four production lineages, the open libraries, thirty repositories, the datasets |
 
 ### Solar eclipses and transits
@@ -101,12 +101,12 @@ The hidden case with the Sun as the source, covered in most depth. [Group overvi
 |---|---|
 | [Catalogues and types](10-raw/20-solar-eclipses-and-transits/02-catalogs/_index.md) | How eclipses are enumerated and classified, and which catalogues to use as fixtures |
 | [Global circumstances](10-raw/20-solar-eclipses-and-transits/03-global-circumstances/_index.md) | Central line, limits, outlines, rise and set curves, durations, and the data products |
-| [Local circumstances](10-raw/20-solar-eclipses-and-transits/04-local-circumstances/_index.md) | Contact times, magnitude, obscuration and position angles at one site, and the corrections |
-| [Lunar limb profile](10-raw/20-solar-eclipses-and-transits/05-lunar-limb/_index.md) | Watts, Kaguya and LOLA, the DEM-to-profile geometry, and Baily's beads |
+| [Local circumstances](10-raw/20-solar-eclipses-and-transits/04-local-circumstances/_index.md) | [Contact times](10-raw/20-solar-eclipses-and-transits/04-local-circumstances/contact-times-and-magnitude.md), magnitude, obscuration and position angles at one site, and the corrections |
+| [Lunar limb profile](10-raw/20-solar-eclipses-and-transits/05-lunar-limb/_index.md) | Watts, Kaguya and [LOLA](https://lola.gsfc.nasa.gov/), the DEM-to-profile geometry, and [Baily's beads](10-raw/20-solar-eclipses-and-transits/05-lunar-limb/bailys-beads.md) |
 | [Solar radius](10-raw/20-solar-eclipses-and-transits/06-solar-radius/_index.md) | Every value in circulation, what each measures, and the effect on products |
 | [Validation](10-raw/20-solar-eclipses-and-transits/10-validation/_index.md) | Observed against predicted, predictor disagreements, the error budget and protocol |
 | [NASA SVS and Ernie Wright](10-raw/20-solar-eclipses-and-transits/11-svs-wright/_index.md) | The 2024 paper, the SVS products and data, and the comparison with other predictors |
-| [Transits of Mercury and Venus](10-raw/20-solar-eclipses-and-transits/14-transits/_index.md) | Enumeration, transit elements, contacts and local reduction formulas, the black drop and the radii |
+| [Transits of Mercury and Venus](10-raw/20-solar-eclipses-and-transits/14-transits/_index.md) | Enumeration, transit elements, contacts and local reduction formulas, the [black drop](10-raw/20-solar-eclipses-and-transits/14-transits/observations-black-drop-and-solar-radius.md) and the radii |
 
 ### Lunar eclipses
 
@@ -114,7 +114,7 @@ The darkened case with the Moon in the Earth's shadow.
 
 | Topic | What it settles |
 |---|---|
-| [Lunar eclipses](10-raw/30-lunar-eclipses/_index.md) | The lunar elements and six contacts, the three shadow enlargement rules, crater timings and brightness |
+| [Lunar eclipses](10-raw/30-lunar-eclipses/_index.md) | The lunar elements and six contacts, the three [shadow enlargement](10-raw/30-lunar-eclipses/shadow-geometry-and-enlargement.md) rules, crater timings and brightness |
 
 ### Occultations
 
@@ -123,7 +123,7 @@ The hidden case with a star or a planet as the source. [Group overview](10-raw/4
 | Topic | What it settles |
 |---|---|
 | [Lunar occultations](10-raw/40-occultations/13-lunar-occultations/_index.md) | Occultations of stars and planets by the Moon, grazes, star catalogues and the reduction of timings |
-| [Occultations by planets and minor bodies](10-raw/40-occultations/17-occultations-by-planets-and-minor-bodies/_index.md) | Asteroid and TNO occultation paths, Gaia astrometry, light curves and chords, and planet-planet occultations |
+| [Occultations by planets and minor bodies](10-raw/40-occultations/17-occultations-by-planets-and-minor-bodies/_index.md) | Asteroid and TNO occultation paths, [Gaia](https://en.wikipedia.org/wiki/Gaia_(spacecraft)) astrometry, light curves and chords, and planet-planet occultations |
 
 ### Planetary satellites
 
@@ -131,8 +131,8 @@ Both cases at Jupiter, Saturn and beyond. [Group overview](10-raw/50-planetary-s
 
 | Topic | What it settles |
 |---|---|
-| [Jupiter's satellites](10-raw/50-planetary-satellites/15-jupiter-satellites/_index.md) | Eclipses, occultations, transits and shadow transits of the Galilean satellites, theories and mutual events |
-| [Saturn and the outer satellites](10-raw/50-planetary-satellites/16-saturn-and-outer-satellites/_index.md) | Saturn's ring geometry, satellite theories and phenomena, and mutual events at Uranus and Pluto |
+| [Jupiter's satellites](10-raw/50-planetary-satellites/15-jupiter-satellites/_index.md) | Eclipses, occultations, transits and shadow transits of the Galilean satellites, theories and [mutual events](10-raw/50-planetary-satellites/15-jupiter-satellites/mutual-events.md) |
+| [Saturn and the outer satellites](10-raw/50-planetary-satellites/16-saturn-and-outer-satellites/_index.md) | Saturn's ring geometry, satellite theories and phenomena, and mutual events at Uranus and [Pluto](https://en.wikipedia.org/wiki/Pluto) |
 
 ## Reference
 

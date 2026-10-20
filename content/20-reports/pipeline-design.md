@@ -8,16 +8,16 @@ seo_title: Solar Eclipse Calculation Pipeline: Algorithms and Formulas
 ---
 
 ::: summary
-- **Nine stages, one configuration record.** Ephemeris and time, enumeration, Besselian elements, global circumstances, partial-eclipse maps, local circumstances, terrain, lunar limb, and products with uncertainty. Every product carries the record of constants and data versions that produced it, set out before stage 1.
+- **Nine stages, one configuration record.** Ephemeris and time, enumeration, [Besselian elements](../10-raw/10-shared/01-foundations/besselian-elements.md), global circumstances, partial-eclipse maps, local circumstances, terrain, lunar limb, and products with uncertainty. Every product carries the record of constants and data versions that produced it, set out before stage 1.
 - **Two computational paths from one ephemeris layer.** An elements path for catalogues, maps and anything that must be reproducible from a published table, and a direct topocentric path for site-level work and limb tests. They must agree to 0.1 s on the same inputs [@bes-quaglia-2021] [@loc-usno-sec].
-- **The smooth-Moon stages are textbook and have reference implementations.** The 1961 Explanatory Supplement for the formulas, Stellarium for the global curves, NASA's `program.js` for local circumstances [@bes-es1961] [@sw-stellarium-sec-cpp] [@loc-jsex-program-js].
+- **The smooth-Moon stages are textbook and have reference implementations.** The 1961 Explanatory Supplement for the formulas, [Stellarium](https://stellarium.org/) for the global curves, NASA's `program.js` for local circumstances [@bes-es1961] [@sw-stellarium-sec-cpp] [@loc-jsex-program-js].
 - **The limb and terrain stages follow Wright and Young 2024** without a public generating implementation in the surveyed releases. They replace the circular shadow with a per-pixel test against an 18,000-element profile [@svs-wright-young-2024].
 - **Each stage has a named validation case** with a tolerance drawn from the [error budget](error-budget.md).
 :::
 
 This pipeline computes solar eclipses, the event this site covers in most
 depth. [Extending the pipeline to other events](other-events.md) sets out
-which stages carry over to lunar eclipses, occultations, transits and
+which stages carry over to [lunar eclipses](../10-raw/30-lunar-eclipses/_index.md), occultations, transits and
 satellite phenomena, and what each of them adds.
 
 ![Two computational paths leave the same ephemeris layer, and the design's only true cross-check is that they meet again at local circumstances within 0.1 s. Almanac mode ends at stage 6, and terrain and the lunar limb are what edge mode adds.](img/pipeline-stages.svg)
@@ -30,13 +30,13 @@ Algorithm and solver choices also matter [@val-quaglia-2021] [@svs-irwin-quaglia
 
 | Item | Almanac mode | Edge mode |
 |---|---|---|
-| Ephemeris | DE440 via `de440s.bsp` (or the ephemeris of the table being reproduced) | DE440 |
+| Ephemeris | [DE440](../10-raw/10-shared/08-lunar-and-solar-model/ephemerides.md) via `de440s.bsp` (or the ephemeris of the table being reproduced) | DE440 |
 | Lunar orientation | not needed | `moon_pa_de440_200625.bpc` with the current NAIF frame kernel, frame `MOON_ME_DE440_ME421` |
-| Earth figure | WGS84, $a = 6378.137$ km, $1/f = 298.257223563$ | same, plus EGM96 or EGM2008 geoid |
-| Solar radius $s_0$ | 959.63″ at 1 au | 959.95″ ± 0.05″, with 959.63″ as a preset |
-| Lunar radius | $k_1 = 0.2724880$ penumbral to match the NASA GSFC tables, 0.2725076 to match EclipseWise and the bulletins; $k_2 = 0.272281$ umbral | LOLA profile on a 1737.4 km datum; $k$ only for penumbral products |
-| Terrain | sea level | SRTM GL1 or Copernicus GLO-30, converted to ellipsoidal height |
-| ΔT | value printed with the table being matched | latest USNO `deltat.data` or `deltat.preds`, with its date |
+| Earth figure | [WGS84](https://en.wikipedia.org/wiki/World_Geodetic_System), $a = 6378.137$ km, $1/f = 298.257223563$ | same, plus [EGM96](https://en.wikipedia.org/wiki/Earth_Gravitational_Model) or EGM2008 [geoid](../10-raw/10-shared/07-earth-and-time/earth-figure-and-terrain.md) |
+| [Solar radius](../10-raw/20-solar-eclipses-and-transits/06-solar-radius/solar-radius-values.md) $s_0$ | 959.63″ at 1 au | 959.95″ ± 0.05″, with 959.63″ as a preset |
+| Lunar radius | $k_1 = 0.2724880$ penumbral to match the NASA GSFC tables, 0.2725076 to match EclipseWise and the bulletins; $k_2 = 0.272281$ umbral | [LOLA](https://lola.gsfc.nasa.gov/) profile on a 1737.4 km datum; $k$ only for penumbral products |
+| Terrain | sea level | [SRTM](https://en.wikipedia.org/wiki/Shuttle_Radar_Topography_Mission) GL1 or Copernicus GLO-30, converted to ellipsoidal height |
+| [ΔT](../10-raw/10-shared/07-earth-and-time/delta-t-and-earth-rotation.md) | value printed with the table being matched | latest [USNO](https://en.wikipedia.org/wiki/United_States_Naval_Observatory) `deltat.data` or `deltat.preds`, with its date |
 | Refraction | None for geometric contacts, stated | None for geometric contacts. Model displayed altitude and visibility separately. Quantitative contact shifts require validated ray tracing [@earth-espenak-tp2001] [@sun-quaglia-2021] |
 | Time scale internal | TT | TT |
 
@@ -54,17 +54,17 @@ Young's appendix; NAIF now serves the 2025 revision of the same frame as
 ## Stage 1: ephemeris, orientation and time
 
 **Inputs.** `de440s.bsp` (1849 to 2150, 31 MB) for the Sun, Earth and Moon;
-the DE440 lunar PCK and frame kernel; IERS `finals.all` or USNO `deltat.data`
+the DE440 lunar PCK and frame kernel; [IERS](https://www.iers.org/) `finals.all` or USNO `deltat.data`
 and `deltat.preds`; a leap-second table. Reject dates outside the chosen
 kernel's coverage. Catalogue work over wider epochs needs a full kernel
 covering those dates [@moon-naif-summaries]
 [@moon-jpl-bsp-readme] [@earth-iers-bulletin-a] [@earth-usno-deltat-preds].
 
 **Contract.** The layer exposes, at a TT instant: apparent geocentric places
-of the Sun and Moon on the true equator and equinox of date, with light-time
+of the Sun and Moon on the true equator and equinox of date, with [light-time](../10-raw/10-shared/07-earth-and-time/refraction-light-time-and-frames.md)
 and aberration applied to both; apparent topocentric places for a site;
 Greenwich apparent sidereal time; the Moon-to-observer vector in the Moon
-mean-Earth frame for libration. The Moon is read as body 301 relative to 399 and the Sun as
+mean-Earth frame for [libration](../10-raw/10-shared/08-lunar-and-solar-model/lunar-figure-and-libration.md). The Moon is read as body 301 relative to 399 and the Sun as
 body 10, never the barycentre, since the Sun wanders up to 1.6 solar radii
 from it [@moon-folkner-2014]. TT may stand in for TDB, the difference being
 under 2 m on the shadow [@earth-circ179].
@@ -86,7 +86,7 @@ hour angle in stage 6, at 15.041″ of rotation per second [@bes-es1961]
 ## Stage 2: enumeration and provisional type
 
 **Method.** Step through mean new moons. Reject a lunation when
-$|\sin F| > 0.36$. Compute [?gamma] and $u$ from Meeus's short series. Classify:
+$|\sin F| > 0.36$. Compute [?gamma] and $u$ from [Meeus](https://en.wikipedia.org/wiki/Jean_Meeus)'s short series. Classify:
 central if $|\gamma| < 0.9972$; no eclipse if $|\gamma| > 1.5433 + u$;
 non-central umbral if $0.9972 < |\gamma| < 0.9972 + |u|$; total if $u < 0$;
 annular if $u > 0.0047$; for $0 \le u \le 0.0047$, hybrid if
@@ -97,12 +97,12 @@ magnitude $(1.5433 + u - |\gamma|)/(0.5461 + 2u)$ [@cat-meeus-1991-aa].
 γ as $\sqrt{x^2+y^2}$ at its minimum, with the sign of $y$ to preserve the
 catalogue's north/south convention [@bes-nasa-glossary]. Decide the final type on the umbral
 radius at the surface point under the axis, at greatest eclipse and at both
-ends of the central line, so that hybrids and their three classes fall out.
+ends of the [central line](../10-raw/20-solar-eclipses-and-transits/03-global-circumstances/path-and-limits.md), so that hybrids and their three classes fall out.
 Keep a non-central class: 94 eclipses in five millennia have a one-limit
 track and no central line [@cat-espenak-meeus-2009-catalog]
 [@cat-swisseph-swecl].
 
-**Saros.** Kluepfel's closed form from the lunation number reproduces the
+**[Saros](../10-raw/20-solar-eclipses-and-transits/02-catalogs/enumerating-eclipses.md).** Kluepfel's closed form from the lunation number reproduces the
 Saros number of all 11,898 catalogued eclipses [@cat-vangent-cycles].
 
 **Validation.** The 221 eclipses of 1951 to 2050 in NASA's ASCII catalogue:
@@ -150,14 +150,14 @@ samples over six hours about $t_0$ [@bes-nasa-2024-elements]. Metadata:
 ephemeris, $t_0$, ΔT, $k_1$, $k_2$, $s_0$, ellipsoid.
 
 **Validation.** The 1961 Supplement's worked example for 1961 February 15
-08h ET, and the NASA 2024 April 8 polynomial at $t = 0$, expecting agreement
+08h ET, and the NASA [2024 April 8](https://en.wikipedia.org/wiki/Solar_eclipse_of_April_8,_2024) polynomial at $t = 0$, expecting agreement
 at $10^{-5}$ Earth radii once ephemeris, $k$ and ΔT match. A difference above
 $10^{-4}$ Earth radii in $x$ or $y$, about 640 m, means a frame or aberration
 inconsistency [@bes-es1961] [@bes-nasa-csv].
 
 ## Stage 4: global circumstances, smooth Moon
 
-**Frame.** Bessel's substitution turns the ellipsoid into a unit sphere with
+**Frame.** [Bessel](https://en.wikipedia.org/wiki/Friedrich_Wilhelm_Bessel)'s substitution turns the ellipsoid into a unit sphere with
 $\rho_1 = \sqrt{1 - e^2\cos^2 d}$, $\rho_2 = \sqrt{1 - e^2\sin^2 d}$ and a
 rotated declination $d_1$. In that frame the central line at time $t$ is
 $\xi = x$, $\eta_1 = y/\rho_1$, $\zeta_1 = \sqrt{1 - x^2 - \eta_1^2}$
@@ -185,7 +185,7 @@ eclipse from $\tan Q = -(y' - \eta')/(x' - \xi')$ sweeping ζ [@glob-es1961].
 
 **Output.** Central line, limits, outlines at stated instants, rise and set
 curves, maximum-eclipse curves, greatest eclipse, greatest duration, ground
-speed, as GeoJSON with the time system and ΔT in the properties.
+speed, as [GeoJSON](https://en.wikipedia.org/wiki/GeoJSON) with the time system and ΔT in the properties.
 
 **Validation.** The 1961 examples 9.6 and 9.7 ($\phi = +44^{\circ} 18'.3$,
 $\lambda = -29^{\circ} 20'.9$, duration 158.6 s at 08h ET). Then NASA's 2024 path
@@ -195,9 +195,9 @@ table at three times, expecting 1 km and 0.1 s [@glob-es1961]
 ## Stage 5: partial-eclipse maps
 
 Equal-magnitude and equal-obscuration curves are not solved directly. The
-Supplements interpolate on the maximum-eclipse curves; SVS and the open
+Supplements interpolate on the maximum-eclipse curves; [SVS](../10-raw/20-solar-eclipses-and-transits/11-svs-wright/_index.md) and the open
 Eclipse-Engine rasterise instead. For each grid cell, optimise the quantity being contoured over its visible
-interval. Maximum magnitude and maximum obscuration need not occur at the
+interval. Maximum magnitude and maximum [obscuration](../10-raw/20-solar-eclipses-and-transits/04-local-circumstances/contact-times-and-magnitude.md) need not occur at the
 same instant. Use closest approach as a search seed, and keep apparent radii
 time-dependent. Evaluate obscuration with the exact lens formula and
 contour with marching squares. Pad the grid edge and refine vertices near
@@ -241,15 +241,15 @@ Position angle $P$ comes from $\mathrm{atan2}(\pm u,\pm v)$ with the sign
 reversal for interior contacts of a total eclipse. The vertex angle is
 $V = P-q$, where $q$ is the parallactic angle and $\tan q = \xi/\eta$ [@loc-es1961-local] [@loc-nasa-locirc-2001].
 
-**Second path.** The direct topocentric method: root-find
+**Second path.** The direct [topocentric method](../10-raw/20-solar-eclipses-and-transits/04-local-circumstances/topocentric-method.md): root-find
 $\delta(t) = r_s \pm r_m$ on apparent topocentric positions from stage 1, as
-USNO and the Swiss Ephemeris do. Agreement with the Besselian result within
+USNO and the [Swiss Ephemeris](https://www.astro.com/swisseph/) do. Agreement with the Besselian result within
 0.1 s on the same inputs is the regression test for the element generator
 [@loc-usno-sec] [@loc-swecl-c].
 
 **Validation.** NASA's `program.js` output for any city, which is GPL and
 self-contained, to the second; the Lusaka 2001 case (C2 13:09:19.3 UT,
-C3 13:12:32.8 UT before limb correction) to 0.5 s [@loc-jsex-program-js]
+C3 13:12:32.8 UT before [limb correction](../10-raw/20-solar-eclipses-and-transits/04-local-circumstances/corrections-and-code.md)) to 0.5 s [@loc-jsex-program-js]
 [@val-tp2001-bulletin].
 
 ## Stage 7: terrain
@@ -300,7 +300,7 @@ broken-annular criterion against that geometry
 [@svs-wright-young-2024].
 
 **Contacts and beads.** C2 and C3 at a site are the first and last time steps
-at which the test passes. Baily's beads are the same test per limb element:
+at which the test passes. [Baily's beads](../10-raw/20-solar-eclipses-and-transits/05-lunar-limb/bailys-beads.md) are the same test per limb element:
 each event is the instant the solar limb, drawn with Herald's curve
 $h = 960\,\text{arcseconds}\,(M-1)(1-\cos C)$, clears a valley floor.
 Here $C$ is the offset from the nominal contact point, which Herald calls
@@ -326,7 +326,7 @@ sphere when quoting them against the almanac mean limb
 
 **Validation.** The Lusaka corrections of +4.0 s at C2 and −1.2 s at C3,
 within 1 s allowing for Watts against LOLA. The SVS 2024 `umbra_hi` polygon at
-one second, reproduced from SLDEM2015. The IOTA bead tables for 2017 at
+one second, reproduced from SLDEM2015. The [IOTA](https://occultations.org/) bead tables for 2017 at
 Thermopolis and 2023 at Cape Range, each event within 1 s at the radius
 correction each paper derived [@val-tp2001-bulletin] [@svs-2024-shapefiles-zip]
 [@val-guhl-tegtmeier-2018] [@val-guhl-2023].
@@ -344,7 +344,7 @@ against reference observations before assigning a coverage probability
 alternatives. The cited 100 to 200 m edge scales are case-specific rather
 than an accuracy guarantee. Products for dates before 1600 or after 2300
 carry a longitude gore for the ΔT standard error. This is stricter than the
-Five Millennium Canon, which draws gores only where σ exceeds 265 s, before
+[Five Millennium Canon](../10-raw/20-solar-eclipses-and-transits/02-catalogs/canons-and-data-products.md), which draws gores only where σ exceeds 265 s, before
 the year 1 and after 2300 [@val-quaglia-2021] [@val-gsfc-uncertainty]
 [@cat-espenak-meeus-2006-canon].
 

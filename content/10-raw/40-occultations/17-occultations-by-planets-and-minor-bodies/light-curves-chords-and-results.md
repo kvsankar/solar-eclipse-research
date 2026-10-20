@@ -9,12 +9,12 @@ tags: [stellar-occultation, light-curve, fresnel, chord, ellipse-fit, rings, tno
 ---
 
 ::: summary
-- **A light curve gives two times per observer.** Disappearance and reappearance, with the site position, fix the ends of one chord on the fundamental plane. The magnitude drop decides whether the event is detectable at all [@mb-gomes-junior-2022-sora] [@mb-herald-2020].
+- **A light curve gives two times per observer.** Disappearance and reappearance, with the site position, fix the ends of one chord on the [fundamental plane](../../10-shared/01-foundations/besselian-elements.md). The magnitude drop decides whether the event is detectable at all [@mb-gomes-junior-2022-sora] [@mb-herald-2020].
 - **The edge is not a step.** The model is Fresnel diffraction at a straight edge, averaged over the passband, the star's projected disc and the exposure. The Fresnel scale $\sqrt{\lambda D/2}$ is about 0.3 km in the main belt and 1.2 km at 40 au [@mb-gomes-junior-2022-sora] [@mb-sora-code].
 - **Sub-exposure timing is routine.** The fractional flux of the one transitional point locates the event inside the exposure, giving $\sigma_t = \sigma_{LC}\,t_{\mathrm{exp}}/\Delta f$, unless the event fell in readout dead time [@mb-gomes-junior-2022-sora].
 - **Chords are fitted with a circle, an ellipse or a shape model.** An ellipse has five parameters and needs at least three well-spread chords. Single chords give a size lower limit and an astrometric position with a two-sided ambiguity that a nearby miss resolves [@mb-gomes-junior-2022-sora] [@mb-herald-2020].
 - **Occultation sizes match spacecraft.** The 1984 Ceres occultation, fitted to the Dawn shape model, gives a volume-equivalent diameter of 937 ± 3 km against Dawn's 939 km [@mb-herald-2020].
-- **Rings and atmospheres were found this way.** Occultations revealed Uranus's rings in 1977 and Pluto's atmosphere in 1985 and 1988. They found Chariklo's two rings in 2013, Haumea's ring in 2017 and Quaoar's two rings outside its Roche limit in 2018 to 2022 [@mb-elliot-1977] [@mb-meza-2019] [@mb-braga-ribas-2014] [@mb-ortiz-2017] [@mb-pereira-2023].
+- **Rings and atmospheres were found this way.** Occultations revealed Uranus's rings in 1977 and [Pluto](https://en.wikipedia.org/wiki/Pluto)'s atmosphere in 1985 and 1988. They found Chariklo's two rings in 2013, Haumea's ring in 2017 and Quaoar's two rings outside its Roche limit in 2018 to 2022 [@mb-elliot-1977] [@mb-meza-2019] [@mb-braga-ribas-2014] [@mb-ortiz-2017] [@mb-pereira-2023].
 :::
 
 **The question.** How is an occultation light curve turned into accurate disappearance and reappearance times, how are many observers' times combined into a size, shape and position, and what physical results has this produced for asteroids, trans-Neptunian objects and their environments? The prediction side is in [Prediction geometry and astrometry](prediction-geometry-and-astrometry.md).
@@ -60,10 +60,10 @@ where $o$ is the opacity, 1 for an opaque body [@mb-sora-code]. The plane coordi
 Three averages follow, in this order in both paper and code [@mb-gomes-junior-2022-sora] [@mb-sora-code]:
 
 1. **Passband.** The paper says the model "should be integrated over the observed bandwidth". The code computes the bar model at two wavelengths, $\lambda_0 - \Delta\lambda/2$ and $\lambda_0 + \Delta\lambda/2$, and averages the two curves [@mb-sora-code]. This is a two-point approximation of that integral, not a passband integration.
-2. **Star disc.** The star's radius projected to the body's distance is $r_\star = D_\circ R_\star / D_\star$, with $R_\star$ the stellar radius and $D_\star$ its distance [@mb-gomes-junior-2022-sora]. Gaia EDR3 does not give radii, so SORA takes them from Gaia DR2 or from the empirical colour relations of van Belle 1999 and Kervella et al. 2004 using NOMAD B, V and K photometry [@mb-gomes-junior-2022-sora]. The code averages the diffraction curve over 24 offsets across the projected diameter, weighted by $\sqrt{(d_\star/2)^2 - p^2}$. That is a uniform disc collapsed to one dimension, with no limb darkening [@mb-sora-code].
+2. **Star disc.** The star's radius projected to the body's distance is $r_\star = D_\circ R_\star / D_\star$, with $R_\star$ the stellar radius and $D_\star$ its distance [@mb-gomes-junior-2022-sora]. [Gaia](https://en.wikipedia.org/wiki/Gaia_(spacecraft)) EDR3 does not give radii, so SORA takes them from Gaia DR2 or from the empirical colour relations of van Belle 1999 and Kervella et al. 2004 using NOMAD B, V and K photometry [@mb-gomes-junior-2022-sora]. The code averages the diffraction curve over 24 offsets across the projected diameter, weighted by $\sqrt{(d_\star/2)^2 - p^2}$. That is a uniform disc collapsed to one dimension, with no limb darkening [@mb-sora-code].
 3. **Exposure.** Each observed point is the mean of the model over $t \pm t_{\mathrm{exp}}/2$. The model is sampled at $\min(F/V_S,\ t_{\mathrm{exp}})/10$ [@mb-sora-code]. Readout dead time between exposures carries no information, and an event falling inside it adds the dead time to the timing uncertainty [@mb-gomes-junior-2022-sora].
 
-The spatial resolution of one exposure is $r_t = V_S\,t_{\mathrm{exp}}$ [@mb-gomes-junior-2022-sora]. If it exceeds both $F$ and $r_\star$, the exposure dominates the edge shape. Published examples of a resolved star include a Hipparcos star of 0.54 milliarcseconds behind Titania, 7.5 km at the satellite's distance, and a star of about 20 km projected diameter behind the Plutino Ixion [@mb-gomes-junior-2022-sora].
+The spatial resolution of one exposure is $r_t = V_S\,t_{\mathrm{exp}}$ [@mb-gomes-junior-2022-sora]. If it exceeds both $F$ and $r_\star$, the exposure dominates the edge shape. Published examples of a resolved star include a [Hipparcos](https://en.wikipedia.org/wiki/Hipparcos) star of 0.54 milliarcseconds behind Titania, 7.5 km at the satellite's distance, and a star of about 20 km projected diameter behind the Plutino Ixion [@mb-gomes-junior-2022-sora].
 
 ### Fitting the times
 
@@ -83,11 +83,11 @@ $$
 
 with $\sigma_{LC}$ the flux noise and $\Delta f$ the drop between baseflux and bottomflux. The estimate does not depend on where in the exposure the event fell [@mb-gomes-junior-2022-sora].
 
-The light curve itself comes from other programs. SORA's paper names PRAIA, Tangra and PyMovie [@mb-gomes-junior-2022-sora]. Herald's quality-assurance chain names Limovie, PyMovie and Tangra for photometry, and AOTA in Occult, Occular, ROTE and PyOTE for the timing analysis [@mb-herald-2020].
+The light curve itself comes from other programs. SORA's paper names PRAIA, Tangra and PyMovie [@mb-gomes-junior-2022-sora]. Herald's quality-assurance chain names Limovie, PyMovie and Tangra for photometry, and AOTA in [Occult](../../10-shared/09-software-and-repos/commercial-and-institutional-tools.md), Occular, ROTE and PyOTE for the timing analysis [@mb-herald-2020].
 
 ## From times to chords
 
-Each time and site gives one point on the fundamental plane, through the plane equations of [Prediction geometry and astrometry](prediction-geometry-and-astrometry.md#the-geometry-a-cylinder-on-the-fundamental-plane). The [?mb-chord|chord] joins an observer's two points. Herald's reduction moves every point to a common reference time with the cubic shadow motion [@mb-herald-2020]. The reference time is the mean of all event times used. With a double star it is the mean for the primary. With an asteroid satellite it is the mean for the satellite's events, so that the satellite's orbital motion drops out [@mb-herald-2020]. SORA uses the instant of each event directly with geocentric star coordinates. It warns about the 0.021 s geocentre-to-observer light-time [@mb-gomes-junior-2022-sora].
+Each time and site gives one point on the fundamental plane, through the plane equations of [Prediction geometry and astrometry](prediction-geometry-and-astrometry.md#the-geometry-a-cylinder-on-the-fundamental-plane). The [?mb-chord|chord] joins an observer's two points. Herald's reduction moves every point to a common reference time with the cubic shadow motion [@mb-herald-2020]. The reference time is the mean of all event times used. With a double star it is the mean for the primary. With an asteroid satellite it is the mean for the satellite's events, so that the satellite's orbital motion drops out [@mb-herald-2020]. SORA uses the instant of each event directly with geocentric star coordinates. It warns about the 0.021 s geocentre-to-observer [light-time](../../10-shared/07-earth-and-time/refraction-light-time-and-frames.md) [@mb-gomes-junior-2022-sora].
 
 Observers at the same site or on the same track give "only one effective chord" [@mb-gomes-junior-2022-sora]. A [?mb-negative-chord|negative chord] near the limb constrains size and shape. It also decides between the two possible centres of a single chord, north or south of it [@mb-gomes-junior-2022-sora].
 
@@ -119,7 +119,7 @@ Herald's data set handles the commonest case explicitly. For a [?mb-single-chord
 
 ### Shape models and the centre of mass
 
-A shape model turns one projected outline into a volume. Herald compares occultation and spacecraft sizes for Ceres, Vesta, Lutetia, Mathilde, Eros and Arrokoth [@mb-herald-2020]. For Ceres, 13 photoelectric chords of 1984 November 13 fitted to the Dawn model give a volume-equivalent diameter of 937 ± 3 km against Dawn's 939 km. A free ellipse fitted to the same chords gives 960 ± 4 by 908 ± 3 km [@mb-herald-2020]. The shape model also locates the [?centre-of-mass|centre of mass]. For Eros on 2019 February 25 it was displaced from the [?centre-of-figure|centre of figure] by about 5 per cent of its length, about 3 milliarcseconds [@mb-herald-2020].
+A shape model turns one projected outline into a volume. Herald compares occultation and spacecraft sizes for Ceres, Vesta, Lutetia, Mathilde, Eros and [Arrokoth](https://en.wikipedia.org/wiki/486958_Arrokoth) [@mb-herald-2020]. For Ceres, 13 photoelectric chords of 1984 November 13 fitted to the Dawn model give a volume-equivalent diameter of 937 ± 3 km against Dawn's 939 km. A free ellipse fitted to the same chords gives 960 ± 4 by 908 ± 3 km [@mb-herald-2020]. The shape model also locates the [?centre-of-mass|centre of mass]. For Eros on 2019 February 25 it was displaced from the [?centre-of-figure|centre of figure] by about 5 per cent of its length, about 3 milliarcseconds [@mb-herald-2020].
 
 The [?mb-equivalent-radius|area-equivalent radius] $R_{eq} = \sqrt{a'b'}$ gives the geometric albedo when the absolute magnitude is known. SORA's paper prints [@mb-gomes-junior-2022-sora]:
 
@@ -133,7 +133,7 @@ but the code computes $10^{0.4(H_\odot - H_\circ)}\,(\mathrm{au}/R_{eq})^2$ in b
 
 ### Asteroids
 
-Herald's data set at NASA's Planetary Data System (PDS) held, at its 2020 description, over 15 000 observations by more than 3 300 observers of 4 400 occultations by more than 1 330 asteroids [@mb-herald-2020]. It also lists 76 double stars discovered in occultations, typically tens of milliarcseconds apart, and the diameter, separation and position angle of 30 asteroid satellites or possible satellites [@mb-herald-2020]. About 8 000 occultation light curves are at VizieR catalogue B/occ [@mb-herald-2020]. Euraster published European results from 1996 to 2022 with path maps and chord reductions "done with the help of Dave Herald's software Occult". It handed collection from 2023 to SODIS, the system of the European Section of the International Occultation Timing Association (IOTA/ES) [@mb-euraster-2023] [@mb-sodis].
+Herald's data set at NASA's Planetary Data System (PDS) held, at its 2020 description, over 15 000 observations by more than 3 300 observers of 4 400 occultations by more than 1 330 asteroids [@mb-herald-2020]. It also lists 76 double stars discovered in occultations, typically tens of milliarcseconds apart, and the diameter, separation and position angle of 30 asteroid satellites or possible satellites [@mb-herald-2020]. About 8 000 occultation light curves are at VizieR catalogue B/occ [@mb-herald-2020]. Euraster published European results from 1996 to 2022 with path maps and chord reductions "done with the help of Dave Herald's software Occult". It handed collection from 2023 to SODIS, the system of the European Section of the International Occultation Timing Association ([IOTA](https://occultations.org/)/ES) [@mb-euraster-2023] [@mb-sodis].
 
 ### Trans-Neptunian objects and Centaurs
 
@@ -143,7 +143,7 @@ Herald's data set at NASA's Planetary Data System (PDS) held, at its 2020 descri
 
 **Quaoar, 2018 to 2022.** The 2022 August 9 event gave nine effective chords. The limb has an apparent semi-major axis of 579.5 ± 4.0 km and oblateness 0.12 ± 0.01. The first ring, Q1R, is at 4 057 ± 6 km, and a second ring at 2 520 ± 20 km has a normal optical depth of 0.004. "Just as Q1R, it also lies outside Quaoar's classical Roche limit" [@mb-pereira-2023].
 
-**Pluto's atmosphere.** The atmosphere "was glimpsed during a ground-based stellar occultation observed on 1985 August 19, and fully confirmed on 1988 June 09" [@mb-meza-2019]. Refraction in an atmosphere makes the disappearance and reappearance smooth instead of sharp. That smoothness is how the atmosphere was detected. SORA's current light-curve model excludes this case [@mb-gomes-junior-2022-sora]. Eleven occultations from 2002 to 2016 show that "pressure has suffered a monotonic increase from 1988 to 2016" [@mb-meza-2019]. The 2015 June 29 event showed a [?mb-central-flash|central flash] that the authors compared with New Horizons radio profiles [@mb-meza-2019].
+**Pluto's atmosphere.** The atmosphere "was glimpsed during a ground-based stellar occultation observed on 1985 August 19, and fully confirmed on 1988 June 09" [@mb-meza-2019]. Refraction in an atmosphere makes the disappearance and reappearance smooth instead of sharp. That smoothness is how the atmosphere was detected. SORA's current light-curve model excludes this case [@mb-gomes-junior-2022-sora]. Eleven occultations from 2002 to 2016 show that "pressure has suffered a monotonic increase from 1988 to 2016" [@mb-meza-2019]. The 2015 June 29 event showed a [?mb-central-flash|central flash] that the authors compared with [New Horizons](https://en.wikipedia.org/wiki/New_Horizons) radio profiles [@mb-meza-2019].
 
 **Arrokoth.** Five chords on 2017 July 17 showed "a complicated shape consistent with a contact binary with rough dimensions of 20 by 30 km". The New Horizons flyby confirmed that shape [@mb-buie-2020-arrokoth].
 
@@ -177,7 +177,7 @@ Read SORA's section 2.2 and `lightcurve/core.py` first, then Herald et al. 2020 
 
 ## What this changes
 
-Nothing in the eclipse pipeline. Occultation reduction adds a separate inverse stage that eclipse work does not have: from timed events back to the body's outline and position. It reuses the fundamental-plane geometry, and it needs a physical-optics model of the edge that eclipse contact times never use.
+Nothing in the eclipse pipeline. Occultation reduction adds a separate inverse stage that eclipse work does not have: from timed events back to the body's outline and position. It reuses the fundamental-plane geometry, and it needs a physical-optics model of the edge that eclipse [contact times](../../20-solar-eclipses-and-transits/04-local-circumstances/contact-times-and-magnitude.md) never use.
 
 ## Open questions
 

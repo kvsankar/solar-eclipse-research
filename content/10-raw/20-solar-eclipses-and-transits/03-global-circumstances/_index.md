@@ -9,11 +9,11 @@ seo_title: Solar Eclipse Path Calculation: Global Circumstances
 ---
 
 ::: summary
-- **Classical smooth-Moon world maps use Besselian elements.** The almanac formulation derives curves from these elements. Direct geometric calculations and limb-aware raster tests provide alternative computational paths [@glob-swisseph-swecl] [@glob-wright-young-2024]. Stellarium is the closest thing to a complete open reference implementation [@glob-es1961] [@glob-stellarium-sec].
-- **The oblate Earth is handled by Bessel's substitution.** Two auxiliary radii and a rotated declination turn the ellipsoid into a unit sphere, so the central line, limits and outlines all become root finds in one angle or one height [@glob-es1961] [@glob-es1992].
-- **Constants matter more than the algebra.** The lunar radius ratio $k$, the solar radius, the ellipsoid and ΔT move the path edges by kilometres. A ΔT shift is 15.041 arcseconds of longitude per second [@glob-nasa-tp2001] [@glob-rherale].
-- **Smooth-Moon limits are wrong by 1 to 3 km.** NASA, Jubier and SVS all say so. The released SVS shapefiles provide limb-profiled, terrain-corrected polygons. The surveyed global engines do not derive limb-corrected path edges [@glob-nasa-google-2024] [@glob-svs-4518].
-- **Magnitude and obscuration contours are rasterised, not solved.** The Supplements obtain them by inverse interpolation on the curves of maximum eclipse. SVS and Eclipse-Engine evaluate maximum obscuration per grid cell and contour the field [@glob-es1961] [@glob-svs-5123] [@glob-rherale].
+- **Classical smooth-Moon world maps use [Besselian elements](../../10-shared/01-foundations/besselian-elements.md).** The almanac formulation derives curves from these elements. Direct geometric calculations and limb-aware raster tests provide alternative computational paths [@glob-swisseph-swecl] [@glob-wright-young-2024]. [Stellarium](https://stellarium.org/) is the closest thing to a complete open reference implementation [@glob-es1961] [@glob-stellarium-sec].
+- **The oblate Earth is handled by [Bessel](https://en.wikipedia.org/wiki/Friedrich_Wilhelm_Bessel)'s substitution.** Two auxiliary radii and a rotated declination turn the ellipsoid into a unit sphere, so the central line, limits and outlines all become root finds in one angle or one height [@glob-es1961] [@glob-es1992].
+- **Constants matter more than the algebra.** The lunar radius ratio $k$, the [solar radius](../06-solar-radius/solar-radius-values.md), the ellipsoid and [ΔT](../../10-shared/07-earth-and-time/delta-t-and-earth-rotation.md) move the path edges by kilometres. A ΔT shift is 15.041 arcseconds of longitude per second [@glob-nasa-tp2001] [@glob-rherale].
+- **Smooth-Moon limits are wrong by 1 to 3 km.** NASA, Jubier and [SVS](../11-svs-wright/_index.md) all say so. The released SVS [shapefiles](https://en.wikipedia.org/wiki/Shapefile) provide limb-profiled, terrain-corrected polygons. The surveyed global engines do not derive limb-corrected path edges [@glob-nasa-google-2024] [@glob-svs-4518].
+- **Magnitude and [obscuration](../04-local-circumstances/contact-times-and-magnitude.md) contours are rasterised, not solved.** The Supplements obtain them by inverse interpolation on the curves of maximum eclipse. SVS and Eclipse-Engine evaluate maximum obscuration per grid cell and contour the field [@glob-es1961] [@glob-svs-5123] [@glob-rherale].
 :::
 
 ## What this topic covers
@@ -36,8 +36,8 @@ and terrain corrected, and the open-source code that computes them.
   curves of maximum eclipse, equal magnitude and equal obscuration contours,
   contact-time contours.
 - [Data products and code](data-products-and-code.md): NASA path tables, SVS
-  shapefiles, Jubier KML, NOAA releases, Stellarium, Swiss Ephemeris, GitHub
-  implementations, and a pipeline to GeoJSON.
+  shapefiles, Jubier KML, NOAA releases, Stellarium, [Swiss Ephemeris](https://www.astro.com/swisseph/), GitHub
+  implementations, and a pipeline to [GeoJSON](https://en.wikipedia.org/wiki/GeoJSON).
 
 ## What this topic changes for the pipeline
 

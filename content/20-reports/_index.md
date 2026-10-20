@@ -13,7 +13,7 @@ Six pages, written to be read in order and to stand without the raw notes.
 - [Solar eclipse pipeline](pipeline-design.md): the stages, their inputs,
   formulas, constants, outputs and validation cases.
 - [Extending the pipeline to other events](other-events.md): what the solar
-  pipeline shares with lunar eclipses, occultations, transits and satellite
+  pipeline shares with [lunar eclipses](../10-raw/30-lunar-eclipses/_index.md), occultations, transits and satellite
   phenomena, and what each one adds.
 - [Solar eclipse error budget](error-budget.md): every input ranked by its
   effect in seconds and metres, and the two product modes that follow from it.

@@ -9,10 +9,10 @@ seo_title: NASA SVS Solar Eclipse Maps, Shapefiles and Datasets
 ---
 
 ::: summary
-- **Two data releases matter:** SVS 4518 for 2017 and SVS 5073 with 5123 and 5124 for the 2023 annular and 2024 total eclipses. Both release ESRI shapefiles in WGS 84 geographic coordinates [@svs-4518-2017-map-shapefiles] [@svs-5073-2023-2024-map-data].
+- **Two data releases matter:** [SVS](_index.md) 4518 for 2017 and SVS 5073 with 5123 and 5124 for the 2023 annular and 2024 total eclipses. Both release ESRI [shapefiles](https://en.wikipedia.org/wiki/Shapefile) in [WGS 84](https://en.wikipedia.org/wiki/World_Geodetic_System) geographic coordinates [@svs-4518-2017-map-shapefiles] [@svs-5073-2023-2024-map-data].
 - **The 2024 umbra_hi layer** has 6,741 polygons at 1 s intervals from 17:56:00 to 19:48:20 UTC with twelve attributes including centre longitude and latitude, duration, Sun altitude and azimuth, libration and Moon distance [@svs-2024-shapefiles-zip].
-- **The constants** on the SVS pages: Earth radius 6378.137 km, WGS 84, EGM96, Moon radius 1737.4 km, Sun radius 696,000 km, DE421, and for 2017 $\Delta T$ = 68.917 s [@svs-4515-2017-path].
-- **The cities file** gives contact times to the second for 32,174 US places [@svs-cities-2024-json].
+- **The constants** on the SVS pages: Earth radius 6378.137 km, WGS 84, [EGM96](https://en.wikipedia.org/wiki/Earth_Gravitational_Model), Moon radius 1737.4 km, Sun radius 696,000 km, DE421, and for 2017 $\Delta T$ = 68.917 s [@svs-4515-2017-path].
+- **The cities file** gives [contact times](../04-local-circumstances/contact-times-and-magnitude.md) to the second for 32,174 US places [@svs-cities-2024-json].
 - **The documented release pages provide data rather than a source implementation.** The September 2026 inventory identifies no limb-corrected product for the 2019 to 2021 eclipses. The archived feeds cover only ten entries each, so this is not proof of absence across the SVS catalogue [@svs-archived-feeds].
 - **Archived SVS pages document released maps.** Reference entries identify snapshot dates and distinguish original artefacts from archived copies [@svs-4518-2017-map-shapefiles] [@svs-5073-2023-2024-map-data].
 :::
@@ -33,7 +33,7 @@ seo_title: NASA SVS Solar Eclipse Maps, Shapefiles and Datasets
 | Earth orientation | earth_070425_370426_predict.bpc ($\Delta T$ corrected) |
 | Delta UTC | 68.184 s (TT minus TAI plus 36 leap seconds) |
 
-The same page states that elevations and the limb "were ignored" for that animation, that the errors "tend to cancel out" because elevation lengthens totality while limb valleys shorten it, and that the Moon's centre of mass and [?centre-of-figure] differ by "about 0.5 kilometers". That figure is the sky-plane component. The full centre-of-mass to centre-of-figure vector from LOLA is 1.935 km, mostly along the Earth-Moon line, as [lunar figure and libration](../../10-shared/08-lunar-and-solar-model/lunar-figure-and-libration.md) sets out [@moon-jones-2025]. It also positions its lunar radius as "slightly larger than the one used by Fred Espenak and slightly smaller than the one used by the Astronomical Almanac" [@svs-4314-2017-usa]. The [?k-lunar-radius] value 0.2723993 is 1737.4/6378.137.
+The same page states that elevations and the limb "were ignored" for that animation, that the errors "tend to cancel out" because elevation lengthens totality while limb valleys shorten it, and that the Moon's centre of mass and [?centre-of-figure] differ by "about 0.5 kilometers". That figure is the sky-plane component. The full centre-of-mass to centre-of-figure vector from [LOLA](https://lola.gsfc.nasa.gov/) is 1.935 km, mostly along the Earth-Moon line, as [lunar figure and libration](../../10-shared/08-lunar-and-solar-model/lunar-figure-and-libration.md) sets out [@moon-jones-2025]. It also positions its lunar radius as "slightly larger than the one used by Fred Espenak and slightly smaller than the one used by the Astronomical Almanac" [@svs-4314-2017-usa]. The [?k-lunar-radius] value 0.2723993 is 1737.4/6378.137.
 
 **SVS 4515, "2017 Path of Totality"**, and **SVS 4516, the oblique view**, both released 2016 December 13, are the first limb-and-terrain-corrected products. The text: "Elevations on the Earth's surface and the irregular lunar limb (the silhouette edge of the Moon's disk) are both fully accounted for." The constants table changes in two places from 4314 [@svs-4515-2017-path]:
 
@@ -41,7 +41,7 @@ The same page states that elevations and the limb "were ignored" for that animat
 |---|---|
 | Earth radius | 6378.137 km |
 | Ellipsoid | WGS84 |
-| Geoid | EGM96 |
+| [Geoid](../../10-shared/07-earth-and-time/earth-figure-and-terrain.md) | EGM96 |
 | Moon radius | 1737.4 km |
 | Sun radius | 696,000 km (959.645 arcseconds at 1 au) |
 | Ephemeris | DE 421 |
@@ -68,7 +68,7 @@ This 2016 description rotates the point cloud into [?fundamental-plane] coordina
 - upath17 and w_upath17, the path at US and world scale, the US version limited to 96 degrees of longitude.
 - umbra17 and w_umbra17, at 10 minute intervals.
 - w_umbra17_1m, at 1 minute intervals from 16:49 to 20:02 UTC.
-- center17 and w_center17, the central line.
+- center17 and w_center17, the [central line](../03-global-circumstances/path-and-limits.md).
 
 "The projection for all of these shapefiles is WGS84, latitude-longitude, in degrees."
 
@@ -129,11 +129,11 @@ The cities JSON is described as covering "over 32k major cities in the US" with 
 
 **SVS 5212, "Path for Spherical Displays"**, released 2024 January 20, states the frame cadence of the global shadow rasters: "from 15:42:10 to 20:52:20 UTC with steps of 10 seconds between frames" [@svs-5212-2024-spherical]. **SVS 5248, "Insolation during the 2024 Eclipse"**, released 2024 March 25, releases the obscuration rasters behind it: "calculated at 10-second intervals from 15:42:10 to 20:52:20 UTC at a resolution of 360/8192 degrees per pixel (roughly 3.75 x 4.9 km at 40 N)", global equirectangular, white for 100 per cent obscuration, as a 194 MB zip [@svs-5248-insolation-2024]. That grid, 8192 by 4096 pixels, is the only stated raster resolution for any SVS eclipse product and is a plausible candidate for the global shadow grid.
 
-**SVS 5186, "Flying Around The 2024 Eclipse Shadow"**, released 2023 November 13, is a narrated flyaround with the geometry to scale and the umbra speed given as "more than 1500 miles (2400 kilometers) per hour" [@svs-5186-flyaround-2024]. **The SVS Eclipse Explorer web app (SVS 5169)**, released 2023 October 2 by Alex Gurvich with Wright and Garrison credited, is the interactive map at go.nasa.gov/EclipseExplorer with per-city countdowns and SDO imagery [@svs-5169-eclipse-explorer]. It is a different product from NASA's JavaScript Solar Eclipse Explorer (JSEX), Espenak's local-circumstances calculator.
+**SVS 5186, "Flying Around The 2024 Eclipse Shadow"**, released 2023 November 13, is a narrated flyaround with the geometry to scale and the umbra speed given as "more than 1500 miles (2400 kilometers) per hour" [@svs-5186-flyaround-2024]. **The SVS Eclipse Explorer web app (SVS 5169)**, released 2023 October 2 by Alex Gurvich with Wright and Garrison credited, is the interactive map at go.nasa.gov/EclipseExplorer with per-city countdowns and [SDO](https://en.wikipedia.org/wiki/Solar_Dynamics_Observatory) imagery [@svs-5169-eclipse-explorer]. It is a different product from NASA's JavaScript Solar Eclipse Explorer ([JSEX](../../10-shared/09-software-and-repos/commercial-and-institutional-tools.md)), [Espenak](https://en.wikipedia.org/wiki/Fred_Espenak)'s local-circumstances calculator.
 
-**SVS 5365 and 5366**, both released 2024 September 19 with the paper, are the broken-annular Baily's beads simulation for 2005 April 8 and the "Solar Eclipse Shadow Shape Explained" page. Both list the AJ paper under "Related papers" and both list LOLA DEM, DE421 and SLDEM2015 as datasets [@svs-5365-broken-annular] [@svs-5366-shadow-shape].
+**SVS 5365 and 5366**, both released 2024 September 19 with the paper, are the broken-annular [Baily's beads](../05-lunar-limb/bailys-beads.md) simulation for 2005 April 8 and the "Solar Eclipse Shadow Shape Explained" page. Both list the AJ paper under "Related papers" and both list LOLA DEM, DE421 and SLDEM2015 as datasets [@svs-5365-broken-annular] [@svs-5366-shadow-shape].
 
-**SVS 5222, "5000 Years of Total Solar Eclipses"**, released 2024 February 20, is a different product: a heat map of 3,742 total and hybrid paths from the Five Millennium Canon drawn at 1/15 degree pixels, in Terrestrial Time, with DE441 listed as a dataset. It reports an average of 13.66 eclipses per pixel and 366 years between totalities at a place [@svs-5222-5000-years].
+**SVS 5222, "5000 Years of Total Solar Eclipses"**, released 2024 February 20, is a different product: a heat map of 3,742 total and hybrid paths from the [Five Millennium Canon](../02-catalogs/canons-and-data-products.md) drawn at 1/15 degree pixels, in Terrestrial Time, with [DE441](../../10-shared/08-lunar-and-solar-model/ephemerides.md) listed as a dataset. It reports an average of 13.66 eclipses per pixel and 366 years between totalities at a place [@svs-5222-5000-years].
 
 ## After the paper
 
@@ -158,7 +158,7 @@ Interpretation of the umbra attributes, from the field names and values: CenterL
 
 The 2024 umbra_hi centre at 17:56:00 UTC is 109.84 W, 19.15 N, and Espenak's central line table gives 20 19.2 N, 108 45.8 W at 18:00 UT [@svs-espenak-2024-path]. Four minutes of shadow motion at the stated speed accounts for the difference. A comparison at a common instant and common time scale is needed to measure the residual.
 
-`2024eclipse_kml.zip`, 299 MB, read from the Wayback capture of 2025 February 12, contains center.kml, duration.kml, penumbra.kml, ppath.kml, ppath01.kml, umbra_hi.kml, umbra_lo.kml, upath_hi.kml and upath_lo.kml, read from the zip central directory with an HTTP range request [@svs-2024-kml-zip]. penumbra.kml has no shapefile counterpart. No GeoJSON is released. The cities file is the only JSON.
+`2024eclipse_kml.zip`, 299 MB, read from the Wayback capture of 2025 February 12, contains center.kml, duration.kml, penumbra.kml, ppath.kml, ppath01.kml, umbra_hi.kml, umbra_lo.kml, upath_hi.kml and upath_lo.kml, read from the zip central directory with an HTTP range request [@svs-2024-kml-zip]. penumbra.kml has no shapefile counterpart. No [GeoJSON](https://en.wikipedia.org/wiki/GeoJSON) is released. The cities file is the only JSON.
 
 `cities-eclipse-2024.json`, 4.35 MB, read from the Wayback capture of 2025 February 12, is a list of 32,174 objects with keys STATE, NAME, LAT, LON and ECLIPSE. Places outside totality have five times and places inside have six, with the third and fourth being second and third contact [@svs-cities-2024-json]. Examples: Dallas, Texas: 17:23:40, 18:08:40, 18:40:47, 18:44:38, 19:17:10, 20:02:40 UTC, so totality lasts 3 min 51 s. Carbondale, Illinois: second contact 18:59:15, third contact 19:03:25, 4 min 10 s. Indianapolis: 19:06:06 to 19:09:53, 3 min 47 s. Partial-phase times are given to 10 s and contacts to 1 s, consistent with a 10 s global raster and a 1 s regional raster.
 
@@ -166,7 +166,7 @@ The 2024 umbra_hi centre at 17:56:00 UTC is 109.84 W, 19.15 N, and Espenak's cen
 
 The compared SVS release pages and Wright and Young paper do not link a source release of the raster implementation. The September 2026 GitHub inventory identifies no author release or general independent raster-path reimplementation. This scope does not rule out other public limb or bead code [@svs-github-api-search] [@svs-wright-young-2024].
 
-The paper's appendix gives C calls against SPICE and names its kernels [@svs-wright-young-2024]. The 2015 animation page describes Bessel's method adapted to SPICE, and the 2017 release page distinguishes shadow calculation from rendering [@svs-4314-2017-usa] [@svs-4518-2017-map-shapefiles]. These sources do not identify Maya or RenderMan as the eclipse solver.
+The paper's appendix gives C calls against [SPICE](https://naif.jpl.nasa.gov/naif/) and names its kernels [@svs-wright-young-2024]. The 2015 animation page describes [Bessel](https://en.wikipedia.org/wiki/Friedrich_Wilhelm_Bessel)'s method adapted to SPICE, and the 2017 release page distinguishes shadow calculation from rendering [@svs-4314-2017-usa] [@svs-4518-2017-map-shapefiles]. These sources do not identify Maya or RenderMan as the eclipse solver.
 
 ## Sources compared
 
@@ -174,7 +174,7 @@ The paper's appendix gives C calls against SPICE and names its kernels [@svs-wri
 |---|---|
 | SVS 4314 [@svs-4314-2017-usa] | The only page with $k$, flattening and the mass-versus-figure offset stated. |
 | SVS 4515 [@svs-4515-2017-path] | The only page with $\Delta T$, the geoid and the EOP kernel stated. |
-| SVS 4517 [@svs-4517-umbra-shapes] | The point-cloud description of the limb profile and the 3 km terrain shift. |
+| SVS 4517 [@svs-4517-umbra-shapes] | The point-cloud description of the [limb profile](../05-lunar-limb/limb-profile-methods.md) and the 3 km terrain shift. |
 | SVS 4518 [@svs-4518-2017-map-shapefiles] | The 100 m and 250 m precision statements for the 1 s archive. |
 | SVS 5073 [@svs-5073-2023-2024-map-data] | The layer descriptions and the cities JSON schema for 2023 and 2024. |
 | SVS 5248 [@svs-5248-insolation-2024] | The only stated raster grid, 360/8192 degrees per pixel at 10 s. |
@@ -187,7 +187,7 @@ Download `2024eclipse_shapefiles.zip` from SVS 5123 or 5073, or from the Wayback
 
 ## What this changes
 
-The SVS archives become the validation set for the pipeline. They fix the target constants, which are DE421 or DE440, 1737.4 km, 696,000 km, WGS 84, EGM96 and SRTM. They fix the target resolutions, 1 s and 10 s in time and about 50 m and 500 m in position. They fix the target outputs: umbra polygons, path polygon, centre polyline, duration and obscuration contours, and city contact times.
+The SVS archives become the validation set for the pipeline. They fix the target constants, which are DE421 or DE440, 1737.4 km, 696,000 km, WGS 84, EGM96 and [SRTM](https://en.wikipedia.org/wiki/Shuttle_Radar_Topography_Mission). They fix the target resolutions, 1 s and 10 s in time and about 50 m and 500 m in position. They fix the target outputs: umbra polygons, path polygon, centre polyline, duration and obscuration contours, and city contact times.
 
 ## Open questions
 

@@ -18,5 +18,5 @@ nothing, but it is how these events are computed.
   stars and planets, grazes along the Moon's limb, star catalogues, and the
   reduction of timings.
 - [Occultations by planets and minor bodies](17-occultations-by-planets-and-minor-bodies/_index.md):
-  asteroid and TNO shadow paths, Gaia astrometry, light curves and chords,
+  asteroid and TNO shadow paths, [Gaia](https://en.wikipedia.org/wiki/Gaia_(spacecraft)) astrometry, light curves and chords,
   and one planet occulting another.

@@ -157,9 +157,9 @@ def apply_outside_code(md: str, fn):
 GLOSSARY_FILE = ROOT / "glossary.tsv"
 
 
-def load_glossary() -> dict[str, tuple[str, str]]:
-    """slug -> (label, definition), from glossary.tsv."""
-    terms: dict[str, tuple[str, str]] = {}
+def load_glossary() -> dict[str, tuple[str, str, str]]:
+    """slug -> (label, definition, canonical url or ""), from glossary.tsv."""
+    terms: dict[str, tuple[str, str, str]] = {}
     if not GLOSSARY_FILE.exists():
         return terms
     for lineno, raw in enumerate(GLOSSARY_FILE.read_text(encoding="utf-8").splitlines(), 1):
@@ -173,8 +173,62 @@ def load_glossary() -> dict[str, tuple[str, str]]:
             continue
         if parts[0] in terms:
             DATA_ERRORS.append(f"glossary.tsv line {lineno}: duplicate slug '{parts[0]}'")
-        terms[parts[0]] = (parts[1], parts[2])
+        url = parts[3] if len(parts) > 3 else ""
+        if url and site_name(url) is None:
+            DATA_ERRORS.append(
+                f"glossary.tsv line {lineno}: '{parts[0]}' links {url}, which is not "
+                f"https on a host in CANONICAL_SITES (spec LNK-5)")
+        terms[parts[0]] = (parts[1], parts[2], url)
     return terms
+
+
+# A glossary term may name one canonical page outside the site (spec LNK-1),
+# and a research note links named things to theirs (LNK-2). Those links go to
+# the reference works and the agencies that own the thing, never to a blog or
+# a mirror, so the hosts are listed here with the name a reader sees.
+CANONICAL_SITES = {
+    "en.wikipedia.org": "Wikipedia",
+    "commons.wikimedia.org": "Wikimedia Commons",
+    "eclipse.gsfc.nasa.gov": "NASA",
+    "svs.gsfc.nasa.gov": "NASA SVS",
+    "science.nasa.gov": "NASA",
+    "www.nasa.gov": "NASA",
+    "lola.gsfc.nasa.gov": "NASA",
+    "lunar.gsfc.nasa.gov": "NASA",
+    "ssd.jpl.nasa.gov": "JPL",
+    "naif.jpl.nasa.gov": "NAIF",
+    "pds-geosciences.wustl.edu": "PDS",
+    "www.iers.org": "IERS",
+    "www.imcce.fr": "IMCCE",
+    "aa.usno.navy.mil": "USNO",
+    "occultations.org": "IOTA",
+    "www.iau.org": "IAU",
+    "www.esa.int": "ESA",
+    "www.cosmos.esa.int": "ESA",
+    "minorplanetcenter.net": "Minor Planet Center",
+    "arxiv.org": "arXiv",
+    "ui.adsabs.harvard.edu": "ADS",
+    "www.astro.com": "Astrodienst",
+    "rhodesmill.org": "Skyfield",
+    "www.astropy.org": "Astropy",
+    "stellarium.org": "Stellarium",
+    "github.com": "GitHub",
+}
+
+
+def site_name(url: str) -> str | None:
+    """The reader-facing name of a canonical site, or None when the link is
+    not https or its host is not in CANONICAL_SITES."""
+    m = re.match(r"https://([^/:?#]+)", url)
+    return CANONICAL_SITES.get(m.group(1).lower()) if m else None
+
+
+def more_link(url: str) -> str:
+    """The "Read on Wikipedia" line under a glossary definition."""
+    if not url:
+        return ""
+    return (f'<span class="gloss-more"><a href="{html.escape(url)}">'
+            f'Read on {html.escape(site_name(url) or url)}</a></span>')
 
 
 # --------------------------------------------------------------------------- #
@@ -245,7 +299,7 @@ def resolve_glossary(md: str, terms: dict, missing: set, used: set) -> str:
         if entry is None:
             missing.add(slug)
             return f'<span class="gloss gloss-missing">{html.escape(override or slug)}</span>'
-        label, definition = entry
+        label, definition, url = entry
         used.add(slug)
         text = override if override else label
         return (
@@ -254,6 +308,7 @@ def resolve_glossary(md: str, terms: dict, missing: set, used: set) -> str:
             f'<span class="gloss-pop" id="g-{slug}" role="tooltip">'
             f'<span class="gloss-h">{inline(label)}</span>'
             f'<span class="gloss-d">{inline(definition)}</span>'
+            f"{more_link(url)}"
             f"</span></span>"
         )
 
@@ -266,10 +321,10 @@ def render_glossary_list(terms: dict) -> str:
         return ""
     rows = sorted(terms.items(), key=lambda kv: kv[1][0].lower())
     out = ['<dl class="glossary-list">']
-    for slug, (label, definition) in rows:
+    for slug, (label, definition, url) in rows:
         out.append(
             f'<dt id="term-{slug}">{inline(label)}</dt>'
-            f"<dd>{inline(definition)}</dd>"
+            f"<dd>{inline(definition)}{more_link(url)}</dd>"
         )
     out.append("</dl>")
     return "".join(out)
@@ -864,6 +919,30 @@ def rewrite_links(html_text: str) -> str:
     return LINK_RE.sub(repl, html_text)
 
 
+EXTERNAL_A_RE = re.compile(r'<a\b([^>]*?\bhref="https?://[^"]*"[^>]*)>')
+REL_RE = re.compile(r'\brel="([^"]*)"')
+
+
+def open_external_in_new_tab(html_text: str) -> str:
+    """Give every link that leaves the site its own tab (spec LNK-8). Links within
+    the site stay in the reader's tab, so Back keeps working as expected."""
+    def repl(m):
+        attrs = m.group(1)
+        if re.search(r'\btarget=', attrs):
+            return m.group(0)
+        rel = REL_RE.search(attrs)
+        if rel:
+            words = rel.group(1).split()
+            if "noopener" not in words:
+                words.append("noopener")
+            attrs = REL_RE.sub(f'rel="{" ".join(words)}"', attrs, count=1)
+        else:
+            attrs += ' rel="noopener"'
+        return f'<a{attrs} target="_blank">'
+
+    return EXTERNAL_A_RE.sub(repl, html_text)
+
+
 def rel_root(depth: int) -> str:
     return "../" * depth if depth else ""
 
@@ -1160,7 +1239,7 @@ def render_page(node: Node, root: Node, template: str, refs: dict, missing: set,
         "prevnext": render_prevnext(node, prev, nxt, position, total),
         "source_note": SOURCE_NOTE,
     }
-    return fill(template, values)
+    return open_external_in_new_tab(fill(template, values))
 
 
 
@@ -1369,7 +1448,7 @@ def main() -> int:
     images = load_images()
     n_images = check_images(images)
     render_inline_batch(
-        [t for pair in terms.values() for t in pair]
+        [t for entry in terms.values() for t in entry[:2]]
         + [r.title for r in refs.values()]
         + [r.note for r in refs.values()]
     )

@@ -10,10 +10,10 @@ seo_title: NASA SVS Eclipse Calculation: Wright and Young's Method
 
 ::: summary
 - **The method is published.** Wright, E. and Young, C. A. 2024, "A Raster-oriented Method for Creating Eclipse Maps", The Astronomical Journal 168:163, published 2024 September 19, DOI 10.3847/1538-3881/ad6b23, open access under CC BY 4.0 [@svs-wright-young-2024].
-- **The core idea** is to test every map pixel, at every time step, against a lunar limb profile built from the SLDEM2015 and LOLA LDEM elevation models, with the observer lifted to the SRTM terrain height above the WGS 84 ellipsoid via the EGM96 geoid [@svs-wright-young-2024].
-- **The datasets** are ESRI shapefiles and KML in WGS 84 longitude and latitude: umbra polygons at 1 s and 10 s steps, path outlines, central line, duration contours at 30 s and obscuration contours at 1 per cent and 5 per cent [@svs-5073-2023-2024-map-data].
+- **The core idea** is to test every map pixel, at every time step, against a lunar [limb profile](../05-lunar-limb/limb-profile-methods.md) built from the SLDEM2015 and [LOLA](https://lola.gsfc.nasa.gov/) LDEM elevation models, with the observer lifted to the [SRTM](https://en.wikipedia.org/wiki/Shuttle_Radar_Topography_Mission) terrain height above the [WGS 84](https://en.wikipedia.org/wiki/World_Geodetic_System) ellipsoid via the [EGM96](https://en.wikipedia.org/wiki/Earth_Gravitational_Model) [geoid](../../10-shared/07-earth-and-time/earth-figure-and-terrain.md) [@svs-wright-young-2024].
+- **The datasets** are ESRI [shapefiles](https://en.wikipedia.org/wiki/Shapefile) and KML in WGS 84 longitude and latitude: umbra polygons at 1 s and 10 s steps, path outlines, [central line](../03-global-circumstances/path-and-limits.md), duration contours at 30 s and [obscuration](../04-local-circumstances/contact-times-and-magnitude.md) contours at 1 per cent and 5 per cent [@svs-5073-2023-2024-map-data].
 - **The constants** stated by SVS are DE421, Earth radius 6378.137 km, WGS 84 flattening, Moon datum radius 1737.4 km, Sun radius 696,000 km (959.645 arcseconds at 1 au) and, for 2017, $\Delta T$ = 68.917 s [@svs-4515-2017-path].
-- **Limb and terrain are explicit sources of path differences.** Espenak states that limb corrections shift limits by 1 to 3 km. Solar-radius and Earth-orientation differences also matter. Ephemeris effects require matched-epoch comparison [@svs-espenak-2024-path] [@svs-wright-young-2024].
+- **Limb and terrain are explicit sources of path differences.** [Espenak](https://en.wikipedia.org/wiki/Fred_Espenak) states that limb corrections shift limits by 1 to 3 km. Solar-radius and Earth-orientation differences also matter. Ephemeris effects require matched-epoch comparison [@svs-espenak-2024-path] [@svs-wright-young-2024].
 :::
 
 ## What this topic covers
@@ -22,7 +22,7 @@ This topic covers a published raster eclipse-mapping method backed by released d
 
 Notes in this topic:
 
-- [Wright and Young 2024, the raster method](wright-2024-paper.md): the limb-profile construction, the limb test, the antialiasing threshold, the broken-annular criterion and the SPICE calls of Appendix A, with what the paper leaves out.
+- [Wright and Young 2024, the raster method](wright-2024-paper.md): the limb-profile construction, the limb test, the antialiasing threshold, the broken-annular criterion and the [SPICE](https://naif.jpl.nasa.gov/naif/) calls of Appendix A, with what the paper leaves out.
 - [SVS eclipse pages and datasets](svs-products-and-data.md): every SVS eclipse product by ID, the constants each page states, and the parsed DBF schemas of the 2017 and 2024 shapefile archives.
 - [SVS versus Espenak, Jubier and Irwin](svs-vs-other-predictors.md): the four predictors' inputs side by side and the size of the limb, terrain, radius and $\Delta T$ differences.
 
