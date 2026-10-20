@@ -4,14 +4,15 @@ Agent-facing guide. Read this before writing anything here.
 
 ## What this is
 
-Deep research into **how solar eclipse computational products are computed**:
-from enumerating the eclipses in a period, through global circumstances (paths,
-limits, durations, timing), down to local circumstances at one observer (contact
-times, magnitude, obscuration, Baily's beads). The target depth is Ernie
+Deep research into **how eclipse, occultation and transit predictions are
+computed**. Solar eclipses are covered in most depth: from enumerating the
+eclipses in a period, through global circumstances (paths, limits, durations,
+timing), down to local circumstances at one observer (contact times,
+magnitude, obscuration, Baily's beads). The target depth is Ernie
 Wright's NASA SVS work on the 2024 eclipse: lunar limb profiles from LRO LOLA,
 the solar radius question, Earth and Moon modelling, ephemerides, time scales.
 
-The same geometry extends to the other events of the family. Every event is
+The same geometry covers the other events of the family. Every event is
 a body casting a shadow, and there are two cases, set by who stands in it:
 the observer (who sees the source hidden: every occultation, transit and
 solar eclipse) or another body (which goes dark for everyone: lunar eclipses
@@ -26,8 +27,9 @@ slugs in these topics carry the topic prefix as well. The report
 The deliverable is a static research site, built from Markdown exactly the way
 `Essence-10/astrophotography-rental` is built: pandoc, graded citations,
 glossary explainers, deterministic output. The audience is a software
-developer who wants to build or evaluate an eclipse-computation product and
-needs to know which papers, formulas, datasets and repositories matter, and why.
+developer who wants to build or evaluate an eclipse, occultation or transit
+calculator and needs to know which papers, formulas, datasets and
+repositories matter, and why.
 
 ## Layout
 

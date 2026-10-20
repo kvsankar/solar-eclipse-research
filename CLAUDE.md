@@ -9,8 +9,8 @@ This file exists only to point at the real documents.
 
 ## The short version
 
-Deep research into how solar eclipse computational products are computed,
-extended to lunar eclipses, occultations and transits.
+Deep research into how eclipse, occultation and transit predictions are
+computed, with solar eclipses covered in most depth.
 Markdown in `content/`, built deterministically to `site/` by
 `python tools/merge_refs.py && python tools/build.py --clean`. Requires pandoc.
 
