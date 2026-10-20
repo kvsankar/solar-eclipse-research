@@ -1,4 +1,4 @@
-# eclipse-research: computing solar eclipse products
+# Computing Eclipses and Occultations
 
 **[Read the research site](https://sankara.net/astro/eclipses/computing.html)**
 
@@ -9,18 +9,30 @@
 3.0](https://creativecommons.org/licenses/by-sa/3.0/), via
 [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Solar_eclipse_1999_4.jpg).</sub>
 
-Deep research into how solar eclipse computational products are computed,
-from enumerating the eclipses in a period to the contact times and Baily's
-beads at a single observer. Markdown in `content/`, deterministically
-compiled to a self-contained HTML tree in `site/`. No backend, no build-time
-network access; the output opens directly from `file://`.
+Deep research into how eclipse, occultation and transit predictions are
+computed, for developers who want to build or check such a calculator. Each
+event is a body casting a shadow. When the observer stands in the shadow,
+the source is hidden: a solar eclipse, a transit of Mercury or Venus, a lunar
+occultation, or an occultation by a planet or minor body. When another body
+stands in the shadow, that body goes dark: a lunar eclipse, or an eclipse of
+a satellite of Jupiter or Saturn.
+
+Solar eclipses are covered in most depth, from enumerating the eclipses in a
+period to the contact times and Baily's beads at a single observer. The
+other events are covered by what each one adds to the solar pipeline. The
+research is cited source by source, with formulas, constants, datasets and
+validation evidence.
+
+The site is Markdown in `content/`, deterministically compiled to a
+self-contained HTML tree in `site/`. It has no backend and needs no network
+access at build time. The output opens directly from `file://`.
 
 | Read | For |
 |---|---|
 | **[AGENTS.md](AGENTS.md)** | Conventions, invariants, the note shape, the research method. Start here. |
 | This file | The machinery: build, front matter, citations, glossary, math. |
 | `content/00-meta/` | The research plan and the source policy. |
-| `content/20-reports/` | The synthesised report. |
+| `content/20-reports/` | The synthesised reports: the solar eclipse pipeline, its error budget, and how to extend it to the other events. |
 
 The build machinery is ported from `Essence-10/astrophotography-rental`
 (itself from `kvsankar-private/finance-ai`) and keeps its conventions
@@ -140,10 +152,13 @@ explicit `--host/--user/--key`. Missing settings are reported by name.
 content/            source Markdown; the output tree mirrors this exactly
   _index.md         a directory's own page; becomes <dir>/index.html
   00-meta/          research plan, method and source policy
-  05-primer/        background: the eclipse computation pipeline for newcomers
-  10-raw/           research notes, grouped by kind of event, one folder per topic
+  05-primer/        background: how eclipses, occultations and transits are computed
+  10-raw/           research notes, one folder per topic, grouped by kind of
+                    event: shared foundations, solar eclipses and transits,
+                    lunar eclipses, occultations, planetary satellites
   20-reports/       executive summary, pipeline design, error budget,
-                    reading list and reference matrix, open questions
+                    reading list and reference matrix, open questions,
+                    extending the pipeline to other events
   img/              images belonging to the site rather than one topic
 references.tsv      GENERATED bibliography, merged from content/**/refs.tsv
 glossary.tsv        GENERATED glossary, merged from content/**/terms.tsv
@@ -373,4 +388,4 @@ traversal, fixed pandoc flags.
 | `templates/static/vendor/three.min.js` | MIT, in `three.LICENSE.md` beside it |
 
 To reuse the text or figures, credit "Sankaranarayanan Viswanathan,
-eclipse-research, https://sankara.net/astro/eclipses/computing.html, CC BY 4.0".
+Computing Eclipses and Occultations, https://sankara.net/astro/eclipses/computing.html, CC BY 4.0".
