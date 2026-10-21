@@ -16,6 +16,11 @@
   --link: #7a4a1f;
   --code-bg: #f5f2ec;
   --max: 76ch;
+  /* Layout widths (spec LAY). site.js sets them on <html> from the reader's
+     drags; these are the defaults. */
+  --side-w: 270px;
+  --doc-w: var(--max);
+  --toc-w: 196px;
 }
 
 html[data-theme="dark"] {
@@ -53,6 +58,10 @@ html[data-theme="dark"] {
 }
 
 * { box-sizing: border-box; }
+
+/* An in-page link (a citation, a ToC entry, a footnote) lands below the
+   sticky top bar rather than under it (spec LAY-5). */
+html { scroll-padding-top: 64px; }
 
 body {
   margin: 0;
@@ -92,16 +101,51 @@ a:hover { text-decoration: underline; }
   border: 1px solid var(--line); border-radius: 6px;
   padding: 4px 10px; cursor: pointer;
 }
-.navtoggle { display: none; }
+.navtoggle { order: -1; }
 .themetoggle { margin-left: auto; }
 
 /* ---- layout ---- */
+/* The columns are named areas, so the resize handles site.js inserts take no
+   room and the page lays out the same with no script. The whole layout is
+   only as wide as its columns and sits in the middle of a wide window. */
 .layout {
   display: grid;
-  grid-template-columns: 270px minmax(0, 1fr);
+  grid-template-columns: var(--side-w) 0 minmax(0, 1fr);
+  grid-template-areas: "side gut main";
   gap: 0;
   align-items: start;
+  max-width: calc(var(--side-w) + 52px + var(--doc-w) + 30px + var(--toc-w));
+  margin: 0 auto;
 }
+.layout > .sidebar { grid-area: side; }
+.layout > main { grid-area: main; }
+/* Hidden navigation takes its column with it. (Not by zeroing --side-w,
+   which a reader's width set on <html> would override.) */
+html.nav-collapsed .layout {
+  grid-template-columns: 0 0 minmax(0, 1fr);
+  max-width: calc(52px + var(--doc-w) + 30px + var(--toc-w));
+}
+html.nav-collapsed .sidebar,
+html.nav-collapsed .layout > .gutter { display: none; }
+
+/* ---- resize handles (spec LAY) ---- */
+.gutter {
+  position: sticky; top: 49px; z-index: 5;
+  grid-area: gut;
+  width: 11px; margin-left: -5px;
+  height: calc(100vh - 49px);
+  cursor: col-resize; touch-action: none;
+  background: transparent;
+}
+.gutter::after {
+  content: ""; position: absolute; top: 0; bottom: 0; left: 4px; width: 3px;
+  border-radius: 2px; background: transparent; transition: background 0.15s;
+}
+.gutter:hover::after, .gutter:focus-visible::after, .gutter.drag::after {
+  background: var(--accent);
+}
+.gutter:focus { outline: none; }
+html.resizing, html.resizing * { cursor: col-resize !important; user-select: none !important; }
 
 .sidebar {
   position: sticky; top: 49px;
@@ -122,8 +166,10 @@ a:hover { text-decoration: underline; }
 .sidebar a.current { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
 .sidebar .sec > a { color: var(--text); font-weight: 600; margin-top: 10px; }
 
+/* The right padding matches the navigation's left, so a centred layout
+   looks centred. */
 main {
-  padding: 26px 34px 90px;
+  padding: 26px 18px 90px 34px;
   min-width: 0;
 }
 
@@ -142,7 +188,7 @@ main {
 .crumblist a:hover { color: var(--link); text-decoration: underline; }
 .crumblist [aria-current="page"] { color: var(--text-dim); }
 
-.doc { max-width: var(--max); }
+.doc { max-width: var(--doc-w); }
 .doctitle {
   font-size: 30px; line-height: 1.2; letter-spacing: -0.02em;
   margin: 0 0 6px;
@@ -234,11 +280,15 @@ main {
    sits beside the text rather than out at the edge of the window. */
 .colwrap.has-toc {
   display: grid;
-  grid-template-columns: minmax(0, var(--max)) 196px;
-  gap: 30px;
+  grid-template-columns: minmax(0, var(--doc-w)) 0 var(--toc-w);
+  grid-template-areas: "doc gut toc";
+  column-gap: 15px;
   justify-content: start;
   align-items: start;
 }
+.colwrap.has-toc > .doc { grid-area: doc; }
+.colwrap.has-toc > .toc-rail { grid-area: toc; }
+.colwrap > .gutter { top: 60px; height: calc(100vh - 84px); }
 /* Nothing in either column may push past it. */
 .colwrap.has-toc > * { min-width: 0; }
 .toc-rail {
@@ -270,19 +320,20 @@ main {
 /* Below the breakpoint the rail returns to the flow, above the prose. */
 @media (max-width: 1180px) {
   .colwrap.has-toc { display: flex; flex-direction: column; }
+  .colwrap > .gutter { display: none; }
   .toc-rail {
     order: -1;
     position: static; max-height: none; overflow: visible;
     padding-left: 0; border-left: 0;
     border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
     padding-top: 12px; padding-bottom: 13px; margin-bottom: 26px;
-    max-width: var(--max);
+    max-width: var(--doc-w);
   }
   .toc a { display: inline-block; }
 }
 
 /* ---- child listing ---- */
-.children { max-width: var(--max); margin-top: 30px; }
+.children { max-width: var(--doc-w); margin-top: 30px; }
 .children h2 {
   font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em;
   color: var(--text-faint); border: 0; margin: 0 0 12px; padding: 0;
@@ -299,19 +350,21 @@ main {
 .card .cmeta { font-size: 11.5px; color: var(--text-faint); margin-top: 6px; display: block; }
 
 .pagefoot {
-  max-width: var(--max); margin-top: 48px; padding-top: 14px;
+  max-width: var(--doc-w); margin-top: 48px; padding-top: 14px;
   border-top: 1px solid var(--line);
   font-size: 12px; color: var(--text-faint);
 }
 
 @media (max-width: 860px) {
-  .layout { grid-template-columns: 1fr; }
+  .layout, html.nav-collapsed .layout { grid-template-columns: 1fr; grid-template-areas: "side" "main"; max-width: none; }
+  html.nav-collapsed .sidebar.open { display: block; }
   .sidebar {
     display: none; position: static; max-height: none;
     border-right: 0; border-bottom: 1px solid var(--line);
   }
   .sidebar.open { display: block; }
-  .navtoggle { display: inline-block; }
+  .navtoggle { order: 0; }
+  .gutter { display: none; }
   main { padding: 20px 18px 70px; }
 }
 
@@ -327,7 +380,7 @@ main {
 .cite a:hover { text-decoration: none; filter: brightness(0.92); }
 .cite-missing { color: #c0392b; font-weight: 700; }
 
-.references { max-width: var(--max); margin-top: 44px; }
+.references { max-width: var(--doc-w); margin-top: 44px; }
 .references h2 {
   font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em;
   color: var(--text-faint); border: 0; padding: 0; margin: 0 0 12px;
@@ -339,6 +392,7 @@ ol.reflist li {
   padding: 7px 0; border-top: 1px solid var(--line);
 }
 ol.reflist li:last-child { border-bottom: 1px solid var(--line); }
+ol.reflist li:target { background: var(--accent-soft); box-shadow: -8px 0 0 var(--accent-soft), 8px 0 0 var(--accent-soft); }
 .refnum { color: var(--text-faint); font-variant-numeric: tabular-nums; }
 .refnote { color: var(--text-faint); display: block; grid-column: 3; }
 /* Long titles and bare URLs must wrap rather than widen the page on a phone. */
@@ -476,7 +530,7 @@ html[data-theme="dark"] {
 
 /* Executive summary block: `::: summary` ... `:::` in Markdown (pandoc fenced_divs). */
 .doc .summary {
-  max-width: var(--max);
+  max-width: var(--doc-w);
   margin: 6px 0 28px;
   padding: 14px 18px 6px;
   background: var(--accent-soft);
@@ -581,7 +635,7 @@ html[data-theme="dark"] {
   }
 }
 
-.doc figure { margin: 28px 0; max-width: var(--max); }
+.doc figure { margin: 28px 0; max-width: var(--doc-w); }
 .doc figure svg.figsvg { display: block; width: 100%; height: auto; }
 .doc figure img { display: block; max-width: 100%; height: auto; border-radius: 6px; }
 /* A hero photograph is nearly square, so at full column width it fills the
@@ -914,7 +968,7 @@ body.lb-open { overflow: hidden; }
 
 /* ---- previous / next: the site's single linear reading order ---- */
 .prevnext {
-  max-width: var(--max); margin-top: 44px; padding-top: 16px;
+  max-width: var(--doc-w); margin-top: 44px; padding-top: 16px;
   border-top: 1px solid var(--line);
   display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px 18px;
   align-items: start;

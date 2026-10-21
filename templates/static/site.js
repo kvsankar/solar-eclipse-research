@@ -28,14 +28,6 @@
     });
   }
 
-  var nt = document.getElementById("navtoggle");
-  var sb = document.getElementById("sidebar");
-  if (nt && sb) {
-    nt.addEventListener("click", function () {
-      var open = sb.classList.toggle("open");
-      nt.setAttribute("aria-expanded", open ? "true" : "false");
-    });
-  }
 
   // Keep the current sidebar entry in view on load.
   var cur = document.querySelector(".sidebar a.current");
@@ -44,6 +36,155 @@
     if (box.top < 60 || box.bottom > window.innerHeight) {
       cur.scrollIntoView({ block: "center" });
     }
+  }
+})();
+
+/* Layout (spec LAY): the Menu button opens the navigation on a phone and
+   hides or shows it on a desktop, and two handles resize the navigation and
+   the prose column. The reader's choices are kept in localStorage. */
+(function () {
+  "use strict";
+  var root = document.documentElement;
+  var nt = document.getElementById("navtoggle");
+  var sb = document.getElementById("sidebar");
+  var layout = document.querySelector(".layout");
+  if (!nt || !sb || !layout) return;
+  var desk = window.matchMedia("(min-width: 861px)");
+  var K_SIDE = "site-side-w", K_DOC = "site-doc-w", K_HIDE = "site-nav-hidden";
+  var SIDE = { min: 160, max: 520, def: 270, hide: 110 };
+  var DOC_MIN = 320;
+
+  function get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function put(k, v) {
+    try { if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); }
+    catch (e) { /* storage blocked */ }
+  }
+  function px(v) { return Math.round(v) + "px"; }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+  function hidden() { return root.classList.contains("nav-collapsed"); }
+  function sync() {
+    var open = desk.matches ? !hidden() : sb.classList.contains("open");
+    nt.setAttribute("aria-expanded", open ? "true" : "false");
+    nt.title = desk.matches ? (open ? "Hide navigation" : "Show navigation") : "";
+  }
+  function setHidden(h) {
+    root.classList.toggle("nav-collapsed", h);
+    put(K_HIDE, h ? "1" : null);
+    sync();
+  }
+
+  var side = parseFloat(get(K_SIDE)), doc = parseFloat(get(K_DOC));
+  if (side >= SIDE.min) root.style.setProperty("--side-w", px(clamp(side, SIDE.min, SIDE.max)));
+  if (doc >= DOC_MIN) root.style.setProperty("--doc-w", px(doc));
+  if (get(K_HIDE) === "1") root.classList.add("nav-collapsed");
+  sync();
+
+  nt.addEventListener("click", function () {
+    if (desk.matches) setHidden(!hidden());
+    else { sb.classList.toggle("open"); sync(); }
+  });
+  if (desk.addEventListener) desk.addEventListener("change", sync);
+
+  function width(el) { return el.getBoundingClientRect().width; }
+
+  /* A handle: role=separator, dragged with the pointer or moved with the
+     arrow keys; a double click puts the column back to its default. */
+  function handle(parent, before, label, o) {
+    var g = document.createElement("div");
+    g.className = "gutter";
+    g.tabIndex = 0;
+    g.setAttribute("role", "separator");
+    g.setAttribute("aria-orientation", "vertical");
+    g.setAttribute("aria-label", label);
+    g.title = label + " (drag; double-click resets)";
+    parent.insertBefore(g, before);
+    function show() {
+      g.setAttribute("aria-valuenow", Math.round(o.now()));
+      g.setAttribute("aria-valuemin", o.min);
+      g.setAttribute("aria-valuemax", Math.round(o.max()));
+    }
+    show();
+    var startX = 0, startW = 0, factor = 1, id = null;
+    g.addEventListener("pointerdown", function (e) {
+      if (e.button !== 0) return;
+      e.preventDefault();
+      id = e.pointerId;
+      g.setPointerCapture(id);
+      startX = e.clientX; startW = o.now();
+      // A centred layout widens on both sides, so the handle moves half as
+      // far as the column grows: grow it twice the pointer's travel.
+      factor = layout.getBoundingClientRect().left > 1 ? 2 : 1;
+      g.classList.add("drag");
+      root.classList.add("resizing");
+    });
+    g.addEventListener("pointermove", function (e) {
+      if (e.pointerId !== id) return;
+      o.set(startW + (e.clientX - startX) * factor, false);
+      if (factor === 2 && layout.getBoundingClientRect().left <= 1) {
+        factor = 1; startX = e.clientX; startW = o.now();
+      }
+      show();
+    });
+    function end(e) {
+      if (e.pointerId !== id) return;
+      id = null;
+      g.classList.remove("drag");
+      root.classList.remove("resizing");
+      o.set(o.now(), true);
+      show();
+    }
+    g.addEventListener("pointerup", end);
+    g.addEventListener("pointercancel", end);
+    g.addEventListener("dblclick", function () { o.reset(); show(); });
+    g.addEventListener("keydown", function (e) {
+      var step = e.shiftKey ? 64 : 16;
+      if (e.key === "ArrowLeft") o.set(o.now() - step, true);
+      else if (e.key === "ArrowRight") o.set(o.now() + step, true);
+      else if (e.key === "Home") o.reset();
+      else return;
+      e.preventDefault();
+      show();
+    });
+    return g;
+  }
+
+  handle(layout, layout.querySelector("main"), "Resize navigation", {
+    min: SIDE.min,
+    max: function () { return SIDE.max; },
+    now: function () { return width(sb); },
+    set: function (v, done) {
+      // Dragged nearly shut, the navigation hides; the Menu button brings it back.
+      if (done && v < SIDE.hide) { setHidden(true); return; }
+      v = clamp(v, SIDE.min, SIDE.max);
+      root.style.setProperty("--side-w", px(v));
+      if (done) put(K_SIDE, String(Math.round(v)));
+    },
+    reset: function () { root.style.removeProperty("--side-w"); put(K_SIDE, null); }
+  });
+
+  var wrap = document.querySelector(".colwrap.has-toc");
+  var art = wrap && wrap.querySelector(".doc");
+  var rail = wrap && wrap.querySelector(".toc-rail");
+  if (art && rail) {
+    var docMax = function () {
+      // As wide as the window allows beside the navigation and the contents.
+      var main = layout.querySelector("main");
+      var pad = parseFloat(getComputedStyle(main).paddingLeft) + parseFloat(getComputedStyle(main).paddingRight);
+      var room = window.innerWidth - (hidden() ? 0 : width(sb)) - pad - 30 - width(rail);
+      return Math.max(DOC_MIN, room);
+    };
+    handle(wrap, rail, "Resize text column", {
+      min: DOC_MIN,
+      max: docMax,
+      now: function () { return width(art); },
+      set: function (v, done) {
+        v = clamp(v, DOC_MIN, docMax());
+        root.style.setProperty("--doc-w", px(v));
+        if (done) put(K_DOC, String(Math.round(v)));
+      },
+      reset: function () { root.style.removeProperty("--doc-w"); put(K_DOC, null); }
+    });
   }
 })();
 

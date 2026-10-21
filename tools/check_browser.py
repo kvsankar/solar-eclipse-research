@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Headless browser checks AT-FIG-4, AT-FIG-5, AT-MAP-4 and the AT-S3D checks (docs/acceptance-tests.md).
+"""Headless browser checks AT-FIG-4, AT-FIG-5, AT-MAP-4, AT-LAY and the AT-S3D checks (docs/acceptance-tests.md).
 
     python tools/check_browser.py
 
@@ -629,6 +629,118 @@ def check_topic_map(base: str) -> list[str]:
     return problems
 
 
+def check_layout(base: str) -> list[str]:
+    """AT-LAY-1 to AT-LAY-7: the hideable navigation, the two resize handles,
+    the centred layout and in-page links landing below the top bar."""
+    problems: list[str] = []
+    box_js = "s => { const b = document.querySelector(s).getBoundingClientRect(); return [b.left, b.width, b.top]; }"
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page(viewport={"width": 1600, "height": 900})
+        errors = []
+        page.on("console", lambda m: errors.append(m.text) if m.type == "error" else None)
+        page.goto(base + PAGE, wait_until="load")
+        page.evaluate("localStorage.clear()")
+        page.reload(wait_until="load")
+        side = lambda: page.evaluate(box_js, ".sidebar")
+        doc = lambda: page.evaluate(box_js, ".colwrap .doc")
+
+        # AT-LAY-4: two separators with a tab stop.
+        handles = page.locator(".gutter")
+        if handles.count() != 2:
+            problems.append(f"layout: {handles.count()} resize handles, not 2")
+        for i in range(handles.count()):
+            h = handles.nth(i)
+            if h.get_attribute("role") != "separator" or h.get_attribute("tabindex") != "0":
+                problems.append(f"layout: handle {i} is not a focusable separator")
+
+        # AT-LAY-1: Menu hides and restores the navigation.
+        left0 = doc()[0]
+        page.click("#navtoggle")
+        page.wait_for_timeout(100)
+        if page.get_attribute("#navtoggle", "aria-expanded") != "false" or page.is_visible("#sidebar"):
+            problems.append("layout: Menu does not hide the navigation on a desktop")
+        if doc()[0] >= left0:
+            problems.append("layout: hiding the navigation does not move the text left")
+        page.click("#navtoggle")
+        page.wait_for_timeout(100)
+        if page.get_attribute("#navtoggle", "aria-expanded") != "true" or abs(doc()[0] - left0) > 1:
+            problems.append("layout: a second Menu press does not restore the navigation")
+
+        def drag(sel, dx):
+            b = page.locator(sel).bounding_box()
+            x, y = b["x"] + b["width"] / 2, b["y"] + 300
+            page.mouse.move(x, y)
+            page.mouse.down()
+            page.mouse.move(x + dx, y, steps=8)
+            page.mouse.up()
+            b = page.locator(sel).bounding_box()
+            return b["x"] + b["width"] / 2 - (x + dx)
+
+        # AT-LAY-2 and AT-LAY-3: the handles move their columns and stay under the
+        # pointer. In a centred layout a column grows by twice the pointer's travel.
+        w0 = side()[1]
+        off = drag(".layout > .gutter", -40)
+        if side()[1] > w0 - 40 or abs(off) > 3:
+            problems.append(f"layout: the navigation handle moved it {side()[1] - w0:.0f} px, {off:.0f} px off the pointer")
+        d0 = doc()[1]
+        off = drag(".colwrap > .gutter", 100)
+        if doc()[1] < d0 + 99 or abs(off) > 3:
+            problems.append(f"layout: the text handle widened it {doc()[1] - d0:.0f} px, {off:.0f} px off the pointer")
+
+        # AT-LAY-4: keys, persistence and reset.
+        w1, d1 = side()[1], doc()[1]
+        page.focus(".layout > .gutter")
+        page.keyboard.press("ArrowLeft")
+        if abs(side()[1] - (w1 - 16)) > 1:
+            problems.append("layout: ArrowLeft does not narrow the navigation by 16 px")
+        page.reload(wait_until="load")
+        if abs(side()[1] - (w1 - 16)) > 1 or abs(doc()[1] - d1) > 1:
+            problems.append("layout: the dragged widths do not hold after a reload")
+        page.click("#navtoggle")
+        page.reload(wait_until="load")
+        if page.is_visible("#sidebar"):
+            problems.append("layout: the hidden navigation does not stay hidden after a reload")
+        page.click("#navtoggle")
+        page.focus(".layout > .gutter")
+        page.keyboard.press("Home")
+        page.focus(".colwrap > .gutter")
+        page.keyboard.press("Home")
+        if abs(side()[1] - w0) > 1 or abs(doc()[1] - d0) > 1:
+            problems.append("layout: Home does not reset the columns")
+
+        # AT-LAY-6: a citation's reference lands below the top bar and is marked.
+        bar = page.evaluate("document.querySelector('.topbar').getBoundingClientRect().bottom")
+        href = page.get_attribute(".cite a", "href")
+        page.click(".cite a")
+        page.wait_for_timeout(300)
+        top = page.evaluate("h => document.getElementById(h).getBoundingClientRect().top", href.split("#")[1])
+        if top < bar:
+            problems.append(f"layout: a cited reference rests {top:.0f} px from the top, under the top bar")
+        if not page.evaluate("h => document.getElementById(h).matches(':target')", href.split("#")[1]):
+            problems.append("layout: the cited reference is not the :target")
+
+        # AT-LAY-5: centred on a wide window.
+        page.set_viewport_size({"width": 2560, "height": 900})
+        page.wait_for_timeout(100)
+        rail = page.evaluate(box_js, ".toc-rail")
+        lgap, rgap = side()[0], 2560 - (rail[0] + rail[1])
+        if abs(lgap - rgap) > 20:
+            problems.append(f"layout: at 2560 px the columns are not centred ({lgap:.0f} px left, {rgap:.0f} px right)")
+
+        # AT-LAY-7: no handles and no sideways scroll on a phone.
+        page.set_viewport_size({"width": 390, "height": 800})
+        page.wait_for_timeout(100)
+        if page.locator(".gutter:visible").count():
+            problems.append("layout: resize handles show at phone width")
+        if page.evaluate("document.documentElement.scrollWidth") > 390:
+            problems.append("layout: the page scrolls sideways at phone width")
+        if errors:
+            problems.append(f"layout: console errors {errors}")
+        browser.close()
+    return problems
+
+
 def main() -> int:
     handler = functools.partial(NoCache, directory=str(SITE))
     server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
@@ -697,6 +809,7 @@ def main() -> int:
     problems += check_3d(url)
     problems += check_zoom(url.rsplit(PAGE, 1)[0])
     problems += check_topic_map(url.rsplit(PAGE, 1)[0])
+    problems += check_layout(url.rsplit(PAGE, 1)[0])
 
     server.shutdown()
     for p_ in problems:

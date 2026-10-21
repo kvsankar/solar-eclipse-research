@@ -405,6 +405,36 @@ before a reader opens a page.
   the map keeps a legible size and scrolls sideways.
 - **MAP-7** The home page links to the topic map.
 
+## LAY: the page layout
+
+Every page has three columns on a desktop: the navigation, the text and the
+page's contents. The reader can size them to fit a wide table without
+scrolling sideways.
+
+- **LAY-1** On a desktop the Menu button hides and shows the navigation, and
+  the text and contents move over to use the room. On a phone it opens and
+  closes the navigation as before. Its `aria-expanded` says whether the
+  navigation shows.
+- **LAY-2** A handle on the line between the navigation and the text drags
+  that line. The navigation keeps between 160 and 520 px; dragged nearly
+  shut, it hides as LAY-1.
+- **LAY-3** A handle on the line between the text and the contents drags
+  that line, so the text column can grow past its reading measure to the
+  room the window has. On a page with no contents rail the text keeps the
+  width the reader chose.
+- **LAY-4** Each handle is a focusable separator: the arrow keys move it by
+  16 px (64 with Shift), Home and a double click put the column back to its
+  default. The widths and the hidden navigation are kept in the browser
+  (localStorage) and apply on every page. With no script the page lays out
+  at the defaults.
+- **LAY-5** On a window wider than the columns, the columns sit in the
+  middle of it rather than at its left edge.
+- **LAY-6** An in-page link (a citation, a contents entry) brings its target
+  to rest below the sticky top bar, not under it; a cited reference is
+  marked.
+- **LAY-7** Below 861 px wide there are no handles, and the page does not
+  scroll sideways.
+
 ## SBX: the explorer
 
 Status: outline. This section is completed before the explorer is built.
