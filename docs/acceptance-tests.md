@@ -94,3 +94,5 @@ server, with caching off, by `python tools/check_browser.py`.
 | AT-LAY-6 | LAY-6 | `check_browser.py`: after a click on a citation, its reference's top is below the breadcrumbs' bottom, and it matches `:target`. |
 | AT-LAY-7 | LAY-7 | `check_browser.py`: at 390 px no handle shows and the page is no wider than the window. |
 | AT-LAY-8 | LAY-8 | `check_browser.py`: at 1600 px, after scrolling 1500 px the breadcrumbs' top is the top bar's bottom, they are one line high and opaque; at 390 px they scroll away. |
+| AT-LAY-9 | LAY-9 | `check_browser.py`: at 390 px every visible child of the top bar sits at least 4 px inside its top and bottom edges. |
+| AT-LAY-10 | LAY-10 | `check_browser.py`: the reports index, which has no pictures, and the primer page each show a search box; typing "Besselian" lists results. |

@@ -760,6 +760,40 @@ def check_layout(base: str) -> list[str]:
     return problems
 
 
+def check_topbar_and_search(base: str) -> list[str]:
+    """AT-LAY-9 and AT-LAY-10: the phone top bar holds its rows, and every
+    page, with or without pictures, has the search box."""
+    problems: list[str] = []
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page(viewport={"width": 390, "height": 800})
+        page.goto(base + PAGE, wait_until="load")
+        outside = page.evaluate("""() => {
+            const bar = document.querySelector('.topbar').getBoundingClientRect();
+            return [...document.querySelector('.topbar').children].filter(e => e.offsetParent)
+              .filter(e => { const r = e.getBoundingClientRect();
+                             return r.top < bar.top + 4 || r.bottom > bar.bottom - 4; })
+              .map(e => e.className || e.id); }""")
+        if outside:
+            problems.append(f"top bar at 390 px: {outside} touch or cross the bar's edge")
+        page.close()
+        for path in ("20-reports/index.html", PAGE):
+            page = browser.new_page(viewport={"width": 1600, "height": 900})
+            page.goto(base + path, wait_until="load")
+            if not page.locator(".topbar .search-in").count():
+                problems.append(f"search: no search box on {path}")
+                page.close()
+                continue
+            page.fill(".topbar .search-in", "Besselian")
+            try:
+                page.wait_for_selector(".search-panel a", timeout=5000)
+            except Exception:
+                problems.append(f"search: typing Besselian on {path} lists no result")
+            page.close()
+        browser.close()
+    return problems
+
+
 def main() -> int:
     handler = functools.partial(NoCache, directory=str(SITE))
     server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
@@ -829,6 +863,7 @@ def main() -> int:
     problems += check_zoom(url.rsplit(PAGE, 1)[0])
     problems += check_topic_map(url.rsplit(PAGE, 1)[0])
     problems += check_layout(url.rsplit(PAGE, 1)[0])
+    problems += check_topbar_and_search(url.rsplit(PAGE, 1)[0])
 
     server.shutdown()
     for p_ in problems:

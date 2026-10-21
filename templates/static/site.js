@@ -750,256 +750,6 @@
     });
   })();
 
-  /* ------------------------------------------------------------- search ---
-     The site has no server to ask and must open from file://, where fetch()
-     of a local file is refused, so the index is a script that assigns one
-     global. It is fetched on the first keystroke and never for a reader who
-     does not search, which keeps its weight off every other page view.
-
-     The whole control is built here rather than in the template: with no
-     JavaScript there is no index to query, and a search box that cannot
-     search is worse than none. */
-
-  (function () {
-    var bar = document.querySelector(".topbar");
-    var brand = bar && bar.querySelector(".brand");
-    if (!bar || !brand || !window.Promise) return;
-
-    var ROOT = document.body.getAttribute("data-root") || "";
-    var MAX = 12;
-
-    var form = document.createElement("form");
-    form.className = "search";
-    form.setAttribute("role", "search");
-    form.addEventListener("submit", function (e) { e.preventDefault(); });
-
-    var input = document.createElement("input");
-    input.type = "search";
-    input.className = "search-in";
-    input.placeholder = "Search";
-    input.setAttribute("aria-label", "Search this site");
-    input.setAttribute("autocomplete", "off");
-    input.setAttribute("aria-expanded", "false");
-    input.setAttribute("aria-controls", "search-results");
-
-    var panel = document.createElement("div");
-    panel.className = "search-panel";
-    panel.id = "search-results";
-    panel.setAttribute("role", "listbox");
-    panel.hidden = true;
-
-    var live = document.createElement("p");
-    live.className = "search-live";
-    live.setAttribute("aria-live", "polite");
-
-    form.appendChild(input);
-    form.appendChild(panel);
-    form.appendChild(live);
-    brand.parentNode.insertBefore(form, brand.nextSibling);
-
-    // ---- loading the index ------------------------------------------------
-    var loading = null;
-    function index() {
-      if (window.__SEARCH__) return Promise.resolve(window.__SEARCH__);
-      if (loading) return loading;
-      loading = new Promise(function (resolve, reject) {
-        var s = document.createElement("script");
-        s.src = ROOT + "assets/search-index.js";
-        s.onload = function () {
-          window.__SEARCH__ ? resolve(window.__SEARCH__) : reject();
-        };
-        s.onerror = reject;
-        document.head.appendChild(s);
-      });
-      return loading;
-    }
-
-    // ---- query ------------------------------------------------------------
-    function tokenize(s) {
-      var out = (s || "").toLowerCase().match(/[\wÀ-ÿΑ-ω]+/g) || [];
-      return out.filter(function (w) { return w.length > 1; });
-    }
-
-    var cache = {};
-    function postings(term, idx) {
-      if (cache[term]) return cache[term];
-      var out = [], id = 0, parts = idx.t[term].split(" ");
-      for (var i = 0; i < parts.length; i++) {
-        var p = parts[i], dot = p.indexOf(".");
-        var gap = parseInt(dot < 0 ? p : p.slice(0, dot), 36);
-        var tf = dot < 0 ? 1 : parseInt(p.slice(dot + 1), 36);
-        id += gap;
-        out.push([id, tf]);
-      }
-      cache[term] = out;
-      return out;
-    }
-
-    var termList = null;
-    function candidates(tok, idx) {
-      // The exact word, plus anything it begins, so a query answers while it
-      // is still being typed and plurals need no stemmer.
-      if (!termList) termList = Object.keys(idx.t);
-      var hits = [];
-      if (idx.t[tok]) hits.push(tok);
-      for (var i = 0; i < termList.length && hits.length < 48; i++) {
-        var t = termList[i];
-        if (t !== tok && t.length > tok.length && t.indexOf(tok) === 0) {
-          hits.push(t);
-        }
-      }
-      return hits;
-    }
-
-    function run(q, idx) {
-      var toks = tokenize(q);
-      if (!toks.length) return [];
-      var N = idx.r.length;
-      var avg = idx.avg || 120;
-      var acc = null;
-      // BM25, so that repetition saturates and a long section does not win on
-      // length alone. Without the length term the glossary, one very long
-      // passage, outranks the prose for every word it defines.
-      var K1 = 1.2, B = 0.6;
-
-      for (var i = 0; i < toks.length; i++) {
-        var got = {}, terms = candidates(toks[i], idx);
-        for (var j = 0; j < terms.length; j++) {
-          var term = terms[j], ps = postings(term, idx);
-          // An exact hit counts for more than a word merely begun by it.
-          var boost = term === toks[i] ? 1 : 0.45;
-          var idf = Math.log(1 + (N - ps.length + 0.5) / (ps.length + 0.5));
-          for (var k = 0; k < ps.length; k++) {
-            var id = ps[k][0], tf = ps[k][1];
-            var dl = (idx.r[id] && idx.r[id].n) || avg;
-            var norm = K1 * (1 - B + B * dl / avg);
-            var sc = idf * boost * (tf * (K1 + 1)) / (tf + norm);
-            if (!got[id] || got[id] < sc) got[id] = sc;
-          }
-        }
-        // Every word must appear somewhere in the passage.
-        if (acc === null) {
-          acc = got;
-        } else {
-          var next = {};
-          for (var key in got) {
-            if (acc[key] !== undefined) next[key] = acc[key] + got[key];
-          }
-          acc = next;
-        }
-        if (!Object.keys(acc).length) return [];
-      }
-
-      var rows = [];
-      for (var id2 in acc) rows.push([Number(id2), acc[id2]]);
-      rows.sort(function (a, b) { return b[1] - a[1] || a[0] - b[0]; });
-      return rows.slice(0, MAX).map(function (r) { return idx.r[r[0]]; });
-    }
-
-    // ---- rendering --------------------------------------------------------
-    function esc(s) {
-      return String(s).replace(/[&<>"]/g, function (c) {
-        return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
-      });
-    }
-    function mark(text, toks) {
-      var out = esc(text);
-      for (var i = 0; i < toks.length; i++) {
-        var safe = toks[i].replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-        out = out.replace(new RegExp("(" + safe + "\\w*)", "gi"), "$1");
-      }
-      return out.replace(//g, "<mark>").replace(//g, "</mark>");
-    }
-
-    var sel = -1, items = [];
-    function render(results, toks) {
-      panel.innerHTML = "";
-      items = [];
-      sel = -1;
-      if (!results.length) {
-        panel.innerHTML = '<p class="search-none">No match.</p>';
-        live.textContent = "No match.";
-      } else {
-        results.forEach(function (r) {
-          var a = document.createElement("a");
-          a.className = "search-hit";
-          a.setAttribute("role", "option");
-          a.href = ROOT + r.u + (r.a ? "#" + r.a : "");
-          a.innerHTML =
-            '<span class="search-h">' + mark(r.h || r.p, toks) + "</span>" +
-            (r.h ? '<span class="search-p">' + esc(r.p) + "</span>" : "") +
-            '<span class="search-x">' + mark(r.x, toks) + "</span>";
-          panel.appendChild(a);
-          items.push(a);
-        });
-        live.textContent = results.length === MAX
-          ? "Showing the first " + MAX + " matches."
-          : results.length + (results.length === 1 ? " match." : " matches.");
-      }
-      panel.hidden = false;
-      input.setAttribute("aria-expanded", "true");
-    }
-
-    function close() {
-      panel.hidden = true;
-      panel.innerHTML = "";
-      items = [];
-      sel = -1;
-      live.textContent = "";
-      input.setAttribute("aria-expanded", "false");
-    }
-
-    function choose(n) {
-      if (!items.length) return;
-      if (sel >= 0) items[sel].classList.remove("is-sel");
-      sel = (n + items.length) % items.length;
-      items[sel].classList.add("is-sel");
-      items[sel].scrollIntoView({ block: "nearest" });
-    }
-
-    // ---- events -----------------------------------------------------------
-    var timer = null;
-    function query() {
-      var q = input.value.trim();
-      if (q.length < 2) { close(); return; }
-      index().then(function (idx) {
-        if (input.value.trim() !== q) return;   // a later keystroke won
-        render(run(q, idx), tokenize(q));
-      }).catch(function () {
-        panel.innerHTML = '<p class="search-none">Search is unavailable.</p>';
-        panel.hidden = false;
-      });
-    }
-    input.addEventListener("input", function () {
-      clearTimeout(timer);
-      timer = setTimeout(query, 90);
-    });
-    input.addEventListener("focus", function () { index().catch(function () {}); });
-
-    input.addEventListener("keydown", function (e) {
-      if (e.key === "ArrowDown") { e.preventDefault(); choose(sel + 1); }
-      else if (e.key === "ArrowUp") { e.preventDefault(); choose(sel - 1); }
-      else if (e.key === "Enter" && sel >= 0) { e.preventDefault(); items[sel].click(); }
-      else if (e.key === "Escape") { close(); input.blur(); }
-    });
-
-    document.addEventListener("click", function (e) {
-      if (!form.contains(e.target)) close();
-    });
-
-    // A reader with both hands on the keyboard should not have to reach for
-    // the pointer to search.
-    document.addEventListener("keydown", function (e) {
-      var tag = (e.target.tagName || "").toLowerCase();
-      var typing = tag === "input" || tag === "textarea" || e.target.isContentEditable;
-      if (!typing && (e.key === "/" || ((e.ctrlKey || e.metaKey) && e.key === "k"))) {
-        e.preventDefault();
-        input.focus();
-        input.select();
-      }
-    });
-  })();
-
 })();
 
 /* Read more in the figure index (spec FIG-19): a long caption shows its
@@ -1024,6 +774,260 @@
     window.addEventListener("resize", function () { check(cap, btn); });
   });
 })();
+
+/* ------------------------------------------------------------- search ---
+   Its own block, not inside the lightbox above: the lightbox stops early
+   on a page with no pictures, and every page needs the search box
+   (spec LAY-10).
+   The site has no server to ask and must open from file://, where fetch()
+   of a local file is refused, so the index is a script that assigns one
+   global. It is fetched on the first keystroke and never for a reader who
+   does not search, which keeps its weight off every other page view.
+
+   The whole control is built here rather than in the template: with no
+   JavaScript there is no index to query, and a search box that cannot
+   search is worse than none. */
+
+(function () {
+  var bar = document.querySelector(".topbar");
+  var brand = bar && bar.querySelector(".brand");
+  if (!bar || !brand || !window.Promise) return;
+
+  var ROOT = document.body.getAttribute("data-root") || "";
+  var MAX = 12;
+
+  var form = document.createElement("form");
+  form.className = "search";
+  form.setAttribute("role", "search");
+  form.addEventListener("submit", function (e) { e.preventDefault(); });
+
+  var input = document.createElement("input");
+  input.type = "search";
+  input.className = "search-in";
+  input.placeholder = "Search";
+  input.setAttribute("aria-label", "Search this site");
+  input.setAttribute("autocomplete", "off");
+  input.setAttribute("aria-expanded", "false");
+  input.setAttribute("aria-controls", "search-results");
+
+  var panel = document.createElement("div");
+  panel.className = "search-panel";
+  panel.id = "search-results";
+  panel.setAttribute("role", "listbox");
+  panel.hidden = true;
+
+  var live = document.createElement("p");
+  live.className = "search-live";
+  live.setAttribute("aria-live", "polite");
+
+  form.appendChild(input);
+  form.appendChild(panel);
+  form.appendChild(live);
+  brand.parentNode.insertBefore(form, brand.nextSibling);
+
+  // ---- loading the index ------------------------------------------------
+  var loading = null;
+  function index() {
+    if (window.__SEARCH__) return Promise.resolve(window.__SEARCH__);
+    if (loading) return loading;
+    loading = new Promise(function (resolve, reject) {
+      var s = document.createElement("script");
+      s.src = ROOT + "assets/search-index.js";
+      s.onload = function () {
+        window.__SEARCH__ ? resolve(window.__SEARCH__) : reject();
+      };
+      s.onerror = reject;
+      document.head.appendChild(s);
+    });
+    return loading;
+  }
+
+  // ---- query ------------------------------------------------------------
+  function tokenize(s) {
+    var out = (s || "").toLowerCase().match(/[\wÀ-ÿΑ-ω]+/g) || [];
+    return out.filter(function (w) { return w.length > 1; });
+  }
+
+  var cache = {};
+  function postings(term, idx) {
+    if (cache[term]) return cache[term];
+    var out = [], id = 0, parts = idx.t[term].split(" ");
+    for (var i = 0; i < parts.length; i++) {
+      var p = parts[i], dot = p.indexOf(".");
+      var gap = parseInt(dot < 0 ? p : p.slice(0, dot), 36);
+      var tf = dot < 0 ? 1 : parseInt(p.slice(dot + 1), 36);
+      id += gap;
+      out.push([id, tf]);
+    }
+    cache[term] = out;
+    return out;
+  }
+
+  var termList = null;
+  function candidates(tok, idx) {
+    // The exact word, plus anything it begins, so a query answers while it
+    // is still being typed and plurals need no stemmer.
+    if (!termList) termList = Object.keys(idx.t);
+    var hits = [];
+    if (idx.t[tok]) hits.push(tok);
+    for (var i = 0; i < termList.length && hits.length < 48; i++) {
+      var t = termList[i];
+      if (t !== tok && t.length > tok.length && t.indexOf(tok) === 0) {
+        hits.push(t);
+      }
+    }
+    return hits;
+  }
+
+  function run(q, idx) {
+    var toks = tokenize(q);
+    if (!toks.length) return [];
+    var N = idx.r.length;
+    var avg = idx.avg || 120;
+    var acc = null;
+    // BM25, so that repetition saturates and a long section does not win on
+    // length alone. Without the length term the glossary, one very long
+    // passage, outranks the prose for every word it defines.
+    var K1 = 1.2, B = 0.6;
+
+    for (var i = 0; i < toks.length; i++) {
+      var got = {}, terms = candidates(toks[i], idx);
+      for (var j = 0; j < terms.length; j++) {
+        var term = terms[j], ps = postings(term, idx);
+        // An exact hit counts for more than a word merely begun by it.
+        var boost = term === toks[i] ? 1 : 0.45;
+        var idf = Math.log(1 + (N - ps.length + 0.5) / (ps.length + 0.5));
+        for (var k = 0; k < ps.length; k++) {
+          var id = ps[k][0], tf = ps[k][1];
+          var dl = (idx.r[id] && idx.r[id].n) || avg;
+          var norm = K1 * (1 - B + B * dl / avg);
+          var sc = idf * boost * (tf * (K1 + 1)) / (tf + norm);
+          if (!got[id] || got[id] < sc) got[id] = sc;
+        }
+      }
+      // Every word must appear somewhere in the passage.
+      if (acc === null) {
+        acc = got;
+      } else {
+        var next = {};
+        for (var key in got) {
+          if (acc[key] !== undefined) next[key] = acc[key] + got[key];
+        }
+        acc = next;
+      }
+      if (!Object.keys(acc).length) return [];
+    }
+
+    var rows = [];
+    for (var id2 in acc) rows.push([Number(id2), acc[id2]]);
+    rows.sort(function (a, b) { return b[1] - a[1] || a[0] - b[0]; });
+    return rows.slice(0, MAX).map(function (r) { return idx.r[r[0]]; });
+  }
+
+  // ---- rendering --------------------------------------------------------
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+  function mark(text, toks) {
+    var out = esc(text);
+    for (var i = 0; i < toks.length; i++) {
+      var safe = toks[i].replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      out = out.replace(new RegExp("(" + safe + "\\w*)", "gi"), "$1");
+    }
+    return out.replace(//g, "<mark>").replace(//g, "</mark>");
+  }
+
+  var sel = -1, items = [];
+  function render(results, toks) {
+    panel.innerHTML = "";
+    items = [];
+    sel = -1;
+    if (!results.length) {
+      panel.innerHTML = '<p class="search-none">No match.</p>';
+      live.textContent = "No match.";
+    } else {
+      results.forEach(function (r) {
+        var a = document.createElement("a");
+        a.className = "search-hit";
+        a.setAttribute("role", "option");
+        a.href = ROOT + r.u + (r.a ? "#" + r.a : "");
+        a.innerHTML =
+          '<span class="search-h">' + mark(r.h || r.p, toks) + "</span>" +
+          (r.h ? '<span class="search-p">' + esc(r.p) + "</span>" : "") +
+          '<span class="search-x">' + mark(r.x, toks) + "</span>";
+        panel.appendChild(a);
+        items.push(a);
+      });
+      live.textContent = results.length === MAX
+        ? "Showing the first " + MAX + " matches."
+        : results.length + (results.length === 1 ? " match." : " matches.");
+    }
+    panel.hidden = false;
+    input.setAttribute("aria-expanded", "true");
+  }
+
+  function close() {
+    panel.hidden = true;
+    panel.innerHTML = "";
+    items = [];
+    sel = -1;
+    live.textContent = "";
+    input.setAttribute("aria-expanded", "false");
+  }
+
+  function choose(n) {
+    if (!items.length) return;
+    if (sel >= 0) items[sel].classList.remove("is-sel");
+    sel = (n + items.length) % items.length;
+    items[sel].classList.add("is-sel");
+    items[sel].scrollIntoView({ block: "nearest" });
+  }
+
+  // ---- events -----------------------------------------------------------
+  var timer = null;
+  function query() {
+    var q = input.value.trim();
+    if (q.length < 2) { close(); return; }
+    index().then(function (idx) {
+      if (input.value.trim() !== q) return;   // a later keystroke won
+      render(run(q, idx), tokenize(q));
+    }).catch(function () {
+      panel.innerHTML = '<p class="search-none">Search is unavailable.</p>';
+      panel.hidden = false;
+    });
+  }
+  input.addEventListener("input", function () {
+    clearTimeout(timer);
+    timer = setTimeout(query, 90);
+  });
+  input.addEventListener("focus", function () { index().catch(function () {}); });
+
+  input.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowDown") { e.preventDefault(); choose(sel + 1); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); choose(sel - 1); }
+    else if (e.key === "Enter" && sel >= 0) { e.preventDefault(); items[sel].click(); }
+    else if (e.key === "Escape") { close(); input.blur(); }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (!form.contains(e.target)) close();
+  });
+
+  // A reader with both hands on the keyboard should not have to reach for
+  // the pointer to search.
+  document.addEventListener("keydown", function (e) {
+    var tag = (e.target.tagName || "").toLowerCase();
+    var typing = tag === "input" || tag === "textarea" || e.target.isContentEditable;
+    if (!typing && (e.key === "/" || ((e.ctrlKey || e.metaKey) && e.key === "k"))) {
+      e.preventDefault();
+      input.focus();
+      input.select();
+    }
+  });
+})();
+
 
 /* Topic map (spec MAP-4): pointing at or focusing a topic lights its curves
    and the topics at their other ends, and dims the rest. Clicking a topic

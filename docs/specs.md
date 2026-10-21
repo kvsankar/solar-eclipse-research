@@ -443,6 +443,11 @@ scrolling sideways.
   the page scrolls, on one line, with the current page's title cut short if
   it does not fit; the text scrolls out of sight under them. On a phone they
   scroll away with the page.
+- **LAY-9** On a phone the top bar grows to hold every row it wraps onto
+  (the title and buttons, then the search box); no control sits on or past
+  its edge.
+- **LAY-10** Every page, with or without pictures, has the search box in
+  the top bar when scripts run.
 
 ## SBX: the explorer
 
