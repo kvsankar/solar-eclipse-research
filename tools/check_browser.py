@@ -23,7 +23,7 @@ from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parent.parent
 SITE = ROOT / "site"
-PAGE = "05-primer/how-eclipses-occultations-and-transits-are-computed.html"
+PAGE = "primer/how-eclipses-occultations-and-transits-are-computed.html"
 
 
 class NoCache(http.server.SimpleHTTPRequestHandler):
@@ -354,7 +354,7 @@ def check_zoom(base: str) -> list[str]:
                 problems.append("close did not close the zoom view")
 
         # AT-FIG-17: step through the figure index in the zoom view.
-        page.goto(base + "00-meta/figure-index.html", wait_until="networkidle")
+        page.goto(base + "meta/figure-index.html", wait_until="networkidle")
         total = page.locator("button.figzoom").count()
         page.locator("button.figzoom").first.click()
         box = page.locator(".lb")
@@ -412,8 +412,8 @@ def check_zoom(base: str) -> list[str]:
         page.goto(url, wait_until="networkidle")
 
         # AT-FIG-18 and AT-FIG-19: titles, and Read more where a caption is cut.
-        for where in ("05-primer/how-eclipses-occultations-and-transits-are-computed.html",
-                      "00-meta/figure-index.html"):
+        for where in ("primer/how-eclipses-occultations-and-transits-are-computed.html",
+                      "meta/figure-index.html"):
             page.goto(base + where, wait_until="networkidle")
             zooms = page.locator("button.figzoom")
             for i in range(min(zooms.count(), 6)):
@@ -436,7 +436,7 @@ def check_zoom(base: str) -> list[str]:
                     if more.inner_text().strip() != "Read more":
                         problems.append(f"{where} picture {i + 1}: Show less did not cut the caption again")
                 lb.locator('[data-act="close"]').click()
-        page.goto(base + "00-meta/figure-index.html", wait_until="networkidle")
+        page.goto(base + "meta/figure-index.html", wait_until="networkidle")
         rows = page.locator("tr.figrow")
         for i in range(rows.count()):
             row = rows.nth(i)
@@ -453,7 +453,7 @@ def check_zoom(base: str) -> list[str]:
         page.goto(url, wait_until="networkidle")
 
         # AT-FIG-20: Show on page, from the index and on the picture's own page.
-        page.goto(base + "00-meta/figure-index.html", wait_until="networkidle")
+        page.goto(base + "meta/figure-index.html", wait_until="networkidle")
         target = page.locator('tr.figrow:has([data-figpath="05-primer/img/example-solar-eclipse.svg"]) button.figzoom')
         if target.count() != 1:
             problems.append("index: no row for the solar eclipse example")
@@ -543,7 +543,7 @@ def check_zoom(base: str) -> list[str]:
     return problems
 
 
-MAP_PAGE = "00-meta/topic-map.html"
+MAP_PAGE = "meta/topic-map.html"
 
 
 def check_topic_map(base: str) -> list[str]:
@@ -777,7 +777,7 @@ def check_topbar_and_search(base: str) -> list[str]:
         if outside:
             problems.append(f"top bar at 390 px: {outside} touch or cross the bar's edge")
         page.close()
-        for path in ("20-reports/index.html", PAGE):
+        for path in ("reports/index.html", PAGE):
             page = browser.new_page(viewport={"width": 1600, "height": 900})
             page.goto(base + path, wait_until="load")
             if not page.locator(".topbar .search-in").count():

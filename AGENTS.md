@@ -99,9 +99,12 @@ Requires pandoc 3.x on PATH and Python 3.10+. No pip dependencies.
 ## Raw notes: the required shape
 
 A topic's two-digit folder number is an identifier, not a position: the group
-folder and the `order:` key set the reading order. Put a new topic in the group
-for its kind of event. Moving a published folder changes its URLs, so it needs
-a permanent redirect in the sankara.net nginx site, which `homelab` manages.
+folder and the `order:` key set the reading order. Page addresses leave the
+number out (`10-raw/10-shared/01-foundations/` is published as
+`research-notes/shared/foundations/`; `url-names.tsv` names the exceptions;
+see `docs/specs.md` URL-1). Put a new topic in the group for its kind of event.
+Moving or renaming a published folder changes its URLs, so it needs a permanent
+redirect in the sankara.net nginx site, which `homelab` manages.
 
 Each topic folder under `content/10-raw/` contains one or more `.md` notes, an
 `_index.md`, a `refs.tsv` fragment and optionally a `terms.tsv` fragment. The

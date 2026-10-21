@@ -449,6 +449,19 @@ scrolling sideways.
 - **LAY-10** Every page, with or without pictures, has the search box in
   the top bar when scripts run.
 
+## URL: page addresses
+
+- **URL-1** Each folder under `content/` appears in page addresses under its
+  URL name: the name `url-names.tsv` gives it, or else its folder name
+  without a leading two-digit prefix (`01-foundations` becomes
+  `foundations`). The prefix only identifies a topic; the reader never sees
+  it. File names do not change.
+- **URL-2** The research notes are under `research-notes/`; the meta pages,
+  the primer and the reports are under `meta/`, `primer/` and `reports/`.
+- **URL-3** Every relative link in a page points at its target's address.
+  The build fails if two folders get the same address, or if a URL name is
+  also the name of a source folder.
+
 ## SBX: the explorer
 
 Status: outline. This section is completed before the explorer is built.

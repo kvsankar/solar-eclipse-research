@@ -39,9 +39,12 @@ import sys
 from pathlib import Path
 
 from topic_map import MARKER as TOPICMAP_MARKER, render_topic_map
+import url_names
 
 ROOT = Path(__file__).resolve().parent.parent
 CONTENT = ROOT / "content"
+# Readable URL names of the content folders (docs/specs.md URL-1).
+URLS = url_names.load(CONTENT, ROOT / "url-names.tsv")
 OUT = ROOT / "site"
 TEMPLATES = ROOT / "templates"
 STATIC = TEMPLATES / "static"
@@ -64,6 +67,7 @@ SOCIAL_IMAGE_ALT = (
     "Totality: the solar corona around the black disc of the Moon, with pink "
     "prominences at the limb."
 )
+REPO_FILE_URL = "https://github.com/kvsankar/solar-eclipse-research/blob/main/"
 SOURCE_NOTE = (
     '<a href="https://github.com/kvsankar/solar-eclipse-research">'
     'Research and website source on GitHub</a>. '
@@ -568,7 +572,8 @@ def render_figure_index(shown: list[dict], build_only: list[dict], node: "Node")
             return f"Drawn here, <code>{html.escape(row[3])}</code>"
         # The licence's first sentence; "4.0" has a point but no space after it.
         licence = row[2].split(". ")[0].rstrip(".")
-        return f"Third-party, {html.escape(licence)}. <a href=\"{html.escape(row[3])}\">Source</a>"
+        source = row[3] if re.match(r"^https?:", row[3]) else REPO_FILE_URL + row[3]
+        return f"Third-party, {html.escape(licence)}. <a href=\"{html.escape(source)}\">Source</a>"
 
     # Two columns, so the table fits the text column: the picture, and its
     # caption over one line of kind, page and provenance.
@@ -767,14 +772,26 @@ class Node:
 
     @property
     def out_path(self) -> Path:
-        return OUT / (self.rel / "index.html" if self.is_dir else self.rel.with_suffix(".html"))
+        rel = self.rel.as_posix()
+        if self.is_dir and rel in ("", "."):
+            return OUT / "index.html"
+        return OUT / URLS.url(self.source_page + ".html")
+
+    @property
+    def source_page(self) -> str:
+        """The page's source path without extension, as links in it are written."""
+        rel = self.rel.as_posix()
+        if self.is_dir:
+            return "index" if rel in ("", ".") else f"{rel}/index"
+        return rel
 
     @property
     def url_from_root(self) -> str:
+        """The page's address: its source path with the folders' URL names (URL-1)."""
         rel = self.rel.as_posix()
-        if self.is_dir:
-            return HOME_FILENAME if rel in ("", ".") else f"{rel}/index.html"
-        return f"{rel}.html"
+        if self.is_dir and rel in ("", "."):
+            return HOME_FILENAME
+        return URLS.url(self.source_page + ".html")
 
     @property
     def depth(self) -> int:
@@ -900,6 +917,15 @@ def strip_leading_h1(md: str, title: str) -> str:
 
 
 LINK_RE = re.compile(r'(href=")([^"]+)(")')
+
+
+REF_ATTR_RE = re.compile(r'(\b(?:href|src)=")([^"]*)(")')
+
+
+def map_links(html_text: str, page: str) -> str:
+    """Point every relative link written in the source page `page` at its
+    target's address (docs/specs.md URL-3)."""
+    return REF_ATTR_RE.sub(lambda m: m.group(1) + URLS.link(m.group(2), page) + m.group(3), html_text)
 
 
 def rewrite_links(html_text: str) -> str:
@@ -1216,6 +1242,7 @@ def render_page(node: Node, root: Node, template: str, refs: dict, missing: set,
     if records is not None:
         collect_search(node, body, records)
     body = body + render_sources(node) + render_reference_list(cited)
+    body = map_links(body, node.source_page)
     values = {
         "title": html.escape(node.title),
         "site_title": html.escape(SITE_TITLE),
@@ -1419,7 +1446,7 @@ def copy_assets() -> int:
             n += 1
     for src in sorted(CONTENT.rglob("*")):
         if src.is_file() and src.suffix.lower() in COPY_AS_IS:
-            dst = OUT / src.relative_to(CONTENT)
+            dst = OUT / URLS.url(src.relative_to(CONTENT).as_posix())
             dst.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(src, dst)
             n += 1

@@ -39,10 +39,11 @@ class SearchMetadataTests(unittest.TestCase):
         self.assertIn('property="og:url" content="' + build.public_url(self.root) + '"',
                       build.render_social(self.root))
 
-    def test_deep_page_keeps_existing_published_path(self):
+    def test_deep_page_address_uses_url_names(self):
+        # URL-1: the canonical address drops the folders' number prefixes.
         node = next(n for n in self.nodes if n.rel.as_posix().endswith("besselian-elements"))
         self.assertEqual(build.public_url(node), build.BASE_URL +
-                         "10-raw/10-shared/01-foundations/besselian-elements.html")
+                         "research-notes/shared/foundations/besselian-elements.html")
 
     def test_every_page_has_an_explicit_unique_search_title_and_description(self):
         titles = [n.meta.get("seo_title", "") for n in self.nodes]

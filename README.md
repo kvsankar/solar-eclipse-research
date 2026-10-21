@@ -149,7 +149,9 @@ explicit `--host/--user/--key`. Missing settings are reported by name.
 ## Layout
 
 ```
-content/            source Markdown; the output tree mirrors this exactly
+content/            source Markdown; the output tree mirrors it, with each
+                    folder under its URL name (no number prefix; see
+                    url-names.tsv and docs/specs.md URL-1)
   _index.md         a directory's own page; becomes <dir>/index.html
   00-meta/          research plan, method and source policy
   05-primer/        background: how eclipses, occultations and transits are computed
