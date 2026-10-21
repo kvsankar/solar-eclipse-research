@@ -430,10 +430,14 @@ scrolling sideways.
 - **LAY-5** On a window wider than the columns, the columns sit in the
   middle of it rather than at its left edge.
 - **LAY-6** An in-page link (a citation, a contents entry) brings its target
-  to rest below the sticky top bar, not under it; a cited reference is
-  marked.
+  to rest below the sticky top bar and breadcrumbs, not under them; a cited
+  reference is marked.
 - **LAY-7** Below 861 px wide there are no handles, and the page does not
   scroll sideways.
+- **LAY-8** On a desktop the breadcrumbs stay in view under the top bar as
+  the page scrolls, on one line, with the current page's title cut short if
+  it does not fit; the text scrolls out of sight under them. On a phone they
+  scroll away with the page.
 
 ## SBX: the explorer
 

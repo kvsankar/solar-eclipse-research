@@ -709,8 +709,23 @@ def check_layout(base: str) -> list[str]:
         if abs(side()[1] - w0) > 1 or abs(doc()[1] - d0) > 1:
             problems.append("layout: Home does not reset the columns")
 
-        # AT-LAY-6: a citation's reference lands below the top bar and is marked.
-        bar = page.evaluate("document.querySelector('.topbar').getBoundingClientRect().bottom")
+        # AT-LAY-8: the breadcrumbs stay under the top bar, one line, opaque.
+        page.evaluate("window.scrollTo(0, 1500)")
+        page.wait_for_timeout(100)
+        bar, crumbs, line, bg = page.evaluate("""() => {
+            const c = document.querySelector('.crumbs'), l = c.querySelector('li');
+            return [document.querySelector('.topbar').getBoundingClientRect().bottom,
+                    c.getBoundingClientRect().toJSON(), l.getBoundingClientRect().height,
+                    getComputedStyle(c).backgroundColor]; }""")
+        if abs(crumbs["top"] - bar) > 1:
+            problems.append(f"layout: scrolled, the breadcrumbs sit at {crumbs['top']:.0f} px, not under the top bar at {bar:.0f}")
+        if page.evaluate("document.querySelector('.crumblist').getBoundingClientRect().height") > line * 1.5:
+            problems.append("layout: the sticky breadcrumbs wrap onto a second line")
+        if bg in ("transparent", "rgba(0, 0, 0, 0)"):
+            problems.append("layout: the sticky breadcrumbs have no background, so text shows through")
+
+        # AT-LAY-6: a citation's reference lands below the breadcrumbs and is marked.
+        bar = crumbs["bottom"]
         href = page.get_attribute(".cite a", "href")
         page.click(".cite a")
         page.wait_for_timeout(300)
@@ -733,6 +748,10 @@ def check_layout(base: str) -> list[str]:
         page.wait_for_timeout(100)
         if page.locator(".gutter:visible").count():
             problems.append("layout: resize handles show at phone width")
+        page.evaluate("window.scrollTo(0, 1500)")
+        page.wait_for_timeout(100)
+        if page.evaluate("document.querySelector('.crumbs').getBoundingClientRect().bottom") > 0:
+            problems.append("layout: at phone width the breadcrumbs do not scroll away")
         if page.evaluate("document.documentElement.scrollWidth") > 390:
             problems.append("layout: the page scrolls sideways at phone width")
         if errors:

@@ -91,5 +91,6 @@ server, with caching off, by `python tools/check_browser.py`.
 | AT-LAY-3 | LAY-3 | `check_browser.py`: dragging the second handle 100 px right widens the text column by at least 100 px and keeps the handle under the pointer. |
 | AT-LAY-4 | LAY-4 | `check_browser.py`: both handles have role separator and a tab stop; ArrowLeft on the first narrows the navigation by 16 px; after a reload the dragged widths and the hidden navigation hold; Home resets. |
 | AT-LAY-5 | LAY-5 | `check_browser.py`: at 2560 px the space left of the navigation equals the space right of the contents rail to within 20 px. |
-| AT-LAY-6 | LAY-6 | `check_browser.py`: after a click on a citation, its reference's top is at least the top bar's height below the window's top, and it matches `:target`. |
+| AT-LAY-6 | LAY-6 | `check_browser.py`: after a click on a citation, its reference's top is below the breadcrumbs' bottom, and it matches `:target`. |
 | AT-LAY-7 | LAY-7 | `check_browser.py`: at 390 px no handle shows and the page is no wider than the window. |
+| AT-LAY-8 | LAY-8 | `check_browser.py`: at 1600 px, after scrolling 1500 px the breadcrumbs' top is the top bar's bottom, they are one line high and opaque; at 390 px they scroll away. |
