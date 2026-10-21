@@ -387,5 +387,10 @@ traversal, fixed pandoc flags.
 | Third-party images | Each keeps its own licence, recorded in its `images.tsv` row and credited beside the image |
 | `templates/static/vendor/three.min.js` | MIT, in `three.LICENSE.md` beside it |
 
+CC BY rather than CC BY-SA lets anyone reuse the work as long as they credit
+it. A third-party image under CC BY-SA keeps that licence on its own row and
+credit, so the rest of the corpus need not take it. A new third-party image
+always needs its own `images.tsv` row.
+
 To reuse the text or figures, credit "Sankaranarayanan Viswanathan,
 Computing Eclipses and Occultations, https://sankara.net/astro/eclipses/computing.html, CC BY 4.0".

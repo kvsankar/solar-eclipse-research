@@ -375,6 +375,11 @@ A radial mind map of the whole site, built from the contents tree and the
 links between pages. It answers "what is here and what connects to what"
 before a reader opens a page.
 
+The map follows the contents tree rather than a force-directed graph, which
+tangles into a hairball once there are many links and lays out differently
+on each run; bundling the cross-links along the tree keeps it legible and the
+build deterministic.
+
 - **MAP-1** A Meta page, "Topic map", draws every topic of the site as one
   node of one picture. A topic is a research-notes folder of pages, or a
   page of the meta, primer or reports sections. The home page is at the
