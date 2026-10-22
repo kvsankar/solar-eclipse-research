@@ -776,6 +776,22 @@ def check_topbar_and_search(base: str) -> list[str]:
               .map(e => e.className || e.id); }""")
         if outside:
             problems.append(f"top bar at 390 px: {outside} touch or cross the bar's edge")
+        # AT-LAY-11: the Menu and theme buttons are matching icons with names.
+        icons = page.evaluate("""() => ['#navtoggle', '#themetoggle'].map(sel => {
+            const b = document.querySelector(sel), svgs = b.querySelectorAll('svg');
+            const s = svgs[0], r = s ? s.getBoundingClientRect() : null;
+            const stroke = s ? (s.getAttribute('stroke-width') || getComputedStyle(s).strokeWidth) : null;
+            return {sel, n: svgs.length, text: b.innerText.trim(), label: b.getAttribute('aria-label'),
+                    w: r && Math.round(r.width), h: r && Math.round(r.height), stroke,
+                    bh: Math.round(b.getBoundingClientRect().height)}; })""")
+        for icon, name in zip(icons, ("Menu", "Theme")):
+            if icon["n"] != 1 or icon["text"]:
+                problems.append(f"icons: {icon['sel']} holds {icon['n']} icons and text {icon['text']!r}")
+            if icon["label"] != name:
+                problems.append(f"icons: {icon['sel']} is named {icon['label']!r}, not {name!r}")
+        a, b = icons
+        if (a["w"], a["h"], a["stroke"], a["bh"]) != (b["w"], b["h"], b["stroke"], b["bh"]):
+            problems.append(f"icons: the two buttons differ: {a} and {b}")
         page.close()
         for path in ("reports/index.html", PAGE):
             page = browser.new_page(viewport={"width": 1600, "height": 900})

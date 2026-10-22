@@ -448,6 +448,11 @@ scrolling sideways.
   its edge.
 - **LAY-10** Every page, with or without pictures, has the search box in
   the top bar when scripts run.
+- **LAY-11** The Menu and theme buttons show icons, not words: three lines
+  for the menu, a half-filled circle for the theme. Both icons are drawn for
+  the site as inline SVG in the same size and stroke, in the button's text
+  colour. Each button keeps its name ("Menu", "Theme") for screen readers and
+  as a tooltip.
 
 ## URL: page addresses
 

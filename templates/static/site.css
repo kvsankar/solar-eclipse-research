@@ -107,8 +107,12 @@ a:hover { text-decoration: underline; }
   font: inherit; font-size: 13px;
   background: var(--surface-2); color: var(--text-dim);
   border: 1px solid var(--line); border-radius: 6px;
-  padding: 4px 10px; cursor: pointer;
+  padding: 6px; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
 }
+.navtoggle:hover, .themetoggle:hover { color: var(--text); }
+/* The two buttons' icons: drawn for the site, one size and stroke (LAY-11). */
+.navtoggle .icon, .themetoggle .icon { display: block; }
 .navtoggle { order: -1; }
 .themetoggle { margin-left: auto; }
 
